@@ -1,0 +1,62 @@
+# Secrets and local credentials
+.env
+*.key
+*.pem
+data/private/
+
+# Python / Node environments and caches
+.venv/
+backend/.venv/
+node_modules/
+frontend/node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.pytest-*/
+.mypy_cache/
+*.log
+
+# Generated frontend and test output
+frontend/dist/
+coverage/
+htmlcov/
+
+# Runtime data: only the sanitised demo package is versioned
+data/*
+!data/demo/
+data/demo/*
+!data/demo/README.md
+!data/demo/mlquiz-course-demo.sqlite3.gz
+!data/demo/assets/
+!data/demo/assets/**
+
+# The public repository keeps only scripts needed to restore/rebuild the demo
+backend/scripts/*
+!backend/scripts/bootstrap_demo.py
+!backend/scripts/create_release_snapshot.py
+!backend/scripts/migrate_single_class_accounts.py
+
+# Local audits, generated reports and source-course material
+docs/
+materials/
+/*.md
+!/README.md
+/=
+.workbuddy/
+机器学习复习资料_结构化抽题/
+机器学习复习资料_结构化抽题_v2.zip
+
+# Databases and process state outside the standard data tree
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.pid
+
+# Editors / operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,288 @@
+"""Auditable teacher-targeted retest rounds and deterministic mastery rules."""
+from __future__ import annotations
+
+from typing import Any
+
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from backend.app import config as cfg
+from backend.app.models import entities as E
+from backend.app.services import attempt_service
+from backend.app.services.score_policy import admissible_score
+
+
+ACTIVE_STATUSES = {"published", "opened", "scoring_pending"}
+FINAL_STATUSES = {"passed", "not_passed"}
+
+
+def _cycles(db: Session, source_attempt_id: str, student_id: str) -> list[E.TargetedRetestCycle]:
+    return list(db.execute(select(E.TargetedRetestCycle).where(
+        E.TargetedRetestCycle.source_attempt_id == source_attempt_id,
+        E.TargetedRetestCycle.student_id == student_id,
+    ).order_by(E.TargetedRetestCycle.round_no)).scalars())
+
+
+def next_round(db: Session, *, source_attempt_id: str, student_id: str) -> int:
+    rows = _cycles(db, source_attempt_id, student_id)
+    if rows:
+        refresh_cycle(db, rows[-1], commit=True)
+        if rows[-1].status in ACTIVE_STATUSES:
+            raise ValueError(f"第{rows[-1].round_no}轮复测仍待学生完成或评分，请勿重复发布")
+    return (rows[-1].round_no + 1) if rows else 1
+
+
+def create_cycle(
+    db: Session, *, student_id: str, source_attempt_id: str,
+    source_assessment_version_id: str, diagnosis_id: str, release_id: str,
+    workflow_run_id: str, round_no: int, question_ids: list[str],
+    chapter_ids: list[str], kp_ids: list[str], concept_names: list[str],
+) -> E.TargetedRetestCycle:
+    existing = db.execute(select(E.TargetedRetestCycle).where(
+        E.TargetedRetestCycle.source_attempt_id == source_attempt_id,
+        E.TargetedRetestCycle.student_id == student_id,
+        E.TargetedRetestCycle.round_no == round_no,
+    )).scalars().first()
+    if existing:
+        if existing.release_id != release_id:
+            raise ValueError("该轮复测已经发布，不能重复创建")
+        return existing
+    cycle = E.TargetedRetestCycle(
+        cycle_id=E.new_id("retestcycle"), student_id=student_id,
+        source_attempt_id=source_attempt_id,
+        source_assessment_version_id=source_assessment_version_id,
+        diagnosis_id=diagnosis_id, release_id=release_id,
+        workflow_run_id=workflow_run_id, round_no=round_no,
+        status="published",
+        threshold=cfg.TARGETED_RETEST_ACCURACY_THRESHOLD,
+        question_count=len(question_ids), chapter_ids=chapter_ids,
+        kp_ids=kp_ids, concept_names=concept_names,
+        generated_question_ids=question_ids,
+        published_at=E.utcnow(), updated_at=E.utcnow(),
+    )
+    db.add(cycle)
+    db.flush()
+    return cycle
+
+
+def _recipient(db: Session, cycle: E.TargetedRetestCycle) -> E.ReleaseRecipient | None:
+    if not cycle.release_id:
+        return None
+    return db.execute(select(E.ReleaseRecipient).where(
+        E.ReleaseRecipient.release_id == cycle.release_id,
+        E.ReleaseRecipient.student_id == cycle.student_id,
+    )).scalars().first()
+
+
+def _score_rows(db: Session, attempt: E.Attempt) -> tuple[list[E.PaperItem], dict[str, E.AnswerScore]]:
+    items = list(db.execute(select(E.PaperItem).where(
+        E.PaperItem.paper_id == attempt.paper_id
+    ).order_by(E.PaperItem.position)).scalars())
+    scores = list(db.execute(select(E.AnswerScore).where(
+        E.AnswerScore.attempt_id == attempt.attempt_id)).scalars())
+    by_item = {row.paper_item_id: row for row in scores if row.paper_item_id}
+    by_question = {(row.question_id, row.question_version): row for row in scores}
+    return items, {
+        item.item_id: by_item.get(item.item_id) or
+        by_question.get((item.question_id, item.question_version))
+        for item in items
+    }
+
+
+def refresh_cycle(db: Session, cycle: E.TargetedRetestCycle, *, commit: bool = False) -> E.TargetedRetestCycle:
+    recipient = _recipient(db, cycle)
+    if recipient and recipient.attempt_id:
+        cycle.retest_attempt_id = recipient.attempt_id
+    attempt = db.get(E.Attempt, cycle.retest_attempt_id) if cycle.retest_attempt_id else None
+    if not attempt or attempt.status != "submitted":
+        cycle.status = "opened" if recipient and recipient.status == "opened" else "published"
+        cycle.updated_at = E.utcnow()
+        if commit:
+            db.commit()
+        return cycle
+
+    items, scores = _score_rows(db, attempt)
+    version = db.get(E.AssessmentVersion, attempt.assessment_version_id)
+    reliable = [scores.get(item.item_id) for item in items]
+    all_scored = (
+        len(items) == cycle.question_count
+        and cycle.question_count > 0
+        and all(row is not None and row.correct is not None
+                and admissible_score(attempt, row, version)
+                for row in reliable)
+    )
+    cycle.submitted_at = attempt.submitted_at
+    cycle.score = attempt.score
+    cycle.max_score = attempt.max_score
+    if not all_scored:
+        cycle.status = "scoring_pending"
+        cycle.correct_count = None
+        cycle.accuracy = None
+        cycle.completed_at = ""
+        cycle.updated_at = E.utcnow()
+        if commit:
+            db.commit()
+        return cycle
+
+    correct_count = sum(1 for row in reliable if row and row.correct is True)
+    accuracy = correct_count / cycle.question_count
+    cycle.correct_count = correct_count
+    cycle.accuracy = round(accuracy, 6)
+    cycle.status = "passed" if accuracy >= cycle.threshold else "not_passed"
+    cycle.completed_at = cycle.completed_at or E.utcnow()
+    cycle.remaining_kp_ids = list(dict.fromkeys(
+        str(row.kp_id) for row in reliable
+        if row and row.correct is False and row.kp_id
+    ))
+    cycle.updated_at = E.utcnow()
+    if commit:
+        db.commit()
+    return cycle
+
+
+def record_submission(db: Session, *, release_id: str, attempt_id: str) -> dict | None:
+    cycle = db.execute(select(E.TargetedRetestCycle).where(
+        E.TargetedRetestCycle.release_id == release_id
+    )).scalars().first()
+    if cycle is None:
+        return None
+    if cycle.retest_attempt_id and cycle.retest_attempt_id != attempt_id:
+        raise ValueError("同一轮复测不能关联多份答卷")
+    cycle.retest_attempt_id = attempt_id
+    refresh_cycle(db, cycle, commit=True)
+    return cycle_detail(db, cycle, include_items=False)
+
+
+def _question_items(db: Session, cycle: E.TargetedRetestCycle) -> list[dict[str, Any]]:
+    if not cycle.retest_attempt_id:
+        return []
+    attempt = db.get(E.Attempt, cycle.retest_attempt_id)
+    if not attempt or attempt.status != "submitted":
+        return []
+    state = attempt_service.attempt_state(db, attempt.attempt_id)
+    answers = state.get("answers") or {}
+    scores = state.get("scores") or {}
+    result = []
+    for position, question in enumerate(state.get("questions") or [], start=1):
+        question_id = str(question.get("question_id") or "")
+        answer = answers.get(question_id) or {}
+        score = scores.get(question_id) or {}
+        result.append({
+            **question,
+            "position": question.get("position") or position,
+            "response": answer.get("response"),
+            "correct": score.get("correct"),
+            "awarded_score": score.get("awarded_score"),
+            "max_score": score.get("max_score"),
+            "scoring_status": score.get("scoring_status"),
+            "evidence_status": ("scored" if score.get("correct") is not None
+                                else "ungraded"),
+            "answer_reference": {
+                "available": bool(question.get("answer_payload")),
+                "payload": question.get("answer_payload"),
+                "explanation": question.get("explanation") or "",
+                "rubric": question.get("rubric") or {},
+            },
+            "chapter": {
+                "chapter_id": question.get("chapter_id") or "",
+                "title": question.get("chapter_title") or
+                         question.get("chapter_id") or "针对性复测",
+            },
+        })
+    return result
+
+
+def cycle_detail(db: Session, cycle: E.TargetedRetestCycle, *, include_items: bool = True) -> dict:
+    refresh_cycle(db, cycle, commit=False)
+    release = db.get(E.AssessmentRelease, cycle.release_id) if cycle.release_id else None
+    items = _question_items(db, cycle) if include_items else []
+    return {
+        "cycle_id": cycle.cycle_id,
+        "round": cycle.round_no,
+        "status": cycle.status,
+        "passed": cycle.status == "passed",
+        "result_determinable": cycle.status in FINAL_STATUSES,
+        "threshold": cycle.threshold,
+        "question_count": cycle.question_count,
+        "correct_count": cycle.correct_count,
+        "accuracy": cycle.accuracy,
+        "score": cycle.score,
+        "max_score": cycle.max_score,
+        "chapter_ids": cycle.chapter_ids or [],
+        "kp_ids": cycle.kp_ids or [],
+        "concept_names": cycle.concept_names or [],
+        "remaining_kp_ids": cycle.remaining_kp_ids or [],
+        "release_id": cycle.release_id,
+        "release_title": release.title if release else "针对性复测",
+        "retest_attempt_id": cycle.retest_attempt_id,
+        "published_at": cycle.published_at,
+        "submitted_at": cycle.submitted_at,
+        "completed_at": cycle.completed_at,
+        "items": items,
+        "wrong_items": [item for item in items if item.get("correct") is False],
+        "correct_items": [item for item in items if item.get("correct") is True],
+    }
+
+
+def list_cycles(db: Session, *, source_attempt_id: str, student_id: str) -> list[dict]:
+    rows = _cycles(db, source_attempt_id, student_id)
+    result = [cycle_detail(db, row) for row in rows]
+    if rows:
+        db.commit()
+    return result
+
+
+def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
+    """Add structured post-retest fields without letting a model decide pass/fail."""
+    result = dict(analysis or {})
+    original = [str(row.get("name") or row.get("concept") or "")
+                for row in result.get("concept_hypotheses") or []]
+    result["original_weak_concepts"] = [value for value in original if value]
+    if not history:
+        result.update({
+            "retest_performance": [], "remaining_concepts": [],
+            "mastery_status": "not_started",
+            "next_step": "可根据本次真实错题生成5道针对性新题进行复测。",
+        })
+        return result
+    latest = history[-1]
+    result["retest_performance"] = [{
+        "round": row["round"], "status": row["status"],
+        "correct_count": row.get("correct_count"),
+        "question_count": row.get("question_count"),
+        "accuracy": row.get("accuracy"),
+    } for row in history]
+    remaining = list(dict.fromkeys(
+        str(item.get("main_kp_id") or item.get("kp_id") or "")
+        for item in latest.get("wrong_items") or []
+        if item.get("main_kp_id") or item.get("kp_id")
+    ))
+    result["remaining_concepts"] = remaining
+    result["mastery_status"] = latest["status"]
+    if latest["status"] in {"published", "opened"}:
+        result["summary"] = (
+            f"第{latest['round']}轮复测已发布，等待学生完成。" +
+            (" " + result.get("summary", "") if result.get("summary") else "")
+        )
+        result["next_step"] = "等待学生提交后再依据真实评分更新结论。"
+    elif latest["status"] == "scoring_pending":
+        result["summary"] = f"第{latest['round']}轮复测已提交，但仍有题目未完成可靠评分，暂不能判断是否达标。"
+        result["next_step"] = "完成全部题目评分后再执行80%达标判定。"
+    elif latest["status"] == "passed":
+        pct = round(float(latest.get("accuracy") or 0) * 100)
+        result["summary"] = (
+            f"该学生第{latest['round']}轮针对性复测答对"
+            f"{latest.get('correct_count')}/{latest.get('question_count')}题，"
+            f"正确率{pct}%，本轮已达标。此前错题涉及的概念在新题复测中有所改善。"
+        )
+        result["next_step"] = "默认结束本轮复测；教师仍可按需安排新的巩固测验。"
+    else:
+        pct = round(float(latest.get("accuracy") or 0) * 100)
+        result["summary"] = (
+            f"该学生第{latest['round']}轮针对性复测答对"
+            f"{latest.get('correct_count')}/{latest.get('question_count')}题，"
+            f"正确率{pct}%，尚未达到{round(float(latest['threshold']) * 100)}%目标。"
+            "最新复测错题对应的概念仍需关注。"
+        )
+        result["next_step"] = "复习最新错题后，由教师点击“再次生成复测”进入下一轮。"
+    return result

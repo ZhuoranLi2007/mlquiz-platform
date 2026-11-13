@@ -1,0 +1,187 @@
+<script setup lang="ts">
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import * as echarts from 'echarts'
+import { Collection, Position, WarningFilled } from '@element-plus/icons-vue'
+import MathText from './MathText.vue'
+import SourceQuestionContent from './SourceQuestionContent.vue'
+
+const props = defineProps<{
+  result: any
+  diagnosisReady: boolean
+  intervention?: any
+  runningAi?: boolean
+}>()
+const emit = defineEmits<{ retest: [] }>()
+const router = useRouter()
+const distributionHost = ref<HTMLElement | null>(null)
+const accuracyHost = ref<HTMLElement | null>(null)
+let distributionChart: echarts.ECharts | null = null
+let accuracyChart: echarts.ECharts | null = null
+
+const overview = computed(() => props.result?.score_overview || {})
+const participation = computed(() => props.result?.participation || {})
+const topErrors = computed(() => props.result?.high_frequency_errors || [])
+const analysis = computed(() => props.result?.ai_analysis || {})
+const plan = computed(() => props.result?.retest_plan || {})
+const commonErrors = computed(() => (analysis.value?.common_errors || []).slice(0, 4))
+const concepts = computed(() => (analysis.value?.concept_hypotheses || []).slice(0, 5))
+const recommendations = computed(() => (analysis.value?.recommendations || [])
+  .map((row: any) => typeof row === 'string' ? row : (row?.message || row?.advice || row?.action))
+  .filter(Boolean).slice(0, 4))
+const aiFailure = computed(() => analysis.value?.model_status
+  ? 'AI 服务暂时不可用，当前显示基础分析。可点击页面顶部“运行诊断”重试。' : '')
+const resources = computed(() => (props.result?.resources || []).slice(0, 3))
+const publishedRetest = computed(() => props.intervention?.outputs?.retest?.status === 'published')
+const generatedCount = computed(() => props.intervention?.outputs?.generation?.result?.candidates?.length || 0)
+
+const TYPE_LABELS: Record<string, string> = {
+  single_choice: '单选题', multiple_choice: '多选题', multi_choice: '多选题',
+  true_false: '判断题', numeric: '数值题', calculation: '计算题',
+  short_answer: '简答题', term: '名词解释', fill_blank: '填空题',
+  formula_fill: '公式填空', derivation: '推导题', comprehensive: '综合题',
+}
+function percent(value: unknown) { return value === null || value === undefined ? '—' : `${Math.round(Number(value) * 1000) / 10}%` }
+function numberText(value: unknown) {
+  if (value === null || value === undefined) return '—'
+  const n = Number(value); return Number.isInteger(n) ? String(n) : n.toFixed(1)
+}
+function answerValue(value: any): any {
+  if (value === null || value === undefined || value === '') return null
+  if (typeof value !== 'object' || Array.isArray(value)) return value
+  for (const key of ['selected_keys', 'keys', 'key', 'values', 'parts', 'value', 'answer', 'reference_answer', 'text']) {
+    if (value[key] !== undefined && value[key] !== null && value[key] !== '') return value[key]
+  }
+  return value
+}
+function answerText(input: any): string {
+  const value = answerValue(input)
+  if (value === null || value === undefined || value === '') return '未提供'
+  if (typeof value === 'boolean') return value ? '正确' : '错误'
+  if (Array.isArray(value)) return value.map(answerText).join('、')
+  if (typeof value === 'object') return Object.values(value).map(answerText).join('、')
+  return String(value)
+}
+function answerKeys(input: any): string[] {
+  const value = answerValue(input)
+  return (Array.isArray(value) ? value : [value]).map((entry: any) =>
+    String(entry && typeof entry === 'object' ? (entry.key ?? entry.value ?? '') : (entry ?? '')).trim().toUpperCase()).filter(Boolean)
+}
+function optionsFor(item: any): any[] {
+  const options = item?.options || []
+  if (Array.isArray(options)) return options.map((row: any, index: number) =>
+    typeof row === 'object' ? row : { key: String.fromCharCode(65 + index), text: String(row) })
+  return Object.entries(options).map(([key, value]) => ({ key, text: value }))
+}
+function isCorrect(item: any, key: string) { return answerKeys(item?.answer_reference?.payload).includes(String(key).toUpperCase()) }
+function isFrequentWrong(item: any, key: string) {
+  return String(item?.high_frequency_wrong_answer || '').split(',').map((v: string) => v.trim().toUpperCase()).includes(String(key).toUpperCase()) && !isCorrect(item, key)
+}
+function optionClass(item: any, key: string) { return { correct: isCorrect(item, key), wrong: isFrequentWrong(item, key) } }
+function refs(row: any) { return (row?.question_positions || []).map((n: any) => `第${n}题`).join('、') || '相关题目' }
+function resourceType(resource: any) {
+  const value = String(resource?.content_type || resource?.source_type || resource?.platform || '').toLowerCase()
+  if (value.includes('video') || value.includes('bilibili')) return '视频'
+  if (value.includes('ppt') || value.includes('slide')) return '课件'
+  if (value.includes('article')) return '文章'
+  return resource?.platform || '学习资料'
+}
+function openResource(resource: any) { if (resource?.url) window.open(resource.url, '_blank', 'noopener,noreferrer') }
+function locateQuestion(row: any) {
+  const position = (row?.question_positions || [])[0]
+  if (position !== undefined) document.getElementById(`class-question-${position}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+function renderCharts() {
+  const bins = props.result?.score_distribution?.comparable_bins || props.result?.score_distribution?.bins || []
+  if (distributionHost.value) {
+    if (!distributionChart) distributionChart = echarts.init(distributionHost.value)
+    distributionChart.setOption({
+      animation: false,
+      grid: { left: 36, right: 10, top: 22, bottom: 34 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: (rows: any) => `${rows[0].axisValue} 分：${rows[0].value} 人` },
+      xAxis: { type: 'category', data: bins.map((row: any) => row.label), axisLabel: { fontSize: 9, color: '#66758b' }, axisLine: { lineStyle: { color: '#d9e2ef' } } },
+      yAxis: { type: 'value', minInterval: 1, axisLabel: { fontSize: 9 }, splitLine: { lineStyle: { color: '#edf2f7' } } },
+      series: [{ type: 'bar', data: bins.map((row: any) => row.count), barMaxWidth: 34, itemStyle: { color: '#4f8df7', borderRadius: [5, 5, 0, 0] }, label: { show: true, position: 'top', fontSize: 9 } }],
+    }, true)
+  }
+  const questions = props.result?.question_analysis || []
+  if (accuracyHost.value) {
+    if (!accuracyChart) accuracyChart = echarts.init(accuracyHost.value)
+    accuracyChart.setOption({
+      animation: false,
+      grid: { left: 42, right: 12, top: 22, bottom: questions.length > 10 ? 48 : 34 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: (rows: any) => {
+        const item = questions[rows[0].dataIndex] || {}
+        return `第${item.position}题<br/>正确：${item.correct_count}/${item.denominator}<br/>正确率：${percent(item.correct_rate)}`
+      } },
+      dataZoom: questions.length > 10 ? [{ type: 'inside' }, { type: 'slider', height: 12, bottom: 2 }] : [],
+      xAxis: { type: 'category', data: questions.map((row: any) => `第${row.position}题`), axisLabel: { fontSize: 9, color: '#66758b' }, axisLine: { lineStyle: { color: '#d9e2ef' } } },
+      yAxis: { type: 'value', min: 0, max: 100, interval: 25, axisLabel: { formatter: '{value}%', fontSize: 9 }, splitLine: { lineStyle: { color: '#edf2f7' } } },
+      series: [{ type: 'bar', barMaxWidth: 32, data: questions.map((row: any) => {
+        const value = Math.round(Number(row.correct_rate || 0) * 1000) / 10
+        return { value, itemStyle: { color: value < 60 ? '#f39a9f' : (value < 75 ? '#8ab0f8' : '#4f8df7'), borderRadius: [5, 5, 0, 0] } }
+      }), label: { show: true, position: 'top', formatter: '{c}%', fontSize: 8 } }],
+    }, true)
+  }
+}
+function resizeCharts() { distributionChart?.resize(); accuracyChart?.resize() }
+watch(() => props.result, async () => { await nextTick(); renderCharts() }, { deep: true })
+onMounted(() => { renderCharts(); window.addEventListener('resize', resizeCharts) })
+onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); distributionChart?.dispose(); accuracyChart?.dispose() })
+</script>
+
+<template>
+  <div class="class-workbench">
+    <section class="class-overview">
+      <div class="class-metrics">
+        <article class="metric primary"><span>平均分</span><b>{{ numberText(overview.average_score) }}<small>分</small></b></article>
+        <article class="metric good"><span>最高分</span><b>{{ numberText(overview.highest_score) }}<small>分</small></b></article>
+        <article class="metric bad"><span>最低分</span><b>{{ numberText(overview.lowest_score) }}<small>分</small></b></article>
+        <article class="metric people"><span>参考人数</span><b>{{ overview.comparable_student_count ?? participation.scored ?? 0 }}<small>/{{ participation.enrolled || 0 }} 人</small></b></article>
+      </div>
+      <div class="class-charts">
+        <article class="chart-card"><header><b>成绩分布</b><span>{{ numberText(overview.max_score) }} 分 · {{ overview.question_count || 0 }} 题</span></header><div ref="distributionHost" class="chart"></div></article>
+        <article class="chart-card"><header><b>各题正确率</b><span>低于 60% 重点标记</span></header><div ref="accuracyHost" class="chart"></div></article>
+      </div>
+    </section>
+
+    <section class="class-body">
+      <main class="errors-column">
+        <header class="section-title"><div><el-icon><WarningFilled /></el-icon><h2>高频错题（Top 5）</h2></div></header>
+        <div v-if="topErrors.length" class="error-grid">
+          <article v-for="item in topErrors" :id="`class-question-${item.position}`" :key="item.paper_item_id" class="error-card">
+            <header><div><b>第{{ item.position }}题</b><span>{{ TYPE_LABELS[item.question_type] || item.question_type }}</span><span>{{ item.chapter?.title || '未映射章节' }}</span></div><strong>错误 {{ item.incorrect_count }}/{{ item.denominator }} · 正确率 {{ percent(item.correct_rate) }}</strong></header>
+            <div class="card-body">
+              <div class="stem"><MathText :text="item.stem" /></div>
+              <SourceQuestionContent :question="item" />
+              <div v-if="optionsFor(item).length" class="options-list"><div v-for="option in optionsFor(item)" :key="option.key" class="option-row" :class="optionClass(item, option.key)"><b>{{ option.key }}</b><MathText :text="option.text || option.value || ''" /><span v-if="isCorrect(item, option.key)" class="correct-note">正确答案</span><span v-if="isFrequentWrong(item, option.key)" class="wrong-note">高频误选 {{ item.high_frequency_wrong_count }}人</span></div></div>
+              <div class="answer-summary"><div class="wrong-answer"><span>高频错误作答</span><b>{{ item.high_frequency_wrong_answer || '暂无高频错误答案' }}</b></div><div class="right-answer"><span>正确答案</span><b>{{ answerText(item.answer_reference?.payload) }}</b></div></div>
+              <section class="explanation"><h4>参考解析</h4><MathText :text="item.answer_reference?.explanation || '该题暂未提供独立解析。'" /></section>
+            </div>
+          </article>
+        </div>
+        <div v-else class="empty-card"><b>当前试卷暂无高频错题</b><span>全部答对或暂无已评分作答。</span></div>
+      </main>
+
+      <aside class="ai-column">
+        <section class="ai-panel">
+          <header><div><h2>班级学情分析</h2></div></header>
+          <section class="summary-section"><h3>综合结论</h3><p class="summary">{{ analysis.summary || '当前作答信息不足，暂时无法形成班级分析。' }}</p></section>
+          <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
+
+          <section class="side-section"><h3>共性问题</h3><ul v-if="commonErrors.length"><li v-for="(row, index) in commonErrors" :key="index" role="button" tabindex="0" @click="locateQuestion(row)" @keydown.enter="locateQuestion(row)"><b>{{ row.label || row.name }}</b><span>{{ row.evidence }} · {{ refs(row) }}</span></li></ul><div v-if="concepts.length" class="concepts"><article v-for="(row, index) in concepts" :key="index" role="button" tabindex="0" @click="locateQuestion(row)" @keydown.enter="locateQuestion(row)"><b>{{ row.name || row.concept }}</b><span>{{ row.chapter || '未映射章节' }} · {{ refs(row) }}</span></article></div><p v-if="!commonErrors.length && !concepts.length" class="side-empty">本次没有需要重点提示的共性问题。</p></section>
+          <section class="side-section"><h3>教学建议</h3><ol v-if="recommendations.length"><li v-for="(row, index) in recommendations" :key="index">{{ row }}</li></ol><p v-else class="side-empty">暂无需要特别提示的教学建议。</p></section>
+          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="resources.length" class="resources"><article v-for="resource in resources" :key="resource.resource_id || resource.url"><div><b>{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联本卷共性问题' }}</span></div><el-button link type="primary" :disabled="!resource.url" @click="openResource(resource)">查看</el-button></article></div><div v-else class="side-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div></section>
+
+          <section class="retest-section"><h3>班级复测</h3><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道题。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
+        </section>
+      </aside>
+    </section>
+  </div>
+</template>
+
+<style scoped>
+.class-workbench{display:grid;min-width:0;gap:15px;color:#34445f}.overview-shell{display:grid;grid-template-columns:minmax(310px,.9fr) minmax(330px,1fr) minmax(360px,1.2fr);overflow:hidden;border:1px solid #dce5f2;border-radius:14px;background:#fff;box-shadow:0 5px 18px rgb(37 67 108 / 6%)}.overview-shell>article+article{border-left:1px solid #e7edf5}.overview-card,.chart-card{min-width:0;padding:14px}.overview-card>header,.chart-card>header{display:flex;align-items:center;gap:7px;color:#223650}.overview-card>header .el-icon{color:#2563eb;font-size:19px}.overview-card>header span,.chart-card>header span{margin-left:auto;color:#8491a3;font-size:9.5px}.score-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}.score-metrics>div{padding:10px;border-radius:9px}.score-metrics span,.score-metrics b{display:block}.score-metrics span{font-size:9.5px}.score-metrics b{margin-top:3px;font-size:20px}.score-metrics small{margin-left:2px;font-size:9px}.score-metrics .primary{background:#eef4ff;color:#2458c8}.score-metrics .good{background:#edf9f2;color:#148052}.score-metrics .bad{background:#fff0f1;color:#c83d48}.minor-metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}.minor-metrics>div{padding:9px;border-radius:8px;background:#f6f8fb}.minor-metrics span,.minor-metrics b{display:block}.minor-metrics span{color:#7a8799;font-size:9px}.minor-metrics b{margin-top:3px;color:#25384f;font-size:12px}.overview-card>p{margin:8px 0 0;color:#8793a3;font-size:8.5px;line-height:1.4}.chart-card>header b{font-size:11.5px}.chart{height:170px}.class-body{display:grid;grid-template-columns:minmax(0,7fr) minmax(310px,3fr);align-items:start;gap:15px}.errors-column{min-width:0}.section-title{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}.section-title>div{display:flex;align-items:center;gap:7px}.section-title .el-icon{color:#e94f5b;font-size:18px}.section-title h2{margin:0;color:#17243d;font-size:18px}.section-title p{margin:0;color:#7d899b;font-size:10px}.error-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:12px}.error-card{min-width:0;overflow:hidden;border:1px solid #dce5f2;border-radius:13px;background:#fff;box-shadow:0 4px 14px rgb(52 69 98 / 4%)}.error-card>header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;background:#f8faff}.error-card>header>div{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.error-card>header b,.error-card>header span{padding:4px 7px;border-radius:6px;font-size:9.5px}.error-card>header b{background:#4f8df7;color:#fff}.error-card>header span{background:#edf3ff;color:#315fc7}.error-card>header strong{flex:none;color:#d5414c;font-size:10px}.card-body{padding:12px}.stem{color:#17243d;font-size:13px;font-weight:650;line-height:1.7;overflow-wrap:anywhere}.stem :deep(.katex-display){overflow-x:auto}.options-list{display:grid;gap:6px;margin-top:9px}.option-row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:6px;padding:7px 8px;border:1px solid #e5eaf1;border-radius:8px;background:#fff;font-size:10.5px}.option-row.correct{border-color:#b9e2cc;background:#edf9f2}.option-row.wrong{border-color:#f1c5c8;background:#fff0f1}.correct-note,.wrong-note{padding:2px 5px;border-radius:5px;font-size:8.5px;font-weight:700}.correct-note{background:#dff3e8;color:#148052}.wrong-note{background:#fbe0e2;color:#c33b46}.answer-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.answer-summary>div{padding:8px 9px;border-radius:8px}.answer-summary span,.answer-summary b{display:block}.answer-summary span{font-size:9px}.answer-summary b{margin-top:3px;font-size:10.5px}.wrong-answer{background:#fff0f1;color:#9b303b}.right-answer{background:#edf9f2;color:#176847}.explanation{margin-top:9px;padding:9px 10px;border:1px solid #e4e9f1;border-radius:8px;background:#fbfcfe;color:#4a596e;font-size:10px;line-height:1.6}.explanation h4{margin:0 0 4px;color:#25364f;font-size:10.5px}.empty-card{padding:30px;border:1px dashed #cbd7e6;border-radius:13px;background:#fff;text-align:center}.empty-card b,.empty-card span{display:block}.empty-card span{margin-top:4px;color:#7d899b;font-size:11px}.ai-column{min-width:0}.ai-panel{position:sticky;top:14px;overflow:hidden;border:1px solid #d9e5f5;border-radius:14px;background:#fff;box-shadow:0 6px 20px rgb(37 67 108 / 7%)}.ai-panel>header{display:flex;align-items:center;gap:10px;padding:15px 16px;border-bottom:1px solid #e7edf5;background:linear-gradient(135deg,#edf5ff,#fff)}.spark{display:grid;width:38px;height:32px;place-items:center;border-radius:9px;background:#2563eb;color:#fff;font-size:11px;font-weight:800}.ai-panel h2{margin:0;color:#17243d;font-size:17px}.ai-panel>header p{margin:2px 0 0;color:#8491a3;font-size:10px}.summary,.pending{margin:12px 14px 0;padding:10px 11px;border:1px solid #d8e4fb;border-radius:9px;background:#f6f9ff;color:#31445f;font-size:11px;line-height:1.6}.pending b,.pending span{display:block}.pending span{margin-top:4px;color:#718096;font-size:9.5px}.side-section{margin:0 14px;padding:13px 0;border-bottom:1px solid #e8edf4}.side-section h3{display:flex;align-items:center;gap:6px;margin:0 0 8px;color:#223650;font-size:12.5px}.side-section h3 .el-icon{color:#2563eb}.side-section ul,.side-section ol{display:grid;gap:7px;margin:0;padding-left:18px}.side-section li{color:#526279;font-size:10px;line-height:1.5}.side-section li b,.side-section li span{display:block}.side-section li span{margin-top:2px;color:#7a8799;font-size:9px}.concepts{display:flex;flex-wrap:wrap;gap:6px}.concepts article{padding:7px 8px;border-radius:8px;background:#eef4ff}.concepts article>div{display:flex;align-items:center;gap:7px}.concepts b{color:#315fc7;font-size:10px}.concepts em{color:#7384a1;font-size:8.5px;font-style:normal}.concepts span{display:block;margin-top:2px;color:#748399;font-size:8.5px}.side-empty{margin:0;color:#8793a3;font-size:10px;line-height:1.5}.resources{display:grid;gap:5px}.resources article{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:7px;border-radius:8px;background:#f7f9fc}.resources article>div{min-width:0}.resources b,.resources span{display:block}.resources b{overflow:hidden;color:#34465f;font-size:10px;text-overflow:ellipsis;white-space:nowrap}.resources span{margin-top:2px;color:#8390a1;font-size:8.5px}.retest-section{padding:14px;background:#f6f9ff}.retest-section h3{margin:0 0 6px;color:#223650;font-size:12.5px}.retest-section p{margin:0 0 8px;color:#7b899a;font-size:9.5px;line-height:1.5}.workflow-note,.published-note{margin-bottom:7px;padding:7px;border-radius:6px;background:#eaf2ff;color:#436a9f;font-size:9px}.published-note{background:#e8f7ef;color:#197451}.retest-button{width:100%}.ai-panel>footer{padding:9px 14px;border-top:1px solid #e6ebf3;color:#8995a5;font-size:8.5px;line-height:1.5}@media(max-width:1350px){.overview-shell{grid-template-columns:1fr 1fr}.overview-card{grid-row:span 2}.accuracy-card{border-top:1px solid #e7edf5}.class-body{grid-template-columns:minmax(0,1fr) minmax(290px,.72fr)}.error-grid{grid-template-columns:1fr}}@media(max-width:920px){.overview-shell,.class-body{grid-template-columns:1fr}.overview-shell>article+article{border-top:1px solid #e7edf5;border-left:0}.ai-panel{position:static}.ai-column{order:2}.error-grid{grid-template-columns:1fr}}@media(max-width:600px){.score-metrics,.minor-metrics,.answer-summary{grid-template-columns:1fr}.section-title{align-items:flex-start;flex-direction:column}.option-row{grid-template-columns:22px minmax(0,1fr)}.option-row span{grid-column:2;justify-self:start}}
+.class-overview{display:grid;gap:12px}.class-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{min-width:0;padding:13px 15px;border:1px solid var(--diag-border,#dce5f2);border-radius:var(--diag-radius,13px);background:#fff;box-shadow:var(--diag-shadow,0 4px 16px rgb(32 65 115 / 5%))}.metric span,.metric b{display:block}.metric span{color:#64748a;font-size:11px;font-weight:700}.metric b{margin-top:5px;color:#17243d;font-size:24px}.metric small{margin-left:4px;color:#718096;font-size:11px}.metric.primary{border-top:3px solid #2563eb}.metric.good{border-top:3px solid #18a168}.metric.bad{border-top:3px solid #ef5d68}.metric.people{border-top:3px solid #7c3aed}.class-charts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.chart-card{padding:13px 14px;border:1px solid var(--diag-border,#dce5f2);border-radius:var(--diag-radius,13px);background:#fff;box-shadow:var(--diag-shadow,0 4px 16px rgb(32 65 115 / 5%))}.chart-card>header{display:flex;align-items:center;justify-content:space-between;color:#223650}.chart-card>header b{font-size:12px}.chart-card>header span{color:#8491a3;font-size:9.5px}.summary-section{margin:0 14px;padding:13px 0;border-bottom:1px solid #e8edf4}.summary-section h3{margin:0 0 8px;color:#223650;font-size:12.5px}.summary-section .summary{margin:0}.summary-section small{display:block;margin-top:7px;color:#7d899b;font-size:9.5px;line-height:1.5}.ai-failure{margin:10px 14px 0;padding:8px 9px;border-radius:7px;background:#fff6e6;color:#8a6422;font-size:10px;line-height:1.5}.side-section li[role=button],.concepts article[role=button]{cursor:pointer;transition:.15s}.side-section li[role=button]:hover,.side-section li[role=button]:focus,.concepts article[role=button]:hover,.concepts article[role=button]:focus{outline:none;background:#e7f0ff}.concepts article{display:grid;gap:2px}.error-card{scroll-margin-top:18px}@media(max-width:920px){.class-charts{grid-template-columns:1fr}.class-metrics{grid-template-columns:1fr 1fr}}@media(max-width:600px){.class-metrics{grid-template-columns:1fr}}
+</style>

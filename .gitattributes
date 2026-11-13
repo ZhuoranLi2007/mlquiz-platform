@@ -1,0 +1,2 @@
+# Published assets are hash checked at runtime; preserve their bytes on Windows.
+data/demo/assets/** -text
