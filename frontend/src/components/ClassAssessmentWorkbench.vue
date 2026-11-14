@@ -5,6 +5,7 @@ import * as echarts from 'echarts'
 import { Collection, Position, WarningFilled } from '@element-plus/icons-vue'
 import MathText from './MathText.vue'
 import SourceQuestionContent from './SourceQuestionContent.vue'
+import { recommendedResourceLinks } from '../utils/resourceLinks'
 
 const props = defineProps<{
   result: any
@@ -31,7 +32,7 @@ const recommendations = computed(() => (analysis.value?.recommendations || [])
   .filter(Boolean).slice(0, 4))
 const aiFailure = computed(() => analysis.value?.model_status
   ? 'AI 服务暂时不可用，当前显示基础分析。可点击页面顶部“运行诊断”重试。' : '')
-const resources = computed(() => (props.result?.resources || []).slice(0, 3))
+const resources = computed(() => recommendedResourceLinks(props.result?.resources || []))
 const publishedRetest = computed(() => props.intervention?.outputs?.retest?.status === 'published')
 const generatedCount = computed(() => props.intervention?.outputs?.generation?.result?.candidates?.length || 0)
 
@@ -39,7 +40,7 @@ const TYPE_LABELS: Record<string, string> = {
   single_choice: '单选题', multiple_choice: '多选题', multi_choice: '多选题',
   true_false: '判断题', numeric: '数值题', calculation: '计算题',
   short_answer: '简答题', term: '名词解释', fill_blank: '填空题',
-  formula_fill: '公式填空', derivation: '推导题', comprehensive: '综合题',
+  formula_fill: '公式填空', derivation: '推导题', comprehensive: '综合题', matching: '匹配题',
 }
 function percent(value: unknown) { return value === null || value === undefined ? '—' : `${Math.round(Number(value) * 1000) / 10}%` }
 function numberText(value: unknown) {
@@ -86,7 +87,6 @@ function resourceType(resource: any) {
   if (value.includes('article')) return '文章'
   return resource?.platform || '学习资料'
 }
-function openResource(resource: any) { if (resource?.url) window.open(resource.url, '_blank', 'noopener,noreferrer') }
 function locateQuestion(row: any) {
   const position = (row?.question_positions || [])[0]
   if (position !== undefined) document.getElementById(`class-question-${position}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -172,7 +172,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
 
           <section class="side-section"><h3>共性问题</h3><ul v-if="commonErrors.length"><li v-for="(row, index) in commonErrors" :key="index" role="button" tabindex="0" @click="locateQuestion(row)" @keydown.enter="locateQuestion(row)"><b>{{ row.label || row.name }}</b><span>{{ row.evidence }} · {{ refs(row) }}</span></li></ul><div v-if="concepts.length" class="concepts"><article v-for="(row, index) in concepts" :key="index" role="button" tabindex="0" @click="locateQuestion(row)" @keydown.enter="locateQuestion(row)"><b>{{ row.name || row.concept }}</b><span>{{ row.chapter || '未映射章节' }} · {{ refs(row) }}</span></article></div><p v-if="!commonErrors.length && !concepts.length" class="side-empty">本次没有需要重点提示的共性问题。</p></section>
           <section class="side-section"><h3>教学建议</h3><ol v-if="recommendations.length"><li v-for="(row, index) in recommendations" :key="index">{{ row }}</li></ol><p v-else class="side-empty">暂无需要特别提示的教学建议。</p></section>
-          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="resources.length" class="resources"><article v-for="resource in resources" :key="resource.resource_id || resource.url"><div><b>{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联本卷共性问题' }}</span></div><el-button link type="primary" :disabled="!resource.url" @click="openResource(resource)">查看</el-button></article></div><div v-else class="side-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div></section>
+          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="resources.length" class="resources"><a v-for="resource in resources" :key="resource.resource_id || resource.url" class="diagnosis-resource-link" :href="resource.url" target="_blank" rel="noopener noreferrer"><b class="resource-title">{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联本卷共性问题' }}</span></a></div><div v-else class="side-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div></section>
 
           <section class="retest-section"><h3>班级复测</h3><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道题。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
         </section>

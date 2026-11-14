@@ -1,9 +1,12 @@
 """Read-only, hash-pinned teacher source presentation. No answer reconstruction."""
 from pathlib import Path
 from hashlib import sha256
+from functools import lru_cache
+from io import BytesIO
 import json
 import re
 from urllib.parse import urlparse
+from PIL import Image
 from backend.app import config as cfg
 
 
@@ -23,6 +26,22 @@ def manifests():
             continue
 
 
+@lru_cache(maxsize=32)
+def _emf_png(path: str, mtime_ns: int, size: int) -> bytes:
+    """Render an original vector formula for browsers without changing its source."""
+    del mtime_ns, size
+    with Image.open(path) as image:
+        image.load()
+        output = BytesIO()
+        image.convert("RGBA").save(output, format="PNG")
+        return output.getvalue()
+
+
+def render_emf_png(path: Path) -> bytes:
+    stat = path.stat()
+    return _emf_png(str(path), stat.st_mtime_ns, stat.st_size)
+
+
 def asset_path(source_sha, asset_id):
     if not re.fullmatch(r"[a-f0-9]{64}", source_sha or "") or not re.fullmatch(r"media-[a-f0-9]+", asset_id or ""):
         raise ValueError("无效媒体标识")
@@ -34,10 +53,15 @@ def asset_path(source_sha, asset_id):
                 continue
             path = (manifest.parent / asset.get("safe_path", "")).resolve()
             root = (manifest.parent / "media").resolve()
-            if not path.is_relative_to(root) or path.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp", ".gif"}:
-                raise ValueError("媒体格式尚不可浏览，原文件保留待转换")
+            if not path.is_relative_to(root) or path.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp", ".gif", ".emf"}:
+                raise ValueError("媒体格式暂无法显示")
             if not path.is_file() or sha256(path.read_bytes()).hexdigest() != asset.get("sha256"):
                 raise ValueError("媒体文件缺失或哈希不符")
+            if path.suffix.lower() == ".emf":
+                try:
+                    render_emf_png(path)
+                except (OSError, ValueError) as exc:
+                    raise ValueError("公式图片暂无法显示") from exc
             return path
     raise ValueError("媒体不存在")
 
@@ -61,7 +85,9 @@ def source_content(snapshot):
                 unavailable = []
                 def media(m):
                     aid = m.get("selected_asset_id", "")
-                    out = {"type": "media", "asset_id": aid, "alt_text": m.get("alt_text") or "原题配图/公式"}
+                    out = {"type": "media", "asset_id": aid,
+                           "role": m.get("role") or "image",
+                           "alt_text": m.get("alt_text") or "题目配图或公式"}
                     try:
                         asset_path(source_sha, aid)
                         out.update(url=f"/api/classroom-media/{source_sha}/{aid}", available=True)

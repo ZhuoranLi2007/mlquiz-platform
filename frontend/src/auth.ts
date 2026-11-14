@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { api, setTabToken, tabToken } from './api/client'
+import { clearQuestionBankCache } from './utils/questionBankCache'
 
 export type Principal = {
   user_id: string
@@ -54,6 +55,7 @@ async function quickLogin(user_id: string) {
 
 async function logout() {
   try { await api.post('/auth/logout') } finally {
+    clearQuestionBankCache()
     setTabToken('')
     principal.value = null
     ready.value = true

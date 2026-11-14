@@ -7,11 +7,9 @@ import { auth } from '../auth'
 import MathText from '../components/MathText.vue'
 import SourceQuestionContent from '../components/SourceQuestionContent.vue'
 import AuthenticatedImage from '../components/AuthenticatedImage.vue'
-import PageImage from '../components/PageImage.vue'
 import StatusBadge from '../components/StatusBadge.vue'
-import TechnicalDetails from '../components/TechnicalDetails.vue'
 import {
-  answerPayload, formatAnswer, friendlyError, hasMeaningfulAnswer, questionTypeLabel, statusLabel,
+  answerPayload, formatAnswer, friendlyError, hasMeaningfulAnswer, questionTypeLabel,
 } from '../utils/presentation'
 
 const route = useRoute()
@@ -529,17 +527,6 @@ async function openDispute() {
 }
 
 function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
-function scoringLabel(value?: string) {
-  const labels: Record<string, string> = {
-    scored: '已评分', objective: '已评分', needs_manual: '待人工评分',
-    needs_model_scoring: '待智能评分', rescored: '已重新评分',
-  }
-  return labels[value || ''] || statusLabel(value, '评分状态未知')
-}
-function pageRefs(question: any) {
-  return (question.source_refs || []).filter((item: any) => item.assets?.length)
-    .map((item: any) => ({ docId: item.document_id, page: item.page, label: item.rel_path }))
-}
 </script>
 
 <template>
@@ -635,7 +622,7 @@ function pageRefs(question: any) {
 
           <div class="question-stem">
             <span v-if="q.prompt_prefix" class="stem-prefix">{{ q.prompt_prefix }}</span>
-            <MathText :text="displayStem(q)" />
+            <SourceQuestionContent :question="q" :fallback="displayStem(q)" />
           </div>
           <p v-if="translationMissing(q)" class="translation-missing">
             中文译文尚未生成，当前显示英文原文
@@ -644,7 +631,6 @@ function pageRefs(question: any) {
             <img v-for="(img, index) in q.stem_images" :key="img" :src="'/' + img" :alt="`第 ${current + 1} 题配图 ${index + 1}`" />
           </div>
 
-          <SourceQuestionContent :question="q" />
           <div v-if="q.options_incomplete" class="option-missing">
             <strong>{{ q.repair_hint || '该题选项缺失，暂不可作答' }}</strong>
             <span>这道题的选项没能完整保存，不参与本次作答与计分；其他题目不受影响。</span>
@@ -659,7 +645,8 @@ function pageRefs(question: any) {
                 @update:model-value="(value: any) => setResp(q.question_id, { key: value })"
               />
               <span class="option-key">{{ option.key }}.</span>
-              <MathText :text="displayOption(option) || '选项内容缺失，请查看原资料'" />
+              <SourceQuestionContent :question="q" part="option" :option-key="option.key"
+                :fallback="displayOption(option) || '选项内容缺失'" />
             </label>
           </div>
 
@@ -674,7 +661,8 @@ function pageRefs(question: any) {
                 @update:model-value="(checked: any) => toggleMulti(q.question_id, option.key, checked)"
               />
               <span class="option-key">{{ option.key }}.</span>
-              <MathText :text="displayOption(option) || '选项内容缺失，请查看原资料'" />
+              <SourceQuestionContent :question="q" part="option" :option-key="option.key"
+                :fallback="displayOption(option) || '选项内容缺失'" />
             </label>
           </div>
 
@@ -806,26 +794,6 @@ function pageRefs(question: any) {
             <MathText :text="q.explanation" />
           </div>
           <el-button text @click="openDispute">对参考答案有疑问？</el-button>
-          <TechnicalDetails title="评分与答案技术详情">
-            <p>评分状态：{{ scoringLabel(scoreOf(q.question_id).scoring_status) }}</p>
-            <p>答案状态：{{ q.answer_label || statusLabel(q.answer_status) }}</p>
-            <pre>{{ JSON.stringify({ score: scoreOf(q.question_id).detail, answer: q.answer_meta }, null, 2) }}</pre>
-          </TechnicalDetails>
-        </article>
-
-        <article v-if="submitted && q.source_refs?.length" class="source-card">
-          <h2>资料出处</h2>
-          <ul>
-            <li v-for="(source, index) in q.source_refs" :key="index">
-              {{ source.rel_path || '课程资料' }}<span v-if="source.page"> · 第 {{ source.page }} 页</span>
-            </li>
-          </ul>
-          <div v-for="(page, index) in pageRefs(q)" :key="index" class="page-reference">
-            <PageImage :doc-id="page.docId" :page="page.page" :label="page.label" />
-          </div>
-          <TechnicalDetails>
-            <pre>{{ JSON.stringify(q.source_refs, null, 2) }}</pre>
-          </TechnicalDetails>
         </article>
 
         <nav class="question-footer" aria-label="题目翻页">

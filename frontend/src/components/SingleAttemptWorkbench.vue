@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { Collection, DocumentChecked, Position, Trophy, TrendCharts, WarningFilled } from '@element-plus/icons-vue'
 import AttemptEvidenceTable from './AttemptEvidenceTable.vue'
 import TargetedRetestHistory from './TargetedRetestHistory.vue'
+import { recommendedResourceLinks } from '../utils/resourceLinks'
 
 const props = defineProps<{ result: any; diagnosisReady: boolean; diagnosisMeta?: any; intervention?: any; loading?: boolean; runningAi?: boolean }>()
 const emit = defineEmits<{ run: []; retest: [] }>()
@@ -13,7 +14,7 @@ const comparison = computed(() => props.result?.class_comparison || {})
 const analysis = computed(() => props.result?.ai_analysis || {})
 const plan = computed(() => props.result?.retest_plan || {})
 const workflowResources = computed(() => props.intervention?.outputs?.recommendations?.result?.recommendations || [])
-const resources = computed(() => workflowResources.value.length ? workflowResources.value : (props.result?.resources || []))
+const resources = computed(() => recommendedResourceLinks(workflowResources.value, props.result?.resources || []))
 const generatedCandidates = computed(() => props.intervention?.outputs?.generation?.result?.candidates || [])
 const publishedRetest = computed(() => props.intervention?.outputs?.retest?.status === 'published')
 const retestFailure = computed(() => publishedRetest.value ? '' : (props.intervention?.errors || []).join('；'))
@@ -61,7 +62,6 @@ function resourceType(resource: any) {
   if (value.includes('article')) return '文章'
   return resource.platform || '学习资料'
 }
-function openResource(resource: any) { if (resource?.url) window.open(resource.url, '_blank', 'noopener,noreferrer') }
 function positions(row: any) { return (row?.question_positions || []).map((n: any) => `第${n}题`).join('、') || '未定位题号' }
 </script>
 
@@ -125,10 +125,11 @@ function positions(row: any) { return (row?.question_positions || []).map((n: an
           <div class="sidebar-section resource-section">
             <h3><el-icon><Collection /></el-icon>推荐学习资源</h3>
             <div v-if="resources.length" class="resource-list">
-              <article v-for="resource in resources.slice(0, 3)" :key="resource.resource_id || resource.url || resource.title">
-                <div><b>{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联当前错题概念' }}</span></div>
-                <el-button link type="primary" :disabled="!resource.url" @click="openResource(resource)">查看</el-button>
-              </article>
+              <a v-for="resource in resources" :key="resource.resource_id || resource.url || resource.title"
+                class="diagnosis-resource-link" :href="resource.url" target="_blank" rel="noopener noreferrer">
+                <b class="resource-title">{{ resource.title }}</b>
+                <span>{{ resourceType(resource) }} · {{ resource.reason || '关联当前错题概念' }}</span>
+              </a>
             </div>
             <div v-else class="sidebar-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div>
           </div>

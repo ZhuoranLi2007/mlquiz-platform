@@ -9,6 +9,7 @@ import { useRoute } from 'vue-router'
 import { api } from '../api/client'
 import AttemptEvidenceTable from '../components/AttemptEvidenceTable.vue'
 import { friendlyError } from '../utils/presentation'
+import { recommendedResourceLinks } from '../utils/resourceLinks'
 
 const loading = ref(true)
 const route = useRoute()
@@ -25,7 +26,7 @@ const latestRetest = computed(() => retests.value.at(-1) || null)
 const sideConcepts = computed(() => (detail.value?.analysis?.concepts || []).slice(0, 4))
 const sideRecommendations = computed(() => (detail.value?.analysis?.recommendations || [])
   .slice(0, 3).map((row: string) => studentText(row).replace(/^\s*\d+[.、．)]?\s*/, '')))
-const sideResources = computed(() => (detail.value?.resources || []).slice(0, 3))
+const sideResources = computed(() => recommendedResourceLinks(detail.value?.resources || []))
 const scoreRate = computed(() => {
   if (score.value.score_rate !== null && score.value.score_rate !== undefined) return Number(score.value.score_rate)
   const max = Number(score.value.max_score || 0)
@@ -170,7 +171,7 @@ onMounted(load)
           <section class="analysis-summary"><h3>综合结论</h3><p>{{ studentText(detail.analysis?.summary || '完成评分后生成本卷学习分析。') }}</p></section>
           <section class="side-section"><h3><el-icon><Aim /></el-icon>薄弱概念</h3><div v-if="sideConcepts.length" class="concept-list"><article v-for="row in sideConcepts" :key="row.name"><b>{{ row.name }}</b><span>{{ studentText(row.chapter) }} · 第{{ row.question_positions?.join('、') || '—' }}题</span><p>{{ studentText(row.description) }}</p></article></div><p v-else class="side-empty">本卷暂无明确薄弱概念。</p></section>
           <section class="side-section"><h3><el-icon><Reading /></el-icon>学习建议</h3><ol v-if="sideRecommendations.length" class="advice-list"><li v-for="row in sideRecommendations" :key="row">{{ row }}</li></ol><p v-else class="side-empty">暂无额外学习建议。</p></section>
-          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="sideResources.length" class="resource-list"><a v-for="row in sideResources" :key="row.url" :href="row.url" target="_blank" rel="noopener"><div><b>{{ row.title }}</b><span>{{ row.type }}</span></div><em>查看</em></a></div><p v-else class="side-empty">暂无匹配资源。</p></section>
+          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="sideResources.length" class="resource-list"><a v-for="row in sideResources" :key="row.url" class="diagnosis-resource-link" :href="row.url" target="_blank" rel="noopener noreferrer"><b class="resource-title">{{ row.title }}</b><span>{{ row.type }}</span></a></div><p v-else class="side-empty">暂无匹配资源。</p></section>
           <section class="side-section retest-side"><h3><el-icon><RefreshRight /></el-icon>针对性复测</h3><div :class="['retest-result', retestState.tone]"><el-icon><Check v-if="retestState.tone === 'passed'" /><Clock v-else /></el-icon><div><b>{{ retestState.label }}</b><span>{{ latestRetest ? `第${latestRetest.round}轮 · ${latestRetest.accuracy === null || latestRetest.accuracy === undefined ? '等待完成' : percent(latestRetest.accuracy)}` : '等待教师布置复测' }}</span></div></div></section>
         </aside>
       </section>

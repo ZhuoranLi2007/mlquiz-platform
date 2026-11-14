@@ -85,6 +85,24 @@ def test_packaged_matrix_questions_restore_original_options(monkeypatch):
         assert [option["key"] for option in result["source_options"]] == ["A", "B", "C", "D"]
 
 
+def test_packaged_emf_formulas_render_as_png_without_changing_source(monkeypatch):
+    root = Path(__file__).resolve().parents[2] / "data" / "demo" / "assets"
+    monkeypatch.setattr(c.cfg, "DATA_DIR", root)
+    converted = []
+    for _, doc in c.manifests():
+        source_sha = doc["source"]["sha256"]
+        for asset in doc.get("media_assets", []):
+            if not str(asset.get("safe_path") or "").endswith(".emf"):
+                continue
+            path = c.asset_path(source_sha, asset["asset_id"])
+            before = sha256(path.read_bytes()).hexdigest()
+            png = c.render_emf_png(path)
+            assert png.startswith(b"\x89PNG\r\n\x1a\n")
+            assert sha256(path.read_bytes()).hexdigest() == before
+            converted.append(asset["asset_id"])
+    assert len(converted) == 4
+
+
 from backend.tests.test_classroom_diagnosis import db
 
 def test_search_entry_api_label_and_recommendation_exclusion(db):

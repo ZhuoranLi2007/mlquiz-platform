@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 import { api } from '../api/client'
 import { auth } from '../auth'
 import {
-  friendlyError, noTaskDescription,
+  friendlyError, friendlyQuizCode, noTaskDescription,
 } from '../utils/presentation'
 
 const route = useRoute()
@@ -113,7 +113,7 @@ onMounted(load)
         </div>
         <div class="report-list">
           <article v-for="item in feedback.attempts || []" :key="item.attempt_id" class="panel report-card">
-            <div class="report-head"><div><span>{{ item.quiz_code || '在线任务' }}</span><h3>{{ item.title }}</h3></div><strong>{{ item.score ?? '—' }}<small> / {{ item.max_score ?? '待批改' }}</small></strong></div>
+            <div class="report-head"><div><span>{{ friendlyQuizCode(item.quiz_code) || '在线任务' }}</span><h3>{{ item.title }}</h3></div><strong>{{ item.score ?? '—' }}<small> / {{ item.max_score ?? '待批改' }}</small></strong></div>
             <p v-if="item.ungraded_item_count" class="uncertainty">已提交 · {{ item.scored_item_count ? '部分评分' : '待补全评分' }}：{{ item.ungraded_item_count }} 题尚未评分，不按零分计算；整卷名义满分 {{ item.nominal_max_score }} 分。</p>
             <div class="kp-chips"><span v-for="chapter in item.chapters || []" :key="chapter.chapter_id">{{ chapter.title || chapter.chapter_id }} · {{ percent(chapter.score_rate) }}</span></div>
             <div v-if="item.resources?.length" class="resource-list"><a v-for="(resource,index) in item.resources" :key="index" :href="resource.url || '#'" target="_blank" rel="noopener"><b>{{ resource.title }}</b><small>{{ resource.reason || '针对薄弱知识点推荐' }}</small></a></div>

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import {
   diagnosisView, formatAnswer, noTaskDescription, pickNextAction,
-  statusLabel, studentIdentityLabel,
+  statusLabel, studentIdentityLabel, friendlyQuizCode,
 } from '../src/utils/presentation.ts'
 import { compatibilityRedirect } from '../src/utils/navigation.ts'
 
@@ -28,6 +28,11 @@ test('英文状态统一显示为中文', () => {
   assert.equal(statusLabel('in_progress'), '作答中')
   assert.equal(statusLabel('corrected'), '已订正')
   assert.equal(statusLabel('verified'), '已巩固')
+})
+
+test('诊断选择器隐藏内部试卷编号，保留课堂小测顺序', () => {
+  assert.equal(friendlyQuizCode('paper_7f7aec21dd204609'), '')
+  assert.equal(friendlyQuizCode('1.2'), '1.2')
 })
 
 test('答案格式化忽略提示和查看解析元数据', () => {

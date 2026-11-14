@@ -5,6 +5,8 @@ import * as echarts from 'echarts'
 import { Collection, Position, TrendCharts, WarningFilled } from '@element-plus/icons-vue'
 import MathText from './MathText.vue'
 import SourceQuestionContent from './SourceQuestionContent.vue'
+import { friendlyQuizCode } from '../utils/presentation'
+import { recommendedResourceLinks } from '../utils/resourceLinks'
 
 const props = defineProps<{
   result: any
@@ -38,13 +40,13 @@ const recommendations = computed(() => (analysis.value?.recommendations || [])
 const aiFailure = computed(() => analysis.value?.model_status
   ? 'AI 服务暂时不可用，当前显示基础分析。可点击页面顶部“运行诊断”重试。' : '')
 const workflowResources = computed(() => props.intervention?.outputs?.recommendations?.result?.recommendations || [])
-const resources = computed(() => (workflowResources.value.length ? workflowResources.value : (props.result?.resources || [])).slice(0, 3))
+const resources = computed(() => recommendedResourceLinks(workflowResources.value, props.result?.resources || []))
 const publishedRetest = computed(() => props.intervention?.outputs?.retest?.status === 'published')
 const generatedCount = computed(() => props.intervention?.outputs?.generation?.result?.candidates?.length || 0)
 
 const paperOptions = computed(() => attempts.value.map((row: any) => ({
   value: row.assessment_version_id,
-  label: `${row.quiz_code || ''} ${row.title}`.trim(),
+  label: `${friendlyQuizCode(row.quiz_code) ? `${friendlyQuizCode(row.quiz_code)} · ` : ''}${row.title}`,
 })))
 const chapterOptions = computed(() => (props.result?.chapters || []).map((row: any) => ({
   value: row.chapter_id, label: row.title || row.chapter_id,
@@ -67,7 +69,7 @@ const TYPE_LABELS: Record<string, string> = {
   single_choice: '单选题', multiple_choice: '多选题', multi_choice: '多选题',
   true_false: '判断题', numeric: '数值计算题', calculation: '计算题',
   short_answer: '简答题', term: '名词解释', fill_blank: '填空题',
-  formula_fill: '公式填空', derivation: '推导题', comprehensive: '综合题',
+  formula_fill: '公式填空', derivation: '推导题', comprehensive: '综合题', matching: '匹配题',
 }
 
 function percent(value: unknown) {
@@ -84,9 +86,8 @@ function dateText(value: unknown) {
   return text.replace('T', ' ').slice(0, 16)
 }
 function examLabel(row: any) {
-  const code = String(row?.quiz_code || '').trim()
-  return code && !/^(paper|av|assess|assessment|quiz)_[0-9a-f-]{8,}$/i.test(code)
-    ? code : `第${row?.exam_order || ''}次`
+  const code = friendlyQuizCode(row?.quiz_code)
+  return code || (row?.exam_order ? `第${row.exam_order}次` : row?.title || '在线考试')
 }
 function answerValue(value: any): any {
   if (value === null || value === undefined || value === '') return null
@@ -131,9 +132,6 @@ function resourceType(resource: any) {
   if (type.includes('ppt') || type.includes('slide')) return '课件'
   if (type.includes('article')) return '文章'
   return resource?.platform || '学习资料'
-}
-function openResource(resource: any) {
-  if (resource?.url) window.open(resource.url, '_blank', 'noopener,noreferrer')
 }
 function setView(mode: 'all' | 'paper' | 'chapter') {
   viewMode.value = mode
@@ -251,7 +249,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
               <section class="explanation"><h4>参考解析</h4><MathText :text="item.answer_reference?.explanation || '该题暂未提供独立解析。'" /></section>
               <details v-if="item.occurrences?.length" class="occurrences">
                 <summary>查看 {{ item.occurrences.length }} 次原始作答与评分</summary>
-                <div v-for="(row, index) in item.occurrences" :key="`${row.attempt_id}-${index}`" class="occurrence-row"><div><b>{{ row.quiz_code || row.assessment_title }} 第{{ row.position }}题</b><span>{{ row.assessment_title }} · {{ dateText(row.exam_time) }}</span></div><div><span>作答：{{ answerText(row.response) }}</span><b>{{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</b></div></div>
+                <div v-for="(row, index) in item.occurrences" :key="`${row.attempt_id}-${index}`" class="occurrence-row"><div><b>{{ friendlyQuizCode(row.quiz_code) || row.assessment_title }} 第{{ row.position }}题</b><span>{{ row.assessment_title }} · {{ dateText(row.exam_time) }}</span></div><div><span>作答：{{ answerText(row.response) }}</span><b>{{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</b></div></div>
               </details>
             </div>
           </article>
@@ -265,7 +263,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
 
         <details v-if="result.ungraded_items?.length" class="ungraded-area">
           <summary>待评分题目（{{ result.ungraded_items.length }} 题次）</summary>
-          <article v-for="(item, index) in result.ungraded_items" :key="`${item.attempt_id}-${item.paper_item_id}-${index}`"><b>{{ item.quiz_code }} 第{{ item.position }}题 · {{ item.assessment_title }}</b><span>尚未完成评分</span></article>
+          <article v-for="(item, index) in result.ungraded_items" :key="`${item.attempt_id}-${item.paper_item_id}-${index}`"><b>{{ friendlyQuizCode(item.quiz_code) || item.assessment_title }} 第{{ item.position }}题 · {{ item.assessment_title }}</b><span>尚未完成评分</span></article>
         </details>
       </main>
 
@@ -291,7 +289,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
 
           <section class="sidebar-section">
             <h3><el-icon><Collection /></el-icon>推荐学习资源</h3>
-            <div v-if="resources.length" class="resource-list"><article v-for="resource in resources" :key="resource.resource_id || resource.url"><div><b>{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联薄弱概念' }}</span></div><el-button link type="primary" :disabled="!resource.url" @click="openResource(resource)">查看</el-button></article></div>
+            <div v-if="resources.length" class="resource-list"><a v-for="resource in resources" :key="resource.resource_id || resource.url" class="diagnosis-resource-link" :href="resource.url" target="_blank" rel="noopener noreferrer"><b class="resource-title">{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联薄弱概念' }}</span></a></div>
             <div v-else class="sidebar-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div>
           </section>
 

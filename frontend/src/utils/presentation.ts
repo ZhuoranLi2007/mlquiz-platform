@@ -31,6 +31,11 @@ export function questionTypeLabel(value?: string | null) {
   return QUESTION_TYPE_LABELS[value] || '其他题型'
 }
 
+export function friendlyQuizCode(value: unknown): string {
+  const code = String(value || '').trim()
+  return /^(paper|attempt|release|av|assess|assessment|quiz)_[\w-]{8,}$/i.test(code) ? '' : code
+}
+
 export function kindLabel(value?: string | null) {
   if (!value) return '学习任务'
   return KIND_LABELS[value] || value

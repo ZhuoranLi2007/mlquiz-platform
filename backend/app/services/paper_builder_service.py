@@ -12,6 +12,7 @@ import re
 import unicodedata
 from collections import Counter
 from difflib import SequenceMatcher
+from functools import lru_cache
 from typing import Any
 
 from sqlalchemy import delete, select
@@ -102,37 +103,45 @@ def quiz_gate(question: E.Question, *, require_active: bool = True) -> tuple[boo
 
 
 def _duplicate_map(questions: list[E.Question]) -> dict[str, dict]:
-    """Mark exact, family and near duplicates for teacher review.
+    """Keep duplicate labels exact while caching by the current question content."""
+    signature = tuple((q.question_id, q.question_version,
+                       _normalized_stem(q.stem_zh or q.stem),
+                       q.question_family_id or "") for q in questions)
+    return _duplicate_map_cached(signature)
 
-    The bank is small enough (hundreds, not millions) for a deterministic
-    pairwise comparison.  We compare latest question versions only.
-    """
-    result = {q.question_id: {"kind": "", "of": "", "similarity": 0.0}
-              for q in questions}
-    normalized = {q.question_id: _normalized_stem(q.stem_zh or q.stem)
-                  for q in questions}
-    for index, left in enumerate(questions):
-        for right in questions[index + 1:]:
-            ltxt, rtxt = normalized[left.question_id], normalized[right.question_id]
+
+@lru_cache(maxsize=4)
+def _duplicate_map_cached(signature: tuple[tuple[str, int, str, str], ...]) -> dict[str, dict]:
+    result = {qid: {"kind": "", "of": "", "similarity": 0.0}
+              for qid, _, _, _ in signature}
+    for index, (left_id, _, ltxt, left_family) in enumerate(signature):
+        for right_id, _, rtxt, right_family in signature[index + 1:]:
             if not ltxt or not rtxt:
                 continue
-            same_family = bool(left.question_family_id and
-                               left.question_family_id == right.question_family_id)
+            same_family = bool(left_family and left_family == right_family)
             if ltxt == rtxt:
                 kind, ratio = "exact", 1.0
             else:
-                ratio = SequenceMatcher(None, ltxt, rtxt).ratio()
+                cutoff = 0.60 if same_family else 0.82
+                # Both checks are upper bounds: skipped pairs could never meet
+                # the original threshold, so no duplicate label can change.
+                if 2 * min(len(ltxt), len(rtxt)) / (len(ltxt) + len(rtxt)) < cutoff:
+                    continue
+                matcher = SequenceMatcher(None, ltxt, rtxt)
+                if matcher.quick_ratio() < cutoff:
+                    continue
+                ratio = matcher.ratio()
                 if same_family and ratio >= 0.60:
                     kind = "family"
                 elif ratio >= 0.82:
                     kind = "near"
                 else:
                     continue
-            for current, other in ((left, right), (right, left)):
-                old = result[current.question_id]
+            for current, other in ((left_id, right_id), (right_id, left_id)):
+                old = result[current]
                 if ratio > float(old["similarity"]):
-                    result[current.question_id] = {
-                        "kind": kind, "of": other.question_id,
+                    result[current] = {
+                        "kind": kind, "of": other,
                         "similarity": round(ratio, 3),
                     }
     return result

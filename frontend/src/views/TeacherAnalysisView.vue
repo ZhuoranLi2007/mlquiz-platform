@@ -6,7 +6,7 @@ import { api } from '../api/client'
 import SingleAttemptWorkbench from '../components/SingleAttemptWorkbench.vue'
 import MultiAttemptWorkbench from '../components/MultiAttemptWorkbench.vue'
 import ClassAssessmentWorkbench from '../components/ClassAssessmentWorkbench.vue'
-import { friendlyError } from '../utils/presentation'
+import { friendlyError, friendlyQuizCode } from '../utils/presentation'
 
 type Scope = 'student_attempt' | 'student_history' | 'class_assessment'
 const route = useRoute()
@@ -34,6 +34,10 @@ const historyRangeMode = ref<'all' | 'date' | 'paper'>('all')
 const historyDates = ref<[string, string] | null>(null)
 const historyPaperId = ref('')
 let selectionRequest = 0
+function assessmentLabel(version: any, includeCount = false) {
+  const code = friendlyQuizCode(version.quiz_code)
+  return `${code ? `${code} · ` : ''}${version.assessment_title}${includeCount ? ` · ${version.item_count}题` : ''}`
+}
 
 const versions = computed(() => assessments.value.flatMap((assessment: any) =>
   (assessment.versions || []).map((version: any) => ({
@@ -436,7 +440,7 @@ onMounted(loadContext)
         <span>试卷</span>
         <el-select v-model="assessmentVersionId" filterable placeholder="选择固定试卷版本">
           <el-option v-for="version in diagnosisVersions" :key="version.assessment_version_id"
-            :label="`${version.quiz_code || ''} ${version.assessment_title} · ${version.item_count}题`"
+            :label="assessmentLabel(version, true)"
             :value="version.assessment_version_id" />
         </el-select>
       </label>
@@ -457,7 +461,7 @@ onMounted(loadContext)
         <span>指定试卷</span>
         <el-select v-model="historyPaperId" filterable placeholder="选择试卷">
           <el-option v-for="version in diagnosisVersions" :key="version.assessment_version_id"
-            :label="`${version.quiz_code || ''} ${version.assessment_title}`"
+            :label="assessmentLabel(version)"
             :value="version.assessment_version_id" />
         </el-select>
       </label>

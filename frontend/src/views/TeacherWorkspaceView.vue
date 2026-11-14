@@ -1,22 +1,24 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../api/client'
 import MathText from '../components/MathText.vue'
 import MasonryGrid from '../components/MasonryGrid.vue'
 import { friendlyError, questionTypeLabel } from '../utils/presentation'
+import { readQuestionBankCache, saveQuestionBankCache } from '../utils/questionBankCache'
 
 type Question = Record<string, any>
 
 const route = useRoute()
 const router = useRouter()
-const loading = ref(true)
+const initialCache = readQuestionBankCache()
+const loading = ref(!initialCache)
 const loadError = ref('')
-const questions = ref<Question[]>([])
-const bankTotal = ref(0)
-const metadata = ref<any>({ knowledge_points: [], chapters: [], question_types: [] })
-const drafts = ref<any[]>([])
+const questions = shallowRef<Question[]>(initialCache?.items || [])
+const bankTotal = ref(initialCache?.total || 0)
+const metadata = ref<any>(initialCache?.metadata || { knowledge_points: [], chapters: [], question_types: [] })
+const drafts = ref<any[]>(initialCache?.drafts || [])
 const selectedIds = ref<string[]>([])
 const detail = ref<Question | null>(null)
 const detailOpen = ref(false)
@@ -280,7 +282,14 @@ function duplicateLabel(question: Question) {
 }
 
 async function load() {
-  loading.value = true
+  const cache = readQuestionBankCache()
+  if (cache) {
+    questions.value = cache.items
+    bankTotal.value = cache.total
+    metadata.value = cache.metadata
+    drafts.value = cache.drafts
+  }
+  loading.value = !cache
   loadError.value = ''
   try {
     const [bank, saved] = await Promise.all([
@@ -291,16 +300,19 @@ async function load() {
     bankTotal.value = Number(bank.total || questions.value.length)
     metadata.value = bank.metadata || {}
     drafts.value = saved.items || []
+    saveQuestionBankCache({ items: questions.value, total: bankTotal.value,
+      metadata: metadata.value, drafts: drafts.value })
     for (const item of metadata.value.question_types || []) {
       if (compose.typeTargets[item.value] === undefined) compose.typeTargets[item.value] = 0
     }
-    visibleCount.value = PAGE_SIZE
+    if (!cache) visibleCount.value = PAGE_SIZE
     const kp = String(route.query.kp || '')
     if (kp) filters.kpId = kp
     if (String(route.query.compose || '') === '1') openCompose('ai')
   } catch (error) {
-    loadError.value = friendlyError(error, '教师题库加载失败')
-    ElMessage.error(loadError.value)
+    const message = friendlyError(error, '教师题库加载失败')
+    if (!cache) loadError.value = message
+    ElMessage.error(cache ? '题库更新失败，当前显示上次加载的内容' : message)
   } finally { loading.value = false }
 }
 

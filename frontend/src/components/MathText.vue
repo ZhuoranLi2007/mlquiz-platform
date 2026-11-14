@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import katex from 'katex'
+import { normalizeDisplayMath } from '../utils/mathDisplay'
 
 const props = defineProps<{ text?: string }>()
 type Part = { type: 'html' | 'text'; value: string; display?: boolean; failed?: boolean }
@@ -17,7 +18,7 @@ function normalize(src: string): string {
   s = s.replace(/\\\[\s*\$\$/g, '$$').replace(/\$\$\s*\\\]/g, '$$')
   s = s.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$')
   s = s.replace(/\\\(/g, '$').replace(/\\\)/g, '$')
-  return s.split(ROW_BREAK).join('\\\\')
+  return normalizeDisplayMath(s.split(ROW_BREAK).join('\\\\'))
 }
 
 const parts = computed<Part[]>(() => {

@@ -46,7 +46,7 @@ onMounted(() => void auth.ensure())
     <button v-if="mobileOpen" class="nav-scrim" aria-label="关闭导航" @click="mobileOpen=false" />
     <aside class="role-side" :class="{open:mobileOpen}">
       <router-link :to="auth.isTeacher.value?'/teacher':'/student'" class="brand">
-        <span class="brand-mark">教</span><span><b>机器学习教学平台</b><small>{{ roleLabel }}</small></span>
+        <span class="brand-mark" aria-label="ML">ML</span><span><b>机器学习教学平台</b><small>{{ roleLabel }}</small></span>
       </router-link>
       <nav>
         <router-link v-for="item in navs" :key="item.path" :to="item.path"
@@ -77,7 +77,7 @@ onMounted(() => void auth.ensure())
 .role-shell{min-height:100vh;background:var(--app-bg);color:var(--app-text);--el-color-primary:var(--app-primary);--el-color-primary-light-3:#7289bc;--el-color-primary-light-5:#a4b4d3;--el-color-primary-light-8:#e1e9f5;--el-color-primary-light-9:#f0f4fa}
 .role-side{position:fixed;z-index:20;inset:0 auto 0 0;width:220px;padding:24px 14px 18px;display:flex;flex-direction:column;justify-content:flex-start;background:#f8faff;border-right:1px solid #e4eaf4}
 .brand{display:flex;flex:none;align-items:center;gap:12px;padding:0 6px;text-decoration:none;color:#17243d;line-height:1.3}
-.brand-mark{display:grid;flex:none;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--app-primary);color:#fff;font-size:16px;font-weight:800;box-shadow:0 5px 14px rgb(66 99 173 / 15%)}
+.brand-mark{display:grid;flex:none;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--app-primary);color:#fff;font-size:15px;font-weight:800;letter-spacing:-.04em;box-shadow:0 5px 14px rgb(66 99 173 / 15%)}
 .brand b,.brand small{display:block}
 .brand b{font-size:14.5px;font-weight:750;white-space:nowrap}
 .brand small{margin-top:3px;color:#7c8ba4;font-size:11px}

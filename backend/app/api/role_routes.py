@@ -935,10 +935,13 @@ def student_feedback_detail(
 @router.get("/classroom-media/{source_sha}/{asset_id}")
 def classroom_media(source_sha: str, asset_id: str,
                     _: auth_service.Principal = Depends(auth_service.get_principal)):
-    from fastapi.responses import FileResponse
-    from backend.app.services.classroom_content import asset_path
+    from fastapi.responses import FileResponse, Response
+    from backend.app.services.classroom_content import asset_path, render_emf_png
     try:
         path = asset_path(source_sha, asset_id)
+        if path.suffix.lower() == ".emf":
+            return Response(render_emf_png(path), media_type="image/png",
+                            headers={"Cache-Control": "private, max-age=3600"})
     except ValueError as exc:
         raise HTTPException(404, str(exc)) from exc
     return FileResponse(path, headers={"Cache-Control": "private, max-age=3600"})
