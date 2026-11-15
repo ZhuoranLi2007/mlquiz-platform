@@ -169,24 +169,24 @@ onMounted(load)
 .bank-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .bank-stats div { padding: 12px 14px; border: 1px solid var(--border); border-radius: 11px; background: var(--panel); display: flex; flex-direction: column; }
 .bank-stats strong { font-size: 22px; color: var(--accent); }
-.bank-stats span { color: var(--muted); font-size: 12.5px; }
+.bank-stats span { color: var(--muted); font-size: 14px; }
 .bank-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .bank-select { width: 220px; max-width: 100%; }
 .bank-search { width: 200px; max-width: 100%; }
 .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { height: 30px; padding: 0 11px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--text-2); font-size: 12.5px; cursor: pointer; }
+.chip { height: 30px; padding: 0 11px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--text-2); font-size: 14px; cursor: pointer; }
 .chip:hover { border-color: #c7d2fe; color: var(--accent); }
 .chip.active { background: var(--accent-soft); border-color: #c7d2fe; color: var(--accent); font-weight: 600; }
-.bank-count { margin: 0; color: var(--muted); font-size: 12.5px; }
+.bank-count { margin: 0; color: var(--muted); font-size: 14px; }
 .q-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
 .q-item { padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
 .q-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
-.q-score { margin-left: auto; color: var(--muted); font-size: 12px; }
+.q-score { margin-left: auto; color: var(--muted); font-size: 14px; }
 .q-stem { font-size: 14px; line-height: 1.7; }
 .q-prefix { color: var(--muted); }
-.q-options { display: grid; gap: 3px; margin-top: 8px; font-size: 13px; color: var(--text-2); }
+.q-options { display: grid; gap: 3px; margin-top: 8px; font-size: 14px; color: var(--text-2); }
 .q-option { padding: 3px 8px; border-radius: 7px; background: var(--panel-soft); }
-.q-meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 0; color: var(--muted); font-size: 11.5px; }
+.q-meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 0; color: var(--muted); font-size: 14px; }
 .load-more { display: flex; justify-content: center; padding: 8px 0 4px; }
 @media (max-width: 900px) {
   .bank-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }

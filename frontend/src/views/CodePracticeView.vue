@@ -32,7 +32,7 @@
 .code-page { max-width: 1080px; margin: 0 auto; }
 .page-head { margin-bottom: 20px; }
 .page-head h1 { margin: 4px 0 6px; font-size: 30px; letter-spacing: -.02em; }
-.eyebrow { margin: 0; color: #4f46e5; font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+.eyebrow { margin: 0; color: #4f46e5; font-size: 14px; font-weight: 700; letter-spacing: .12em; }
 .page-head p:not(.eyebrow) { margin: 0; color: #5f6675; font-size: 14px; }
 .code-empty {
   display: grid; justify-items: center; gap: 10px; padding: 72px 24px;

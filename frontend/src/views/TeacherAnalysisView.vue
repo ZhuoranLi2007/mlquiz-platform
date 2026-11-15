@@ -204,7 +204,7 @@ async function loadHistorySelection() {
     if (baseline.status === 'rejected') throw baseline.reason
     const baselineResult: any = baseline.value
     if (latest.status === 'fulfilled'
-      && (latest.value as any)?.skill_version === 'classroom-chapter-diagnosis-v4') {
+      && (latest.value as any)?.skill_version === 'classroom-chapter-diagnosis-v5') {
       const saved: any = latest.value
       result.value = saved.result
       diagnosisMeta.value = {
@@ -248,7 +248,8 @@ async function loadClassAssessmentSelection() {
     if (baseline.status === 'rejected') throw baseline.reason
     const baselineResult: any = baseline.value
     if (latest.status === 'fulfilled'
-      && (latest.value as any)?.skill_version === 'classroom-chapter-diagnosis-v4') {
+      && (latest.value as any)?.skill_version === 'classroom-chapter-diagnosis-v5'
+      && (latest.value as any)?.result?.class_view_version === 2) {
       const saved: any = latest.value
       result.value = saved.result
       diagnosisMeta.value = {
@@ -274,7 +275,9 @@ watch(studentId, () => {
   else clearSelectionResult()
 })
 watch(assessmentVersionId, async () => {
-  if (contextLoading.value) return
+  // The history view has its own paper filter. Initialising the single-paper
+  // selector must not cancel an in-flight history request.
+  if (contextLoading.value || scope.value === 'student_history') return
   clearSelectionResult()
   try {
     if (scope.value === 'student_attempt') await loadStudentSelection()
@@ -508,13 +511,13 @@ onMounted(loadContext)
 .analysis-page{--diag-blue:#2563eb;--diag-border:#dce5f2;--diag-radius:13px;--diag-shadow:0 4px 16px rgb(32 65 115 / 5%);display:grid;min-width:0;gap:14px;color:#34445f}
 .scope-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
 .scope-tabs button{min-width:0;padding:12px 15px;border:1px solid #dce4f0;border-radius:11px;background:#fff;color:#34445f;text-align:left;cursor:pointer;transition:.16s}
-.scope-tabs button:hover{border-color:#b9c8e3}.scope-tabs b,.scope-tabs small{display:block}.scope-tabs b{font-size:13px}.scope-tabs small{margin-top:3px;color:#8794a8;font-size:10.5px;font-weight:400}.scope-tabs button.active{border-color:#174d7a;background:#174d7a;color:#fff;box-shadow:0 8px 20px rgb(23 77 122 / 13%)}.scope-tabs button.active small{color:#c5d8e7}
+.scope-tabs button:hover{border-color:#b9c8e3}.scope-tabs b,.scope-tabs small{display:block}.scope-tabs b{font-size:14px}.scope-tabs small{margin-top:3px;color:#8794a8;font-size:14px;font-weight:400}.scope-tabs button.active{border-color:#174d7a;background:#174d7a;color:#fff;box-shadow:0 8px 20px rgb(23 77 122 / 13%)}.scope-tabs button.active small{color:#c5d8e7}
 .filters-panel{display:grid;grid-template-columns:minmax(190px,.75fr) minmax(240px,1fr) minmax(260px,1fr) auto;align-items:end;gap:9px;padding:10px 12px;border:1px solid #dfe7f2;border-radius:12px;background:#fff;box-shadow:0 3px 13px rgb(40 69 112 / 3%)}
-.filter-item{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:7px;min-width:0}.filter-item>span{color:#596982;font-size:11.5px;font-weight:700}.filter-item :deep(.el-select){min-width:0;width:100%}.filter-item :deep(.el-select__wrapper){min-height:34px;border-radius:7px;box-shadow:0 0 0 1px #dce4f0 inset}.question-filter{grid-column:span 1}.run-button,.save-button{min-height:34px;margin:0;border-radius:7px}.run-button{min-width:92px;box-shadow:0 5px 13px rgb(49 92 240 / 15%)}
+.filter-item{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:7px;min-width:0}.filter-item>span{color:#596982;font-size:14px;font-weight:700}.filter-item :deep(.el-select){min-width:0;width:100%}.filter-item :deep(.el-select__wrapper){min-height:34px;border-radius:7px;box-shadow:0 0 0 1px #dce4f0 inset}.question-filter{grid-column:span 1}.run-button,.save-button{min-height:34px;margin:0;border-radius:7px}.run-button{min-width:92px;box-shadow:0 5px 13px rgb(49 92 240 / 15%)}
 .loading-panel{padding:22px;border:1px solid #e0e7f1;border-radius:14px;background:#fff}.empty-selection{padding:46px;border:1px dashed #cdd7e6;border-radius:14px;background:#fff;color:#78869a;text-align:center}
-.panel{padding:18px;border:1px solid #e0e7f1;border-radius:14px;background:#fff;box-shadow:0 3px 14px rgb(40 69 112 / 3%)}.panel h3{margin:0 0 10px;color:#17243d}.source-summary p{font-size:12px}
-.result-grid{display:grid;grid-template-columns:300px 1fr;gap:14px}.wide{grid-column:1/-1}.result-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid #edf1f5}.result-title h3{margin:0}.result-title>span{padding:4px 9px;border-radius:20px;background:#edf3ff;color:#315cf0;font-size:11px}.stem{color:#273853;font-size:15px;line-height:1.75}.mini-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.mini-metrics div{padding:13px;border-radius:9px;background:#f7f9fc}.mini-metrics b,.mini-metrics span{display:block}.mini-metrics b{color:#174d7a;font-size:22px}.mini-metrics span{margin-top:2px;color:#7b889b;font-size:11px}.evidence-note{padding:9px 12px;border-left:3px solid #d8a63d;background:#fff8e8;color:#7a6535;font-size:11.5px;line-height:1.65}.kp-list{display:grid;gap:6px}.kp-list>div{display:grid;grid-template-columns:1fr 70px 110px;gap:10px;padding:8px 0;border-bottom:1px solid #edf1f5;font-size:12px}.kp-list b{color:#247b74}.kp-list small{color:#8795a1}
-.panel details{padding:8px 0;border-top:1px solid #edf1f5}.panel summary{color:#34445f;font-size:12px;cursor:pointer}
+.panel{padding:18px;border:1px solid #e0e7f1;border-radius:14px;background:#fff;box-shadow:0 3px 14px rgb(40 69 112 / 3%)}.panel h3{margin:0 0 10px;color:#17243d}.source-summary p{font-size:14px}
+.result-grid{display:grid;grid-template-columns:300px 1fr;gap:14px}.wide{grid-column:1/-1}.result-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid #edf1f5}.result-title h3{margin:0}.result-title>span{padding:4px 9px;border-radius:20px;background:#edf3ff;color:#315cf0;font-size:14px}.stem{color:#273853;font-size:15px;line-height:1.75}.mini-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.mini-metrics div{padding:13px;border-radius:9px;background:#f7f9fc}.mini-metrics b,.mini-metrics span{display:block}.mini-metrics b{color:#174d7a;font-size:22px}.mini-metrics span{margin-top:2px;color:#7b889b;font-size:14px}.evidence-note{padding:9px 12px;border-left:3px solid #d8a63d;background:#fff8e8;color:#7a6535;font-size:14px;line-height:1.65}.kp-list{display:grid;gap:6px}.kp-list>div{display:grid;grid-template-columns:1fr 70px 110px;gap:10px;padding:8px 0;border-bottom:1px solid #edf1f5;font-size:14px}.kp-list b{color:#247b74}.kp-list small{color:#8795a1}
+.panel details{padding:8px 0;border-top:1px solid #edf1f5}.panel summary{color:#34445f;font-size:14px;cursor:pointer}
 @media(max-width:1120px){.filters-panel{grid-template-columns:1fr 1fr}.paper-filter{grid-column:span 2}.run-button,.save-button{width:100%}}
 @media(max-width:820px){.scope-tabs{grid-template-columns:1fr 1fr}.result-grid{grid-template-columns:1fr}.filters-panel{grid-template-columns:1fr}.paper-filter{grid-column:auto}.mini-metrics{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.scope-tabs{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.scope-tabs button{padding:10px 8px;text-align:center}.filter-item{grid-template-columns:44px minmax(0,1fr)}}

@@ -52,6 +52,8 @@ const ocrText = ref('')
 const ocrBusyId = ref('')
 
 let timer: ReturnType<typeof setInterval> | undefined
+let elapsedBaseMs: number | null = null
+let elapsedAnchor = 0
 let saveTimer: ReturnType<typeof setTimeout> | undefined
 let diagnosisTimer: ReturnType<typeof setInterval> | undefined
 let diagnosisChecks = 0
@@ -61,9 +63,9 @@ const isQuiz = computed(() => ['quiz', 'retest'].includes(state.value?.mode))
 const isRetest = computed(() => state.value?.mode === 'retest')
 const questions = computed<any[]>(() => state.value?.questions || [])
 const q = computed(() => questions.value[current.value] || null)
-const answeredCount = computed(() => questions.value.filter((item) => hasMeaningfulAnswer(responses.value[item.question_id])).length)
+const answeredCount = computed(() => questions.value.filter((item) => hasMeaningfulAnswer(answerFor(item))).length)
 const unansweredCount = computed(() => Math.max(0, questions.value.length - answeredCount.value))
-const wrongCount = computed(() => Object.values<any>(state.value?.scores || {}).filter((score) => score.correct === false).length)
+const wrongCount = computed(() => Object.values<any>(state.value?.scores_by_item || {}).filter((score) => score.correct === false).length)
 const scorePercent = computed(() => {
   const max = Number(state.value?.max_score || 0)
   return max > 0 ? Math.round((Number(state.value?.score || 0) / max) * 100) : null
@@ -84,6 +86,10 @@ const diagnosisTone = computed<'success' | 'danger' | 'info'>(() => {
 })
 
 function resp(qid: string) { return responses.value[qid] || {} }
+function answerFor(item: any) {
+  const byItem = submitted.value && state.value?.answers_by_item?.[item?.item_id]
+  return byItem ? answerPayload(byItem.response || {}) : resp(item.question_id)
+}
 function meta(qid: string) { return answerMeta.value[qid] || { hints_used: 0, solution_viewed: false } }
 
 function setLang(value: string | number | boolean) {
@@ -110,13 +116,13 @@ function translationMissing(item: any) {
     && String(item?.stem || '').trim().length > 0
 }
 
-function selectedKeys(qid: string): string[] {
-  const value = resp(qid).keys
+function selectedKeys(qid: string, itemId = ''): string[] {
+  const value = (itemId ? answerFor({ question_id: qid, item_id: itemId }) : resp(qid)).keys
   return Array.isArray(value) ? value : []
 }
 
-function responseParts(qid: string): unknown[] {
-  const value = resp(qid).parts
+function responseParts(qid: string, itemId = ''): unknown[] {
+  const value = (itemId ? answerFor({ question_id: qid, item_id: itemId }) : resp(qid)).parts
   return Array.isArray(value) ? value : []
 }
 
@@ -340,6 +346,11 @@ async function load(showSpinner = true) {
       ? `/student/attempts/${attemptId}` : `/attempts/${attemptId}`
     const result: any = await api.get(endpoint)
     state.value = result
+    syncElapsed(result)
+    if (auth.isTeacher.value && result.status === 'submitted') {
+      await router.replace(`/teacher/attempts/${attemptId}`)
+      return
+    }
     if (assignedStudentMode && result.status === 'submitted') {
       const tasks: any = await api.get('/student/assignments')
       targetedRetest.value = (tasks.items || []).find(
@@ -357,7 +368,6 @@ async function load(showSpinner = true) {
     }
     responses.value = nextResponses
     answerMeta.value = nextMeta
-    updateElapsed()
     if (result.status === 'submitted') startDiagnosisPolling()
   } catch (e) {
     error.value = friendlyError(e, '答卷加载失败')
@@ -381,6 +391,7 @@ function startDiagnosisPolling() {
 
 onMounted(async () => {
   await load()
+  if (auth.isTeacher.value && submitted.value) return
   await loadAttachments()
   // 深链：?index=3 直接定位到第 3 题（用于演示公式渲染）
   const wantIndex = Number(route.query.index || 0)
@@ -393,7 +404,7 @@ onMounted(async () => {
       .find((a: any) => a.attachment_id === wantOcr)
     if (hit) openOcr(hit)
   }
-  timer = setInterval(updateElapsed, 1000)
+  if (!submitted.value) timer = setInterval(updateElapsed, 250)
 })
 
 onBeforeUnmount(() => {
@@ -403,11 +414,22 @@ onBeforeUnmount(() => {
   if (!submitted.value && dirty.value.size) void flushDirty()
 })
 
+function syncElapsed(result: any) {
+  const value = result?.server_elapsed_ms
+  elapsedBaseMs = value === null || value === undefined || !Number.isFinite(Number(value))
+    ? null : Math.max(0, Number(value))
+  elapsedAnchor = performance.now()
+  updateElapsed()
+}
+
 function updateElapsed() {
-  if (!state.value) return
-  const seconds = Math.floor(Number(state.value.server_elapsed_ms || 0) / 1000)
-  elapsed.value = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
-  if (!submitted.value && state.value.server_elapsed_ms !== undefined) state.value.server_elapsed_ms += 1000
+  if (elapsedBaseMs === null) { elapsed.value = '用时未记录'; return }
+  const ms = elapsedBaseMs + (submitted.value ? 0 : performance.now() - elapsedAnchor)
+  const seconds = Math.floor(ms / 1000)
+  const minutes = Math.floor(seconds / 60)
+  elapsed.value = minutes >= 60
+    ? `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
+    : `${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
 }
 
 function goto(index: number) {
@@ -492,6 +514,12 @@ async function submit() {
       ? `/student/assignments/${recipientId}/submit`
       : `/attempts/${attemptId}/submit`
     state.value = await api.post(endpoint, { request_key: `submit:${attemptId}` })
+    syncElapsed(state.value)
+    if (timer) { clearInterval(timer); timer = undefined }
+    if (auth.isTeacher.value) {
+      await router.replace(`/teacher/attempts/${attemptId}`)
+      return
+    }
     targetedRetest.value = state.value?.targeted_retest || targetedRetest.value
     ElMessage.success('交卷成功，成绩已生成')
     startDiagnosisPolling()
@@ -526,7 +554,7 @@ async function openDispute() {
   }
 }
 
-function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
+function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id] || null }
 </script>
 
 <template>
@@ -547,6 +575,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
       </div>
       <div class="exam-meta">
         <span class="timer" aria-label="答题用时">{{ elapsed }}</span>
+        <small v-if="submitted && state?.elapsed_source === 'historical_display'" class="elapsed-note">历史展示用时</small>
         <StatusBadge :status="submitted ? 'submitted' : 'in_progress'" />
       </div>
     </header>
@@ -559,9 +588,9 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
     <section v-if="submitted" class="result-hero">
       <div>
         <p class="eyebrow">本次成绩</p>
-        <div class="score-line"><strong>{{ state?.score ?? '待评分' }}</strong><span>/ {{ state?.max_score ?? '—' }} 已评分满分</span></div>
-        <p v-if="state?.ungraded_item_count">已提交，{{ state.scored_item_count ? '部分评分' : '待补全评分' }}：{{ state.ungraded_item_count }} 题 / {{ state.ungraded_max_score }} 分未评分；整卷名义满分 {{ state.nominal_max_score }} 分。</p>
-        <p>{{ scorePercent === null ? '尚无可评分结果' : scorePercent + '%' }} · {{ wrongCount }} 道错题<span v-if="state?.manual_pending_count"> · {{ state.manual_pending_count }} 道待评分</span></p>
+        <div class="score-line"><strong>{{ state?.score ?? '暂无成绩' }}</strong><span v-if="state?.score !== null && state?.score !== undefined">/ {{ state?.max_score }} 分</span></div>
+        <p v-if="state?.ungraded_item_count && state?.scored_item_count">已记录 {{ state.scored_item_count }} / {{ questions.length }} 题的逐题成绩。</p>
+        <p v-if="scorePercent !== null">{{ scorePercent }}% · {{ wrongCount }} 道错题</p>
         <div v-if="isRetest && targetedRetest" :class="['retest-verdict', targetedRetest.status]">
           <b v-if="targetedRetest.status === 'passed'">本轮复测已达标，正确率{{ Math.round(Number(targetedRetest.accuracy) * 100) }}%。</b>
           <b v-else-if="targetedRetest.status === 'not_passed'">本轮复测未达标，正确率{{ Math.round(Number(targetedRetest.accuracy) * 100) }}%，建议继续练习。</b>
@@ -589,10 +618,10 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
         <div class="question-grid">
           <button
             v-for="(item, index) in questions"
-            :key="item.question_id"
+            :key="item.item_id"
             class="question-dot"
-            :class="{ current: index === current, answered: hasMeaningfulAnswer(responses[item.question_id]) }"
-            :aria-label="`第 ${index + 1} 题${hasMeaningfulAnswer(responses[item.question_id]) ? '，已作答' : '，未作答'}`"
+            :class="{ current: index === current, answered: hasMeaningfulAnswer(answerFor(item)) }"
+            :aria-label="`第 ${index + 1} 题${hasMeaningfulAnswer(answerFor(item)) ? '，已作答' : '，未作答'}`"
             :aria-current="index === current ? 'step' : undefined"
             @click="goto(index)"
           >{{ index + 1 }}</button>
@@ -608,7 +637,8 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
             <div class="question-tags">
               <span>第 {{ current + 1 }} 题</span>
               <span>{{ questionTypeLabel(q.question_type) }}</span>
-              <span>{{ q.score }} 分</span>
+              <span v-if="!submitted || scoreOf(q)">{{ q.score }} 分</span>
+              <span v-if="submitted && q.is_scoring_revision">修订版（评分依据）</span>
             </div>
             <div class="question-tools">
               <el-segmented v-if="hasBilingual" :model-value="lang" size="small"
@@ -631,7 +661,12 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
             <img v-for="(img, index) in q.stem_images" :key="img" :src="'/' + img" :alt="`第 ${current + 1} 题配图 ${index + 1}`" />
           </div>
 
-          <div v-if="q.options_incomplete" class="option-missing">
+          <div v-if="submitted && q.is_scoring_revision && q.options?.length" class="revised-options">
+            <div v-for="option in q.options || []" :key="option.key" class="revised-option">
+              <b>{{ option.key }}</b><MathText :text="displayOption(option)" />
+            </div>
+          </div>
+          <div v-else-if="q.options_incomplete" class="option-missing">
             <strong>{{ q.repair_hint || '该题选项缺失，暂不可作答' }}</strong>
             <span>这道题的选项没能完整保存，不参与本次作答与计分；其他题目不受影响。</span>
           </div>
@@ -639,7 +674,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
           <div v-else-if="q.question_type === 'single_choice'" class="answer-area option-list">
             <label v-for="option in q.options" :key="option.key" class="option-item">
               <el-radio
-                :model-value="resp(q.question_id).key || ''"
+                :model-value="answerFor(q).key || ''"
                 :value="option.key"
                 :disabled="submitted"
                 @update:model-value="(value: any) => setResp(q.question_id, { key: value })"
@@ -656,7 +691,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
           >
             <label v-for="option in q.options" :key="option.key" class="option-item">
               <el-checkbox
-                :model-value="selectedKeys(q.question_id).includes(option.key)"
+                :model-value="selectedKeys(q.question_id, q.item_id).includes(option.key)"
                 :disabled="submitted"
                 @update:model-value="(checked: any) => toggleMulti(q.question_id, option.key, checked)"
               />
@@ -668,7 +703,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 
           <el-radio-group
             v-else-if="q.question_type === 'true_false'"
-            :model-value="resp(q.question_id).value ?? null"
+            :model-value="answerFor(q).value ?? null"
             :disabled="submitted"
             class="answer-area boolean-options"
             @update:model-value="(value: any) => setResp(q.question_id, { value })"
@@ -684,7 +719,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
             <label v-for="(part, index) in q.response_schema.parts" :key="`${part.label}-${index}`">
               <span>{{ part.label }}<template v-if="part.unit">（{{ part.unit }}）</template></span>
               <el-input
-                :model-value="responseParts(q.question_id)[index] ?? ''"
+                :model-value="responseParts(q.question_id, q.item_id)[index] ?? ''"
                 :disabled="submitted"
                 placeholder="输入数值"
                 :aria-label="`${part.label}数值答案`"
@@ -695,14 +730,14 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 
           <div v-else-if="q.question_type === 'numeric'" class="answer-area numeric-answer">
             <el-input
-              :model-value="resp(q.question_id).value ?? ''"
+              :model-value="answerFor(q).value ?? ''"
               :disabled="submitted"
               placeholder="输入数值"
               aria-label="数值答案"
               @update:model-value="(value: any) => setResp(q.question_id, { value })"
             />
             <el-input
-              :model-value="resp(q.question_id).unit ?? ''"
+              :model-value="answerFor(q).unit ?? ''"
               :disabled="submitted"
               placeholder="单位（选填）"
               aria-label="答案单位"
@@ -717,7 +752,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
             <label v-for="index in q.response_schema.count" :key="index">
               <span>第 {{ index }} 空</span>
               <el-input
-                :model-value="responseParts(q.question_id)[index - 1] ?? ''"
+                :model-value="responseParts(q.question_id, q.item_id)[index - 1] ?? ''"
                 :disabled="submitted"
                 placeholder="填写答案"
                 :aria-label="`第${index}空答案`"
@@ -730,7 +765,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
             <el-input
               type="textarea"
               :rows="q.question_type === 'comprehensive' ? 8 : 5"
-              :model-value="resp(q.question_id).text || ''"
+              :model-value="answerFor(q).text || ''"
               :disabled="submitted"
               placeholder="在这里写下你的思路和答案"
               aria-label="文字答案"
@@ -777,22 +812,27 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
           </div>
         </article>
 
-        <article v-if="submitted && scoreOf(q.question_id)" class="feedback-card">
+        <article v-if="submitted && scoreOf(q)" class="feedback-card">
           <div class="feedback-head">
             <div>
               <p class="eyebrow">本题结果</p>
-              <h2>{{ scoreOf(q.question_id).correct === true ? '回答正确' : scoreOf(q.question_id).correct === false ? '需要再看看' : '等待评分' }}</h2>
+              <h2>{{ scoreOf(q).correct === true ? '回答正确' : '需要再看看' }}</h2>
             </div>
-            <strong v-if="scoreOf(q.question_id).correct !== null">{{ scoreOf(q.question_id).awarded_score }} / {{ scoreOf(q.question_id).max_score }} 分</strong><strong v-else>待评分（未计入得分率）</strong>
+            <strong>{{ scoreOf(q).awarded_score }} / {{ scoreOf(q).max_score }} 分</strong>
           </div>
           <div class="answer-comparison">
-            <div><span>你的答案</span><p>{{ formatAnswer(resp(q.question_id)) }}</p></div>
+            <div><span>你的答案</span><p>{{ formatAnswer(answerFor(q)) }}</p></div>
             <div v-if="q.answer_payload && Object.keys(q.answer_payload).length"><span>参考答案</span><p>{{ formatAnswer(q.answer_payload) }}</p></div>
           </div>
           <div v-if="q.explanation" class="explanation">
             <strong>解题思路</strong>
             <MathText :text="q.explanation" />
           </div>
+          <details v-if="q.original_question" class="original-question">
+            <summary>查看原始题目</summary>
+            <SourceQuestionContent :question="q.original_question" :fallback="q.original_question.stem" />
+            <p v-for="option in q.original_question.options || []" :key="option.key">{{ option.key }}. {{ option.text }}</p>
+          </details>
           <el-button text @click="openDispute">对参考答案有疑问？</el-button>
         </article>
 
@@ -810,9 +850,9 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
       <div class="question-grid question-grid--mobile">
         <button
           v-for="(item, index) in questions"
-          :key="item.question_id"
+          :key="item.item_id"
           class="question-dot"
-          :class="{ current: index === current, answered: hasMeaningfulAnswer(responses[item.question_id]) }"
+          :class="{ current: index === current, answered: hasMeaningfulAnswer(answerFor(item)) }"
           @click="goto(index)"
         >{{ index + 1 }}</button>
       </div>
@@ -853,7 +893,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 .exam-toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(220px, 420px) auto; align-items: center; gap: 28px; min-height: 76px; margin-bottom: 18px; }
 .exam-title { display: flex; align-items: center; gap: 12px; }
 .exam-title h1 { margin: 2px 0 0; font-size: 24px; line-height: 1.2; }
-.eyebrow { margin: 0; color: #4f46e5; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+.eyebrow { margin: 0; color: #4f46e5; font-size: 14px; font-weight: 700; letter-spacing: .04em; }
 .back-button { width: 44px; height: 44px; border: 1px solid #e1e4ec; border-radius: 12px; background: #fff; color: #30384a; font-size: 22px; cursor: pointer; }
 .back-button:hover { border-color: #4f46e5; color: #4f46e5; }
 .back-button:focus-visible, .question-dot:focus-visible, .mobile-nav-button:focus-visible { outline: 3px solid rgb(79 70 229 / 25%); outline-offset: 2px; }
@@ -862,6 +902,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 .progress-track span { display: block; height: 100%; border-radius: inherit; background: #4f46e5; transition: width .2s ease; }
 .exam-meta { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
 .timer { min-width: 70px; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.elapsed-note { color: #69778d; font-size: 14px; white-space: nowrap; }
 .error-banner { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 16px; padding: 12px 16px; border: 1px solid #fecaca; border-radius: 12px; background: #fef2f2; color: #991b1b; }
 .error-banner button { border: 0; background: transparent; color: inherit; cursor: pointer; }
 .result-hero { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(320px, 1.2fr); gap: 36px; margin-bottom: 22px; padding: 28px 32px; border-radius: 18px; background: linear-gradient(135deg, #eef2ff, #f0fdfa); border: 1px solid #dfe3fb; }
@@ -870,7 +911,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 .score-line span, .result-hero p { color: #596174; }
 .result-next { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
 .result-next p { margin: 10px 0 14px; }
-.retest-verdict{margin-top:12px;padding:9px 11px;border-radius:8px;background:#fff4df;color:#8b6321;font-size:12px}.retest-verdict.passed{background:#e7f7ee;color:#14794f}.retest-verdict.not_passed{background:#ffedef;color:#c33b46}
+.retest-verdict{margin-top:12px;padding:9px 11px;border-radius:8px;background:#fff4df;color:#8b6321;font-size:14px}.retest-verdict.passed{background:#e7f7ee;color:#14794f}.retest-verdict.not_passed{background:#ffedef;color:#c33b46}
 .result-actions { display: flex; gap: 10px; }
 .exam-layout { display: grid; grid-template-columns: 210px minmax(0, 1fr); align-items: start; gap: 22px; }
 .question-sidebar { position: sticky; top: 16px; padding: 18px; border: 1px solid #e3e6ee; border-radius: 16px; background: #fff; box-shadow: 0 8px 30px rgb(22 31 52 / 5%); }
@@ -885,34 +926,34 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 .question-topline, .feedback-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .question-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .question-tools :deep(.el-segmented) { --el-segmented-item-selected-bg-color: #eef2ff; --el-segmented-item-selected-color: #4338ca; }
-.translation-missing { margin: 8px 0 0; padding: 6px 10px; border-left: 3px solid #d97706; border-radius: 4px; background: #fffbeb; color: #9a5b12; font-size: 12.5px; }
+.translation-missing { margin: 8px 0 0; padding: 6px 10px; border-left: 3px solid #d97706; border-radius: 4px; background: #fffbeb; color: #9a5b12; font-size: 14px; }
 .option-missing {
   display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
   margin: 10px 0; border: 1px solid #fde68a; border-radius: 8px;
-  background: #fffbeb; color: #92400e; font-size: 12.5px; line-height: 1.6;
+  background: #fffbeb; color: #92400e; font-size: 14px; line-height: 1.6;
 }
-.option-missing strong { font-size: 13px; }
+.option-missing strong { font-size: 14px; }
 .ocr-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 8px; }
-.ocr-hint { color: #8b93a3; font-size: 12px; }
+.ocr-hint { color: #8b93a3; font-size: 14px; }
 .ocr-input { display: none; }
 .attach-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .attach-item { width: 96px; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; }
 .attach-item img { display: block; width: 100%; height: 72px; object-fit: cover; cursor: pointer; }
-.attach-meta { display: flex; align-items: center; justify-content: space-between; padding: 3px 5px; font-size: 11px; }
+.attach-meta { display: flex; align-items: center; justify-content: space-between; padding: 3px 5px; font-size: 14px; }
 .attach-state.ok { color: #047857; }
 .attach-state.failed { color: #b91c1c; }
 .attach-state.pending { color: #8b93a3; }
-.attach-del { padding: 0; border: 0; background: none; color: #b91c1c; cursor: pointer; font-size: 11px; }
+.attach-del { padding: 0; border: 0; background: none; color: #b91c1c; cursor: pointer; font-size: 14px; }
 .ocr-panel { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 16px; }
 .ocr-image img { width: 100%; border: 1px solid #e5e7eb; border-radius: 8px; }
-.ocr-image small { display: block; margin-top: 6px; color: #8b93a3; font-size: 11.5px; }
+.ocr-image small { display: block; margin-top: 6px; color: #8b93a3; font-size: 14px; }
 .ocr-editor { display: flex; min-width: 0; flex-direction: column; gap: 10px; }
-.ocr-latex { max-height: 180px; overflow: auto; padding: 10px 12px; border: 1px solid #eef0f4; border-radius: 8px; background: #fbfcfe; font-size: 13px; }
-.ocr-latex strong { display: block; margin-bottom: 6px; color: #697181; font-size: 12px; }
+.ocr-latex { max-height: 180px; overflow: auto; padding: 10px 12px; border: 1px solid #eef0f4; border-radius: 8px; background: #fbfcfe; font-size: 14px; }
+.ocr-latex strong { display: block; margin-bottom: 6px; color: #697181; font-size: 14px; }
 .ocr-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .question-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.question-tags span { padding: 5px 9px; border-radius: 7px; background: #f3f4f8; color: #555e70; font-size: 13px; }
-.save-state { color: #6b7280; font-size: 13px; white-space: nowrap; }
+.question-tags span { padding: 5px 9px; border-radius: 7px; background: #f3f4f8; color: #555e70; font-size: 14px; }
+.save-state { color: #6b7280; font-size: 14px; white-space: nowrap; }
 .save-state.failed { color: #b91c1c; }
 .question-stem { margin: 28px 0 22px; font-size: 18px; line-height: 1.8; font-weight: 600; }
 .stem-prefix { display: block; margin-bottom: 6px; color: var(--muted); font-size: 14px; font-weight: 500; }
@@ -929,7 +970,7 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 .multi-part-answer { display: grid; gap: 12px; }
 .multi-part-answer label { display: grid; gap: 6px; color: var(--text-2); }
 .question-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; padding-top: 18px; border-top: 1px solid #edf0f4; }
-.support-note { color: #6b7280; font-size: 13px; }
+.support-note { color: #6b7280; font-size: 14px; }
 .learning-note { margin-top: 16px; padding: 16px 18px; border-left: 4px solid #4f46e5; border-radius: 10px; background: #eef2ff; line-height: 1.7; }
 .learning-note strong { display: block; margin-bottom: 5px; color: #3730a3; }
 .learning-note--solution { border-left-color: #0d9488; background: #f0fdfa; }
@@ -938,14 +979,14 @@ function scoreOf(qid: string) { return state.value?.scores?.[qid] || null }
 .feedback-head > strong { font-size: 20px; color: #3730a3; }
 .answer-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
 .answer-comparison > div { padding: 15px; border-radius: 11px; background: #f7f8fb; }
-.answer-comparison span { color: #6b7280; font-size: 13px; }
+.answer-comparison span { color: #6b7280; font-size: 14px; }
 .answer-comparison p { margin: 7px 0 0; line-height: 1.7; white-space: pre-wrap; }
 .explanation { margin: 12px 0; line-height: 1.8; }
 .explanation > strong { display: block; margin-bottom: 6px; }
 .source-card ul { padding-left: 20px; line-height: 1.9; }
 .muted { color: #6b7280; }
 .page-reference { margin-top: 12px; }
-pre { max-width: 100%; overflow: auto; padding: 12px; border-radius: 8px; background: #f7f8fa; color: #4b5563; font-size: 12px; white-space: pre-wrap; }
+pre { max-width: 100%; overflow: auto; padding: 12px; border-radius: 8px; background: #f7f8fa; color: #4b5563; font-size: 14px; white-space: pre-wrap; }
 .question-footer { display: flex; align-items: center; justify-content: space-between; min-height: 52px; margin-top: 6px; }
 .mobile-nav-button { display: none; min-height: 44px; border: 1px solid #e1e4eb; border-radius: 10px; background: #fff; color: #4b5563; }
 .drawer-submit { width: 100%; min-height: 44px; margin-top: 18px; }
@@ -983,4 +1024,9 @@ pre { max-width: 100%; overflow: auto; padding: 12px; border-radius: 8px; backgr
   .question-grid--mobile { grid-template-columns: repeat(6, 1fr); }
   .question-grid--mobile .question-dot { min-height: 44px; aspect-ratio: auto; }
 }
+.revised-options{display:grid;gap:8px;margin-top:16px}
+.revised-option{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:10px 12px;border:1px solid #e3e6ee;border-radius:9px;background:#fff;line-height:1.6}
+.original-question{margin-top:16px;padding-top:12px;border-top:1px solid #e3e6ee;color:#596579;line-height:1.6}
+.original-question summary{color:#3159c9;cursor:pointer}
+.original-question p{margin:5px 0 0 12px}
 </style>

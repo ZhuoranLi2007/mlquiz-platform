@@ -225,16 +225,16 @@ async function regenerate() {
 .ab-opt { margin: 3px 0 0 14px; color: var(--text-2); }
 .ab-answer {
   margin-top: 8px; padding: 8px 10px; background: var(--ok-soft);
-  border: 1px solid #cfe6da; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.7;
+  border: 1px solid #cfe6da; border-radius: var(--radius-sm); font-size: 14px; line-height: 1.7;
 }
 .ab-answer .lbl { color: var(--ok); font-weight: 600; }
 .ab-pending {
   margin-top: 8px; padding: 8px 10px; background: var(--warn-soft);
   border: 1px solid #f0dfc4; border-radius: var(--radius-sm);
-  font-size: 12.5px; color: #7c4a10;
+  font-size: 14px; color: #7c4a10;
 }
 .miss-chip {
-  display: inline-flex; align-items: center; justify-content: center; min-width: 36px; min-height: 36px; font-size: 12px; border: 1px solid #f0dfc4;
+  display: inline-flex; align-items: center; justify-content: center; min-width: 36px; min-height: 36px; font-size: 14px; border: 1px solid #f0dfc4;
   border-radius: 7px; padding: 4px 8px; margin: 4px 4px 0 0; cursor: pointer;
   color: #7c4a10; background: #fff;
 }

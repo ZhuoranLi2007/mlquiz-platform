@@ -34,5 +34,5 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.image-error{display:inline-block;padding:8px;color:#8e5050;font-size:13px}
+.image-error{display:inline-block;padding:8px;color:#8e5050;font-size:14px}
 </style>

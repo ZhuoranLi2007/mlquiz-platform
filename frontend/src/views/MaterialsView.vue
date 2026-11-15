@@ -256,13 +256,13 @@ onBeforeUnmount(() => {
 .category-filter { display: flex; flex-wrap: wrap; gap: 6px; }
 .filter-chip {
   height: 34px; padding: 0 14px; border: 1px solid #e5e7eb; border-radius: 999px;
-  background: #fff; color: #4b5563; font-size: 13px; cursor: pointer;
+  background: #fff; color: #4b5563; font-size: 14px; cursor: pointer;
 }
 .filter-chip:hover { border-color: #c7d2fe; color: #4338ca; }
 .filter-chip.active { border-color: #c7d2fe; background: #eef2ff; color: #4338ca; font-weight: 600; }
 .toolbar-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .toolbar-search { width: 240px; }
-.result-note { color: #8b93a3; font-size: 12.5px; white-space: nowrap; }
+.result-note { color: #8b93a3; font-size: 14px; white-space: nowrap; }
 
 .material-grid {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -294,12 +294,12 @@ onBeforeUnmount(() => {
 .mat-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 1px 3px rgb(15 23 42 / 12%); }
 .mat-text {
   width: 100%; height: 100%; margin: 0; padding: 8px; overflow: hidden;
-  color: #4b5563; font-size: 9.5px; line-height: 1.5; white-space: pre-wrap;
+  color: #4b5563; font-size: 14px; line-height: 1.5; white-space: pre-wrap;
   word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .mat-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #9aa1ae; }
 .mat-icon :deep(svg) { width: 28px; height: 28px; }
-.mat-icon small { font-size: 11px; letter-spacing: .04em; }
+.mat-icon small { font-size: 14px; letter-spacing: .04em; }
 
 .mat-info {
   display: flex; min-width: 0; flex-direction: column; gap: 8px;
@@ -312,14 +312,14 @@ onBeforeUnmount(() => {
 }
 .type-chip {
   align-self: flex-start; padding: 2px 10px; border-radius: 999px;
-  background: #eef2ff; color: #4338ca; font-size: 12px; font-weight: 500;
+  background: #eef2ff; color: #4338ca; font-size: 14px; font-weight: 500;
 }
 /* 按钮固定在信息区底部，标题长短不影响对齐 */
 .mat-actions {
   display: flex; flex-wrap: wrap; gap: 8px;
   margin-top: auto; padding-top: 8px;
 }
-.mat-actions :deep(.el-button) { min-height: 30px; margin-left: 0; font-size: 12.5px; }
+.mat-actions :deep(.el-button) { min-height: 30px; margin-left: 0; font-size: 14px; }
 .mat-actions :deep(.el-button--primary) {
   --el-button-bg-color: #4f46e5; --el-button-border-color: #4f46e5;
 }
@@ -329,12 +329,12 @@ onBeforeUnmount(() => {
   border: 1px dashed #e5e7eb; border-radius: 12px; background: #fbfcfe;
 }
 .empty-state strong { display: block; font-size: 15px; }
-.empty-state p { margin: 8px 0 14px; color: #8b93a3; font-size: 13px; }
+.empty-state p { margin: 8px 0 14px; color: #8b93a3; font-size: 14px; }
 
 .code-view {
   max-height: 62vh; margin: 0; overflow: auto; padding: 14px 16px;
   border: 1px solid #eef0f4; border-radius: 8px; background: #0f172a;
-  color: #e2e8f0; font-size: 12.5px; line-height: 1.7;
+  color: #e2e8f0; font-size: 14px; line-height: 1.7;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
@@ -351,7 +351,7 @@ onBeforeUnmount(() => {
   }
   .mat-thumb { width: 96px; height: 128px; }
   .mat-info { padding-right: 16px; }
-  .mat-actions :deep(.el-button) { flex: 1 1 0; min-width: 0; padding: 0 6px; font-size: 12px; }
+  .mat-actions :deep(.el-button) { flex: 1 1 0; min-width: 0; padding: 0 6px; font-size: 14px; }
 }
 </style>
 

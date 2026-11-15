@@ -31,7 +31,7 @@ const resolvedTone = computed(() => {
   border-radius: 999px;
   background: #f3f4f6;
   color: #4b5563;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
 }

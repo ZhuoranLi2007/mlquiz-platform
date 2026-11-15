@@ -129,6 +129,7 @@ def _ensure_columns() -> None:
         ("wrong_book", "canonical_entry_id", "VARCHAR(64) DEFAULT ''"),
         # V4 课堂学情：学生与登录账号分离，旧 user_id 原样保留。
         ("attempts", "student_id", "VARCHAR(64) DEFAULT ''"),
+        ("attempts", "duration_ms", "INTEGER"),
         ("attempts", "assessment_version_id", "VARCHAR(64) DEFAULT ''"),
         ("attempts", "attendance_status", "VARCHAR(32) DEFAULT 'attended'"),
         ("attempts", "grading_status", "VARCHAR(32) DEFAULT 'unknown'"),

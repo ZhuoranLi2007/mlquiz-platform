@@ -234,14 +234,14 @@ const stateLabel: Record<Row['state'], string> = {
   padding: 26px 16px;
   text-align: center;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   background: var(--panel-soft);
   transition: border-color .15s ease, background .15s ease;
 }
 .drop-zone.over { border-color: var(--accent); background: var(--accent-soft); }
 .drop-zone:focus-visible { outline: 3px solid rgb(79 70 229 / 20%); outline-offset: 2px; }
-.dz-title { color: var(--text-2); font-size: 13.5px; }
+.dz-title { color: var(--text-2); font-size: 14px; }
 .dialog-intro { margin: -8px 0 14px; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .file-list { margin-top: 12px; }
 .file-summary { margin-bottom: 6px; }
@@ -251,7 +251,7 @@ const stateLabel: Record<Row['state'], string> = {
 }
 .file-row .fi { flex: 1; min-width: 0; }
 .file-row .fn {
-  font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .opt-line { display: flex; gap: 10px; align-items: center; margin-top: 16px; }
 .opt-line--top { align-items: flex-start; }

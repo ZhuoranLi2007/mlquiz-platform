@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
@@ -13,6 +14,36 @@ from backend.app.services import attempt_service
 
 
 LOCAL_TIMEZONE = timezone(timedelta(hours=8))
+
+TASK_MINUTES_BY_TYPE = {
+    "true_false": 1.5, "single_choice": 1.5,
+    "multiple_choice": 2.5, "multi_choice": 2.5,
+    "fill_blank": 2.5, "formula_fill": 2.5, "matching": 3,
+    "numeric": 4, "calculation": 5, "short_answer": 5,
+    "term": 3, "derivation": 6, "comprehensive": 6,
+}
+
+
+def _task_paper_facts(db: Session, paper_id: str) -> tuple[int, int | None]:
+    """Count fixed paper items and estimate reading/work time from their types."""
+    if not paper_id:
+        return 0, None
+    items = db.execute(select(E.PaperItem).where(
+        E.PaperItem.paper_id == paper_id).order_by(
+        E.PaperItem.position)).scalars().all()
+    if not items:
+        return 0, None
+    minutes = 0.0
+    for item in items:
+        snapshot = item.snapshot or {}
+        kind = str(snapshot.get("question_type") or "")
+        if (kind not in TASK_MINUTES_BY_TYPE
+                or not (snapshot.get("stem") or snapshot.get("stem_zh"))
+                or (kind in {"single_choice", "multiple_choice", "multi_choice", "matching"}
+                    and not snapshot.get("options"))):
+            return len(items), None
+        minutes += TASK_MINUTES_BY_TYPE[kind]
+    return len(items), math.ceil(minutes)
 
 
 def _parse_due_at(value: str) -> datetime | None:
@@ -240,6 +271,8 @@ def release_detail(db: Session, release_id: str) -> dict:
     version = db.get(E.AssessmentVersion, release.assessment_version_id)
     assessment = db.get(E.Assessment, version.assessment_id) if version else None
     paper = db.get(E.Paper, version.paper_id) if version else None
+    item_count, estimated_minutes = _task_paper_facts(
+        db, version.paper_id if version else "")
     recipients = db.execute(select(E.ReleaseRecipient).where(
         E.ReleaseRecipient.release_id == release_id).order_by(
         E.ReleaseRecipient.assigned_at)).scalars().all()
@@ -282,6 +315,8 @@ def release_detail(db: Session, release_id: str) -> dict:
         "assessment_id": assessment.assessment_id if assessment else "",
         "paper_id": version.paper_id if version else "",
         "paper_title": paper.title if paper else "",
+        "item_count": item_count,
+        "estimated_minutes": estimated_minutes,
         "recipient_count": len(items),
         "submitted_count": sum(1 for item in items if item["status"] == "submitted"),
         "pending_count": sum(1 for item in items

@@ -35,10 +35,11 @@ from backend.app.models import entities as E
 from backend.app.services.classroom_content import source_content, is_search_entry
 from backend.app.services.evidence_strength import item_evidence, aggregate_reference, summarize_independence
 from backend.app.services import model_provider
+from backend.app.services.diagnosis_analysis_v2 import SCIENCE_GUIDANCE, evidence_analysis
 from backend.app.services.score_policy import admissible_score
 
 
-SKILL_VERSION = "classroom-chapter-diagnosis-v4"
+SKILL_VERSION = "classroom-chapter-diagnosis-v5"
 PENDING_SCORE_STATUSES = {
     "pending_key", "needs_manual", "needs_model_scoring", "ungraded",
 }
@@ -303,12 +304,17 @@ def _scores_by_item(
     )).scalars().all())
     exact: dict[str, E.AnswerScore | E.AnswerRegrade] = {
         r.paper_item_id: r for r in rows if r.paper_item_id}
-    # A regrade is an append-only overlay.  Use only the newest COMPLETED run;
-    # never mutate or delete the original AnswerScore facts.
-    latest_run = db.execute(select(E.ScoringRun).where(
-        E.ScoringRun.status == "completed").order_by(
+    # A regrade is an append-only overlay.  Select the newest completed run
+    # containing this attempt, even when a newer run covers another class.
+    latest_run = db.execute(select(E.ScoringRun).join(
+        E.AnswerRegrade,
+        E.AnswerRegrade.scoring_run_id == E.ScoringRun.scoring_run_id,
+    ).where(
+        E.ScoringRun.status == "completed",
+        E.AnswerRegrade.attempt_id == attempt.attempt_id,
+    ).order_by(
         E.ScoringRun.completed_at.desc(), E.ScoringRun.scoring_run_id.desc()
-    )).scalars().first()
+    ).limit(1)).scalars().first()
     if latest_run is not None:
         for row in db.execute(select(E.AnswerRegrade).where(
                 E.AnswerRegrade.scoring_run_id == latest_run.scoring_run_id,
@@ -1251,26 +1257,11 @@ def student_attempt(
             note = "该题只有历史反推评分参考；可展示来源，但不能作为正式掌握结论。"
         else:
             note = "该题没有可进入诊断分母的评分证据。"
-        question_view = _snapshot_view(
-            item, include_answer_reference=True, version=version)
-        if isinstance(score, E.AnswerRegrade):
-            key_question = db.execute(select(E.Question).where(
-                E.Question.question_id == score.question_id,
-                E.Question.question_version == score.answer_key_question_version
-            )).scalars().first()
-            if key_question is not None:
-                question_view["answer_reference"] = {
-                    "available": bool(key_question.answer_payload),
-                    "payload": key_question.answer_payload or None,
-                    "explanation": key_question.explanation or "",
-                    "rubric": key_question.rubric or {},
-                    "authority_status": score.authority_status,
-                    "authority_label": (
-                        "AI独立解题与规则校验答案" if score.authority_status == "ai_auto_checked"
-                        else "答案仍不可用于正式评分"),
-                    "source": score.source_ref,
-                    "teacher_verified": False,
-                }
+        question_view = _class_scoring_reference(
+            db, item,
+            _snapshot_view(item, include_answer_reference=True, version=version),
+            [score] if score else [],
+        )
         result_items.append({
             **question_view,
             "kp_id": kp,
@@ -1641,7 +1632,7 @@ def student_attempt(
         db, source_attempt_id=attempt.attempt_id, student_id=student_id)
     payload["retest_history"] = retest_history
     payload["ai_analysis"] = targeted_retest.enrich_analysis(
-        payload["ai_analysis"], retest_history)
+        _v2_fallback("student_attempt", payload), retest_history)
     if retest_history:
         latest_retest = retest_history[-1]
         payload["retest_plan"]["latest_status"] = latest_retest["status"]
@@ -2224,7 +2215,7 @@ def student_history(
         "ungraded_item_events": len(ungraded_events),
         "average_rule": "先计算每次考试可评分题目的得分率，再对有有效评分的考试等权平均；缺考和无有效评分考试不进入均值。",
     }
-    return {
+    payload = {
         "classroom_id": classroom.classroom_id,
         "student": {"student_id": student.student_id,
                     "display_code": student.display_code},
@@ -2279,6 +2270,8 @@ def student_history(
             "只有一次测量的章节仍展示本次实际表现，但不宣称长期稳定掌握。",
         ],
     }
+    payload["ai_analysis"] = _v2_fallback("student_history", payload)
+    return payload
 
 
 def _distribution(rates: list[float]) -> list[dict]:
@@ -2449,6 +2442,108 @@ def _class_model_ai_analysis(
                 "model_message": exc.message}
 
 
+CLASS_VIEW_VERSION = 2
+
+
+def _class_scoring_reference(
+    db: Session, item: E.PaperItem, original: dict[str, Any],
+    scores: list[E.AnswerScore | E.AnswerRegrade],
+) -> dict[str, Any]:
+    """Pair the displayed question with the exact key version used to score it."""
+    view = dict(original)
+    regrades = [score for score in scores if isinstance(score, E.AnswerRegrade)]
+    if not regrades:
+        view["is_scoring_revision"] = False
+        view["scoring_reference_status"] = (
+            "available" if (view.get("answer_reference") or {}).get("available") else "missing")
+        return view
+    if len(regrades) != len(scores):
+        view["scoring_reference_status"] = "version_conflict"
+        view["answer_reference"] = {"available": False, "payload": None,
+                                    "explanation": "", "reason": "评分版本不一致，参考答案待核对。"}
+        return view
+    versions = {score.answer_key_question_version for score in regrades}
+    if len(versions) != 1:
+        view["scoring_reference_status"] = "version_conflict"
+        view["answer_reference"] = {"available": False, "payload": None,
+                                    "explanation": "", "reason": "评分版本不一致，参考答案待核对。"}
+        return view
+    key_version = next(iter(versions))
+    question = db.execute(select(E.Question).where(
+        E.Question.question_id == item.question_id,
+        E.Question.question_version == key_version,
+    )).scalars().first()
+    payload = question.answer_payload if question else {}
+    option_keys = {str(row.get("key") or "").strip().upper()
+                   for row in (question.options or []) if isinstance(row, dict)
+                   and row.get("key")} if question else set()
+    invalid_choice_key = bool(question and question.question_type in {
+        "single_choice", "multiple_choice", "multi_choice", "matching"}
+        and (not option_keys or not _answer_keys(payload)
+             or not set(_answer_keys(payload)).issubset(option_keys)))
+    if not payload or invalid_choice_key or any(
+        (score.detail or {}).get("expected") is not None
+        and set(_answer_keys((score.detail or {}).get("expected")))
+        != set(_answer_keys(payload))
+        for score in regrades
+    ):
+        view["scoring_reference_status"] = "missing"
+        view["answer_reference"] = {"available": False, "payload": None,
+                                    "explanation": "", "reason": "评分答案缺失或与记录不一致，待核对。"}
+        return view
+    assert question is not None
+    original_view = dict(original)
+    view.update({
+        "stem": question.stem_zh or question.stem,
+        "options": question.options or [],
+        "question_type": question.question_type or original.get("question_type"),
+        "scoring_question_version": key_version,
+        "is_scoring_revision": bool(key_version != item.question_version),
+        "scoring_reference_status": "available",
+        "original_question": original_view if key_version != item.question_version else None,
+        "answer_reference": {
+            "available": True, "payload": payload,
+            "explanation": question.explanation or "",
+            "authority_status": regrades[0].authority_status,
+            "authority_label": "AI校验参考答案" if not regrades[0].teacher_verified else "教师核验答案",
+            "question_version": key_version,
+        },
+    })
+    return view
+
+
+def _class_answer_pattern(
+    score: E.AnswerScore | E.AnswerRegrade, answer: E.Answer | None,
+    option_keys: set[str],
+) -> tuple[str, str]:
+    """Return (label, evidence class), keeping uncertain mappings separate."""
+    if answer is None or answer.response_status == "unanswered" or (
+        isinstance(answer.response, dict) and answer.response.get("answered") is False
+    ):
+        return "未作答", "unanswered"
+    if isinstance(score, E.AnswerRegrade):
+        detail = score.detail or {}
+        selected = _answer_keys(detail.get("given"))
+        mappings = (detail.get("response_mapping") or {}).get("items") or []
+        reliable = bool(selected and all(key in option_keys for key in selected)
+                        and mappings and len(mappings) == len(selected)
+                        and all(isinstance(row, dict) for row in mappings)
+                        and all(
+            row.get("method") == "normalized_exact" or (
+                row.get("method") == "unique_fuzzy_option_text"
+                and float(row.get("score") or 0) >= .70
+                and float(row.get("margin") or 0) >= .15)
+            for row in mappings))
+        if reliable:
+            return ", ".join(sorted(set(selected))), "reliable"
+        return "已作答，选项对应待核对", "unmapped"
+    selected, reliable = _v2_choice_keys({"options": [{"key": key} for key in option_keys],
+                                           "response": answer.response})
+    if reliable and selected:
+        return ", ".join(selected), "reliable"
+    return "已作答，选项对应待核对", "unmapped"
+
+
 def class_assessment(
     db: Session,
     classroom_id: str,
@@ -2548,35 +2643,46 @@ def class_assessment(
     for item in items:
         q = question_analysis(db, assessment_version_id,
                               paper_item_id=item.item_id)
-        question_view = _snapshot_view(
-            item, include_answer_reference=True, version=version)
+        original = _snapshot_view(item, include_answer_reference=True, version=version)
+        item_scores = [(score, attempt) for score, scored_item, attempt in all_valid
+                       if scored_item.item_id == item.item_id]
+        question_view = _class_scoring_reference(
+            db, item, original, [score for score, _ in item_scores])
         response_counts: dict[str, int] = defaultdict(int)
+        mapping_counts: dict[str, int] = defaultdict(int)
         question_type = str(question_view.get("question_type") or "")
         valid_option_keys = {
             str(option.get("key") or "").strip().upper()
-            for option in question_view.get("options") or []
+            for option in question_view.get("options") or question_view.get("source_options") or []
             if isinstance(option, dict) and option.get("key")}
-        for attempt in attempts.values():
-            score = _scores_by_item(db, attempt, [item]).get(item.item_id)
-            if not _valid_score(version, attempt, score) or score is None:
-                continue
+        for score, attempt in item_scores:
             answer = _answers_by_item(db, attempt, [item]).get(item.item_id)
-            if score.correct is True or answer is None:
+            if score.correct is True:
                 continue
-            if question_type in {"single_choice", "multiple_choice", "multi_choice"}:
-                keys = [key for key in _answer_keys(answer.response)
-                        if key in valid_option_keys]
-                label = ", ".join(sorted(keys)) if keys else "未作答/无效选项"
+            if question_type in {"single_choice", "multiple_choice", "multi_choice"} or (
+                valid_option_keys and _answer_keys(
+                    (question_view.get("answer_reference") or {}).get("payload"))
+            ):
+                label, kind = _class_answer_pattern(score, answer, valid_option_keys)
+                mapping_counts[kind] += 1
+                if kind == "reliable":
+                    response_counts[label] += 1
             else:
                 # Class-level output must not disclose individual free-text
                 # answers.  Only a privacy-safe aggregate label is returned.
-                label = "其他错误答案"
-            if label:
-                response_counts[label] += 1
+                mapping_counts["other"] += 1
         wrong_distribution = sorted(
             ({"answer": answer, "count": count}
              for answer, count in response_counts.items()),
             key=lambda row: (-row["count"], row["answer"]))
+        max_count = wrong_distribution[0]["count"] if wrong_distribution else 0
+        common = [row for row in wrong_distribution if row["count"] == max_count] if max_count >= 2 else []
+        frequent_label = (
+            "；".join(row["answer"] for row in common) if common else
+            "错误作答分散" if wrong_distribution else
+            "已作答，选项对应待核对" if mapping_counts["unmapped"] else
+            "未作答" if mapping_counts["unanswered"] else
+            "其他错误答案" if mapping_counts["other"] else "")
         item_analysis.append({
             **question_view,
             "knowledge_point": q["knowledge_point"],
@@ -2588,10 +2694,10 @@ def class_assessment(
             "correct_rate": q["correct_rate"],
             "excluded": q["excluded"],
             "wrong_answer_distribution": wrong_distribution,
-            "high_frequency_wrong_answer": (
-                wrong_distribution[0]["answer"] if wrong_distribution else ""),
-            "high_frequency_wrong_count": (
-                wrong_distribution[0]["count"] if wrong_distribution else 0),
+            "answer_mapping_counts": dict(mapping_counts),
+            "common_wrong_answers": common,
+            "high_frequency_wrong_answer": frequent_label,
+            "high_frequency_wrong_count": max_count if common else 0,
         })
 
     kp_buckets: dict[str, dict[str, Any]] = defaultdict(
@@ -2727,6 +2833,7 @@ def class_assessment(
         and (row.get("chapter") or {}).get("chapter_id")))
     retest_ready = bool(weak_kp_ids and high_frequency_errors)
     payload = {
+        "class_view_version": CLASS_VIEW_VERSION,
         "classroom": {"classroom_id": classroom.classroom_id,
                       "name": classroom.name},
         "assessment": {"assessment_id": assessment.assessment_id,
@@ -2802,8 +2909,261 @@ def class_assessment(
     # stricter <60% aggregate remains available in common_weaknesses.
     payload["resources"] = _resources(db, weak_kp_ids or [
         row["kp_id"] for row in common_weak])
-    payload["ai_analysis"] = _class_ai_fallback(payload)
+    payload["ai_analysis"] = _v2_fallback("class_assessment", payload)
     return payload
+
+
+def _v2_choice_keys(item: dict[str, Any]) -> tuple[list[str], bool]:
+    """Resolve imported option text to keys only when the match is unique."""
+    response = item.get("response")
+    if response is None or (isinstance(response, dict) and response.get("answered") is False):
+        return [], False
+    options = item.get("options") or item.get("source_options") or []
+    valid_keys = {str(row.get("key") or "").upper() for row in options
+                  if isinstance(row, dict) and row.get("key")}
+
+    def normalized(value: Any) -> str:
+        return re.sub(r"[\s。．.,，、;；:：()（）]+", "", str(value or "")).casefold()
+
+    if isinstance(response, dict) and isinstance(response.get("texts"), list):
+        selected = []
+        for text in response["texts"]:
+            matches = [str(row["key"]).upper() for row in options
+                       if isinstance(row, dict) and row.get("key")
+                       and normalized(row.get("text")) == normalized(text)]
+            if len(matches) != 1:
+                return [], False
+            selected.append(matches[0])
+        return sorted(set(selected)), bool(selected)
+
+    selected = _answer_keys(response)
+    if len(selected) == 1 and re.fullmatch(r"[A-Z](?:[,;|/、\s]+[A-Z])+", selected[0]):
+        selected = re.findall(r"[A-Z]", selected[0])
+    if not selected:
+        return [], False
+    if valid_keys and all(key in valid_keys for key in selected):
+        return sorted(set(selected)), True
+    if not valid_keys and all(re.fullmatch(r"[A-Z]", key) for key in selected):
+        return sorted(set(selected)), True
+    if len(selected) == 1 and options:
+        matches = [str(row["key"]).upper() for row in options
+                   if isinstance(row, dict) and row.get("key")
+                   and normalized(row.get("text")) == normalized(selected[0])]
+        if len(matches) == 1:
+            return matches, True
+    return [], False
+
+
+def _v2_observation(item: dict[str, Any]) -> str:
+    analysis = item.get("error_analysis") or _item_error_analysis(item)
+    qtype = str(item.get("question_type"))
+    if qtype in {"multiple_choice", "multi_choice", "single_choice", "matching"}:
+        selected, reliable = _v2_choice_keys(item)
+        if not reliable:
+            return "作答选项无法与原题选项可靠对应，需核对答卷。"
+        correct = set(_answer_keys((item.get("answer_reference") or {}).get("payload")))
+        if not correct:
+            return "参考选项缺失，需核对答案记录。"
+        if qtype in {"single_choice", "matching"}:
+            return f"选择{'、'.join(selected)}，参考答案{'、'.join(sorted(correct))}。"
+        missed = sorted(correct - set(selected))
+        extra = sorted(set(selected) - correct)
+        parts = []
+        if missed:
+            parts.append("漏选" + "、".join(missed))
+        if extra:
+            parts.append("错选" + "、".join(extra))
+        if parts:
+            return "，".join(parts) + "。"
+    if qtype in {"numeric", "calculation", "true_false"}:
+        response = _answer_value(item.get("response"))
+        reference = _answer_value((item.get("answer_reference") or {}).get("payload"))
+        if all(isinstance(value, (str, int, float, bool)) and len(str(value)) <= 32
+               for value in (response, reference)):
+            return f"作答为{response}，参考答案为{reference}。"
+    return re.sub(r"^第\s*\d+\s*题", "", str(analysis.get("evidence") or "作答与答案不一致。"))
+
+
+def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = []
+    if scope == "student_attempt":
+        wrong = [item for item in payload.get("items") or []
+                 if item.get("evidence_status") == "scored"
+                 and item.get("correct") is False]
+        for index, item in enumerate(wrong[:8], 1):
+            position = item.get("position")
+            rows.append({
+                "id": f"q{index}", "name": (item.get("knowledge_point") or {}).get("name") or "本题对应概念",
+                "chapter": (item.get("chapter") or {}).get("title") or "",
+                "positions": [position], "refs": [f"第{position}题"],
+                "observation": _v2_observation(item),
+                "interpretation_allowed": (
+                    _v2_choice_keys(item)[1] if str(item.get("question_type")) in
+                    {"multiple_choice", "multi_choice", "single_choice", "matching"}
+                    else item.get("response") is not None),
+                "stem": item.get("stem"), "question_type": item.get("question_type"),
+                "options": item.get("options") or item.get("source_options") or [],
+                "student_answer": item.get("response"),
+                "correct_answer": (item.get("answer_reference") or {}).get("payload"),
+                "explanation": (item.get("answer_reference") or {}).get("explanation"),
+                "score": {"awarded": item.get("awarded_score"), "maximum": item.get("max_score")},
+            })
+    elif scope == "student_history":
+        for index, item in enumerate((payload.get("wrong_items") or [])[:12], 1):
+            occurrences = sorted(item.get("occurrences") or [],
+                                 key=lambda row: str(row.get("exam_time") or ""))
+            refs = [f"{row.get('assessment_title') or '考试'}第{row.get('position')}题"
+                    for row in occurrences]
+            latest = occurrences[-1] if occurrences else item
+            mismatch = _item_error_analysis({
+                **item, "position": latest.get("position") or item.get("position"),
+                "response": latest.get("response"),
+            })
+            count = int(item.get("error_count") or len(occurrences) or 1)
+            observation = _v2_observation({
+                **item, "position": latest.get("position") or item.get("position"),
+                "response": latest.get("response"), "error_analysis": mismatch,
+            })
+            if count > 1:
+                observation = f"同题出现{count}次错误；最近一次{observation}"
+            rows.append({
+                "id": f"h{index}", "name": (item.get("knowledge_point") or {}).get("name") or "本题对应概念",
+                "chapter": (item.get("chapter") or {}).get("title") or "",
+                "positions": [row.get("position") for row in occurrences if row.get("position")],
+                "refs": refs or [f"第{item.get('position')}题"],
+                "observation": observation,
+                "interpretation_allowed": (
+                    _v2_choice_keys({**item, "response": latest.get("response")})[1]
+                    if str(item.get("question_type")) in
+                    {"multiple_choice", "multi_choice", "single_choice", "matching"}
+                    else latest.get("response") is not None),
+                "stem": item.get("stem"), "question_type": item.get("question_type"),
+                "options": item.get("options") or item.get("source_options") or [],
+                "correct_answer": (item.get("answer_reference") or {}).get("payload"),
+                "explanation": (item.get("answer_reference") or {}).get("explanation"),
+                "error_events": count,
+                "occurrences": [{
+                    "ref": f"{row.get('assessment_title') or '考试'}第{row.get('position')}题",
+                    "student_answer": row.get("response"),
+                    "score": {"awarded": row.get("awarded_score"),
+                              "maximum": row.get("max_score")},
+                } for row in (occurrences[:1] + occurrences[-1:] if len(occurrences) > 1 else occurrences)],
+            })
+    elif scope == "class_assessment":
+        for index, item in enumerate((payload.get("high_frequency_errors") or [])[:5], 1):
+            position = item.get("position")
+            common = item.get("common_wrong_answers") or []
+            answer_known = bool(item.get("scoring_reference_status") == "available"
+                                and common and all(int(row.get("count") or 0) >= 2
+                                                   for row in common))
+            wrong_answer = "；".join(
+                f"{row['answer']}（{row['count']}人）" for row in common) if answer_known else ""
+            correct_keys = set(_answer_keys((item.get("answer_reference") or {}).get("payload")))
+            common_missed = (set.intersection(*(
+                correct_keys - {key.strip() for key in str(row.get("answer") or "").split(",")}
+                for row in common))
+                if answer_known else set())
+            common_extra = (set.intersection(*(
+                {key.strip() for key in str(row.get("answer") or "").split(",")} - correct_keys
+                for row in common))
+                if answer_known else set())
+            observation = (f"{item.get('incorrect_count')}/{item.get('denominator')}人答错"
+                           + (f"，常见错误作答为{wrong_answer}。" if wrong_answer else "。")
+                           + (f"共同漏选{'、'.join(sorted(common_missed))}。" if common_missed else "")
+                           + (f"共同错选{'、'.join(sorted(common_extra))}。" if common_extra else ""))
+            rows.append({
+                "id": f"c{index}", "name": (item.get("knowledge_point") or {}).get("name") or "本题对应概念",
+                "chapter": (item.get("chapter") or {}).get("title") or "",
+                "positions": [position], "refs": [f"第{position}题"],
+                "observation": observation, "interpretation_allowed": answer_known,
+                "stem": item.get("stem"), "question_type": item.get("question_type"),
+                "options": item.get("options") or item.get("source_options") or [],
+                "high_frequency_wrong_answer": wrong_answer or None,
+                "correct_answer": (item.get("answer_reference") or {}).get("payload"),
+                "explanation": (item.get("answer_reference") or {}).get("explanation"),
+                "correct_count": item.get("correct_count"),
+                "incorrect_count": item.get("incorrect_count"),
+                "denominator": item.get("denominator"),
+                "high_frequency_wrong_count": item.get("high_frequency_wrong_count"),
+                "mapping_counts": item.get("answer_mapping_counts") or {},
+                "common_missed_keys": sorted(common_missed),
+                "common_extra_keys": sorted(common_extra),
+            })
+    return rows
+
+
+def _v2_fallback(scope: str, payload: dict[str, Any]) -> dict[str, Any]:
+    legacy = (
+        _deterministic_ai_analysis(payload) if scope == "student_attempt" else
+        _history_ai_fallback(payload) if scope == "student_history" else
+        _class_ai_fallback(payload)
+    )
+    evidence = _v2_analysis_evidence(scope, payload)
+    if evidence:
+        compact = evidence_analysis(scope, evidence)
+    else:
+        has_scores = bool((payload.get("score_summary") or {}).get("scored_items")
+                          or (payload.get("statistics") or {}).get("scored_item_events")
+                          or (payload.get("participation") or {}).get("scored"))
+        compact = evidence_analysis(scope if has_scores else "insufficient", [])
+    return {**legacy, **compact}
+
+
+def _model_analysis_v2(db: Session, scope: str, payload: dict[str, Any], run_id: str) -> dict[str, Any]:
+    fallback = _v2_fallback(scope, payload)
+    evidence = _v2_analysis_evidence(scope, payload)
+    if not evidence:
+        return fallback
+    interpretable = [row for row in evidence if row.get("interpretation_allowed", True)]
+    if not interpretable:
+        # A class aggregate of only unanswered/invalid responses gives no
+        # evidence for a conceptual hypothesis. This is not an AI outage.
+        return fallback
+    focus = {
+        "student_attempt": "本次答卷中每题实际错在哪里",
+        "student_history": "跨考试同题反复错误及作答变化，不把同章节不同题称为同题重复",
+        "class_assessment": "班级聚合的共性问题，不推断任何学生的个人心理原因",
+    }[scope]
+    system = (
+        f"你是认真批改机器学习课程作业的教师。重点：{focus}。"
+        "只依据提供的真实题干、选项、作答、答案、评分和解析写简短评语。"
+        "每个 observable_mismatch 是确定性证据；先辨认漏选、错选、计算结果不符或未作答，"
+        "再谨慎推测可能的理解问题。不得把计算错误或审题失误写成确定事实。"
+        "综合结论也只总结作答表现；心理原因必须写可能，不得直接断言概念混淆。"
+        "返回严格 JSON：summary 为不含题号和分数的1句话（不超过70字）；"
+        "concept_hypotheses 优先2至3项；只有一项可分析证据时只返回1项。每项只含"
+        " evidence_ids（输入中的 id 数组）和 analysis（不超过45字）；"
+        "recommendations 为2至3项，每项只含 evidence_ids 和 action（不超过45字）。"
+        "不要返回 observation、题号、HTML、JSON说明或泛泛的学习话术；服务端会附上真实观察与题号。"
+        "interpretation_allowed=false 的记录只能描述作答缺失或无效，不能推断概念误解。"
+        "班级并列错答要分别看；只把各组共同漏选或共同错选的选项写成班级共性，"
+        "不要把某一组独有的漏选推广到所有答错学生。"
+        "数学符号必须用$...$或$$...$$的有效LaTeX，例如 $a^{(l-1)}$、"
+        "$\\frac{\\partial L}{\\partial W}$、$\\tanh(x)$。"
+        + SCIENCE_GUIDANCE
+    )
+    try:
+        response = model_provider.chat(
+            db, messages=[{"role": "system", "content": system},
+                          {"role": "user", "content": json.dumps({
+                              "scope": scope, "wrong_evidence": evidence,
+                              "retest_history": [{
+                                  "round": row.get("round"), "status": row.get("status"),
+                                  "accuracy": row.get("accuracy"),
+                                  "wrong_positions": [item.get("position") for item in row.get("wrong_items") or []],
+                              } for row in (payload.get("retest_history") or [])[-2:]],
+                          }, ensure_ascii=False)}],
+            skill_name="diagnose_classroom", prompt_version=f"{scope}-analysis-v2",
+            run_id=run_id, temperature=0.1, max_tokens=1100, timeout=60.0)
+        if response.get("finish_reason") == "length":
+            raise model_provider.ModelUnavailable("truncated", "模型输出被截断")
+        parsed = model_provider.parse_json_content(response.get("content") or "")
+        compact = evidence_analysis(scope, evidence, parsed, model_meta=response)
+        if compact["source"] != "deepseek":
+            raise model_provider.ModelUnavailable("invalid_output", "模型分析未通过证据与篇幅校验")
+        return {**fallback, **compact}
+    except model_provider.ModelUnavailable as exc:
+        return {**fallback, "model_status": exc.status, "model_message": exc.message}
 
 
 def _diagnosis_target(scope_type: str, values: Iterable[str]) -> str:
@@ -2872,12 +3232,17 @@ def run_diagnosis(
     if scope_type == "student_attempt" and include_ai:
         from backend.app.services import targeted_retest
         payload["ai_analysis"] = targeted_retest.enrich_analysis(
-            _model_ai_analysis(db, payload, run_id),
+            _model_analysis_v2(db, "student_attempt", payload, run_id),
             payload.get("retest_history") or [])
     elif scope_type == "student_history" and include_ai:
-        payload["ai_analysis"] = _history_model_ai_analysis(db, payload, run_id)
+        payload["ai_analysis"] = _model_analysis_v2(db, "student_history", payload, run_id)
     elif scope_type == "class_assessment" and include_ai:
-        payload["ai_analysis"] = _class_model_ai_analysis(db, payload, run_id)
+        from backend.app.services.class_answer_review import review_class_answers
+        payload["answer_reviews"] = review_class_answers(
+            db, payload, run_id=run_id, actor_user_id=actor_user_id,
+            classroom_id=classroom_id,
+            assessment_version_id=assessment_version_id)
+        payload["ai_analysis"] = _model_analysis_v2(db, "class_assessment", payload, run_id)
 
     evidence_refs = list(payload.get("evidence_refs") or [])
     uncertainties = list(payload.get("uncertainties") or [])

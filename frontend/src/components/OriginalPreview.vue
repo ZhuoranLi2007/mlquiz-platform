@@ -154,12 +154,12 @@ watch([visible, () => props.uploadId], ([open]) => {
 
 <style scoped>
 .op-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-.op-meta { color: #64748b; font-size: 13px; }
+.op-meta { color: #64748b; font-size: 14px; }
 .op-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .op-download {
   display: inline-flex; align-items: center; min-height: 24px; padding: 5px 12px;
   border: 1px solid #c7d2fe; border-radius: 6px; background: #eef2ff;
-  color: #4338ca; font-size: 12px; font-weight: 600; text-decoration: none;
+  color: #4338ca; font-size: 14px; font-weight: 600; text-decoration: none;
 }
 .op-download:hover { background: #e0e7ff; }
 .op-body {
@@ -176,8 +176,8 @@ watch([visible, () => props.uploadId], ([open]) => {
 .op-body--placeholder { display: grid; place-items: center; }
 .op-placeholder { padding: 24px; text-align: center; color: #526072; }
 .op-placeholder strong { display: block; color: #334155; font-size: 15px; }
-.op-placeholder p { margin: 8px 0 0; font-size: 13px; line-height: 1.7; }
-.op-footnote { margin: 10px 0 0; color: #8490a2; font-size: 12px; line-height: 1.6; }
+.op-placeholder p { margin: 8px 0 0; font-size: 14px; line-height: 1.7; }
+.op-footnote { margin: 10px 0 0; color: #8490a2; font-size: 14px; line-height: 1.6; }
 
 @media (max-width: 640px) {
   .op-toolbar { align-items: stretch; flex-direction: column; }

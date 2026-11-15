@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import katex from 'katex'
 import { normalizeDisplayMath } from '../utils/mathDisplay'
 
-const props = defineProps<{ text?: string }>()
+const props = defineProps<{ text?: string; failedFormulaText?: string }>()
 type Part = { type: 'html' | 'text'; value: string; display?: boolean; failed?: boolean }
 
 // Real model output mixes delimiters: prompt says `$...$` / `$$...$$`, but a
@@ -72,7 +72,7 @@ const parts = computed<Part[]>(() => {
       <span v-if="p.type === 'html'" :class="{ 'math-block': p.display }"
         v-html="p.value" />
       <span v-else-if="p.failed" class="mathtext-failed" style="white-space: pre-wrap"
-        title="这条公式未能渲染，已保留原始内容">{{ p.value }}</span>
+        title="这条公式未能渲染">{{ props.failedFormulaText || p.value }}</span>
       <span v-else style="white-space: pre-wrap">{{ p.value }}</span>
     </template>
   </span>

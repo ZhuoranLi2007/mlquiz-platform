@@ -14,6 +14,8 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '试卷预览与发布', roles: ['teacher'] } },
   { path: '/teacher/analysis', name: 'teacher-analysis', component: () => import('../views/TeacherAnalysisView.vue'),
     meta: { title: '学情诊断', roles: ['teacher'] } },
+  { path: '/teacher/attempts/:attemptId', name: 'teacher-attempt-review', component: () => import('../views/TeacherAttemptReviewView.vue'),
+    meta: { title: '查看答卷', roles: ['teacher'] } },
   { path: '/teacher/resources', name: 'teacher-resources', component: () => import('../views/MaterialsView.vue'),
     meta: { title: '教学资源', roles: ['teacher'] } },
   { path: '/teacher/online', name: 'teacher-online', component: () => import('../views/OnlineResourcesView.vue'),

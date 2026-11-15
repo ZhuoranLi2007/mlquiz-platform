@@ -445,6 +445,7 @@ class Attempt(Base):
     status: Mapped[str] = mapped_column(String(32), default="in_progress")  # in_progress|submitted
     started_at: Mapped[str] = mapped_column(String(32), default=utcnow)
     server_started_ms: Mapped[int] = mapped_column(Integer, default=0)
+    duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True, default=None)
     submitted_at: Mapped[str] = mapped_column(String(32), default="")
     score: Mapped[float] = mapped_column(Float, default=0.0)
     max_score: Mapped[float] = mapped_column(Float, default=0.0)

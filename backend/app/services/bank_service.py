@@ -516,6 +516,7 @@ def get_paper_student_view(db: Session, paper_id: str, *, reveal: bool = False,
     for it in get_paper_items(db, paper_id):
         v = student_view(it.snapshot, reveal=reveal, mode=mode)
         v.update(position=it.position, score=it.score,
+                 question_id=it.question_id,
                  question_version=it.question_version,
                  item_id=it.item_id)
         out.append(v)

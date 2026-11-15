@@ -10,7 +10,7 @@ from backend.app.api import auth_routes, role_routes, routes
 from backend.app.graphs import classroom_workflow
 from backend.app.models import entities as E
 from backend.app.models.base import Base, get_session
-from backend.app.services import auth_service, bank_service
+from backend.app.services import auth_service, bank_service, release_service
 
 
 @pytest.fixture()
@@ -105,6 +105,23 @@ def _login(client: TestClient, user_id: str, password: str):
     return response.json()["principal"]
 
 
+def test_task_estimate_uses_fixed_item_types_and_hides_incomplete_papers(flow):
+    _, local = flow
+    with local() as db:
+        assert release_service._task_paper_facts(db, "paper-1") == (1, 2)
+        db.add(E.PaperItem(
+            item_id="item-2", paper_id="paper-1", position=2,
+            question_id="q-2", question_version=1, score=5,
+            snapshot={"question_type": "multiple_choice", "stem": "选择适用方法",
+                      "options": [{"key": "A", "text": "方法 A"}]}))
+        db.commit()
+        assert release_service._task_paper_facts(db, "paper-1") == (2, 4)
+        item = db.get(E.PaperItem, "item-2")
+        item.snapshot = {"question_type": "multiple_choice", "stem": "选择适用方法"}
+        db.commit()
+        assert release_service._task_paper_facts(db, "paper-1") == (2, None)
+
+
 def test_auth_identity_scope_and_formal_assignment_isolation(flow):
     client, _local = flow
     _login(client, "teacher", "Teacher!2026")
@@ -128,6 +145,8 @@ def test_auth_identity_scope_and_formal_assignment_isolation(flow):
     assert me.json()["identity_scope"] == "official"
     assignments = client.get("/api/student/assignments").json()
     assert assignments["total"] == 1
+    assert assignments["items"][0]["item_count"] == 1
+    assert assignments["items"][0]["estimated_minutes"] == 2
     assert assignments["items"][0]["recipient_id"] == recipient_id
     client.post("/api/auth/logout")
 

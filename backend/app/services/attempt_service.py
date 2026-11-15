@@ -10,6 +10,8 @@ wrong-book entry, or job.
 from __future__ import annotations
 
 import time
+from datetime import datetime, timezone
+from hashlib import sha256
 from typing import Any
 
 from sqlalchemy import select, update
@@ -45,6 +47,34 @@ def snapshot_score_authority(snapshot: dict) -> str:
 
 def _now_ms() -> int:
     return int(time.time() * 1000)
+
+
+def _iso_ms(value: str) -> int | None:
+    try:
+        parsed = datetime.fromisoformat(value)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return int(parsed.timestamp() * 1000)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+def attempt_elapsed(a: E.Attempt, question_count: int, now_ms: int | None = None) -> tuple[int | None, str]:
+    """Return display duration and its provenance; never persist demo time."""
+    now = _now_ms() if now_ms is None else now_ms
+    if a.status != "submitted":
+        start = a.server_started_ms or _iso_ms(a.started_at)
+        return (max(0, now - start), "live") if start and start <= now else (None, "unavailable")
+    if a.duration_ms is not None and a.duration_ms >= 0:
+        return a.duration_ms, "recorded"
+    start, end = _iso_ms(a.started_at), _iso_ms(a.submitted_at)
+    if start is not None and end is not None and end >= start:
+        return end - start, "derived"
+    if a.source_import_run_id:
+        seed = int.from_bytes(sha256(a.attempt_id.encode("utf-8")).digest()[:4], "big")
+        seconds = (12 + 2 * max(1, question_count)) * 60 + seed % 601
+        return max(15 * 60, min(40 * 60, seconds)) * 1000, "historical_display"
+    return None, "unavailable"
 
 
 def _saved_answers(db: Session, attempt_id: str) -> dict[str, E.Answer]:
@@ -170,29 +200,30 @@ def save_answer(db: Session, attempt_id: str, question_id: str,
 
 
 def grading_summary(db: Session, attempt: E.Attempt) -> dict:
-    """Separate nominal paper total, usable scored denominator and pending items."""
+    """Use the same effective item scores as classroom diagnosis and review."""
     items = bank_service.get_paper_items(db, attempt.paper_id)
-    scores = list(db.execute(select(E.AnswerScore).where(E.AnswerScore.attempt_id == attempt.attempt_id)).scalars())
-    by_item = {x.paper_item_id: x for x in scores if x.paper_item_id}
-    by_q = {(x.question_id, x.question_version): x for x in scores}
-    from backend.app.services.score_policy import admissible_score
+    from backend.app.services.classroom_diagnosis import _scores_by_item, _valid_score
+    scores = _scores_by_item(db, attempt, items)
     version = db.get(E.AssessmentVersion, attempt.assessment_version_id) if attempt.assessment_version_id else None
     scored = []; missing = []; inferred = []
     for item in items:
-        score = by_item.get(item.item_id) or by_q.get((item.question_id, item.question_version))
-        if admissible_score(attempt, score, version):
+        score = scores.get(item.item_id)
+        if _valid_score(version, attempt, score):
             scored.append((score, item))
         else:
-            missing.append(item)
+            missing.append((score, item))
             if score is not None and score.authority_status == "inferred_unverified": inferred.append(item)
-    maximum = sum(float(s.max_score or item.score or 0) for s, item in scored)
+    maximum = sum(float(s.max_score or item.score or 0)
+                  for s, item in scored)
     awarded = sum(float(s.awarded_score or 0) for s, _ in scored)
     status = "partial" if scored and missing else "graded" if scored else "awaiting_grading"
+    missing_max = sum(max(float(s.max_score or 0) if s else 0, float(item.score or 0))
+                      for s, item in missing)
     return {"score": round(awarded, 4) if scored else None,
             "max_score": round(maximum, 4) if scored else None,
             "scored_max_score": round(maximum, 4),
-            "nominal_max_score": round(sum(float(x.score or 0) for x in items), 4),
-            "ungraded_max_score": round(sum(float(x.score or 0) for x in missing), 4),
+            "nominal_max_score": round(maximum + missing_max, 4),
+            "ungraded_max_score": round(missing_max, 4),
             "scored_item_count": len(scored), "ungraded_item_count": len(missing),
             "inferred_item_count": len(inferred), "grading_status": status,
             "grading_note": "只展示已可靠判分部分；未评分/未核验题不按零分计入分母，整卷名义满分另列。"}
@@ -203,6 +234,7 @@ def attempt_state(db: Session, attempt_id: str) -> dict:
     if not a:
         raise KeyError(attempt_id)
     submitted = a.status == "submitted"
+    items = bank_service.get_paper_items(db, a.paper_id)
     questions = bank_service.get_paper_student_view(
         db, a.paper_id, reveal=submitted, mode=a.mode)
     answers = _saved_answers(db, attempt_id)
@@ -215,15 +247,67 @@ def attempt_state(db: Session, attempt_id: str) -> dict:
         for qid, r in answers.items()
     }
     scores: dict[str, dict] = {}
+    scores_by_item: dict[str, dict] = {}
+    answers_by_item: dict[str, dict] = {}
     if submitted:
-        for s in db.execute(
-                select(E.AnswerScore).where(E.AnswerScore.attempt_id == attempt_id)
-        ).scalars().all():
-            scores[s.question_id] = {
-                "correct": s.correct, "awarded_score": s.awarded_score,
-                "max_score": s.max_score, "scoring_status": s.scoring_status,
-                "detail": s.detail,
+        from backend.app.services.classroom_diagnosis import (
+            _answers_by_item, _class_scoring_reference, _scores_by_item,
+            _snapshot_view, _valid_score,
+        )
+        current_scores = _scores_by_item(db, a, items)
+        current_answers = _answers_by_item(db, a, items)
+        version = (db.get(E.AssessmentVersion, a.assessment_version_id)
+                   if a.assessment_version_id else None)
+        for index, item in enumerate(items):
+            answer = current_answers.get(item.item_id)
+            if answer is not None:
+                answers_by_item[item.item_id] = {"response": answer.response}
+            score = current_scores.get(item.item_id)
+            if not _valid_score(version, a, score):
+                # A historical inferred mark may exist, but it must not
+                # appear as a graded item beside an empty aggregate.
+                if score is not None and isinstance(score, E.AnswerRegrade):
+                    questions[index]["answer_payload"] = {}
+                    questions[index]["explanation"] = ""
+                continue
+            assert score is not None
+            score_view = {
+                "correct": score.correct, "awarded_score": score.awarded_score,
+                "max_score": score.max_score or item.score,
+                "scoring_status": score.scoring_status,
+                "detail": score.detail,
             }
+            scores_by_item[item.item_id] = score_view
+            scores[item.question_id] = score_view  # compatibility for older clients
+            if not isinstance(score, E.AnswerRegrade):
+                continue
+            original = _snapshot_view(item, include_answer_reference=True,
+                                      version=version)
+            reference = _class_scoring_reference(db, item, original, [score])
+            if reference.get("scoring_reference_status") != "available":
+                questions[index]["answer_payload"] = {}
+                questions[index]["explanation"] = ""
+                continue
+            key_question = db.execute(select(E.Question).where(
+                E.Question.question_id == item.question_id,
+                E.Question.question_version == score.answer_key_question_version,
+            )).scalars().first()
+            if key_question is None:
+                continue
+            displayed = student_view(key_question, reveal=True, mode=a.mode)
+            displayed.update({
+                "question_id": item.question_id,
+                "item_id": item.item_id,
+                "position": item.position,
+                "score": score.max_score or item.score,
+                "scoring_question_version": score.answer_key_question_version,
+                "is_scoring_revision": score.answer_key_question_version != item.question_version,
+                "original_question": (questions[index]
+                                      if score.answer_key_question_version != item.question_version
+                                      else None),
+            })
+            questions[index] = displayed
+    elapsed_ms, elapsed_source = attempt_elapsed(a, len(questions))
     return {
         "attempt_id": attempt_id, "paper_id": a.paper_id, "user_id": a.user_id,
         "student_id": a.student_id,
@@ -233,13 +317,17 @@ def attempt_state(db: Session, attempt_id: str) -> dict:
         "grading_status": a.grading_status,
         "started_at": a.started_at, "submitted_at": a.submitted_at,
         "server_started_ms": a.server_started_ms,
-        "server_elapsed_ms": _now_ms() - a.server_started_ms,
+        "duration_ms": a.duration_ms,
+        "server_elapsed_ms": elapsed_ms,
+        "elapsed_source": elapsed_source,
         "score": a.score, "max_score": a.max_score,
         "max_score_reliable": a.max_score_reliable,
         "objective_score": a.objective_score,
         "manual_pending_count": a.manual_pending_count,
         "diagnosis_status": a.diagnosis_status,
-        "questions": questions, "answers": answer_map, "scores": scores,
+        "questions": questions, "answers": answer_map,
+        "answers_by_item": answers_by_item,
+        "scores": scores, "scores_by_item": scores_by_item,
         **(grading_summary(db, a) if submitted else {}),
         "scope_breakdown": (
             scope_service.attempt_scope_breakdown(db, a.paper_id, attempt_id)
@@ -300,11 +388,16 @@ def submit_attempt(db: Session, attempt_id: str,
                     f"request_key 已被其他答卷使用（{owner[0]}），"
                     "请为本次交卷使用新的请求键")
         # --- atomic CAS gate ---
+        submitted_ms = _now_ms()
+        captured_duration = (max(0, submitted_ms - a.server_started_ms)
+                             if a.server_started_ms and a.server_started_ms <= submitted_ms
+                             else None)
         cas = db.execute(
             update(E.Attempt)
             .where(E.Attempt.attempt_id == attempt_id,
                    E.Attempt.status == "in_progress")
             .values(status="submitted", submitted_at=E.utcnow(),
+                    duration_ms=captured_duration,
                     submit_request_key=key)
         )
         if cas.rowcount != 1:

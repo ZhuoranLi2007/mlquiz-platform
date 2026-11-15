@@ -819,8 +819,8 @@ watch(() => route.query, () => {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
 }
 .bank-head h2 { margin: 4px 0 6px; font-size: 26px; }
-.bank-head p { margin: 0; color: #6b7280; font-size: 13px; line-height: 1.7; }
-.bank-head .eyebrow { color: #6366f1; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+.bank-head p { margin: 0; color: #6b7280; font-size: 14px; line-height: 1.7; }
+.bank-head .eyebrow { color: #6366f1; font-size: 14px; font-weight: 700; letter-spacing: .08em; }
 .compose-cta { flex: 0 0 auto; margin-top: 8px; }
 
 .bank-filters {
@@ -829,7 +829,7 @@ watch(() => route.query, () => {
 }
 .bank-filters :deep(.el-input) { flex: 1 1 240px; }
 .bank-filters :deep(.el-select) { flex: 0 0 160px; }
-.bank-count { color: #6b7280; font-size: 13px; }
+.bank-count { color: #6b7280; font-size: 14px; }
 .bank-count strong { color: #4338ca; font-size: 18px; }
 .bank-grid { width: 100%; }
 
@@ -839,35 +839,35 @@ watch(() => route.query, () => {
 }
 .bank-card:hover { border-color: #c7d2fe; box-shadow: 0 4px 16px rgb(31 41 55 / 6%); }
 .bc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.bc-tags span { padding: 1px 8px; border-radius: 6px; font-size: 11.5px; }
+.bc-tags span { padding: 1px 8px; border-radius: 6px; font-size: 14px; }
 .bc-type { background: #eef2ff; color: #4338ca; }
 .bc-kp { background: #f4f6fb; color: #4b5563; }
 .bc-diff { background: #f0fdf4; color: #166044; }
-.bc-stem { color: #1f2937; font-size: 13.5px; line-height: 1.72; overflow-wrap: anywhere; }
+.bc-stem { color: #1f2937; font-size: 14px; line-height: 1.72; overflow-wrap: anywhere; }
 .bc-prompt { margin-right: 4px; color: #6b7280; font-weight: 600; }
 .bc-options { display: flex; flex-direction: column; gap: 6px; }
 .bc-option {
   display: flex; gap: 8px; align-items: flex-start;
   padding: 7px 10px; border: 1px solid #eef0f4; border-radius: 8px;
-  background: #fafbfd; font-size: 13px; line-height: 1.6;
+  background: #fafbfd; font-size: 14px; line-height: 1.6;
 }
 .bc-opt-key { flex: 0 0 auto; font-weight: 700; color: #6b7280; }
 .bc-opt-text { min-width: 0; overflow-wrap: anywhere; }
 .bc-missing {
   padding: 7px 10px; border: 1px solid #fde68a; border-radius: 8px;
-  background: #fffbeb; color: #92400e; font-size: 12px;
+  background: #fffbeb; color: #92400e; font-size: 14px;
 }
 .dlg-missing {
   margin-top: 6px; padding: 5px 8px; border: 1px solid #fde68a; border-radius: 6px;
-  background: #fffbeb; color: #92400e; font-size: 11.5px;
+  background: #fffbeb; color: #92400e; font-size: 14px;
 }
 .bc-source {
   padding-top: 8px; border-top: 1px dashed #eef0f4;
-  color: #8b93a3; font-size: 11.5px; line-height: 1.6; overflow-wrap: anywhere;
+  color: #8b93a3; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere;
 }
 .bc-source.is-empty { color: #b6bcc8; }
 .empty-state {
-  padding: 36px 16px; text-align: center; color: #8b93a3; font-size: 13px;
+  padding: 36px 16px; text-align: center; color: #8b93a3; font-size: 14px;
 }
 .empty-state h4 { margin: 0 0 6px; color: #4b5563; }
 
@@ -883,33 +883,33 @@ watch(() => route.query, () => {
 }
 .compose-steps > span {
   padding: 4px 12px; border-radius: 999px; background: #f4f6fb;
-  color: #8b93a3; font-size: 12px;
+  color: #8b93a3; font-size: 14px;
 }
 .compose-steps > span.active { background: #eef2ff; color: #4338ca; font-weight: 700; }
 .compose-steps > span.done { background: #ecfdf5; color: #047857; }
-.compose-selected { margin-left: auto; color: #4338ca; font-size: 13px; }
+.compose-selected { margin-left: auto; color: #4338ca; font-size: 14px; }
 .compose-body { max-height: 66vh; overflow-y: auto; padding-right: 6px; }
 .mode-picker {
   display: flex; flex-direction: column; gap: 8px;
   padding: 12px 14px; margin-bottom: 14px;
   border: 1px solid #e5e7eb; border-radius: 10px; background: #fafbff;
 }
-.mode-label { font-size: 12.5px; font-weight: 700; color: #374151; }
-.mode-desc { margin: 0; color: #6b7280; font-size: 12px; line-height: 1.6; }
+.mode-label { font-size: 14px; font-weight: 700; color: #374151; }
+.mode-desc { margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6; }
 .mode-warn { color: #b45309; }
 .ai-form {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px; margin-bottom: 10px;
 }
-.ai-form label { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: #4b5563; }
+.ai-form label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4b5563; }
 .result-warn {
   margin: 10px 0; padding: 8px 10px; border: 1px solid #fde68a; border-radius: 8px;
-  background: #fffbeb; color: #92400e; font-size: 12px; line-height: 1.6;
+  background: #fffbeb; color: #92400e; font-size: 14px; line-height: 1.6;
 }
 .dlg-filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .dlg-filters :deep(.el-input) { flex: 1 1 200px; }
 .dlg-filters :deep(.el-select) { flex: 0 0 150px; }
-.dlg-hint { margin: 10px 0; color: #6b7280; font-size: 12px; }
+.dlg-hint { margin: 10px 0; color: #6b7280; font-size: 14px; }
 .dlg-list { display: flex; flex-direction: column; gap: 8px; }
 .dlg-row {
   display: flex; gap: 10px; align-items: flex-start; cursor: pointer;
@@ -921,22 +921,22 @@ watch(() => route.query, () => {
 .dlg-q-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 5px; }
 .dlg-q-tags span {
   padding: 1px 7px; border-radius: 5px; background: #f4f6fb;
-  color: #6b7280; font-size: 11px;
+  color: #6b7280; font-size: 14px;
 }
-.dlg-stem { font-size: 13px; line-height: 1.7; color: #1f2937; overflow-wrap: anywhere; }
+.dlg-stem { font-size: 14px; line-height: 1.7; color: #1f2937; overflow-wrap: anywhere; }
 .dlg-options {
   display: flex; flex-direction: column; gap: 3px; margin-top: 6px;
-  color: #4b5563; font-size: 12.5px; line-height: 1.6;
+  color: #4b5563; font-size: 14px; line-height: 1.6;
 }
 .dlg-options > div { display: flex; gap: 6px; }
-.dlg-source { margin-top: 6px; color: #9aa1af; font-size: 11px; overflow-wrap: anywhere; }
-.dlg-empty { padding: 24px; text-align: center; color: #8b93a3; font-size: 13px; }
+.dlg-source { margin-top: 6px; color: #9aa1af; font-size: 14px; overflow-wrap: anywhere; }
+.dlg-empty { padding: 24px; text-align: center; color: #8b93a3; font-size: 14px; }
 
 .settings-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.settings-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: #4b5563; }
+.settings-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4b5563; }
 .score-head {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  margin: 18px 0 10px; font-size: 12.5px; color: #6b7280;
+  margin: 18px 0 10px; font-size: 14px; color: #6b7280;
 }
 .score-head strong { color: #1f2937; }
 .score-total { margin-left: auto; color: #4338ca; font-weight: 700; }
@@ -947,22 +947,22 @@ watch(() => route.query, () => {
 }
 .score-index {
   flex: 0 0 26px; height: 26px; display: grid; place-items: center;
-  border-radius: 7px; background: #eef2ff; color: #4338ca; font-size: 12px; font-weight: 700;
+  border-radius: 7px; background: #eef2ff; color: #4338ca; font-size: 14px; font-weight: 700;
 }
 .score-stem {
-  flex: 1; min-width: 0; font-size: 12.5px; line-height: 1.6; color: #1f2937;
+  flex: 1; min-width: 0; font-size: 14px; line-height: 1.6; color: #1f2937;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-.score-type { flex: 0 0 auto; color: #8b93a3; font-size: 11.5px; }
+.score-type { flex: 0 0 auto; color: #8b93a3; font-size: 14px; }
 
 .confirm-box { padding: 8px 4px 20px; }
 .confirm-box h4 { margin: 0 0 12px; font-size: 17px; }
-.confirm-box p { margin: 0 0 8px; color: #4b5563; font-size: 13.5px; }
-.confirm-note { color: #6b7280 !important; font-size: 12.5px !important; line-height: 1.7; }
+.confirm-box p { margin: 0 0 8px; color: #4b5563; font-size: 14px; }
+.confirm-note { color: #6b7280 !important; font-size: 14px !important; line-height: 1.7; }
 .result-box { padding: 6px 4px 20px; }
 .result-badge {
   display: inline-block; padding: 5px 12px; border-radius: 8px;
-  background: #ecfdf5; color: #047857; font-size: 12.5px; font-weight: 700;
+  background: #ecfdf5; color: #047857; font-size: 14px; font-weight: 700;
 }
 .result-box h3 { margin: 12px 0; font-size: 20px; }
 .result-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
@@ -970,14 +970,14 @@ watch(() => route.query, () => {
   padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fafbfd;
   display: flex; flex-direction: column; gap: 4px;
 }
-.result-metrics span { color: #8b93a3; font-size: 11.5px; }
+.result-metrics span { color: #8b93a3; font-size: 14px; }
 .result-metrics strong { color: #1f2937; font-size: 16px; }
-.result-note { margin: 14px 0; color: #6b7280; font-size: 12.5px; line-height: 1.7; }
+.result-note { margin: 14px 0; color: #6b7280; font-size: 14px; line-height: 1.7; }
 .result-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .compose-footer { display: flex; align-items: center; gap: 8px; }
 .footer-spacer { flex: 1; }
 .preview-q {
-  padding: 10px 0; border-bottom: 1px solid #eef0f4; font-size: 13px; line-height: 1.7;
+  padding: 10px 0; border-bottom: 1px solid #eef0f4; font-size: 14px; line-height: 1.7;
 }
 
 @media (max-width: 900px) {

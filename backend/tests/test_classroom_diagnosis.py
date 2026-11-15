@@ -14,6 +14,7 @@ from backend.app.api import classroom_routes
 from backend.app.models import entities as E
 from backend.app.models.base import Base, get_session
 from backend.app.services import classroom_diagnosis as service
+from backend.app.services import class_answer_review
 
 
 def _attempt(db: Session, aid: str, student: str, version: str, paper: str,
@@ -446,6 +447,133 @@ def test_class_view_distribution_statuses_zero_and_privacy(db: Session):
                       "SECRET_EXT", "raw_payload", "raw_response",
                       "answer_payload", '"response"'):
         assert forbidden not in rendered
+
+
+def test_class_scoring_reference_keeps_question_and_key_versions_together(db: Session):
+    item = db.get(E.PaperItem, "item-1")
+    db.add(E.Question(row_id="qrow-revised", question_id="q-linear",
+                      question_version=4, question_type="single_choice",
+                      stem="修订版题干", options=[{"key": "A", "text": "修订选项"}],
+                      answer_payload={"key": "A"}, explanation="修订解析"))
+    db.flush()
+    original = service._snapshot_view(item, include_answer_reference=True)
+    score = E.AnswerRegrade(answer_key_question_version=4,
+                            authority_status="ai_auto_checked", teacher_verified=False,
+                            detail={"expected": ["A"]})
+    view = service._class_scoring_reference(db, item, original, [score])
+    assert view["stem"] == "修订版题干"
+    assert view["options"][0]["text"] == "修订选项"
+    assert view["answer_reference"]["payload"] == {"key": "A"}
+    assert view["original_question"]["stem"] == "固定版本题干 v3"
+    assert view["is_scoring_revision"] is True
+    score.detail = {"expected": ["B"]}
+    conflict = service._class_scoring_reference(db, item, original, [score])
+    assert conflict["scoring_reference_status"] == "missing"
+    assert conflict["answer_reference"]["payload"] is None
+    revised = db.get(E.Question, "qrow-revised")
+    revised.answer_payload = {"key": "B"}
+    db.flush()
+    assert service._class_scoring_reference(db, item, original, [score])[
+        "scoring_reference_status"] == "missing"
+    score.answer_key_question_version = 5
+    conflict = service._class_scoring_reference(db, item, original, [score])
+    assert conflict["scoring_reference_status"] == "missing"
+
+
+def test_class_answer_mapping_requires_reliable_evidence():
+    answer = E.Answer(response={"answered": True}, response_status="answered")
+    score = E.AnswerRegrade(detail={
+        "given": ["A", "C"],
+        "response_mapping": {"items": [
+            {"method": "normalized_exact"},
+            {"method": "unique_fuzzy_option_text", "score": .70, "margin": .15},
+        ]},
+    })
+    assert service._class_answer_pattern(score, answer, {"A", "B", "C"}) == (
+        "A, C", "reliable")
+    score.detail["response_mapping"]["items"][1]["score"] = .69
+    assert service._class_answer_pattern(score, answer, {"A", "B", "C"})[1] == "unmapped"
+    score.detail["response_mapping"]["items"][1]["score"] = .70
+    score.detail["response_mapping"]["items"][1]["margin"] = .14
+    assert service._class_answer_pattern(score, answer, {"A", "B", "C"})[1] == "unmapped"
+    answer.response = {"answered": False}
+    assert service._class_answer_pattern(score, answer, {"A", "B", "C"}) == (
+        "未作答", "unanswered")
+
+
+def test_class_answer_review_agreement_disagreement_and_anonymity(
+    db: Session, monkeypatch: pytest.MonkeyPatch,
+):
+    items = [{"position": position, "question_id": f"q{position}",
+              "scoring_question_version": 2, "scoring_reference_status": "available",
+              "stem": f"第{position}题", "options": [{"key": "A", "text": "甲"},
+                                                   {"key": "B", "text": "乙"}],
+              "answer_reference": {"payload": {"key": "A"},
+                                   "explanation": "原有解析"}}
+             for position in (1, 2)]
+    payload = {"question_analysis": items,
+               "high_frequency_errors": [dict(row) for row in items]}
+    seen = []
+    def fake_chat(_db, **kwargs):
+        seen.append(kwargs)
+        return {"content": json.dumps({"items": [
+            {"position": 1, "answer_payload": {"key": "A"},
+             "explanation": "甲符合题意。"},
+            {"position": 2, "answer_payload": {"key": "B"},
+             "explanation": "乙符合题意。"},
+        ]}, ensure_ascii=False), "finish_reason": "stop", "call_id": "call-test"}
+    monkeypatch.setattr(class_answer_review.model_provider, "chat", fake_chat)
+    reviews = class_answer_review.review_class_answers(
+        db, payload, run_id="run-test", actor_user_id="teacher_local",
+        classroom_id="class-1", assessment_version_id="av-1")
+    assert len(seen) == 1 and len(reviews) == 2
+    assert [row["status"] for row in reviews] == ["agreed", "disagreed"]
+    assert payload["question_analysis"][0]["answer_reference"]["explanation"] == "甲符合题意。"
+    assert payload["question_analysis"][1]["answer_reference"]["explanation"] == "原有解析"
+    sent = json.dumps(seen[0]["messages"], ensure_ascii=False)
+    assert "student" not in sent and "answer_key" not in sent
+    assert "SECRET" not in sent
+    db.add(E.Diagnosis(diagnosis_id="diag-reviewed", user_id="teacher_local",
+                       level="class", target_id="class-1", scope_type="class_assessment",
+                       classroom_id="class-1", assessment_version_id="av-1",
+                       payload={"answer_reviews": reviews}))
+    db.commit()
+    monkeypatch.setattr(class_answer_review.model_provider, "chat",
+                        lambda *_args, **_kwargs: pytest.fail("有效复核应从诊断记录复用"))
+    cached = class_answer_review.review_class_answers(
+        db, payload, run_id="run-cached", actor_user_id="teacher_local",
+        classroom_id="class-1", assessment_version_id="av-1")
+    assert [row["status"] for row in cached] == ["agreed", "disagreed"]
+
+
+def test_class_answer_review_failure_preserves_existing_explanation(
+    db: Session, monkeypatch: pytest.MonkeyPatch,
+):
+    item = {"position": 1, "question_id": "q1", "scoring_question_version": 2,
+            "scoring_reference_status": "available", "stem": "题干",
+            "options": [{"key": "A", "text": "甲"}],
+            "answer_reference": {"payload": {"key": "A"},
+                                 "explanation": "原有解析"}}
+    def unavailable(*_args, **_kwargs):
+        raise class_answer_review.model_provider.ModelUnavailable("network_error", "连接失败")
+    monkeypatch.setattr(class_answer_review.model_provider, "chat", unavailable)
+    payload = {"question_analysis": [item], "high_frequency_errors": [dict(item)]}
+    result = class_answer_review.review_class_answers(
+        db, payload, run_id="run-failed", actor_user_id="teacher_local",
+        classroom_id="class-1", assessment_version_id="av-1")
+    assert result[0]["status"] == "unavailable"
+    assert payload["question_analysis"][0]["answer_reference"]["explanation"] == "原有解析"
+    monkeypatch.setattr(class_answer_review.model_provider, "chat",
+                        lambda *_args, **_kwargs: {
+                            "content": json.dumps({"items": [
+                                {"position": [], "answer_payload": {"key": "A"},
+                                 "explanation": "不能使用的解析"}]}),
+                            "finish_reason": "stop"})
+    malformed = class_answer_review.review_class_answers(
+        db, payload, run_id="run-malformed", actor_user_id="teacher_local",
+        classroom_id="class-1", assessment_version_id="av-1")
+    assert malformed[0]["status"] == "unavailable"
+    assert payload["question_analysis"][0]["answer_reference"]["explanation"] == "原有解析"
 
 
 def test_class_ai_rejects_empty_output_and_never_returns_blank_lists(

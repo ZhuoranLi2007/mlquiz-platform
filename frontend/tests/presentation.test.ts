@@ -99,6 +99,7 @@ test('教师诊断页只保留三种业务模式并加载当前版本结果', ()
 })
 
 test('三种诊断的分析栏不再用运行后占位文案代替结论', () => {
+  const shared = readFileSync(new URL('../src/components/DiagnosisAnalysisContent.vue', import.meta.url), 'utf8')
   for (const file of [
     '../src/components/SingleAttemptWorkbench.vue',
     '../src/components/MultiAttemptWorkbench.vue',
@@ -106,8 +107,11 @@ test('三种诊断的分析栏不再用运行后占位文案代替结论', () =>
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), 'utf8')
     assert.doesNotMatch(source, /运行诊断后生成/)
-    assert.match(source, /综合结论/)
+    assert.match(source, /<DiagnosisAnalysisContent/)
     assert.match(source, /推荐学习资源/)
+  }
+  for (const label of ['综合结论', '薄弱概念', '学习建议', '查看题目依据']) {
+    assert.match(shared, new RegExp(label))
   }
 })
 
@@ -147,11 +151,15 @@ test('登录页选择身份即登录并保留手动登录降级', () => {
 
 test('学生学习反馈以错题和复测闭环为核心且不展示技术文案', () => {
   const source = readFileSync(new URL('../src/views/StudentFeedbackView.vue', import.meta.url), 'utf8')
+  const shared = readFileSync(new URL('../src/components/DiagnosisAnalysisContent.vue', import.meta.url), 'utf8')
   const router = readFileSync(new URL('../src/router/index.ts', import.meta.url), 'utf8')
   assert.match(router, /student\/feedback[\s\S]*StudentFeedbackView\.vue/)
-  for (const label of ['选择试卷', '本次成绩', '班级排名', '错题数量', '针对性复测', '学情分析', '薄弱概念', '学习建议', '推荐学习资源']) {
+  for (const label of ['选择试卷', '本次成绩', '班级排名', '错题数量', '针对性复测', '学情分析', '推荐学习资源']) {
     assert.match(source, new RegExp(label))
   }
+  assert.match(source, /<DiagnosisAnalysisContent/)
+  assert.match(shared, /薄弱概念/)
+  assert.match(shared, /学习建议/)
   assert.match(source, /grid-template-columns:minmax\(0,7fr\) minmax\(300px,3fr\)/)
   assert.doesNotMatch(source, /MY LEARNING DESK|correct=NULL|正式指标排除|paper_id|diagnosis_id/)
 })

@@ -87,5 +87,5 @@ const fallbackText = computed(() => props.fallback || (props.part === 'stem'
 </template>
 
 <style scoped>
-.question-content{display:inline;line-height:inherit}.source-shared{display:block;margin-bottom:8px;padding:8px 10px;border-left:3px solid #c8d8eb;background:#f7f9fd}.source-lines{display:inline}.source-line{display:block}.source-line+.source-line{margin-top:6px}.source-line :deep(.source-media){display:inline-block;max-width:100%;height:auto;vertical-align:-.25em}.source-line :deep(.source-formula){max-height:3.8em;object-fit:contain;object-position:left center}.media-note{display:block;margin-top:6px;color:#95651e;font-size:12px;font-weight:650}
+.question-content{display:inline;line-height:inherit}.source-shared{display:block;margin-bottom:8px;padding:8px 10px;border-left:3px solid #c8d8eb;background:#f7f9fd}.source-lines{display:inline}.source-line{display:block}.source-line+.source-line{margin-top:6px}.source-line :deep(.source-media){display:inline-block;max-width:100%;height:auto;vertical-align:-.25em}.source-line :deep(.source-formula){max-height:3.8em;object-fit:contain;object-position:left center}.media-note{display:block;margin-top:6px;color:#95651e;font-size:14px;font-weight:650}
 </style>

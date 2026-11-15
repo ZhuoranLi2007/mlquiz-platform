@@ -242,6 +242,7 @@ def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
         result.update({
             "retest_performance": [], "remaining_concepts": [],
             "mastery_status": "not_started",
+            "retest_summary": None,
             "next_step": "可根据本次真实错题生成5道针对性新题进行复测。",
         })
         return result
@@ -259,30 +260,35 @@ def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
     ))
     result["remaining_concepts"] = remaining
     result["mastery_status"] = latest["status"]
+    summary = ""
     if latest["status"] in {"published", "opened"}:
-        result["summary"] = (
-            f"第{latest['round']}轮复测已发布，等待学生完成。" +
-            (" " + result.get("summary", "") if result.get("summary") else "")
-        )
+        summary = f"第{latest['round']}轮复测已发布，等待学生完成。"
         result["next_step"] = "等待学生提交后再依据真实评分更新结论。"
     elif latest["status"] == "scoring_pending":
-        result["summary"] = f"第{latest['round']}轮复测已提交，但仍有题目未完成可靠评分，暂不能判断是否达标。"
+        summary = f"第{latest['round']}轮复测已提交，等待完整评分后判断是否达标。"
         result["next_step"] = "完成全部题目评分后再执行80%达标判定。"
     elif latest["status"] == "passed":
         pct = round(float(latest.get("accuracy") or 0) * 100)
-        result["summary"] = (
-            f"该学生第{latest['round']}轮针对性复测答对"
+        summary = (
+            f"第{latest['round']}轮复测答对"
             f"{latest.get('correct_count')}/{latest.get('question_count')}题，"
-            f"正确率{pct}%，本轮已达标。此前错题涉及的概念在新题复测中有所改善。"
+            f"正确率{pct}%，本轮已达标。"
         )
         result["next_step"] = "默认结束本轮复测；教师仍可按需安排新的巩固测验。"
-    else:
+    elif latest["status"] == "not_passed":
         pct = round(float(latest.get("accuracy") or 0) * 100)
-        result["summary"] = (
-            f"该学生第{latest['round']}轮针对性复测答对"
+        wrong_positions = [str(item.get("position")) for item in latest.get("wrong_items") or []
+                           if item.get("position")]
+        focus = ("继续练习本轮第" + "、".join(wrong_positions[:3]) + "题对应概念。"
+                 if wrong_positions else "继续练习本轮错题对应概念。")
+        summary = (
+            f"第{latest['round']}轮复测答对"
             f"{latest.get('correct_count')}/{latest.get('question_count')}题，"
-            f"正确率{pct}%，尚未达到{round(float(latest['threshold']) * 100)}%目标。"
-            "最新复测错题对应的概念仍需关注。"
+            f"正确率{pct}%，尚未达到{round(float(latest['threshold']) * 100)}%目标。{focus}"
         )
         result["next_step"] = "复习最新错题后，由教师点击“再次生成复测”进入下一轮。"
+    result["retest_summary"] = {
+        "status": latest["status"], "round": latest["round"],
+        "accuracy": latest.get("accuracy"), "text": summary,
+    }
     return result

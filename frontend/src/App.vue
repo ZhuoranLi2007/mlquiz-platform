@@ -13,6 +13,7 @@ const immersive = computed(() => Boolean(route.meta.immersive))
 const questionBankPage = computed(() => route.name === 'teacher-questions')
 const teacherDashboardPage = computed(() => route.name === 'teacher-home')
 const studentFeedbackPage = computed(() => route.name === 'student-feedback')
+const studentTaskPage = computed(() => route.name === 'student-home')
 const teacherResourcePage = computed(() => ['teacher-resources', 'teacher-online'].includes(String(route.name || '')))
 const teacherNav = [
   { path: '/teacher', label: '教学总览', icon: House, exact: true },
@@ -42,7 +43,7 @@ onMounted(() => void auth.ensure())
 <template>
   <router-view v-if="publicPage" />
   <div v-else-if="immersive" class="immersive-shell"><router-view /></div>
-  <div v-else class="role-shell" :class="[auth.role.value || 'loading', { 'question-bank-shell': questionBankPage, 'teacher-dashboard-shell': teacherDashboardPage, 'student-feedback-shell': studentFeedbackPage, 'teacher-resource-shell': teacherResourcePage }]">
+  <div v-else class="role-shell" :class="[auth.role.value || 'loading', { 'question-bank-shell': questionBankPage, 'teacher-dashboard-shell': teacherDashboardPage, 'student-feedback-shell': studentFeedbackPage, 'student-task-shell': studentTaskPage, 'teacher-resource-shell': teacherResourcePage }]">
     <button v-if="mobileOpen" class="nav-scrim" aria-label="关闭导航" @click="mobileOpen=false" />
     <aside class="role-side" :class="{open:mobileOpen}">
       <router-link :to="auth.isTeacher.value?'/teacher':'/student'" class="brand">
@@ -62,7 +63,7 @@ onMounted(() => void auth.ensure())
     <div class="role-main">
       <header v-if="!questionBankPage && !teacherDashboardPage" class="role-topbar">
         <button class="mobile-menu" @click="mobileOpen=true">☰</button>
-        <div><span>{{ roleLabel }}</span><h1>{{ title }}</h1></div>
+        <div><span>{{ studentTaskPage ? '学生端 › 我的任务' : roleLabel }}</span><h1><el-icon v-if="studentTaskPage" class="task-title-icon"><Tickets /></el-icon>{{ title }}<small v-if="studentTaskPage" class="task-title-note">查看与完成学习任务，掌握学习进度</small></h1></div>
         <div class="identity"><b>{{ auth.principal.value?.display_name }}</b></div>
       </header>
       <button v-else-if="questionBankPage" class="mobile-menu bank-mobile-menu" aria-label="打开导航" @click="mobileOpen=true">☰</button>
@@ -80,25 +81,25 @@ onMounted(() => void auth.ensure())
 .brand-mark{display:grid;flex:none;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--app-primary);color:#fff;font-size:15px;font-weight:800;letter-spacing:-.04em;box-shadow:0 5px 14px rgb(66 99 173 / 15%)}
 .brand b,.brand small{display:block}
 .brand b{font-size:14.5px;font-weight:750;white-space:nowrap}
-.brand small{margin-top:3px;color:#7c8ba4;font-size:11px}
+.brand small{margin-top:3px;color:var(--text-muted);font-size:var(--font-size-min)}
 .role-side nav{display:grid;gap:6px;margin-top:34px}
-.role-side nav a{display:flex;min-height:43px;align-items:center;gap:12px;padding:0 13px;border-radius:10px;color:#34445f;text-decoration:none;font-size:14px;font-weight:560;transition:background .15s ease,color .15s ease}
+.role-side nav a{display:flex;min-height:43px;align-items:center;gap:12px;padding:0 13px;border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:var(--font-size-min);font-weight:500;transition:background .15s ease,color .15s ease}
 .role-side nav a:hover{background:#eef3fd;color:#244fbd}
 .role-side nav a.active{background:#e9f0fa;color:var(--app-primary);font-weight:750}
 .role-side nav .el-icon{font-size:19px}
 .side-foot{margin-top:auto;padding:16px 6px 0;border-top:1px solid #e4eaf4}
-.role-chip{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 10px;border-radius:8px;background:#f0f3f8;color:#66768d;font-size:11px}
+.role-chip{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 10px;border-radius:8px;background:#f0f3f8;color:var(--text-secondary);font-size:var(--font-size-min)}
 .role-chip>span{width:7px;height:7px;border-radius:50%;background:#34a889;box-shadow:0 0 0 3px #dff4ed}
-.side-foot p{margin:0 0 10px;color:#8a98ac;font-size:10.5px}
-.side-foot button{display:flex;width:100%;min-height:34px;align-items:center;gap:8px;padding:5px 2px;border:0;background:none;color:#687890;cursor:pointer;font:inherit;font-size:12.5px}
+.side-foot p{margin:0 0 10px;color:var(--text-muted);font-size:var(--font-size-min)}
+.side-foot button{display:flex;width:100%;min-height:34px;align-items:center;gap:8px;padding:5px 2px;border:0;background:none;color:var(--text-secondary);cursor:pointer;font:inherit;font-size:var(--font-size-min)}
 .side-foot button:hover{color:#315cf0}
 .role-main{min-height:100vh;margin-left:220px}
 .role-topbar{position:sticky;z-index:10;top:0;display:flex;height:77px;align-items:center;justify-content:space-between;padding:0 34px;border-bottom:1px solid #e4eaf4;background:rgba(255,255,255,.94);backdrop-filter:blur(10px)}
 .teacher-resource-shell .role-topbar{background:#f6f8fe;backdrop-filter:none}
-.role-topbar>div:first-of-type span{color:var(--app-primary);font-size:10px;font-weight:800;letter-spacing:.15em}
-.role-topbar h1{margin:2px 0;color:#17243d;font-size:20px}
+.role-topbar>div:first-of-type span{color:var(--app-primary);font-size:14px;font-weight:800;letter-spacing:.15em}
+.role-topbar h1{margin:2px 0;color:var(--text-primary);font-size:var(--font-size-page);font-weight:var(--font-weight-bold);line-height:1.3}
 .student-feedback-shell .role-topbar h1{font-size:24px;font-weight:800}
-.identity{text-align:right}.identity b,.identity small{display:block}.identity b{font-size:13px}.identity small{margin-top:3px;color:#8794a8;font-size:10px}
+.identity{text-align:right}.identity b,.identity small{display:block}.identity b{font-size:14px}.identity small{margin-top:3px;color:var(--text-muted);font-size:14px}
 .role-content{max-width:1440px;margin:0 auto;padding:28px 32px 54px}
 .question-bank-shell .role-content{max-width:none;padding:18px 22px 48px}
 .mobile-menu{display:none;border:0;background:none;color:#17243d;font-size:23px}
@@ -106,13 +107,21 @@ onMounted(() => void auth.ensure())
 .nav-scrim{display:none}
 .role-shell{background:var(--app-bg);color:var(--app-text);--el-color-primary:var(--app-primary);--el-border-radius-base:10px}
 .role-side{background:#f8faff;border-color:var(--app-border)}
-.role-side nav a{min-height:46px;font-size:15px;font-weight:600}
-.brand b{font-size:16px}.brand small{font-size:13px}
-.role-chip{font-size:13px}.side-foot button{min-height:42px;font-size:14px}
+.role-side nav a{min-height:46px;font-size:15px;font-weight:var(--font-weight-semibold)}
+.brand b{font-size:16px}.brand small{font-size:14px}
+.role-chip{font-size:14px}.side-foot button{min-height:42px;font-size:14px}
 .role-topbar{background:var(--app-bg);border-color:var(--app-border);backdrop-filter:none}
-.role-topbar>div:first-of-type span{font-size:12px;letter-spacing:.03em}
-.role-topbar h1{font-size:25px;font-weight:750}
+.role-topbar>div:first-of-type span{font-size:14px;letter-spacing:.03em}
+.role-topbar h1{font-size:var(--font-size-page);font-weight:var(--font-weight-bold)}
 .identity b{font-size:14px}
 .role-content{padding-top:22px}
 @media(max-width:820px){.role-side{width:min(82vw,300px);transform:translateX(-102%);transition:.2s}.role-side.open{transform:translateX(0)}.role-main{margin-left:0}.mobile-menu{display:block}.role-topbar{padding:0 18px}.role-content,.question-bank-shell .role-content{padding:70px 15px 40px}.role-shell:not(.question-bank-shell):not(.teacher-dashboard-shell) .role-content{padding-top:20px}.nav-scrim{display:block;position:fixed;z-index:19;inset:0;border:0;background:rgba(11,28,40,.4)}}
+.student-task-shell{background:#f5f7fc;--app-primary:#2858d8}
+.student-task-shell .role-side{background:#f8faff;border-color:#e2e8f3}
+.student-task-shell .role-side nav a.active{background:#e7efff;color:#2858d8}
+.student-task-shell .role-topbar{background:#f5f7fc;border-color:#e2e8f3}
+.student-task-shell .role-topbar h1{display:flex;align-items:center;gap:10px;color:var(--text-primary);font-size:var(--font-size-page);font-weight:var(--font-weight-bold)}
+.student-task-shell .task-title-icon{display:grid;place-items:center;width:31px;height:31px;border-radius:8px;background:#e7efff;color:#2858d8;font-size:22px}
+.student-task-shell .task-title-note{margin-left:8px;color:var(--text-muted);font-size:var(--font-size-min);font-weight:var(--font-weight-normal)}
+@media(max-width:820px){.student-task-shell .task-title-note{display:none}.student-task-shell .role-topbar h1{font-size:21px}}
 </style>

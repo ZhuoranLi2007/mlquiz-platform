@@ -22,6 +22,7 @@ from backend.app.services import (
     classroom_import,
     paper_builder_service,
     release_service,
+    teacher_attempt_review,
 )
 
 router = APIRouter(prefix="/api", tags=["teacher-student"])
@@ -183,6 +184,18 @@ def save_teacher_paper_draft(
             items=[item.model_dump() for item in body.items])
     except Exception as exc:
         raise _http_error(exc) from exc
+
+
+@router.get("/teacher/attempts/{attempt_id}/review")
+def teacher_review_attempt(
+    attempt_id: str,
+    principal: auth_service.Principal = Depends(auth_service.require_teacher),
+    db: Session = Depends(get_session),
+) -> dict:
+    attempt = auth_service.assert_attempt_access(db, principal, attempt_id)
+    if attempt.status != "submitted":
+        raise HTTPException(409, "答卷尚未提交")
+    return teacher_attempt_review.teacher_attempt_review(db, attempt)
 
 
 @router.get("/teacher/releases")
@@ -515,9 +528,14 @@ def _exam_chapters(db: Session, version: E.AssessmentVersion | None,
 def _regrade_for_attempt(db: Session, attempt_id: str) -> dict | None:
     if not attempt_id:
         return None
-    row = db.execute(select(E.AttemptRegradeSummary).where(
+    row = db.execute(select(E.AttemptRegradeSummary).join(
+        E.ScoringRun,
+        E.ScoringRun.scoring_run_id == E.AttemptRegradeSummary.scoring_run_id,
+    ).where(
         E.AttemptRegradeSummary.attempt_id == attempt_id,
-    ).order_by(E.AttemptRegradeSummary.computed_at.desc())).scalars().first()
+        E.ScoringRun.status == "completed",
+    ).order_by(E.ScoringRun.completed_at.desc(),
+               E.ScoringRun.scoring_run_id.desc())).scalars().first()
     if row is None:
         return None
     return {
@@ -586,6 +604,7 @@ def _student_exam_records(db: Session, student_id: str) -> list[dict]:
         E.Attempt.source_import_run_id == "",
     ).order_by(E.Attempt.submitted_at.desc())).scalars().all()
     for attempt in online_attempts:
+        current = attempt_service.grading_summary(db, attempt)
         version = (db.get(E.AssessmentVersion, attempt.assessment_version_id)
                    if attempt.assessment_version_id else None)
         assessment = (db.get(E.Assessment, version.assessment_id)
@@ -608,12 +627,11 @@ def _student_exam_records(db: Session, student_id: str) -> list[dict]:
             "submitted_at": attempt.submitted_at,
             "reported_score": None,
             "reported_max_score": None,
-            "platform_score": (
-                attempt.score if attempt.grading_status != "pending_key"
-                else None),
-            "platform_max_score": (
-                attempt.max_score if attempt.max_score_reliable else None),
-            "grading_status": attempt.grading_status,
+            "platform_score": current["score"],
+            "platform_max_score": current["max_score"],
+            "grading_status": current["grading_status"],
+            "scored_item_count": current["scored_item_count"],
+            "ungraded_item_count": current["ungraded_item_count"],
             "regrade": None,
             "answer_count": len(db.execute(select(E.Answer.answer_id).where(
                 E.Answer.attempt_id == attempt.attempt_id)).scalars().all()),
@@ -644,15 +662,22 @@ def _feedback_options(item: dict[str, Any]) -> list[dict[str, str]]:
 def _student_question_view(item: dict[str, Any]) -> dict[str, Any]:
     reference = item.get("answer_reference") or {}
     comparison = item.get("class_comparison") or {}
+    revised = bool(item.get("is_scoring_revision"))
+    original = item.get("original_question") or {}
     return {
         "position": item.get("position"),
         "question_type": item.get("question_type") or item.get("type") or "",
         "stem": item.get("stem") or "",
         "options": _feedback_options(item),
-        "shared_materials": item.get("shared_materials") or [],
-        "source_blocks": item.get("source_blocks") or [],
-        "source_options": item.get("source_options") or [],
+        "shared_materials": [] if revised else item.get("shared_materials") or [],
+        "source_blocks": [] if revised else item.get("source_blocks") or [],
+        "source_options": [] if revised else item.get("source_options") or [],
         "content_warning": item.get("content_warning") or "",
+        "is_scoring_revision": revised,
+        "original_question": ({
+            "stem": original.get("stem") or "",
+            "options": _feedback_options(original),
+        } if revised else None),
         "chapter_id": item.get("chapter_id") or (item.get("chapter") or {}).get("chapter_id") or "",
         "chapter": {
             "title": (item.get("chapter") or {}).get("title") or "未映射章节",
@@ -686,6 +711,23 @@ def _student_question_view(item: dict[str, Any]) -> dict[str, Any]:
 
 def _student_analysis_view(payload: dict[str, Any]) -> dict[str, Any]:
     analysis = payload.get("ai_analysis") or {}
+    if analysis.get("analysis_version") == 2:
+        return {
+            "analysis_version": 2,
+            "summary": analysis.get("summary") or "",
+            "concepts": [{
+                "name": row.get("name") or "",
+                "chapter": row.get("chapter") or "",
+                "question_positions": row.get("question_positions") or [],
+                "question_refs": row.get("question_refs") or [],
+                "observation": row.get("observation") or "",
+                "analysis": row.get("analysis") or "",
+            } for row in (analysis.get("concept_hypotheses") or [])[:3]
+                if isinstance(row, dict)],
+            "recommendations": (analysis.get("recommendations") or [])[:3],
+            "retest_summary": analysis.get("retest_summary"),
+            "evidence_details": (analysis.get("evidence_details") or [])[:6],
+        }
     wrong = [row for row in payload.get("items") or []
              if row.get("evidence_status") == "scored"
              and row.get("correct") is False]
@@ -770,11 +812,9 @@ def student_feedback(
             # keeps feedback visible without rewriting audit provenance.
         ).order_by(E.Diagnosis.created_at.desc())).scalars().first()
         payload = (diagnosis.payload or {}) if diagnosis else {}
-        regrade = _regrade_for_attempt(db, attempt.attempt_id)
-        score = (regrade.get("awarded_score") if regrade else
-                 attempt.score if attempt.grading_status != "pending_key" else None)
-        max_score = (regrade.get("max_score") if regrade else
-                     attempt.max_score if attempt.max_score_reliable else None)
+        grading = attempt_service.grading_summary(db, attempt)
+        score = grading["score"]
+        max_score = grading["max_score"]
         quiz_code = assessment.quiz_code if assessment else ""
         if str(quiz_code).startswith("paper_"):
             quiz_code = ""
@@ -789,13 +829,13 @@ def student_feedback(
                             else "online_exam"),
             "source_label": ("历史课堂小测" if attempt.source_import_run_id
                              else "在线考试"),
-            **attempt_service.grading_summary(db, attempt),
+            **grading,
             "score": score,
             "max_score": max_score,
             "score_rate": (round(float(score) / float(max_score), 6)
                            if score is not None and max_score and max_score > 0
                            else None),
-            "grading_status": attempt.grading_status,
+            "grading_status": grading["grading_status"],
             "score_summary": payload.get("score_summary"),
             "chapters": payload.get("chapters", []),
             "knowledge_points": payload.get("knowledge_points", []),
@@ -874,6 +914,7 @@ def student_feedback_detail(
         E.Diagnosis.student_id == principal.student_id,
         E.Diagnosis.assessment_version_id == attempt.assessment_version_id,
         E.Diagnosis.scope_type == "student_attempt",
+        E.Diagnosis.skill_version == classroom_diagnosis.SKILL_VERSION,
     ).order_by(E.Diagnosis.created_at.desc())).scalars().first()
     saved = (diagnosis.payload or {}) if diagnosis else {}
     if (saved.get("attempt_id") in {None, "", attempt.attempt_id}

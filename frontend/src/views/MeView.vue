@@ -322,7 +322,7 @@ function favoriteKindLabel(kind: string) {
 .page-head { margin-bottom: 18px; }
 .page-head h1 { margin: 3px 0 7px; font-size: 28px; }
 .page-head p { margin: 0; color: #687083; }
-.page-kicker { color: #4f46e5 !important; font-size: 13px; font-weight: 700; }
+.page-kicker { color: #4f46e5 !important; font-size: 14px; font-weight: 700; }
 .profile-card { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; padding: 18px 20px; border: 1px solid #e3e6ee; border-radius: 16px; background: #fff; }
 .avatar { display: grid; place-items: center; width: 48px; height: 48px; flex: none; border-radius: 14px; background: #eef2ff; color: #4338ca; font-size: 20px; font-weight: 800; }
 .profile-main { flex: 1; min-width: 0; }
@@ -340,7 +340,7 @@ function favoriteKindLabel(kind: string) {
 .record-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .record-card { display: flex; flex-direction: column; min-width: 0; padding: 18px; border: 1px solid #e3e6ee; border-radius: 14px; background: #fff; }
 .card-head, .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.card-head > span, .card-foot > span { color: #737b8d; font-size: 13px; }
+.card-head > span, .card-foot > span { color: #737b8d; font-size: 14px; }
 .record-card h3 { margin: 17px 0 6px; font-size: 17px; }
 .record-card > p { flex: 1; margin: 0 0 18px; color: #687083; line-height: 1.6; }
 .card-foot > div { display: flex; align-items: center; gap: 4px; }
@@ -351,17 +351,17 @@ function favoriteKindLabel(kind: string) {
 .attempt-row:focus-visible { position: relative; z-index: 1; outline: 3px solid rgb(79 70 229 / 20%); outline-offset: -3px; }
 .attempt-main { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .attempt-main strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.attempt-main span { color: #747c8d; font-size: 13px; }
+.attempt-main span { color: #747c8d; font-size: 14px; }
 .attempt-score { text-align: right; color: #3730a3; }
 .empty-state { padding: 40px 20px; border: 1px dashed #d8dce6; border-radius: 14px; background: #fafbfc; text-align: center; }
 .empty-state.compact { padding: 28px 20px; }
 .empty-state strong { font-size: 16px; }
 .empty-state p { margin: 8px 0 16px; color: #70788a; }
-.favorite-toolbar > span { color: #737b8d; font-size: 13px; }
+.favorite-toolbar > span { color: #737b8d; font-size: 14px; }
 .favorite-list { display: grid; gap: 10px; }
 .favorite-card { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 20px; border: 1px solid #e3e6ee; border-radius: 14px; background: #fff; }
 .favorite-card > div:first-child { min-width: 0; }
-.favorite-card span { color: #4f46e5; font-size: 13px; font-weight: 700; }
+.favorite-card span { color: #4f46e5; font-size: 14px; font-weight: 700; }
 .favorite-card h3 { margin: 5px 0; font-size: 16px; }
 .favorite-card p, .favorite-card small { margin: 0; color: #70788a; }
 .favorite-actions { display: flex; flex: none; gap: 8px; }
@@ -371,7 +371,7 @@ function favoriteKindLabel(kind: string) {
 .settings-form { max-width: 520px; }
 .settings-form :deep(.el-date-editor) { width: 100%; }
 .form-suffix { margin-left: 8px; color: #687083; }
-.field-help { width: 100%; margin: 5px 0 0; color: #757d8f; font-size: 13px; line-height: 1.6; }
+.field-help { width: 100%; margin: 5px 0 0; color: #757d8f; font-size: 14px; line-height: 1.6; }
 
 @media (max-width: 720px) {
   .profile-card { align-items: flex-start; flex-wrap: wrap; }
