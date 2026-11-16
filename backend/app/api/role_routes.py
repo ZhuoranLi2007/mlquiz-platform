@@ -477,6 +477,18 @@ def student_attempt(
     return attempt_service.attempt_state(db, attempt_id)
 
 
+@router.get("/student/attempts/{attempt_id}/review")
+def student_review_attempt(
+    attempt_id: str,
+    principal: auth_service.Principal = Depends(auth_service.require_student),
+    db: Session = Depends(get_session),
+) -> dict:
+    attempt = auth_service.assert_attempt_access(db, principal, attempt_id)
+    if attempt.status != "submitted":
+        raise HTTPException(409, "答卷尚未提交")
+    return teacher_attempt_review.teacher_attempt_review(db, attempt)
+
+
 @router.put("/student/attempts/{attempt_id}/answers/{question_id}")
 def save_student_answer(
     attempt_id: str, question_id: str, body: AnswerIn,

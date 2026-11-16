@@ -1,29 +1,29 @@
 /* ============================================================================
    机器学习学情诊断平台 · 学生工作台设计系统
-   - 内容区浅灰 #F6F7FB，卡片与侧栏使用白色内容面
-   - 靛蓝 #4F46E5 只用于主操作、当前导航和关键链接
+   - 内容区浅灰，卡片与侧栏使用白色内容面
+   - 品牌蓝只用于主操作、当前导航和关键链接
    - 以留白、边框和轻阴影建立层级，避免彩色卡片墙
    ========================================================================== */
 :root {
-  --font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Segoe UI", Arial, sans-serif;
+  --font-family: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", "Noto Sans SC", "Microsoft YaHei", "Segoe UI", sans-serif;
   --font-size-min: 14px;
-  --font-size-body: 16px;
-  --font-size-table: 15px;
+  --font-size-body: 15px;
+  --font-size-table: 14px;
   --font-size-card-title: 16px;
-  --font-size-section: 19px;
+  --font-size-section: 18px;
   --font-size-page: 24px;
-  --font-size-metric: 30px;
+  --font-size-metric: 28px;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #596a80;
-  --text-accent: #2558d4;
+  --text-primary: #1d2b40;
+  --text-secondary: #465a72;
+  --text-muted: #5a6d84;
+  --text-accent: #285fcf;
   --el-font-size-extra-small: 14px;
   --el-font-size-small: 14px;
-  --el-font-size-base: 16px;
+  --el-font-size-base: 15px;
   --el-font-family: var(--font-family);
   --el-text-color-primary: var(--text-primary);
   --el-text-color-regular: var(--text-secondary);
@@ -32,7 +32,7 @@
   --app-surface: #ffffff;
   --app-text: var(--text-primary);
   --app-muted: var(--text-muted);
-  --app-primary: #4263ad;
+  --app-primary: var(--text-accent);
   --app-border: #dce5ef;
   --app-radius: 14px;
   --app-shadow: 0 4px 16px rgb(32 65 115 / 5%);
@@ -46,7 +46,7 @@
   --muted: var(--text-muted);
   --muted-2: var(--text-muted);
   --accent: var(--text-accent);
-  --accent-hover: #365490;
+  --accent-hover: #1f4fae;
   --accent-soft: #edf2fa;
   --nav-bg: #ffffff;
   --nav-text: #4b5563;
@@ -64,8 +64,8 @@
   --shadow-sm: 0 1px 2px rgba(31, 41, 55, .04), 0 8px 24px rgba(31, 41, 55, .035);
   --font: var(--font-family);
   --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
-  --reading-size: var(--font-size-body);
-  --reading-line: 1.6;
+  --reading-size: 16px;
+  --reading-line: 1.7;
   --side-w: 248px;
   --topbar-h: 72px;
 }
@@ -77,8 +77,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font-size: var(--font-size-body);
-  line-height: 1.6;
-  letter-spacing: .012em;
+  line-height: 1.58;
+  letter-spacing: .006em;
   text-rendering: optimizeLegibility;
   font-weight: var(--font-weight-normal);
 }
@@ -87,8 +87,8 @@ a:hover { color: var(--accent-hover); }
 small { font-size: var(--font-size-min); }
 .el-select-dropdown__item.is-selected { color: var(--text-accent); }
 h1, h2, h3, h4 {
-  color: var(--text); font-weight: 700; line-height: 1.38;
-  letter-spacing: -.015em;
+  color: var(--text); font-weight: var(--font-weight-bold); line-height: 1.35;
+  letter-spacing: 0;
 }
 /* 题干、解析等大段阅读内容统一走这套舒适的排版尺度。 */
 .reading-text { font-size: var(--reading-size); line-height: var(--reading-line); letter-spacing: .015em; }
@@ -399,7 +399,7 @@ h1, h2, h3, h4 {
 .el-tabs__item.is-active { color: var(--accent); }
 .el-input__wrapper, .el-select__wrapper { border-radius: var(--radius-sm); }
 .el-button, .el-input, .el-select, .el-tag, .el-dialog { font-family: var(--font); }
-.el-button { font-weight: 650; }
+.el-button { font-weight: var(--font-weight-semibold); }
 .el-input__inner, .el-select__placeholder, .el-select__selected-item { font-size: 15px; }
 
 /* ========================================================================
@@ -847,15 +847,18 @@ button:focus-visible, a:focus-visible, summary:focus-visible,
   font-family: var(--font);
   font-size: var(--font-size-min);
 }
-#app .role-shell .el-table { font-family: var(--font-family); font-size: var(--font-size-table); line-height: 1.45; }
+#app .role-shell .el-table { font-family: var(--font-family); font-size: var(--font-size-table); line-height: 1.5; }
 #app .role-shell :is(.el-input__inner, .el-select__placeholder, .el-select__selected-item) { color: var(--text-secondary); }
 #app .role-shell :is(.el-input__inner, .el-textarea__inner)::placeholder { color: var(--text-muted); opacity: 1; }
-#app .role-shell .el-button:not(.is-link) { min-height: 38px; border-radius: 9px; font-weight: var(--font-weight-semibold); }
+#app .role-shell .el-button:not(.is-link) { min-height: 40px; border-radius: 9px; font-weight: var(--font-weight-semibold); }
 #app .role-shell .el-button--primary:not(.is-disabled) { border-color: var(--app-primary); background: var(--app-primary); color: #fff; }
 #app .role-shell .el-button--primary:not(.is-disabled):hover { border-color: color-mix(in srgb, var(--app-primary) 85%, #000); background: color-mix(in srgb, var(--app-primary) 85%, #000); }
-#app .role-shell :is(.el-input__wrapper, .el-select__wrapper) { min-height: 38px; border-radius: 9px; }
+#app .role-shell :is(.el-input__wrapper, .el-select__wrapper) { min-height: 40px; border-radius: 9px; }
 #app .role-shell :is(.el-dialog, .el-drawer) { color: var(--app-text); }
 #app .role-shell .el-dialog__title { font-size: var(--font-size-section); font-weight: var(--font-weight-semibold); }
+.el-overlay .el-dialog__title, .el-overlay .el-drawer__title { color: var(--text-primary); font-family: var(--font-family); font-size: var(--font-size-section); font-weight: var(--font-weight-semibold); }
+.el-overlay :is(.el-dialog__body, .el-drawer__body) { color: var(--text-secondary); font-family: var(--font-family); font-size: var(--font-size-body); line-height: 1.6; }
+.el-overlay :is(.el-dialog__footer, .el-drawer__footer) { font-family: var(--font-family); }
 #app .role-shell :is(.el-alert__title, .el-empty__description, .el-result__subtitle) { font-size: 14px; }
 
 #app .role-shell :is(.metric-card, .question-card, .resource-card, .material-card,
@@ -873,9 +876,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible,
 #app .role-shell :is(.question-card .stem, .question-card .question-stem,
   .wrong-card .stem, .paper-item .item-stem, .detail-stem) {
   color: var(--app-text);
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.6;
+  font-size: var(--reading-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--reading-line);
 }
 #app .role-shell :is(.analysis-summary p, .ai-summary, .side-section li,
   .sidebar-section li, .concept-list p, .concept-list b, .resource-list b,
@@ -901,7 +904,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible,
 #app .role-shell :is(.answer-compare small, .student-answer, .correct-answer) { font-weight: var(--font-weight-semibold); }
 #app .role-shell :is(.view-tabs button, .scope-tabs b, .filter-item > span,
   .wrong-toolbar label, .filter-chip, .category-filter button) { font-size: 14px; }
-#app .role-shell .metric-card strong { font-size: var(--font-size-metric); font-weight: var(--font-weight-bold); }
+#app .role-shell .metric-card strong { font-size: var(--font-size-metric); font-weight: var(--font-weight-bold); line-height: 1.15; font-variant-numeric: tabular-nums; }
+#app .role-shell :is(.history-table, .records-table, .record-row, .overview-stat strong, .diagnosis-stat strong) { font-variant-numeric: tabular-nums; }
 #app .role-shell :is(.metric-card p, .metric-card em, .score-meta,
   .analysis-empty, .side-empty, .sidebar-empty, .concept-list p,
   .resource-list span, .resources span, .retest-section p,
@@ -952,8 +956,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible,
 
 #app .teacher-dashboard :is(.dashboard-head h2, .preview-head h2, .page-head h2) {
   color: var(--app-text);
-  font-size: 30px;
-  font-weight: 750;
+  font-size: var(--font-size-page);
+  font-weight: var(--font-weight-bold);
 }
 #app .teacher-dashboard .metric-grid article { border-color: var(--app-border); }
 #app .teacher-dashboard :is(.release-title small, .release-audience, .release-time,

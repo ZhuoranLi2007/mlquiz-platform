@@ -180,30 +180,30 @@ onMounted(load)
 .student-feedback-page{gap:12px;color:#2f4058}
 .selector-card{gap:10px;padding:10px 12px}
 .selector-card :deep(.el-select__wrapper){min-height:42px;font-size:14px}
-.selector-card :deep(.el-button){min-height:40px;font-size:14px;font-weight:700}
+.selector-card :deep(.el-button){min-height:40px;font-size:14px;font-weight:var(--font-weight-semibold)}
 .metric-grid{gap:10px}
 .metric-card{min-height:88px;gap:11px;padding:13px 14px}
 .metric-icon{width:44px;height:44px;font-size:22px}
-.metric-card small{font-size:14px;font-weight:800}
-.metric-card b{margin-top:4px;font-size:25px;font-weight:800}
-.metric-card em{font-size:14px;font-weight:700}
+.metric-card small{font-size:14px;font-weight:var(--font-weight-semibold)}
+.metric-card b{margin-top:4px;overflow:visible;font-size:26px;font-weight:var(--font-weight-bold);font-variant-numeric:tabular-nums;text-overflow:clip;white-space:normal;overflow-wrap:anywhere}
+.metric-card em{font-size:14px;font-weight:var(--font-weight-normal)}
 .metric-card p{margin-top:3px;font-size:14px;line-height:1.35}
 .feedback-layout{gap:14px}
 .feedback-main{gap:12px}
 .analysis-panel>header{gap:12px;padding:14px 15px}
 .analysis-panel>header>span{width:38px;height:38px;font-size:21px}
-.analysis-panel h2{font-size:21px;font-weight:800}
+.analysis-panel h2{font-size:var(--font-size-section);font-weight:var(--font-weight-semibold)}
 .analysis-panel header small{margin-top:2px;font-size:14px}
 .analysis-summary{margin:10px 13px 0;padding:11px 12px}
-.analysis-summary h3,.side-section h3{font-size:15px;font-weight:800}
+.analysis-summary h3,.side-section h3{font-size:16px;font-weight:var(--font-weight-semibold)}
 .analysis-summary p{margin-top:7px;font-size:14px;line-height:1.65}
 .side-section{margin:0 13px;padding:12px 0}
 .side-section h3{margin-bottom:9px}
 .concept-list{gap:7px}
 .concept-list article{padding:9px 10px}
 .concept-list b{font-size:14px}
-.concept-list span{font-size:14px;font-weight:650}
-.concept-list p{display:-webkit-box;margin-top:4px;overflow:hidden;font-size:14px;line-height:1.55;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.concept-list span{font-size:14px;font-weight:var(--font-weight-semibold)}
+.concept-list p{margin-top:4px;font-size:14px;line-height:1.6}
 .advice-list{gap:9px}
 .advice-list li{padding-left:28px;font-size:14px;line-height:1.6}
 .advice-list li::before{width:20px;height:20px;font-size:14px}
@@ -211,12 +211,12 @@ onMounted(load)
 .resource-list a{padding:9px 10px}
 .resource-list b{font-size:14px}
 .resource-list span{font-size:14px}
-.resource-list em{font-size:14px;font-weight:700}
+.resource-list em{font-size:14px;font-weight:var(--font-weight-semibold)}
 .retest-result{padding:10px 11px}
 .retest-result b{font-size:14px}
 .retest-result span{font-size:14px}
 .retest-panel{padding:14px}
-.section-heading h2{font-size:20px;font-weight:800}
+.section-heading h2{font-size:var(--font-size-section);font-weight:var(--font-weight-semibold)}
 .section-heading>span,.retest-progress>span,.retest-empty span,.round-card>summary,.round-conclusion,.round-clean{font-size:14px}
 .retest-empty b{font-size:14px}
 @media(max-width:1280px){.metric-card b{font-size:22px}.metric-card small{font-size:14px}}

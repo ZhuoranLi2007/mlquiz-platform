@@ -160,17 +160,17 @@ onMounted(load)
       <el-button size="small" @click="load">重新加载</el-button>
     </el-alert>
 
-    <section class="overview-grid" aria-label="任务概况">
-      <div class="overview-card tone-blue"><span class="stat-icon"><el-icon><Tickets /></el-icon></span><div class="stat-copy"><span>待完成</span><strong>{{ pending.length }}<small>项</small></strong></div></div>
-      <div class="overview-card tone-green"><span class="stat-icon"><el-icon><CircleCheck /></el-icon></span><div class="stat-copy"><span>已提交</span><strong>{{ completed.length }}<small>项</small></strong></div></div>
-      <div class="overview-card tone-purple"><span class="stat-icon"><el-icon><Document /></el-icon></span><div class="stat-copy"><span>考试记录</span><strong>{{ examRecords.length }}<small>次</small></strong></div></div>
-      <div class="overview-card tone-orange"><span class="stat-icon"><el-icon><DataAnalysis /></el-icon></span><div class="stat-copy"><span>平均得分率</span><strong>{{ average.rate === null ? '—' : `${Math.round(average.rate * 100)}%` }}</strong><small>{{ average.count ? `${average.count} 次完整评分` : '暂无完整评分' }}</small></div></div>
-      <div class="overview-card tone-cyan retest-stat"><span class="stat-icon"><el-icon><Aim /></el-icon></span><div class="stat-copy"><span>最近复测</span><strong>{{ retestText(latestRetest) }}</strong><small v-if="latestRetest">{{ taskTitle(latestRetest) }}</small><small v-else>暂无复测任务</small></div></div>
+    <section class="overview-strip" aria-label="任务概况">
+      <div class="overview-stat"><el-icon class="stat-icon"><Tickets /></el-icon><div class="stat-copy"><span>待完成</span><strong>{{ pending.length }}<small>项</small></strong></div></div>
+      <div class="overview-stat"><el-icon class="stat-icon"><CircleCheck /></el-icon><div class="stat-copy"><span>已提交</span><strong>{{ completed.length }}<small>项</small></strong></div></div>
+      <div class="overview-stat"><el-icon class="stat-icon"><Document /></el-icon><div class="stat-copy"><span>考试记录</span><strong>{{ examRecords.length }}<small>次</small></strong></div></div>
+      <div class="overview-stat"><el-icon class="stat-icon"><DataAnalysis /></el-icon><div class="stat-copy"><span>平均得分率</span><strong>{{ average.rate === null ? '—' : `${Math.round(average.rate * 100)}%` }}</strong><small>{{ average.count ? `${average.count} 次完整评分` : '暂无完整评分' }}</small></div></div>
+      <div class="overview-stat retest-stat"><el-icon class="stat-icon"><Aim /></el-icon><div class="stat-copy"><span>最近复测</span><strong>{{ retestText(latestRetest) }}</strong><small :title="latestRetest ? taskTitle(latestRetest) : undefined">{{ latestRetest ? taskTitle(latestRetest) : '暂无复测任务' }}</small></div></div>
     </section>
 
     <section class="pending-section" aria-labelledby="pending-heading">
       <div class="section-heading">
-        <div class="heading-copy"><h2 id="pending-heading">待完成任务</h2><span>共 {{ pending.length }} 项</span></div>
+        <div class="heading-copy"><h2 id="pending-heading">待完成任务</h2></div>
         <div class="task-tools">
           <el-select v-model="taskType" aria-label="筛选任务类型" class="type-filter">
             <el-option label="全部类型" value="all" /><el-option label="课堂测验" value="exam" /><el-option label="针对性复测" value="retest" />
@@ -180,7 +180,7 @@ onMounted(load)
         </div>
       </div>
       <div v-if="visiblePending.length" class="task-grid">
-        <article v-for="item in visiblePending" :key="item.recipient_id" class="task-card" :class="item.release_type === 'retest' ? 'retest-card' : 'exam-card'">
+        <article v-for="item in visiblePending" :key="item.recipient_id" class="task-card">
           <div class="task-card-top"><span class="task-kind" :class="item.release_type === 'retest' ? 'retest' : 'exam'"><el-icon><component :is="item.release_type === 'retest' ? Aim : Reading" /></el-icon>{{ item.release_type === 'retest' ? '针对性复测' : '课堂测验' }}</span><span class="status-pill" :class="item.status === 'opened' ? 'in-progress' : 'new'">{{ item.status === 'opened' ? '进行中' : '新任务' }}</span></div>
           <h3>{{ taskTitle(item) }}</h3>
           <p class="task-description">{{ taskDescription(item) }}</p>
@@ -195,21 +195,22 @@ onMounted(load)
 
     <div class="records-layout">
       <section class="records-panel recent-panel" aria-labelledby="recent-heading">
-        <div class="panel-heading"><div class="heading-copy"><el-icon class="panel-icon"><Document /></el-icon><h2 id="recent-heading">最近提交</h2><span>共 {{ completed.length }} 项</span></div><button type="button" class="text-action" @click="completed.length > 3 ? showAllCompleted = !showAllCompleted : scrollToRecords()">{{ completed.length > 3 ? (showAllCompleted ? '收起' : '查看更多') : '查看考试记录' }}</button></div>
+        <div class="panel-heading"><div class="heading-copy"><h2 id="recent-heading">最近提交</h2></div><button type="button" class="text-action" @click="completed.length > 3 ? showAllCompleted = !showAllCompleted : scrollToRecords()">{{ completed.length > 3 ? (showAllCompleted ? '收起' : '查看更多') : '查看考试记录' }}</button></div>
         <div v-if="completed.length" class="recent-list">
           <article v-for="item in visibleCompleted" :key="item.recipient_id" class="recent-row">
-            <div class="recent-main"><strong>{{ taskTitle(item) }}</strong><small><el-icon><Calendar /></el-icon>{{ dateTime(item.submitted_at) || '提交时间未记录' }}<span class="recent-type">{{ item.release_type === 'retest' ? '针对性复测' : '在线测验' }}</span></small><small v-if="item.release_type === 'retest' && item.targeted_retest">{{ retestText(item) }}</small></div>
-            <b>{{ scoreText(item.score, item.max_score) }}</b>
-            <el-button plain type="primary" :disabled="!item.attempt_id" @click="openAssignment(item)">查看答卷</el-button>
+            <div class="recent-main"><strong>{{ taskTitle(item) }}</strong><small><span class="recent-type">{{ item.release_type === 'retest' ? '针对性复测' : '在线测验' }}</span><span v-if="item.release_type === 'retest' && item.targeted_retest">{{ retestText(item) }}</span></small></div>
+            <time class="recent-time" :datetime="item.submitted_at || undefined"><el-icon><Calendar /></el-icon>{{ dateTime(item.submitted_at) || '提交时间未记录' }}</time>
+            <b class="recent-score">{{ scoreText(item.score, item.max_score) }}</b>
+            <button type="button" class="record-link" :disabled="!item.attempt_id" :aria-label="`查看 ${taskTitle(item)} 的答卷`" @click="openAssignment(item)">查看答卷</button>
           </article>
         </div>
         <div v-else-if="!loading" class="empty-state compact">暂无已提交任务</div>
       </section>
 
       <section id="exam-records" class="records-panel history-panel" aria-labelledby="history-heading">
-        <div class="panel-heading"><div class="heading-copy"><el-icon class="panel-icon"><Collection /></el-icon><h2 id="history-heading">考试记录</h2><span>共 {{ examRecords.length }} 次</span></div><button v-if="examRecords.length > 6" type="button" class="text-action" @click="showAllRecords = !showAllRecords">{{ showAllRecords ? '收起' : '查看全部' }}</button></div>
+        <div class="panel-heading"><div class="heading-copy"><h2 id="history-heading">考试记录</h2></div><button v-if="examRecords.length > 6" type="button" class="text-action" @click="showAllRecords = !showAllRecords">{{ showAllRecords ? '收起' : '查看全部' }}</button></div>
         <div v-if="examRecords.length" class="history-table-wrap"><table class="history-table"><thead><tr><th>试卷标题</th><th>考试时间 / 顺序</th><th>所属章节</th><th>得分</th><th>状态</th><th>操作</th></tr></thead><tbody>
-          <tr v-for="item in visibleRecords" :key="item.record_id"><td data-label="试卷标题"><span class="record-title">{{ item.title }}</span><small v-if="item.source_type === 'online_retest'" class="record-type">复测</small></td><td data-label="考试时间 / 顺序">{{ recordTime(item) }}</td><td data-label="所属章节" class="chapter-cell" :title="recordChapters(item)"><template v-if="chapterNames(item).length"><span v-for="(name,index) in chapterNames(item).slice(0,2)" :key="index" class="chapter-chip">{{ name }}</span><small v-if="chapterNames(item).length > 2">+{{ chapterNames(item).length - 2 }}</small></template><span v-else>—</span></td><td data-label="得分" class="score-cell">{{ recordScoreText(item) }}</td><td data-label="状态"><span class="record-status" :class="recordStatus(item).tone">{{ recordStatus(item).label }}</span></td><td data-label="操作"><el-button v-if="item.attempt_id" plain type="primary" @click="openExamRecord(item)">查看答卷</el-button><span v-else class="no-action">—</span></td></tr>
+          <tr v-for="item in visibleRecords" :key="item.record_id"><td data-label="试卷标题"><span class="record-title">{{ item.title }}</span><small v-if="item.source_type === 'online_retest'" class="record-type">复测</small></td><td data-label="考试时间 / 顺序">{{ recordTime(item) }}</td><td data-label="所属章节" class="chapter-cell" :title="recordChapters(item)"><template v-if="chapterNames(item).length"><span v-for="(name,index) in chapterNames(item).slice(0,2)" :key="index" class="chapter-chip">{{ name }}</span><small v-if="chapterNames(item).length > 2">+{{ chapterNames(item).length - 2 }}</small></template><span v-else>—</span></td><td data-label="得分" class="score-cell">{{ recordScoreText(item) }}</td><td data-label="状态"><span class="record-status" :class="recordStatus(item).tone">{{ recordStatus(item).label }}</span></td><td data-label="操作"><button v-if="item.attempt_id" type="button" class="record-link" :aria-label="`查看 ${item.title} 的答卷`" @click="openExamRecord(item)">查看答卷</button><span v-else class="no-action">—</span></td></tr>
         </tbody></table></div>
         <div v-else-if="!loading" class="empty-state compact">暂无考试记录</div>
       </section>

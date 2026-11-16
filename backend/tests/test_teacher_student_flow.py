@@ -221,6 +221,7 @@ def test_release_answer_feedback_and_cross_student_isolation(flow, monkeypatch):
     saved = client.put(f"/api/student/attempts/{attempt_id}/answers/q-1",
                        json={"response": {"value": True}})
     assert saved.status_code == 200, saved.text
+    assert client.get(f"/api/student/attempts/{attempt_id}/review").status_code == 409
     client.post("/api/auth/logout")
 
     _login(client, "student2", "Student2!2026")
@@ -238,6 +239,15 @@ def test_release_answer_feedback_and_cross_student_isolation(flow, monkeypatch):
     assert submitted.status_code == 200, submitted.text
     body = submitted.json()
     assert body["score"] == 5
+    review = client.get(f"/api/student/attempts/{attempt_id}/review")
+    assert review.status_code == 200, review.text
+    assert review.json()["score"] == body["score"]
+    assert review.json()["items"][0]["score"]["awarded_score"] == 5
+    client.post("/api/auth/logout")
+    _login(client, "student2", "Student2!2026")
+    assert client.get(f"/api/student/attempts/{attempt_id}/review").status_code == 403
+    client.post("/api/auth/logout")
+    _login(client, "student1", "Student1!2026")
     assert body["classroom_workflow"]["graph"] == "post_submission_graph"
     feedback = client.get("/api/student/feedback")
     assert feedback.status_code == 200

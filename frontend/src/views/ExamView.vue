@@ -8,6 +8,7 @@ import MathText from '../components/MathText.vue'
 import SourceQuestionContent from '../components/SourceQuestionContent.vue'
 import AuthenticatedImage from '../components/AuthenticatedImage.vue'
 import StatusBadge from '../components/StatusBadge.vue'
+import StudentAttemptResult from '../components/StudentAttemptResult.vue'
 import {
   answerPayload, formatAnswer, friendlyError, hasMeaningfulAnswer, questionTypeLabel,
 } from '../utils/presentation'
@@ -351,10 +352,11 @@ async function load(showSpinner = true) {
       await router.replace(`/teacher/attempts/${attemptId}`)
       return
     }
-    if (assignedStudentMode && result.status === 'submitted') {
+    if (auth.principal.value?.role === 'student' && result.status === 'submitted'
+        && (assignedStudentMode || result.mode === 'retest') && !targetedRetest.value) {
       const tasks: any = await api.get('/student/assignments')
       targetedRetest.value = (tasks.items || []).find(
-        (item: any) => item.recipient_id === recipientId)?.targeted_retest || targetedRetest.value
+        (item: any) => item.recipient_id === recipientId || item.attempt_id === attemptId)?.targeted_retest || targetedRetest.value
     }
     const nextResponses: Record<string, Record<string, unknown>> = {}
     const nextMeta: Record<string, { hints_used: number; solution_viewed: boolean }> = {}
@@ -559,6 +561,8 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
 
 <template>
   <main v-loading="loading" class="exam-page">
+    <StudentAttemptResult v-if="submitted" :attempt-id="attemptId" :targeted-retest="targetedRetest" />
+    <template v-else>
     <header class="exam-toolbar">
       <div class="exam-title">
           <button class="back-button" aria-label="返回" @click="router.push(assignedStudentMode ? '/student' : '/teacher/questions')">←</button>
@@ -885,11 +889,13 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
         </div>
       </div>
     </el-dialog>
+    </template>
   </main>
 </template>
 
 <style scoped>
 .exam-page { max-width: 1240px; margin: 0 auto; padding: 20px 24px 48px; color: #182033; }
+.exam-page:has(.student-result) { max-width: none; padding: 0; }
 .exam-toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(220px, 420px) auto; align-items: center; gap: 28px; min-height: 76px; margin-bottom: 18px; }
 .exam-title { display: flex; align-items: center; gap: 12px; }
 .exam-title h1 { margin: 2px 0 0; font-size: 24px; line-height: 1.2; }
@@ -1029,4 +1035,14 @@ pre { max-width: 100%; overflow: auto; padding: 12px; border-radius: 8px; backgr
 .original-question{margin-top:16px;padding-top:12px;border-top:1px solid #e3e6ee;color:#596579;line-height:1.6}
 .original-question summary{color:#3159c9;cursor:pointer}
 .original-question p{margin:5px 0 0 12px}
+.exam-page{--el-color-primary:var(--text-accent)}
+.eyebrow,.option-key{color:var(--text-accent)}
+.back-button:hover{border-color:var(--text-accent);color:var(--text-accent)}
+.progress-track span,.question-dot.current{background:var(--text-accent)}
+.question-dot.current{border-color:var(--text-accent);box-shadow:0 0 0 3px rgb(40 95 207 / 13%)}
+.question-tools :deep(.el-segmented){--el-segmented-item-selected-color:var(--text-accent)}
+.option-item:hover{border-color:#a8c0ed;background:#f7faff}
+.question-stem{font-size:17px;line-height:var(--reading-line);font-weight:500}
+.learning-note{border-left-color:var(--text-accent)}
+.learning-note strong{color:var(--text-accent)}
 </style>

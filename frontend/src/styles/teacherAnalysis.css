@@ -1,0 +1,76 @@
+.analysis-page {
+  --diag-blue: var(--app-primary);
+  --diag-border: var(--app-border);
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  color: var(--text-secondary);
+}
+.diagnosis-controls {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--diag-border);
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 3px 14px rgb(31 51 91 / 4%);
+}
+.scope-tabs {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid #e3e9f2;
+  border-radius: 9px;
+  background: #f5f7fa;
+}
+.scope-tabs button {
+  min-height: 40px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #43546c;
+  cursor: pointer;
+  font: inherit;
+  text-align: center;
+  white-space: nowrap;
+}
+.scope-tabs button b { font-size: 14px; font-weight: var(--font-weight-semibold); }
+.scope-tabs button:hover:not(.active) { background: #eaf0f8; }
+.scope-tabs button.active { background: var(--diag-blue); color: #fff; box-shadow: 0 2px 6px rgb(40 88 189 / 15%); }
+.scope-tabs button:focus-visible { outline: 2px solid var(--diag-blue); outline-offset: 2px; }
+.filters-panel { display: flex; flex: 1; align-items: center; gap: 12px; min-width: 0; }
+.filter-item { display: flex; flex: 0 1 205px; align-items: center; gap: 8px; min-width: 0; }
+.filter-item > span { flex: none; color: var(--text-secondary); font-size: 14px; font-weight: var(--font-weight-semibold); white-space: nowrap; }
+.filter-item :deep(.el-select), .filter-item :deep(.el-date-editor) { min-width: 0; width: 100%; }
+.filter-item :deep(.el-select__wrapper), .filter-item :deep(.el-range-editor) { min-height: 40px; border-radius: 9px; box-shadow: 0 0 0 1px var(--diag-border) inset; }
+.filter-item :deep(.el-select__wrapper.is-focused), .filter-item :deep(.el-range-editor.is-active) { box-shadow: 0 0 0 1px var(--diag-blue) inset; }
+.paper-filter, .history-value-filter { flex: 1 1 280px; }
+.history-range-filter { flex: 0 0 230px; }
+.run-button { flex: none; min-width: 112px; min-height: 40px; margin: 0; border-radius: 9px; font-weight: var(--font-weight-semibold); }
+.loading-panel { padding: 22px; border: 1px solid var(--diag-border); border-radius: 13px; background: #fff; }
+.empty-selection { padding: 46px 20px; border: 1px dashed #cdd7e6; border-radius: 13px; background: #fff; color: #64748b; text-align: center; }
+
+@media (max-width: 1350px) {
+  .diagnosis-controls { align-items: stretch; flex-direction: column; gap: 12px; }
+  .scope-tabs { align-self: flex-start; }
+  .filters-panel { flex: none; width: 100%; }
+}
+@media (max-width: 820px) {
+  .filters-panel { flex-wrap: wrap; }
+  .filter-item, .paper-filter, .history-range-filter, .history-value-filter { flex: 1 1 220px; }
+  .run-button { flex: 1 1 130px; }
+}
+@media (max-width: 600px) {
+  .diagnosis-controls { padding: 12px; }
+  .scope-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: stretch; }
+  .scope-tabs button { padding: 8px 5px; }
+  .scope-tabs button b { font-size: 14px; }
+  .filters-panel { display: grid; gap: 10px; }
+  .filter-item, .paper-filter, .history-range-filter, .history-value-filter { width: 100%; }
+  .run-button { width: 100%; }
+}

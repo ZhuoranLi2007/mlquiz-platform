@@ -1,0 +1,19 @@
+.history-shared-head{min-width:0;padding:0 20px;overflow:hidden;border:1px solid var(--app-border);border-radius:14px;background:#fff;box-shadow:var(--app-shadow)}
+.history-key-figures{display:grid;grid-template-columns:170px 180px 190px minmax(0,1fr);align-items:center;min-height:88px;border-bottom:1px solid #e2e8f0}
+.history-key-figures>div{display:grid;gap:2px;min-width:0;padding:10px 22px;border-right:1px solid #d8e0eb}
+.history-key-figures>div:first-child{padding-left:0}
+.history-key-figures>div:nth-child(3){border:0}
+.history-key-figures strong{color:var(--text-primary);font-size:var(--font-size-metric);font-weight:var(--font-weight-bold);font-variant-numeric:tabular-nums;line-height:1.15;letter-spacing:0}
+.history-key-figures strong small{font-size:15px;font-weight:var(--font-weight-normal);letter-spacing:0}
+.history-key-figures span{color:#586a82;font-size:14px}
+.history-key-figures p{justify-self:end;margin:0;color:#42536a;font-size:14px;white-space:nowrap}
+.history-key-figures p span{padding:0 10px;color:#a0acbb}
+.history-main-tabs{display:flex;align-items:stretch;gap:22px;min-height:50px}
+.history-main-tabs button{position:relative;padding:12px 8px;border:0;background:transparent;color:#45566f;cursor:pointer;font:inherit;font-size:15px;font-weight:600;white-space:nowrap}
+.history-main-tabs button:first-child{padding-left:0}
+.history-main-tabs button:hover{color:#2159c8}
+.history-main-tabs button.active{color:#1559dc}
+.history-main-tabs button.active:after{position:absolute;right:0;bottom:-1px;left:0;height:3px;border-radius:2px 2px 0 0;background:#1d62e9;content:''}
+.history-main-tabs button:focus-visible{outline:2px solid #1d62e9;outline-offset:-2px}
+@media(max-width:1100px){.history-key-figures{grid-template-columns:repeat(3,minmax(0,1fr))}.history-key-figures p{grid-column:1/-1;justify-self:start;padding:0 0 12px}.history-key-figures>div{padding-left:16px}.history-key-figures>div:first-child{padding-left:0}}
+@media(max-width:620px){.history-shared-head{padding:0 12px}.history-key-figures strong{font-size:24px}.history-key-figures strong small{font-size:13px}.history-key-figures span,.history-key-figures p{font-size:13px}.history-key-figures>div{padding:10px 8px}.history-main-tabs{gap:4px;justify-content:space-between}.history-main-tabs button{padding:11px 5px;font-size:14px}}

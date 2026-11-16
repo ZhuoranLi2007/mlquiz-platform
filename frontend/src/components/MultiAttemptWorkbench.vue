@@ -2,13 +2,19 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import * as echarts from 'echarts'
-import { Collection, Position, TrendCharts, WarningFilled } from '@element-plus/icons-vue'
+import { Position, WarningFilled } from '@element-plus/icons-vue'
 import MathText from './MathText.vue'
 import SourceQuestionContent from './SourceQuestionContent.vue'
 import DiagnosisAnalysisContent from './DiagnosisAnalysisContent.vue'
+import HistorySummaryTabs from './HistorySummaryTabs.vue'
 import { friendlyQuizCode } from '../utils/presentation'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
 import { analysisNotice } from '../utils/analysisNotice'
+import {
+  chapterWrongDistribution, filterHistoryAttempts, historyRecordType,
+  historyScoringStatus, scoreRateLabel, validScoreRate,
+  type HistoryRecordType, type HistoryScoringStatus,
+} from '../utils/historyDiagnosis'
 
 const props = defineProps<{
   result: any
@@ -22,42 +28,69 @@ const emit = defineEmits<{ retest: []; openAttempt: [assessmentVersionId: string
 const router = useRouter()
 const chartHost = ref<HTMLElement | null>(null)
 let chart: echarts.ECharts | null = null
+let chartResizeObserver: ResizeObserver | null = null
+const activeTab = ref<'overview' | 'wrong' | 'records'>('overview')
 const viewMode = ref<'all' | 'paper' | 'chapter'>('all')
 const selectedPaper = ref('')
+const selectedAttemptId = ref('')
 const selectedChapter = ref('')
 const repeatedOnly = ref(false)
+const showAllWrong = ref(false)
+const showAllChapters = ref(false)
+const selectedWrong = ref<any | null>(null)
+const recordType = ref<HistoryRecordType>('all')
+const recordStatus = ref<HistoryScoringStatus>('all')
 
 const stats = computed(() => props.result?.statistics || {})
 const attempts = computed(() => props.result?.attempts || [])
 const allWrongItems = computed(() => props.result?.wrong_items || [])
 const analysis = computed(() => props.result?.ai_analysis || {})
+const priorityConcepts = computed(() => (props.result?.weak_concepts || analysis.value?.concepts || analysis.value?.concept_hypotheses || []).slice(0, 2))
+const repeatedWrongCount = computed(() => allWrongItems.value.filter((row: any) => row.repeated).length)
+const chapterDistribution = computed(() => chapterWrongDistribution(allWrongItems.value))
+const visibleChapters = computed(() => showAllChapters.value ? chapterDistribution.value : chapterDistribution.value.slice(0, 4))
+const overviewSummary = computed(() => {
+  const rated = attempts.value.filter((row: any) => validScoreRate(row.score_rate) !== null).length
+  if (!rated) return '当前统计范围尚无可计算得分率的考试。完成评分后可查看成绩与错题证据。'
+  const wrong = Number(stats.value.unique_wrong_question_count || 0)
+  return `当前范围有 ${rated} 次考试可计算得分率，平均为 ${scoreRateLabel(stats.value.average_score_rate)}。${wrong ? `记录到 ${wrong} 道不同错题，${repeatedWrongCount.value ? `其中 ${repeatedWrongCount.value} 道反复出错。` : '尚无重复出错记录。'}` : '已评分题目中暂未记录错题。'}`
+})
 const plan = computed(() => props.result?.retest_plan || {})
+const planChapterNames = computed(() => (plan.value.chapters || []).map((row: any) => row.title).filter(Boolean))
+const planChapterSummary = computed(() => planChapterNames.value.length > 2
+  ? `${planChapterNames.value.slice(0, 2).join('、')}等${planChapterNames.value.length}章`
+  : planChapterNames.value.join('、') || '当前薄弱章节')
 const aiFailure = computed(() => analysisNotice(analysis.value))
 const workflowResources = computed(() => props.intervention?.outputs?.recommendations?.result?.recommendations || [])
 const resources = computed(() => recommendedResourceLinks(workflowResources.value, props.result?.resources || []))
 const publishedRetest = computed(() => props.intervention?.outputs?.retest?.status === 'published')
 const generatedCount = computed(() => props.intervention?.outputs?.generation?.result?.candidates?.length || 0)
+const filteredAttempts = computed<any[]>(() => filterHistoryAttempts<any>(attempts.value, recordType.value, recordStatus.value))
+const ratedAttempts = computed(() => attempts.value.filter((row: any) => validScoreRate(row.score_rate) !== null).length)
+const partiallyGradedAttempts = computed(() => attempts.value.filter((row: any) => historyScoringStatus(row) === 'partial').length)
 
 const paperOptions = computed(() => attempts.value.map((row: any) => ({
   value: row.assessment_version_id,
   label: `${friendlyQuizCode(row.quiz_code) ? `${friendlyQuizCode(row.quiz_code)} · ` : ''}${row.title}`,
 })))
-const chapterOptions = computed(() => (props.result?.chapters || []).map((row: any) => ({
-  value: row.chapter_id, label: row.title || row.chapter_id,
+const chapterOptions = computed(() => chapterDistribution.value.map(row => ({
+  value: row.key, label: row.title,
 })))
 const filteredWrongItems = computed(() => allWrongItems.value.filter((item: any) => {
   if (repeatedOnly.value && !item.repeated) return false
+  if (selectedChapter.value && String(item.chapter_id || item.chapter?.chapter_id || item.chapter?.title || 'unmapped') !== selectedChapter.value) return false
   const occurrences = item.occurrences || [item]
+  if (selectedAttemptId.value) {
+    return occurrences.some((row: any) => row.attempt_id === selectedAttemptId.value)
+  }
   if (viewMode.value === 'paper' && selectedPaper.value) {
     return occurrences.some((row: any) => row.assessment_version_id === selectedPaper.value)
   }
-  if (viewMode.value === 'chapter' && selectedChapter.value) {
-    return item.chapter_id === selectedChapter.value
-  }
   return true
 }))
-const primaryWrongItems = computed(() => filteredWrongItems.value.slice(0, 6))
-const otherWrongItems = computed(() => filteredWrongItems.value.slice(6))
+const visibleWrongItems = computed(() => showAllWrong.value ? filteredWrongItems.value : filteredWrongItems.value.slice(0, 5))
+const remainingWrongCount = computed(() => Math.max(0, filteredWrongItems.value.length - 5))
+const filteredWrongEvents = computed(() => filteredWrongItems.value.reduce((sum: number, item: any) => sum + displayErrorCount(item), 0))
 
 const TYPE_LABELS: Record<string, string> = {
   single_choice: '单选题', multiple_choice: '多选题', multi_choice: '多选题',
@@ -66,9 +99,6 @@ const TYPE_LABELS: Record<string, string> = {
   formula_fill: '公式填空', derivation: '推导题', comprehensive: '综合题', matching: '匹配题',
 }
 
-function percent(value: unknown) {
-  return value === null || value === undefined ? '—' : `${Math.round(Number(value) * 100)}%`
-}
 function numberText(value: unknown) {
   if (value === null || value === undefined) return '—'
   const number = Number(value)
@@ -78,10 +108,6 @@ function dateText(value: unknown) {
   const text = String(value || '')
   if (!text) return '未记录考试时间'
   return text.replace('T', ' ').slice(0, 16)
-}
-function examLabel(row: any) {
-  const code = friendlyQuizCode(row?.quiz_code)
-  return code || (row?.exam_order ? `第${row.exam_order}次` : row?.title || '在线考试')
 }
 function answerValue(value: any): any {
   if (value === null || value === undefined || value === '') return null
@@ -126,167 +152,257 @@ function resourceType(resource: any) {
 }
 function setView(mode: 'all' | 'paper' | 'chapter') {
   viewMode.value = mode
+  selectedAttemptId.value = ''
+  if (mode === 'all') { selectedPaper.value = ''; selectedChapter.value = '' }
+  if (mode === 'paper') selectedChapter.value = ''
   if (mode === 'paper' && !selectedPaper.value) selectedPaper.value = paperOptions.value[0]?.value || ''
-  if (mode === 'chapter' && !selectedChapter.value) selectedChapter.value = chapterOptions.value[0]?.value || ''
+  if (mode === 'chapter' && !selectedChapter.value) selectedChapter.value = chapterDistribution.value[0]?.key || ''
 }
 function itemDomId(item: any) { return `history-question-${String(item?.repeat_group_key || item?.question_id || item?.position).replace(/[^\w-]/g, '-')}` }
-function locateConcept(row: any) {
+function wrongItemTitle(item: any) {
+  const concept = String(item?.knowledge_point?.name || '').trim()
+  return concept && concept !== '未映射知识点'
+    ? concept : (item?.position ? `未标注知识点 · 第 ${item.position} 题` : '未标注知识点题目')
+}
+function matchingOccurrences(item: any): any[] {
+  const rows = item.occurrences || [item]
+  if (selectedAttemptId.value) return rows.filter((row: any) => row.attempt_id === selectedAttemptId.value)
+  if (viewMode.value === 'paper' && selectedPaper.value) return rows.filter((row: any) => row.assessment_version_id === selectedPaper.value)
+  return rows
+}
+function displayErrorCount(item: any) {
+  if (selectedAttemptId.value || (viewMode.value === 'paper' && selectedPaper.value)) return matchingOccurrences(item).length
+  return Number(item.error_count || matchingOccurrences(item).length || 1)
+}
+function wrongSources(item: any) {
+  const titles = selectedAttemptId.value || (viewMode.value === 'paper' && selectedPaper.value)
+    ? [...new Set(matchingOccurrences(item).map((row: any) => row.assessment_title).filter(Boolean))]
+    : item.assessment_titles || [...new Set((item.occurrences || []).map((row: any) => row.assessment_title).filter(Boolean))]
+  return titles.length > 2 ? `${titles.slice(0, 2).join('、')}等${titles.length}份试卷` : titles.join('、') || item.assessment_title || '来源试卷未记录'
+}
+function conceptWrongCount(row: any) {
+  if (row.error_events !== undefined) return Number(row.error_events || 0)
+  const name = row.name || row.concept
+  return allWrongItems.value.filter((item: any) => item.knowledge_point?.name === name)
+    .reduce((total: number, item: any) => total + Number(item.error_count || 1), 0)
+}
+function recordTypeLabel(row: any) {
+  return { quiz: '课堂小测', exam: '在线考试', retest: '针对性复测' }[historyRecordType(row)]
+}
+function recordStatusLabel(row: any) {
+  return { graded: '已评分', partial: '部分评分', ungraded: '待评分' }[historyScoringStatus(row)]
+}
+function escapeHtml(value: unknown) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char] || char)
+}
+function openWrong(item: any) {
+  const occurrence = viewMode.value === 'paper' && (selectedPaper.value || selectedAttemptId.value)
+    ? [...(item.occurrences || [])].reverse().find((row: any) => selectedAttemptId.value
+      ? row.attempt_id === selectedAttemptId.value
+      : row.assessment_version_id === selectedPaper.value)
+    : null
+  selectedWrong.value = occurrence ? { ...item, ...occurrence, occurrences: item.occurrences, error_count: item.error_count, assessment_titles: item.assessment_titles } : item
+}
+function openRecordedAttempt(row: any) {
+  if (row.attempt_id) void router.push(`/teacher/attempts/${encodeURIComponent(row.attempt_id)}`)
+  else emit('openAttempt', row.assessment_version_id)
+}
+async function locateConcept(row: any) {
   const name = row?.name || row?.concept
   const item = allWrongItems.value.find((entry: any) =>
-    (name && entry?.knowledge_point?.name === name)
+    (row?.kp_id && entry?.knowledge_point?.kp_id === row.kp_id)
+    || (name && entry?.knowledge_point?.name === name)
     || (row?.chapter && entry?.chapter?.title === row.chapter))
-  if (item) document.getElementById(itemDomId(item))?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  activeTab.value = 'wrong'
+  viewMode.value = 'all'
+  selectedAttemptId.value = ''
+  repeatedOnly.value = false
+  selectedChapter.value = ''
+  selectedPaper.value = ''
+  if (!item) return
+  if (allWrongItems.value.indexOf(item) >= 5) showAllWrong.value = true
+  await nextTick()
+  document.getElementById(itemDomId(item))?.scrollIntoView({ block: 'center' })
+  openWrong(item)
 }
+async function showWrongForAttempt(row: any) {
+  activeTab.value = 'wrong'
+  viewMode.value = 'paper'
+  selectedPaper.value = row.assessment_version_id || ''
+  selectedAttemptId.value = row.attempt_id || ''
+  repeatedOnly.value = false
+  showAllWrong.value = false
+  await nextTick()
+  document.querySelector('.wrong-workspace')?.scrollIntoView({ block: 'start' })
+}
+
+watch(() => props.result, () => {
+  showAllWrong.value = false
+  showAllChapters.value = false
+  selectedWrong.value = null
+  viewMode.value = 'all'
+  selectedPaper.value = ''
+  selectedAttemptId.value = ''
+  selectedChapter.value = ''
+  repeatedOnly.value = false
+  recordType.value = 'all'
+  recordStatus.value = 'all'
+})
+watch(activeTab, async tab => { if (tab === 'records') { await nextTick(); renderChart() } })
 
 function renderChart() {
   if (!chartHost.value) return
+  if (chart && chart.getDom() !== chartHost.value) {
+    chart.dispose()
+    chart = null
+  }
   if (!chart) chart = echarts.init(chartHost.value)
-  const rows = attempts.value.filter((row: any) => row.score_rate !== null && row.score_rate !== undefined)
+  if (typeof ResizeObserver !== 'undefined') {
+    if (!chartResizeObserver) chartResizeObserver = new ResizeObserver(resizeChart)
+    chartResizeObserver.disconnect()
+    chartResizeObserver.observe(chartHost.value)
+  }
+  const rows = attempts.value
+  const labelInterval = chartLabelInterval(rows.length, chartHost.value.clientWidth)
   chart.setOption({
     animation: false,
     color: ['#2563eb'],
-    grid: { left: 60, right: 20, top: 46, bottom: 36 },
+    grid: { left: 62, right: 24, top: 26, bottom: 44 },
     tooltip: {
-      trigger: 'item',
+      trigger: 'axis',
       textStyle: { fontSize: 14 },
       formatter: (params: any) => {
-        const row = rows[params.dataIndex] || {}
-        return `<b>${row.title || '考试'}</b><br/>${row.source_label || ''}<br/>得分：${numberText(row.awarded_score)}/${numberText(row.max_score)}<br/>得分率：${percent(row.score_rate)}<br/>时间：${dateText(row.exam_time)}`
+        const point = Array.isArray(params) ? params[0] : params
+        const row = rows[point?.dataIndex] || {}
+        return `<b>${escapeHtml(row.title || '考试')}</b><br/>${escapeHtml(recordTypeLabel(row))} · ${escapeHtml(recordStatusLabel(row))}<br/>得分：${escapeHtml(numberText(row.awarded_score))}/${escapeHtml(numberText(row.max_score))}<br/>得分率：${escapeHtml(scoreRateLabel(row.score_rate))}<br/>时间：${escapeHtml(dateText(row.exam_time))}`
       },
     },
-    legend: { top: 6, right: 8, data: ['历史课堂小测', '在线考试', '针对性复测'], textStyle: { fontSize: 14, color: '#475569' } },
+    legend: { show: false },
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: rows.map((row: any) => examLabel(row)),
-      axisLabel: { color: '#475569', fontSize: 14, hideOverlap: true },
+      data: rows.map((row: any, index: number) => `第${row.exam_order || index + 1}次`),
+      axisLabel: { color: '#475569', fontSize: 12, hideOverlap: true, showMaxLabel: true, interval: labelInterval },
       axisLine: { lineStyle: { color: '#d8e2ef' } },
     },
     yAxis: {
       type: 'value', min: 0, max: 100, interval: 25,
-      axisLabel: { formatter: '{value}%', color: '#475569', fontSize: 14 },
+      axisLabel: { formatter: '{value}%', color: '#475569', fontSize: 12 },
       splitLine: { lineStyle: { color: '#edf2f7' } },
     },
     series: [{
       name: '得分率', type: 'line', smooth: false, symbolSize: 8,
       lineStyle: { width: 2.5 }, areaStyle: { color: 'rgba(37,99,235,.08)' },
       data: rows.map((row: any) => ({
-        value: Math.round(Number(row.score_rate) * 100),
-        symbol: row.source_label === '针对性复测' ? 'diamond' : (row.source_label === '历史课堂小测' ? 'circle' : 'rect'),
-        itemStyle: { color: row.source_label === '针对性复测' ? '#7c3aed' : (row.source_label === '历史课堂小测' ? '#2563eb' : '#0ea5e9') },
+        value: validScoreRate(row.score_rate) === null ? null : Math.round(Number(row.score_rate) * 100),
+        symbol: historyRecordType(row) === 'retest' ? 'diamond' : (historyRecordType(row) === 'quiz' ? 'circle' : 'rect'),
+        itemStyle: { color: historyRecordType(row) === 'retest' ? '#7c3aed' : (historyRecordType(row) === 'quiz' ? '#2563eb' : '#0ea5e9') },
       })),
     }],
   }, true)
 }
-function resizeChart() { chart?.resize() }
+function chartLabelInterval(count: number, width: number) {
+  const visibleLabels = Math.max(2, Math.floor((width - 70) / 60))
+  return Math.max(0, Math.ceil(count / visibleLabels) - 1)
+}
+function resizeChart() {
+  if (!chart) return
+  chart.resize()
+  chart.setOption({ xAxis: { axisLabel: { interval: chartLabelInterval(attempts.value.length, chartHost.value?.clientWidth || 0) } } })
+}
 watch(() => props.result?.attempts, async () => { await nextTick(); renderChart() }, { deep: true })
 onMounted(() => { renderChart(); window.addEventListener('resize', resizeChart) })
-onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart?.dispose(); chart = null })
+onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chartResizeObserver?.disconnect(); chart?.dispose(); chart = null })
 </script>
 
 <template>
   <div class="history-workbench">
-    <section class="history-overview">
-      <div class="metric-strip">
-        <article class="metric-card blue"><span>平均得分率</span><strong>{{ percent(stats.average_score_rate) }}</strong><small>历次考试平均</small></article>
-        <article class="metric-card violet"><span>参与考试次数</span><strong>{{ stats.participated_assessments || 0 }}<em>次</em></strong><small>有成绩的考试</small></article>
-        <article class="metric-card cyan"><span>累计答题题次</span><strong>{{ stats.scored_item_events || 0 }}<em>题次</em></strong><small>已完成评分</small></article>
-        <article class="metric-card red"><span>累计错误题次</span><strong>{{ stats.wrong_item_events || 0 }}<em>题次</em></strong><small>{{ stats.unique_wrong_question_count || 0 }} 道不同错题</small></article>
-      </div>
-      <article class="trend-card">
-        <header><div><el-icon><TrendCharts /></el-icon><b>历次成绩趋势</b></div></header>
-        <div v-if="attempts.some((row: any) => row.score_rate !== null)" ref="chartHost" class="trend-chart"></div>
-        <p v-else class="chart-empty">当前统计范围没有可绘制的有效评分。</p>
-        <footer>不同试卷难度可能不同，曲线仅表示成绩变化。</footer>
-      </article>
-    </section>
+    <HistorySummaryTabs :stats="stats" :active-tab="activeTab" @update:active-tab="activeTab = $event" />
 
-    <section class="history-body">
-      <main class="wrong-column">
-        <header class="wrong-toolbar">
-          <div><h2>错题汇总</h2><span>错误题次 {{ stats.wrong_item_events || 0 }} · 不同错题 {{ stats.unique_wrong_question_count || 0 }}</span></div>
-          <label><el-checkbox v-model="repeatedOnly">仅看反复出错内容（≥2次）</el-checkbox></label>
-        </header>
-        <div class="view-tabs">
-          <button :class="{ active: viewMode === 'all' }" @click="setView('all')">全部错题</button>
-          <button :class="{ active: viewMode === 'paper' }" @click="setView('paper')">按试卷查看</button>
-          <button :class="{ active: viewMode === 'chapter' }" @click="setView('chapter')">按章节统计</button>
-          <el-select v-if="viewMode === 'paper'" v-model="selectedPaper" size="small" placeholder="选择试卷">
-            <el-option v-for="row in paperOptions" :key="row.value" :label="row.label" :value="row.value" />
-          </el-select>
-          <el-select v-if="viewMode === 'chapter'" v-model="selectedChapter" size="small" placeholder="选择章节">
-            <el-option v-for="row in chapterOptions" :key="row.value" :label="row.label" :value="row.value" />
-          </el-select>
-        </div>
-
-        <div v-if="primaryWrongItems.length" class="wrong-grid">
-          <article v-for="item in primaryWrongItems" :id="itemDomId(item)" :key="item.repeat_group_key" class="wrong-card">
-            <header>
-              <div class="tags"><b :class="{ repeat: item.repeated }">{{ item.repeated ? '反复错题' : '错题' }}</b><span>{{ item.chapter?.title || '未映射章节' }}</span><span>{{ TYPE_LABELS[item.question_type] || item.question_type }}</span></div>
-              <strong>共 {{ item.error_count }} 次出错</strong>
-            </header>
-            <div class="card-body">
-              <p class="paper-line">第 {{ item.position }} 题 · {{ item.assessment_title }} · {{ item.source_label }}</p>
-              <div class="stem"><MathText :text="item.stem" /></div>
-              <SourceQuestionContent :question="item" />
-              <div v-if="optionsFor(item).length" class="options-list">
-                <div v-for="option in optionsFor(item)" :key="option.key" class="option-row" :class="optionClass(item, option.key)">
-                  <b>{{ option.key }}</b><MathText :text="option.text || option.value || ''" />
-                  <span v-if="correctOption(item, option.key)" class="correct-note">正确答案</span>
-                  <span v-if="selected(item, option.key) && !correctOption(item, option.key)" class="wrong-note">学生选择</span>
-                </div>
-              </div>
-              <div class="answer-compare"><div class="student-answer"><small>学生作答</small><MathText :text="answerText(item.response)" /></div><div class="correct-answer"><small>正确答案</small><MathText :text="answerText(correctPayload(item))" /></div></div>
-              <div class="score-meta"><span>本题得分 <b>{{ numberText(item.awarded_score) }}/{{ numberText(item.max_score) }}</b></span><span>所属概念 <b>{{ item.knowledge_point?.name || '未映射' }}</b></span></div>
-              <section class="explanation"><h4>参考解析</h4><MathText :text="item.answer_reference?.explanation || '该题暂未提供独立解析。'" /></section>
-              <details v-if="item.occurrences?.length" class="occurrences">
-                <summary>查看 {{ item.occurrences.length }} 次原始作答与评分</summary>
-                <div v-for="(row, index) in item.occurrences" :key="`${row.attempt_id}-${index}`" class="occurrence-row"><div><b>{{ friendlyQuizCode(row.quiz_code) || row.assessment_title }} 第{{ row.position }}题</b><span>{{ row.assessment_title }} · {{ dateText(row.exam_time) }}</span></div><div><span>作答：{{ answerText(row.response) }}</span><b>{{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</b></div></div>
-              </details>
-            </div>
-          </article>
-        </div>
-        <div v-else class="empty-card"><el-icon><WarningFilled /></el-icon><div><b>当前筛选下没有错题</b><span>可调整试卷、章节或反复错误筛选。</span></div></div>
-
-        <details v-if="otherWrongItems.length" class="other-wrong">
-          <summary>其他错题（共 {{ otherWrongItems.length }} 道）</summary>
-          <div class="compact-list"><article v-for="item in otherWrongItems" :key="item.repeat_group_key"><b>{{ item.quiz_code }} 第{{ item.position }}题 · {{ item.chapter?.title }}</b><span>{{ item.stem }}</span><em>错 {{ item.error_count }} 次</em></article></div>
-        </details>
-
-        <details v-if="result.ungraded_items?.length" class="ungraded-area">
-          <summary>待评分题目（{{ result.ungraded_items.length }} 题次）</summary>
-          <article v-for="(item, index) in result.ungraded_items" :key="`${item.attempt_id}-${item.paper_item_id}-${index}`"><b>{{ friendlyQuizCode(item.quiz_code) || item.assessment_title }} 第{{ item.position }}题 · {{ item.assessment_title }}</b><span>尚未完成评分</span></article>
-        </details>
-      </main>
-
-      <aside class="ai-column">
-        <section class="ai-panel">
-          <header><div><h2>学情分析</h2></div></header>
-          <DiagnosisAnalysisContent :analysis="analysis" scope="student_history" locatable @locate="locateConcept" />
-          <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
-
-          <section class="sidebar-section">
-            <h3><el-icon><Collection /></el-icon>推荐学习资源</h3>
-            <div v-if="resources.length" class="resource-list"><a v-for="resource in resources" :key="resource.resource_id || resource.url" class="diagnosis-resource-link" :href="resource.url" target="_blank" rel="noopener noreferrer"><b class="resource-title">{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联薄弱概念' }}</span></a></div>
-            <div v-else class="sidebar-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div>
-          </section>
-
-          <section class="retest-section">
-            <h3>针对性复测</h3>
-            <p v-if="!plan.ready">{{ plan.reason || '暂无可复测的薄弱概念。' }}</p>
-            <div v-if="plan.ready" class="plan-line"><b>{{ plan.chapters?.map((row: any) => row.title).join('、') || '当前薄弱章节' }}</b><span>{{ plan.item_count }} 题</span></div>
-            <div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道题。</div>
-            <div v-if="publishedRetest" class="published-note">复测已发布。</div>
-            <el-button class="retest-button" type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button>
-            <el-button class="detail-button" plain :disabled="!attempts.length" @click="emit('openAttempt', attempts[attempts.length - 1]?.assessment_version_id)">查看单卷明细</el-button>
-          </section>
+    <div v-if="activeTab === 'overview'" class="history-content-grid">
+      <div class="history-primary">
+        <section class="history-surface overview-conclusion">
+          <h2>综合结论</h2>
+          <p>{{ overviewSummary }}</p>
+          <details class="full-analysis"><summary>查看完整分析与题目依据</summary><DiagnosisAnalysisContent :analysis="analysis" scope="student_history" locatable @locate="locateConcept" /></details>
+          <p v-if="aiFailure" class="analysis-notice">{{ aiFailure }}</p>
         </section>
+
+        <section class="history-surface overview-priorities">
+          <div class="surface-heading"><h2>优先关注</h2><span>依据当前范围的真实错题</span></div>
+          <div v-if="priorityConcepts.length" class="priority-list">
+            <button v-for="(row, index) in priorityConcepts" :key="`${row.kp_id || row.name || row.concept}-${index}`" type="button" @click="locateConcept(row)">
+              <b class="priority-index">{{ String(index + 1).padStart(2, '0') }}</b>
+              <span><strong>{{ row.name || row.concept }}</strong><small>{{ row.chapter || '相关知识点' }} · 相关题目答错 {{ conceptWrongCount(row) }} 次</small></span>
+              <em>查看作答依据 ›</em>
+            </button>
+          </div>
+          <p v-else class="history-empty-inline">当前没有可定位的薄弱知识点。</p>
+        </section>
+
+        <section class="history-surface overview-actions">
+          <h2>建议教学行动</h2>
+          <div class="action-links">
+            <button type="button" @click="activeTab = 'wrong'"><b>查看错题清单</b><small>核对具体作答与解析</small><span>›</span></button>
+            <button type="button" @click="router.push('/teacher/resources')"><b>查看学习资源</b><small>查找对应章节资料</small><span>›</span></button>
+            <button type="button" :disabled="!plan.ready || runningAi" @click="emit('retest')"><b>生成并发布复测</b><small>通过自动校验后立即发布</small><span>›</span></button>
+          </div>
+        </section>
+
+        <section class="history-surface overview-distribution">
+          <div class="surface-heading"><h2>知识点分布</h2><span>按不同错题所属章节统计</span></div>
+          <div v-if="chapterDistribution.length" class="distribution-table">
+            <div class="distribution-head"><span>章节</span><span>错题数（占比）</span></div>
+            <div v-for="row in visibleChapters" :key="row.key" class="distribution-row"><span>{{ row.title }}</span><div class="distribution-bar"><i :style="{ width: `${row.percent}%` }"></i></div><b>{{ row.count }} 道（{{ row.percent }}%）</b></div>
+            <button v-if="chapterDistribution.length > 4" type="button" class="text-action" @click="showAllChapters = !showAllChapters">{{ showAllChapters ? '收起其他章节' : `查看全部 ${chapterDistribution.length} 个章节` }}</button>
+          </div>
+          <p v-else class="history-empty-inline">当前范围没有已评分错题，暂无分布数据。</p>
+        </section>
+      </div>
+
+      <aside class="history-side history-surface">
+        <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 2)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看相关错题 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
+        <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div><div v-if="resources.length" class="side-resources"><a v-for="resource in resources.slice(0, 3)" :key="resource.resource_id || resource.url" :href="resource.url" target="_blank" rel="noopener noreferrer"><b>{{ resource.title }}</b><small>{{ resourceType(resource) }}</small></a></div><p v-else class="history-empty-inline">暂无关联资料，可前往教学资源添加。</p></section>
+        <section class="side-retest"><h2>针对性复测</h2><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="generatedCount" class="workflow-state">已生成 {{ generatedCount }} 道题</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
       </aside>
-    </section>
+    </div>
+
+    <div v-else-if="activeTab === 'wrong'" class="history-content-grid wrong-workspace">
+      <div class="history-primary">
+        <section class="history-surface wrong-surface">
+          <header class="wrong-heading"><div><h2>错题清单</h2><p>共 {{ filteredWrongItems.length }} 道不同错题 · {{ filteredWrongEvents }} 次错误作答</p></div><div class="wrong-filters"><el-select v-model="selectedChapter" clearable placeholder="全部章节" aria-label="按章节筛选"><el-option v-for="row in chapterOptions" :key="row.value" :label="row.label" :value="row.value" /></el-select><el-checkbox v-model="repeatedOnly">仅看重复错误</el-checkbox></div></header>
+          <div class="wrong-view-tabs"><button type="button" :class="{ active: viewMode === 'all' }" :aria-pressed="viewMode === 'all'" @click="setView('all')">全部错题</button><button type="button" :class="{ active: viewMode === 'paper' }" :aria-pressed="viewMode === 'paper'" @click="setView('paper')">按试卷查看</button><button type="button" :class="{ active: viewMode === 'chapter' }" :aria-pressed="viewMode === 'chapter'" @click="setView('chapter')">按章节统计</button><el-select v-if="viewMode === 'paper'" v-model="selectedPaper" placeholder="选择试卷" @change="selectedAttemptId = ''"><el-option v-for="row in paperOptions" :key="row.value" :label="row.label" :value="row.value" /></el-select></div>
+          <div v-if="viewMode === 'chapter'" class="chapter-stat-list" aria-label="错题章节统计"><button v-for="row in chapterDistribution" :key="row.key" type="button" :class="{ active: selectedChapter === row.key }" @click="selectedChapter = row.key"><span>{{ row.title }}</span><b>{{ row.count }} 道 · {{ row.percent }}%</b></button></div>
+          <div class="wrong-table">
+            <div class="wrong-table-head"><span>题目与章节</span><span>答错次数</span><span>操作</span></div>
+            <article v-for="item in visibleWrongItems" :id="itemDomId(item)" :key="item.repeat_group_key" class="wrong-row"><div><b>{{ wrongItemTitle(item) }}</b><small>{{ item.chapter?.title || '未映射章节' }} · {{ TYPE_LABELS[item.question_type] || item.question_type }} · {{ wrongSources(item) }}</small></div><strong :class="{ repeated: displayErrorCount(item) > 1 }">{{ displayErrorCount(item) }} 次</strong><button type="button" @click="openWrong(item)">查看题目与解析</button></article>
+            <div v-if="!visibleWrongItems.length" class="history-empty"><el-icon><WarningFilled /></el-icon><span>当前筛选下没有错题。可调整试卷、章节或重复错误条件。</span></div>
+          </div>
+          <button v-if="remainingWrongCount" type="button" class="text-action more-wrong" @click="showAllWrong = !showAllWrong">{{ showAllWrong ? '收起其他错题' : `查看全部 ${filteredWrongItems.length} 道错题` }}</button>
+          <details v-if="result.ungraded_items?.length" class="ungraded-list"><summary>另有 {{ result.ungraded_items.length }} 题次待评分</summary><p v-for="(item, index) in result.ungraded_items" :key="`${item.attempt_id}-${item.paper_item_id}-${index}`">{{ friendlyQuizCode(item.quiz_code) || item.assessment_title }} · 第 {{ item.position }} 题</p></details>
+        </section>
+      </div>
+      <aside class="history-side history-surface">
+        <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 3)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看作答依据 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
+        <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div></section>
+        <section class="side-retest"><h2>针对性复测</h2><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+      </aside>
+    </div>
+
+    <div v-else class="history-content-grid records-workspace">
+      <div class="history-primary">
+        <section class="history-surface score-chart-surface"><div class="surface-heading"><h2>历次成绩</h2><div class="chart-legend" aria-label="考试类型图例"><span><i class="dot-quiz"></i>课堂小测</span><span><i class="dot-exam"></i>在线考试</span><span><i class="dot-retest"></i>针对性复测</span></div></div><div v-if="attempts.length" ref="chartHost" class="history-score-chart"></div><p v-else class="history-empty-inline">当前范围没有考试记录。</p><p class="chart-note">仅展示可计算得分率的记录；不同试卷难度、题型和范围可能不同，折线不能单独证明进步或退步。</p></section>
+        <section class="history-surface records-table-surface"><div class="surface-heading"><h2>考试记录</h2><span>显示 {{ filteredAttempts.length }} / {{ attempts.length }} 次</span></div><div class="records-table"><div class="records-head"><span>考试名称</span><span>类型</span><span>得分率</span><span>状态</span><span>操作</span></div><article v-for="row in filteredAttempts" :key="row.attempt_id" class="record-row"><div><b>第 {{ row.exam_order }} 次 · {{ row.title }}</b><small>{{ dateText(row.exam_time) }} · {{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</small></div><span class="record-type" :class="historyRecordType(row)">{{ recordTypeLabel(row) }}</span><strong>{{ scoreRateLabel(row.score_rate) }}</strong><span class="record-status" :class="historyScoringStatus(row)">{{ recordStatusLabel(row) }}</span><div class="record-actions"><button type="button" @click="openRecordedAttempt(row)">查看试卷</button><button type="button" @click="showWrongForAttempt(row)">看错题</button></div></article><p v-if="!filteredAttempts.length" class="history-empty">当前筛选下没有考试记录。</p></div></section>
+      </div>
+      <aside class="history-side history-surface record-side"><section><h2>记录摘要</h2><div class="record-facts"><p><span>考试次数</span><b>{{ attempts.length }} 次</b></p><p><span>平均得分率</span><b>{{ scoreRateLabel(stats.average_score_rate) }}</b></p><p><span>可计算得分率</span><b>{{ ratedAttempts }} 次</b></p><p><span>部分评分</span><b>{{ partiallyGradedAttempts }} 次</b></p><p><span>待评分题次</span><b>{{ stats.ungraded_item_events ?? 0 }} 题次</b></p></div></section><section><h2>查看方式</h2><label class="record-filter"><span>考试类型</span><el-select v-model="recordType" aria-label="按考试类型筛选"><el-option label="全部类型" value="all" /><el-option label="课堂小测" value="quiz" /><el-option label="在线考试" value="exam" /><el-option label="针对性复测" value="retest" /></el-select></label><label class="record-filter"><span>评分状态</span><el-select v-model="recordStatus" aria-label="按评分状态筛选"><el-option label="全部状态" value="all" /><el-option label="已评分" value="graded" /><el-option label="部分评分" value="partial" /><el-option label="待评分" value="ungraded" /></el-select></label></section><section class="record-navigation"><h2>与诊断联动</h2><button type="button" @click="activeTab = 'wrong'">查看错题清单 ›</button><button type="button" @click="activeTab = 'overview'">返回诊断概览 ›</button></section></aside>
+    </div>
+
+    <el-dialog :model-value="Boolean(selectedWrong)" :title="selectedWrong ? `第 ${selectedWrong.position} 题 · ${wrongItemTitle(selectedWrong)}` : '错题详情'" width="min(960px, 94vw)" append-to-body class="history-question-dialog" @close="selectedWrong = null">
+      <div v-if="selectedWrong" class="question-detail"><p class="question-origin">{{ wrongSources(selectedWrong) }} · {{ selectedWrong.chapter?.title || '未映射章节' }} · {{ TYPE_LABELS[selectedWrong.question_type] || selectedWrong.question_type }} · 当前筛选 {{ displayErrorCount(selectedWrong) }} 次出错</p><div class="question-stem"><SourceQuestionContent :question="selectedWrong" /></div><div v-if="optionsFor(selectedWrong).length" class="question-options"><div v-for="option in optionsFor(selectedWrong)" :key="option.key" class="question-option" :class="optionClass(selectedWrong, option.key)"><b>{{ option.key }}</b><MathText :text="option.text || option.value || ''" /><span v-if="correctOption(selectedWrong, option.key)">正确答案</span><span v-if="selected(selectedWrong, option.key) && !correctOption(selectedWrong, option.key)">学生选择</span></div></div><div class="question-answers"><div><small>学生作答</small><MathText :text="answerText(selectedWrong.response)" /></div><div><small>正确答案</small><MathText :text="answerText(correctPayload(selectedWrong))" /></div></div><p class="question-score">本题得分 {{ numberText(selectedWrong.awarded_score) }}/{{ numberText(selectedWrong.max_score) }} · 所属知识点 {{ selectedWrong.knowledge_point?.name || '未映射' }}</p><section class="question-explanation"><h3>参考解析</h3><MathText :text="selectedWrong.answer_reference?.explanation || '该题暂未提供独立解析。'" /></section><details v-if="selectedWrong.occurrences?.length" class="question-history"><summary>历史作答记录（{{ selectedWrong.occurrences.length }} 次）</summary><article v-for="(row, index) in selectedWrong.occurrences" :key="`${row.attempt_id}-${index}`"><div><b>{{ friendlyQuizCode(row.quiz_code) || row.assessment_title }} · 第 {{ row.position }} 题</b><small>{{ dateText(row.exam_time) }}</small></div><span>作答：{{ answerText(row.response) }}</span><strong>{{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</strong></article></details></div>
+    </el-dialog>
   </div>
 </template>
 
-<style scoped>
-.history-workbench{display:grid;min-width:0;gap:16px;color:#34445f}.history-overview{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(390px,1fr);gap:14px}.metric-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.metric-card{min-width:0;padding:16px 14px;border:1px solid #dfe7f2;border-radius:13px;background:#fff;box-shadow:0 4px 16px rgb(32 65 115 / 5%)}.metric-card span,.metric-card small{display:block}.metric-card span{color:#64748a;font-size:14px;font-weight:700}.metric-card strong{display:block;margin-top:10px;color:#17243d;font-size:25px}.metric-card em{margin-left:3px;color:#718096;font-size:14px;font-style:normal}.metric-card small{margin-top:7px;color:#8794a6;font-size:14px;line-height:1.4}.metric-card.blue{border-top:3px solid #2563eb}.metric-card.violet{border-top:3px solid #7c3aed}.metric-card.cyan{border-top:3px solid #0ea5e9}.metric-card.red{border-top:3px solid #ef5d68}.trend-card{overflow:hidden;border:1px solid #dfe7f2;border-radius:13px;background:#fff;box-shadow:0 4px 16px rgb(32 65 115 / 5%)}.trend-card>header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0}.trend-card>header>div{display:flex;align-items:center;gap:7px;color:#20344f}.trend-card>header .el-icon{color:#2563eb}.trend-card>header span{color:#8390a1;font-size:14px}.trend-chart{height:190px}.trend-card>footer{padding:0 14px 10px;color:#8a96a7;font-size:14px}.chart-empty{display:grid;height:160px;place-items:center;color:#8b97a8;font-size:14px}.history-body{display:grid;grid-template-columns:minmax(0,7fr) minmax(310px,3fr);align-items:start;gap:16px}.wrong-column{min-width:0}.wrong-toolbar{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:1px 0 10px}.wrong-toolbar>div{display:flex;align-items:baseline;gap:10px}.wrong-toolbar h2{margin:0;color:#17243d;font-size:18px}.wrong-toolbar>div span{color:#7f8c9f;font-size:14px}.wrong-toolbar label{font-size:14px}.view-tabs{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:7px;border:1px solid #e0e7f1;border-radius:11px;background:#fff}.view-tabs button{padding:8px 15px;border:0;border-radius:7px;background:#f5f7fa;color:#53647b;font-size:14px;font-weight:700;cursor:pointer}.view-tabs button.active{background:#2563eb;color:#fff;box-shadow:0 4px 10px rgb(37 99 235 / 18%)}.view-tabs :deep(.el-select){width:220px;margin-left:auto}.wrong-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:14px}.wrong-card{min-width:0;overflow:hidden;border:1px solid #f2c3c7;border-radius:13px;background:#fff;box-shadow:0 4px 15px rgb(52 69 98 / 5%)}.wrong-card>header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;background:linear-gradient(90deg,#fff4f5,#fff)}.tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.tags b,.tags span{padding:4px 8px;border-radius:6px;font-size:14px}.tags b{background:#ef5d68;color:#fff}.tags b.repeat{background:#d83d49}.tags span{background:#edf3ff;color:#315fc7}.wrong-card>header strong{flex:none;color:#d13c47;font-size:14px}.card-body{padding:12px 13px}.paper-line{margin:0 0 8px;color:#78869a;font-size:14px}.stem{color:#17243d;font-size:14px;font-weight:650;line-height:1.72;overflow-wrap:anywhere}.stem :deep(.katex-display){overflow-x:auto}.options-list{display:grid;gap:6px;margin-top:10px}.option-row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:6px;padding:8px 9px;border:1px solid #e5eaf1;border-radius:8px;background:#fff;font-size:14px}.option-row.is-correct{border-color:#b9e2cc;background:#edf9f2}.option-row.is-wrong-picked{border-color:#f1c5c8;background:#fff0f1}.correct-note,.wrong-note{padding:2px 5px;border-radius:5px;font-size:14px;font-weight:700}.correct-note{background:#dff3e8;color:#148052}.wrong-note{background:#fbe0e2;color:#c33b46}.answer-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.answer-compare>div{min-width:0;padding:9px 10px;border-radius:8px;font-size:14px;line-height:1.6;overflow-wrap:anywhere}.answer-compare small{display:block;margin-bottom:4px;font-weight:700}.student-answer{background:#fff0f1;color:#912f39}.correct-answer{background:#edf9f2;color:#176847}.score-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;padding:8px 0;border-bottom:1px solid #edf0f5;color:#7d8999;font-size:14px}.score-meta span+span{padding-left:8px;border-left:1px solid #e6ebf1}.score-meta b{display:block;margin-top:2px;color:#35475f;font-size:14px}.explanation{margin-top:10px;padding:10px 11px;border:1px solid #e4e9f1;border-radius:8px;background:#fbfcfe;color:#4a596e;font-size:14px;line-height:1.65}.explanation h4{margin:0 0 4px;color:#25364f;font-size:14px}.occurrences{margin-top:10px;border-top:1px solid #edf0f5}.occurrences summary{padding-top:9px;color:#315fc7;font-size:14px;font-weight:700;cursor:pointer}.occurrence-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0;border-bottom:1px dashed #e5eaf1;font-size:14px}.occurrence-row>div>*{display:block}.occurrence-row b{color:#33465f}.occurrence-row span{margin-top:2px;color:#7d899a}.empty-card{display:flex;align-items:center;gap:12px;padding:26px;border:1px dashed #cad5e4;border-radius:13px;background:#fff}.empty-card>.el-icon{color:#ea9b34;font-size:25px}.empty-card b,.empty-card span{display:block}.empty-card span{margin-top:4px;color:#7d899b;font-size:14px}.other-wrong,.ungraded-area{margin-top:14px;border:1px solid #dbe5f4;border-radius:12px;background:#fff}.other-wrong>summary,.ungraded-area>summary{padding:13px 15px;color:#2c4160;font-size:14px;font-weight:700;cursor:pointer}.compact-list,.ungraded-area{overflow:hidden}.compact-list article,.ungraded-area article{display:grid;grid-template-columns:180px minmax(0,1fr) auto;gap:10px;padding:10px 14px;border-top:1px solid #edf1f5;font-size:14px}.compact-list span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.compact-list em{color:#d54853;font-style:normal}.ungraded-area article{grid-template-columns:220px 1fr}.ungraded-area article span{color:#7d899b}.ai-column{min-width:0}.ai-panel{position:sticky;top:14px;overflow:hidden;border:1px solid #dce5f2;border-radius:14px;background:#fff;box-shadow:0 6px 20px rgb(37 67 108 / 7%)}.ai-panel>header{display:flex;align-items:center;gap:10px;padding:15px 16px;border-bottom:1px solid #e7edf5;background:linear-gradient(135deg,#f2f7ff,#fff)}.robot{display:grid;flex:none;width:38px;height:32px;place-items:center;border-radius:9px;background:#2563eb;color:#fff;font-size:14px;font-weight:800}.ai-panel h2{margin:0;color:#17243d;font-size:17px}.ai-panel>header p{margin:2px 0 0;color:#8491a3;font-size:14px}.ai-summary,.ai-pending{margin:12px 14px 0;padding:11px 12px;border:1px solid #d8e4fb;border-radius:9px;background:#f6f9ff;color:#31445f;font-size:14px;line-height:1.65}.ai-pending b,.ai-pending span{display:block}.ai-pending span{margin-top:4px;color:#718096;font-size:14px}.sidebar-section{margin:0 14px;padding:14px 0;border-bottom:1px solid #e8edf4}.sidebar-section h3{display:flex;align-items:center;gap:6px;margin:0 0 9px;color:#223650;font-size:14px}.sidebar-section h3>.el-icon{color:#2563eb}.concept-list{display:grid;gap:7px}.concept-list article{padding:9px 10px;border-left:3px solid #5b7df3;border-radius:7px;background:#f7f9fc}.concept-list article>div{display:flex;align-items:center;justify-content:space-between;gap:8px}.concept-list b{color:#263950;font-size:14px}.concept-list em{color:#d54853;font-size:14px;font-style:normal}.concept-list span,.concept-list small{display:block;margin-top:3px;color:#4970c5;font-size:14px}.concept-list small{color:#77869a}.concept-list p{margin:5px 0 0;color:#718097;font-size:14px;line-height:1.5}.advice-list{display:grid;gap:7px;margin:0;padding:0;list-style:none;counter-reset:advice}.advice-list li{position:relative;padding-left:25px;color:#516279;font-size:14px;line-height:1.6;counter-increment:advice}.advice-list li::before{position:absolute;top:0;left:0;display:grid;width:18px;height:18px;place-items:center;border-radius:50%;background:#eaf1ff;color:#315cf0;font-size:14px;font-weight:700;content:counter(advice)}.sidebar-empty{margin:0;color:#8591a2;font-size:14px;line-height:1.55}.resource-list{display:grid;gap:5px}.resource-list article{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:8px;background:#f7f9fc}.resource-list article>div{min-width:0}.resource-list b,.resource-list span{display:block}.resource-list b{overflow:hidden;color:#34465f;font-size:14px;text-overflow:ellipsis;white-space:nowrap}.resource-list span{margin-top:3px;color:#8390a1;font-size:14px;line-height:1.4}.retest-section{padding:14px;background:#f6f9ff}.retest-section h3{margin:0 0 7px;color:#223650;font-size:14px}.retest-section>p{margin:0 0 9px;color:#7b899a;font-size:14px;line-height:1.5}.plan-line{display:flex;justify-content:space-between;gap:8px;margin-bottom:9px;color:#52647d;font-size:14px}.plan-line b{color:#263b5b}.workflow-note,.published-note{margin-bottom:8px;padding:7px 8px;border-radius:6px;background:#eaf2ff;color:#436a9f;font-size:14px}.published-note{background:#e8f7ef;color:#197451}.retest-button,.detail-button{width:100%;margin:0}.detail-button{margin-top:7px}.ai-panel>footer{padding:10px 14px;border-top:1px solid #e6ebf3;color:#8995a5;font-size:14px;line-height:1.5}@media(max-width:1320px){.history-overview{grid-template-columns:1fr}.history-body{grid-template-columns:minmax(0,1fr) minmax(290px,.72fr)}.wrong-grid{grid-template-columns:1fr}.metric-strip{grid-template-columns:repeat(4,1fr)}}@media(max-width:930px){.history-body{grid-template-columns:1fr}.ai-panel{position:static}.ai-column{order:2}.metric-strip{grid-template-columns:1fr 1fr}}@media(max-width:640px){.metric-strip{grid-template-columns:1fr}.wrong-toolbar{align-items:flex-start;flex-direction:column}.view-tabs{align-items:stretch;flex-direction:column}.view-tabs :deep(.el-select){width:100%;margin-left:0}.answer-compare,.score-meta,.occurrence-row{grid-template-columns:1fr}.compact-list,.ungraded-area article{grid-template-columns:1fr}.trend-card>header{align-items:flex-start;flex-direction:column}}
-.history-workbench{gap:14px}.metric-card{padding:13px 14px;border-color:var(--diag-border,#dfe7f2);border-radius:var(--diag-radius,13px);box-shadow:var(--diag-shadow,0 4px 16px rgb(32 65 115 / 5%))}.metric-card strong{margin-top:7px}.metric-card small{margin-top:5px}.trend-card{border-color:var(--diag-border,#dfe7f2);border-radius:var(--diag-radius,13px);box-shadow:var(--diag-shadow,0 4px 16px rgb(32 65 115 / 5%))}.summary-section{margin:0 14px;padding:13px 0;border-bottom:1px solid #e8edf4}.summary-section h3{margin:0 0 8px;color:#223650;font-size:14px}.summary-section .ai-summary{margin:0}.summary-section small{display:block;margin-top:7px;color:#7d899b;font-size:14px;line-height:1.5}.ai-failure{margin:10px 14px 0;padding:8px 9px;border-radius:7px;background:#fff6e6;color:#8a6422;font-size:14px;line-height:1.5}.concept-list article[role=button]{cursor:pointer;transition:.15s}.concept-list article[role=button]:hover,.concept-list article[role=button]:focus{outline:none;background:#eef4ff;box-shadow:0 0 0 2px #dce7ff}.wrong-card{scroll-margin-top:18px}
-</style>
+
+
+<style scoped src="../styles/multiAttemptWorkbench.css"></style>

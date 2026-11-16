@@ -94,7 +94,6 @@ test('教师诊断页只保留三种业务模式并加载当前版本结果', ()
   const view = readFileSync(new URL('../src/views/TeacherAnalysisView.vue', import.meta.url), 'utf8')
   assert.doesNotMatch(view, /题目层次/)
   assert.doesNotMatch(view, /classroom-chapter-diagnosis-v3/)
-  assert.match(view, /grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/)
   for (const label of ['单人单卷', '单人多卷', '多人单卷']) assert.match(view, new RegExp(label))
 })
 

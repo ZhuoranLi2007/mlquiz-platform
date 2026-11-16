@@ -1,7 +1,7 @@
 """Student result totals and question details use the same scored item facts."""
 from backend.tests.test_classroom_diagnosis import db
 from backend.app.models import entities as E
-from backend.app.services import attempt_service
+from backend.app.services import attempt_service, teacher_attempt_review
 
 
 def _regrade(db):
@@ -41,6 +41,9 @@ def test_student_result_uses_regrade_and_its_question_version(db):
     assert state["questions"][0]["answer_payload"] == {"key": "B"}
     assert state["questions"][0]["original_question"]["stem"] == "固定版本题干 v3"
     assert state["answers_by_item"]["item-1"]["response"] == source_answer
+    review = teacher_attempt_review.teacher_attempt_review(db, original)
+    assert (review["score"], review["max_score"]) == (state["score"], state["max_score"])
+    assert sum(item["score"]["awarded_score"] for item in review["items"] if item["score"]) == state["score"]
     assert original.score == source_score
     assert db.get(E.AnswerScore, "score-s1-i1").awarded_score == 0
 
@@ -55,6 +58,9 @@ def test_partial_result_excludes_unscored_item_without_inventing_zero(db):
     assert (state["score"], state["max_score"]) == (5, 10)
     assert (state["scored_item_count"], state["ungraded_item_count"]) == (1, 1)
     assert "item-2" not in state["scores_by_item"]
+    review = teacher_attempt_review.teacher_attempt_review(db, db.get(E.Attempt, "attempt-s1-v1"))
+    assert (review["score"], review["max_score"]) == (5, 10)
+    assert review["items"][1]["score"] is None
     assert state["answers_by_item"]["item-2"]["response"]
 
 

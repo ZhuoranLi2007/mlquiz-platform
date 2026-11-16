@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Collection, DocumentChecked, Position, Trophy, TrendCharts, WarningFilled } from '@element-plus/icons-vue'
 import AttemptEvidenceTable from './AttemptEvidenceTable.vue'
@@ -8,9 +8,11 @@ import DiagnosisAnalysisContent from './DiagnosisAnalysisContent.vue'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
 import { analysisNotice } from '../utils/analysisNotice'
 
-const props = defineProps<{ result: any; diagnosisReady: boolean; diagnosisMeta?: any; intervention?: any; loading?: boolean; runningAi?: boolean }>()
+const props = defineProps<{ result: any; diagnosisReady: boolean; diagnosisMeta?: any; intervention?: any; loading?: boolean; runningAi?: boolean; studentLabel?: string; assessmentLabel?: string }>()
 const emit = defineEmits<{ run: []; retest: [] }>()
 const router = useRouter()
+const showAudit = ref(false)
+const showCompare = ref(false)
 const summary = computed(() => props.result?.score_summary || {})
 const comparison = computed(() => props.result?.class_comparison || {})
 const analysis = computed(() => props.result?.ai_analysis || {})
@@ -55,35 +57,43 @@ function resourceType(resource: any) {
 
 <template>
   <div v-if="result" class="single-workbench">
-    <details v-if="result.historical_reported_result || result.regraded_result || diagnosisMeta" class="audit-detail">
-      <summary>查看评分详情</summary>
-      <p v-if="diagnosisMeta">最近分析时间：{{ diagnosisMeta.created_at }}</p>
-      <p>原成绩：{{ numberText(result.historical_reported_result?.score) }}；当前评分：{{ numberText(result.regraded_result?.score) }}/{{ numberText(result.regraded_result?.max_score) }}。</p>
-    </details>
-
-    <section class="metrics-grid">
-      <article class="metric-card score"><el-icon><Trophy /></el-icon><div><span>本次成绩</span><strong>{{ scoreText(summary.awarded_score, summary.max_score) }}</strong><p>{{ Number(summary.max_score) > 0 ? `得分率 ${percent(summary.score_rate)}` : '历史满分缺失，不计算得分率' }}</p></div></article>
-      <article class="metric-card rank"><el-icon><TrendCharts /></el-icon><div><span>班级排名</span><strong>{{ rankText() }}<small v-if="comparison.status === 'available'">/{{ comparison.participant_count }} 人</small></strong><p>{{ comparison.status === 'available' ? '与同卷学生比较' : comparison.reason }}</p></div></article>
-      <article class="metric-card wrong"><el-icon><WarningFilled /></el-icon><div><span>错题数量</span><strong>{{ summary.wrong_items ?? 0 }}<small>/{{ summary.scored_items ?? 0 }} 题</small></strong><p>{{ summary.ungraded_item_count ? `另有 ${summary.ungraded_item_count} 题待评分` : `已评分 ${summary.scored_items ?? 0} 题` }}</p></div></article>
-      <article class="metric-card attend"><el-icon><DocumentChecked /></el-icon><div><span>参考情况</span><strong>{{ comparison.attendee_count ?? 0 }}<small>/{{ comparison.class_size ?? 0 }} 人</small></strong><p>实际参加 / 正式班人数</p></div></article>
+    <section class="result-overview" aria-label="本次诊断结果">
+      <header class="result-heading">
+        <h2>{{ studentLabel || '当前学生' }} · {{ assessmentLabel || '当前试卷' }}</h2>
+        <div class="result-links">
+          <button v-if="result.historical_reported_result || result.regraded_result || diagnosisMeta" type="button" :aria-expanded="showAudit" @click="showAudit = !showAudit">{{ showAudit ? '收起评分详情' : '查看评分详情' }}</button>
+          <button type="button" :aria-expanded="showCompare" @click="showCompare = !showCompare">{{ showCompare ? '收起班级对照' : '查看班级对照' }}</button>
+        </div>
+      </header>
+      <div v-if="showAudit" class="audit-detail">
+        <p v-if="diagnosisMeta">最近分析时间：{{ diagnosisMeta.created_at }}</p>
+        <p>原成绩：{{ numberText(result.historical_reported_result?.score) }}；当前评分：{{ numberText(result.regraded_result?.score) }}/{{ numberText(result.regraded_result?.max_score) }}。</p>
+      </div>
+      <div class="diagnosis-stats">
+        <article class="diagnosis-stat"><el-icon><Trophy /></el-icon><div><span>本次成绩</span><strong>{{ scoreText(summary.awarded_score, summary.max_score) }}</strong><small>{{ Number(summary.max_score) > 0 ? `得分率 ${percent(summary.score_rate)}` : '历史满分缺失，不计算得分率' }}</small></div></article>
+        <article class="diagnosis-stat"><el-icon><TrendCharts /></el-icon><div><span>班级排名</span><strong>{{ rankText() }}<small v-if="comparison.status === 'available'">/ {{ comparison.participant_count }} 人</small></strong><small>{{ comparison.status === 'available' ? '与同卷学生比较' : comparison.reason }}</small></div></article>
+        <article class="diagnosis-stat"><el-icon><WarningFilled /></el-icon><div><span>错题数量</span><strong>{{ summary.wrong_items ?? 0 }}<small>/ {{ summary.scored_items ?? 0 }} 题</small></strong><small>{{ summary.ungraded_item_count ? `另有 ${summary.ungraded_item_count} 题待评分` : `已评分 ${summary.scored_items ?? 0} 题` }}</small></div></article>
+        <article class="diagnosis-stat"><el-icon><DocumentChecked /></el-icon><div><span>参考情况</span><strong>{{ comparison.attendee_count ?? 0 }}<small>/ {{ comparison.class_size ?? 0 }} 人</small></strong><small>实际参加 / 正式班人数</small></div></article>
+      </div>
+      <div v-if="showCompare" class="class-compare">
+        <div class="compare-stats"><div><span>学生得分</span><b>{{ numberText(comparison.selected_score) }}/{{ numberText(comparison.max_score) }}</b></div><div><span>班级平均分</span><b>{{ numberText(comparison.average_score) }}</b></div><div><span>班级最高分</span><b>{{ numberText(comparison.highest_score) }}</b></div><div><span>正式排名</span><b>{{ rankText() }}</b></div></div>
+        <div class="question-rates"><span v-for="row in comparison.question_correct_rates || []" :key="row.paper_item_id">第{{ row.position }}题 <b>{{ percent(row.correct_rate) }}</b><small>{{ row.correct_count }}/{{ row.denominator }}</small></span></div>
+      </div>
     </section>
-
-    <details class="class-compare">
-      <summary><span><el-icon><TrendCharts /></el-icon><b>查看班级对照</b></span></summary>
-      <div class="compare-stats"><div><span>学生得分</span><b>{{ numberText(comparison.selected_score) }}/{{ numberText(comparison.max_score) }}</b></div><div><span>班级平均分</span><b>{{ numberText(comparison.average_score) }}</b></div><div><span>班级最高分</span><b>{{ numberText(comparison.highest_score) }}</b></div><div><span>正式排名</span><b>{{ rankText() }}</b></div></div>
-      <div class="question-rates"><span v-for="row in comparison.question_correct_rates || []" :key="row.paper_item_id">第{{ row.position }}题 <b>{{ percent(row.correct_rate) }}</b><small>{{ row.correct_count }}/{{ row.denominator }}</small></span></div>
-    </details>
 
     <section class="diagnosis-body">
       <div class="evidence-column">
-        <AttemptEvidenceTable :result="result" section="problems" />
-        <AttemptEvidenceTable :result="result" section="correct" />
-        <TargetedRetestHistory :history="retestHistory" :original-summary="summary" />
+        <section class="answers-panel" aria-label="作答诊断">
+          <header><h2>作答诊断</h2></header>
+          <AttemptEvidenceTable :result="result" section="problems" />
+          <AttemptEvidenceTable :result="result" section="correct" />
+        </section>
+        <TargetedRetestHistory :history="retestHistory" :original-summary="summary" :empty-text="plan.ready ? '诊断确认复测目标后，可从右侧生成并发布针对性新题。' : (plan.reason || '当前没有适合生成复测的错题。')" />
       </div>
 
       <aside class="insight-sidebar">
         <section class="ai-panel">
-          <header><div><h2>学情分析</h2></div></header>
+          <header><h2>学情分析</h2></header>
           <DiagnosisAnalysisContent :analysis="analysis" scope="student_attempt" />
           <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
 
@@ -96,11 +106,11 @@ function resourceType(resource: any) {
                 <span>{{ resourceType(resource) }} · {{ resource.reason || '关联当前错题概念' }}</span>
               </a>
             </div>
-            <div v-else class="sidebar-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div>
+            <div v-else class="sidebar-empty">暂无相关资料。<button type="button" class="resource-action" @click="router.push('/teacher/resources')">添加资源</button></div>
           </div>
 
           <div class="retest-section">
-            <h3>针对性复测</h3>
+            <h3>复测建议</h3>
             <div v-if="plan.ready" class="plan-summary"><span>{{ plan.chapters?.map((item: any) => item.title).join('、') || '当前错题章节' }}</span><span>{{ plan.item_count }} 题 · {{ plan.suggested_types?.map(typeLabel).join('、') || '自动匹配题型' }}</span></div>
             <p v-else>{{ plan.reason || '当前没有适合生成复测的错题。' }}</p>
             <div v-if="generatedCandidates.length" class="candidate-note">已生成 {{ generatedCandidates.length }} 道候选题，校验通过后发布。</div>
@@ -114,8 +124,4 @@ function resourceType(resource: any) {
   </div>
 </template>
 
-<style scoped>
-.single-workbench{display:grid;min-width:0;gap:14px;color:#34445f}.audit-detail{padding:9px 13px;border:1px solid var(--diag-border,#dfe6f0);border-radius:10px;background:#f8faff;font-size:14px}.audit-detail summary{cursor:pointer;color:#58708f;font-weight:700}.audit-detail p{margin:7px 0 0;color:#728096}.metrics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric-card{display:flex;min-width:0;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--diag-border,#dfe7f2);border-radius:var(--diag-radius,13px);background:#fff;box-shadow:var(--diag-shadow,0 3px 13px rgb(40 69 112 / 4%))}.metric-card>.el-icon{display:grid;flex:none;width:42px;height:42px;place-items:center;border-radius:11px;font-size:21px}.metric-card.score>.el-icon{background:#eaf2ff;color:#315cf0}.metric-card.rank>.el-icon{background:#f1edff;color:#7256dc}.metric-card.wrong>.el-icon{background:#fff0f1;color:#df4a55}.metric-card.attend>.el-icon{background:#eaf8f7;color:#15877f}.metric-card div{min-width:0}.metric-card span{display:block;color:#64748a;font-size:14px;font-weight:650}.metric-card strong{display:block;margin-top:2px;color:#17243d;font-size:23px;white-space:nowrap}.metric-card strong small{margin-left:3px;color:#68778d;font-size:14px}.metric-card p{margin:3px 0 0;color:#8290a3;font-size:14px;line-height:1.35;display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2}.class-compare{border:1px solid var(--diag-border,#dfe7f3);border-radius:var(--diag-radius,12px);background:#fff}.class-compare summary{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer}.class-compare summary span{display:flex;align-items:center;gap:8px;color:#2f4260}.compare-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:0 15px 10px}.compare-stats div{padding:10px;border-radius:9px;background:#f5f8fc}.compare-stats span,.compare-stats b{display:block}.compare-stats span{color:#7a879a;font-size:14px}.compare-stats b{margin-top:3px;color:#21344f;font-size:16px}.question-rates{display:flex;flex-wrap:wrap;gap:7px;padding:0 15px 14px}.question-rates span{padding:6px 9px;border-radius:7px;background:#eef4ff;color:#48617f;font-size:14px}.question-rates b{margin-left:4px;color:#245fd3}.question-rates small{margin-left:4px;color:#8996a7}
-.diagnosis-body{display:grid;grid-template-columns:minmax(0,7fr) minmax(300px,3fr);align-items:start;gap:15px;min-width:0}.evidence-column{display:grid;gap:14px;min-width:0;container-type:inline-size}.insight-sidebar{min-width:0}.ai-panel{position:sticky;top:15px;overflow:hidden;border:1px solid var(--diag-border,#dce5f2);border-radius:14px;background:#fff;box-shadow:0 6px 20px rgb(37 67 108 / 7%)}.ai-panel>header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #e7edf5;background:linear-gradient(135deg,#f2f7ff,#fff)}.robot{display:grid;flex:none;width:36px;height:31px;place-items:center;border-radius:9px;background:#315cf0;color:#fff;font-size:14px;font-weight:800;box-shadow:0 4px 10px rgb(49 92 240 / 20%)}.ai-panel h2{margin:0;color:#17243d;font-size:17px}.summary-section{margin:0 14px;padding:13px 0;border-bottom:1px solid #e8edf4}.summary-section h3,.retest-section h3{margin:0 0 8px;color:#223650;font-size:14px}.ai-summary{margin:0;padding:10px 11px;border:1px solid #d8e4fb;border-radius:9px;background:#f6f9ff;color:#31445f;font-size:14px;line-height:1.65}.summary-section small{display:block;margin-top:7px;color:#7d899b;font-size:14px;line-height:1.5}.ai-failure{margin:10px 14px 0;padding:8px 9px;border-radius:7px;background:#fff6e6;color:#8a6422;font-size:14px;line-height:1.5}.mastery-status{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 14px 0;padding:8px 10px;border-radius:8px;background:#eef4ff;color:#315fca;font-size:14px}.mastery-status.passed{background:#e8f7ef;color:#14794f}.mastery-status.not_passed{background:#ffedef;color:#c33b46}.mastery-status span{font-size:14px}.sidebar-section{margin:0 14px;padding:13px 0;border-bottom:1px solid #e8edf4}.sidebar-section h3{display:flex;align-items:center;gap:6px;margin:0 0 9px;color:#223650;font-size:14px}.sidebar-section h3>.el-icon{color:#315cf0}.concept-list{display:grid;gap:7px}.concept-list article{padding:9px 10px;border-left:3px solid #5b7df3;border-radius:7px;background:#f7f9fc}.concept-list b,.concept-list span{display:block}.concept-list b{color:#263950;font-size:14px}.concept-list span{margin-top:3px;color:#4970c5;font-size:14px}.concept-list p{margin:5px 0 0;color:#718097;font-size:14px;line-height:1.5}.advice-list{display:grid;gap:7px;margin:0;padding:0;list-style:none;counter-reset:advice}.advice-list li{position:relative;padding-left:25px;color:#516279;font-size:14px;line-height:1.6;counter-increment:advice}.advice-list li::before{position:absolute;top:0;left:0;display:grid;width:18px;height:18px;place-items:center;border-radius:50%;background:#eaf1ff;color:#315cf0;font-size:14px;font-weight:700;content:counter(advice)}.sidebar-empty{margin:0;color:#8591a2;font-size:14px;line-height:1.55}.resource-list{display:grid;gap:5px}.resource-list article{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border-radius:8px;background:#f7f9fc}.resource-list article>div{min-width:0}.resource-list b,.resource-list span{display:block}.resource-list b{overflow:hidden;color:#34465f;font-size:14px;text-overflow:ellipsis;white-space:nowrap}.resource-list span{margin-top:3px;color:#8390a1;font-size:14px;line-height:1.4}.resource-list .el-button{flex:none}.retest-section{padding:14px;background:#f6f9ff}.plan-summary{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:9px}.plan-summary span{color:#52647d;font-size:14px;line-height:1.45}.plan-summary span:first-child{color:#263b5b;font-weight:700}.retest-section>p{margin:0 0 9px;color:#7b899a;font-size:14px}.candidate-note,.published-note{margin-bottom:8px;padding:7px 8px;border-radius:6px;background:#eaf2ff;color:#436a9f;font-size:14px}.published-note{background:#e8f7ef;color:#197451}.retest-button{width:100%}@media(max-width:1320px){.diagnosis-body{grid-template-columns:minmax(0,1fr) minmax(290px,.72fr)}.metrics-grid{grid-template-columns:1fr 1fr}}@media(max-width:900px){.diagnosis-body{grid-template-columns:1fr}.ai-panel{position:static}.insight-sidebar{order:2}}@media(max-width:700px){.metrics-grid,.compare-stats{grid-template-columns:1fr}.class-compare summary{align-items:flex-start;flex-direction:column}.question-rates{display:grid;grid-template-columns:1fr 1fr}}
-.validation-note{margin-bottom:8px;padding:7px 8px;border-radius:6px;background:#fff4e5;color:#906421;font-size:14px;line-height:1.45}
-</style>
+<style scoped src="../styles/singleAttemptWorkbench.css"></style>

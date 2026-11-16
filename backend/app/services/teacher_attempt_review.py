@@ -3,11 +3,13 @@ from __future__ import annotations
 
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from backend.app.models import entities as E
 from backend.app.services import bank_service
-from backend.app.services.attempt_service import attempt_elapsed
+from backend.app.services.classroom_content import asset_path
+from backend.app.services.attempt_service import attempt_elapsed, grading_summary
 from backend.app.services.classroom_diagnosis import (
     _answer_keys, _answers_by_item, _class_answer_pattern,
     _class_scoring_reference, _scores_by_item, _snapshot_view,
@@ -30,6 +32,34 @@ def _boolean(value: Any) -> bool | None:
     return None
 
 
+def _review_options(question: E.Question) -> list[dict]:
+    """Attach verified media URLs to revised options without mixing versions."""
+    source_sha = next((str(ref.get("file_sha256") or "")
+                       for ref in (question.source_refs or [])
+                       if isinstance(ref, dict) and ref.get("kind") == "teacher_docx"), "")
+    result = []
+    for source in question.options or []:
+        if not isinstance(source, dict):
+            result.append(source)
+            continue
+        option = dict(source)
+        media = []
+        for image in source.get("media") or []:
+            asset_id = str(image.get("selected_asset_id") or "")
+            if not source_sha or not asset_id:
+                continue
+            try:
+                asset_path(source_sha, asset_id)
+            except ValueError:
+                continue
+            media.append({"url": f"/api/classroom-media/{source_sha}/{asset_id}",
+                          "role": image.get("role") or "image",
+                          "alt_text": image.get("alt_text") or "题目公式或配图"})
+        option["review_media"] = media
+        result.append(option)
+    return result
+
+
 def teacher_attempt_review(db: Session, attempt: E.Attempt) -> dict:
     if attempt.status != "submitted":
         raise ValueError("答卷尚未提交")
@@ -45,6 +75,13 @@ def teacher_attempt_review(db: Session, attempt: E.Attempt) -> dict:
         original = _snapshot_view(item, include_answer_reference=True,
                                   version=assessment_version)
         view = _class_scoring_reference(db, item, original, [score] if score else [])
+        if view.get("is_scoring_revision") and view.get("scoring_reference_status") == "available":
+            revised = db.execute(select(E.Question).where(
+                E.Question.question_id == item.question_id,
+                E.Question.question_version == view.get("scoring_question_version"),
+            )).scalars().first()
+            if revised is not None:
+                view["options"] = _review_options(revised)
         reference = view.get("answer_reference") or {}
         if (score and not isinstance(score, E.AnswerRegrade)
                 and score.question_version != item.question_version):
@@ -89,22 +126,30 @@ def teacher_attempt_review(db: Session, attempt: E.Attempt) -> dict:
                        "max_score": score.max_score}
                       if score else None),
         })
-    scored = [row["score"] for row in rows if row["score"] is not None]
-    complete = len(scored) == len(items) and all(row["correct"] is not None for row in scored)
+    # The student result and the teacher review must use the same effective
+    # marks, including the validity check for historical regrades.
+    from backend.app.services.classroom_diagnosis import _valid_score
+    version = assessment_version
+    for item, row in zip(items, rows):
+        if not _valid_score(version, attempt, scores.get(item.item_id)):
+            row["score"] = None
+    grading = grading_summary(db, attempt)
     elapsed_ms, elapsed_source = attempt_elapsed(attempt, len(items))
     return {
         "attempt_id": attempt.attempt_id,
         "status": attempt.status,
         "mode": attempt.mode,
+        "retest_of_attempt_id": attempt.retest_of_attempt_id,
         "started_at": attempt.started_at,
         "submitted_at": attempt.submitted_at,
         "duration_ms": attempt.duration_ms,
         "display_elapsed_ms": elapsed_ms,
         "elapsed_source": elapsed_source,
-        "score": (round(sum(float(row["awarded_score"] or 0) for row in scored), 4)
-                  if complete else attempt.score),
-        "max_score": (round(sum(float(row["max_score"] or 0) for row in scored), 4)
-                      if complete else attempt.max_score),
-        "score_source": "current_scoring" if complete else "source_record",
+        "score": grading["score"],
+        "max_score": grading["max_score"],
+        "scored_item_count": grading["scored_item_count"],
+        "ungraded_item_count": grading["ungraded_item_count"],
+        "grading_status": grading["grading_status"],
+        "score_source": "current_scoring",
         "items": rows,
     }

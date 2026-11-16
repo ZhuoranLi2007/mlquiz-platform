@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { CircleCheck, Clock, RefreshRight, WarningFilled } from '@element-plus/icons-vue'
 import AttemptEvidenceTable from './AttemptEvidenceTable.vue'
 
-const props = defineProps<{ history?: any[]; originalSummary?: any }>()
+const props = defineProps<{ history?: any[]; originalSummary?: any; emptyText?: string }>()
 const rows = computed(() => props.history || [])
 
 function percent(value: unknown) {
@@ -62,7 +62,7 @@ function dateText(value: string) {
         </div>
       </details>
     </div>
-    <div v-else class="empty-retest"><span>诊断确认复测目标后，可从右侧生成并发布5道针对性新题。</span></div>
+    <div v-else class="empty-retest"><span>{{ emptyText || '诊断确认复测目标后，可从右侧生成并发布5道针对性新题。' }}</span></div>
   </section>
 </template>
 
