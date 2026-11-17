@@ -438,15 +438,19 @@ def diagnose_classroom(db: Session, payload: dict, *, run_id: str,
             payload.get("assessment_version_id") or "").strip(),
         paper_item_id=str(payload.get("paper_item_id") or "").strip(),
         attempt_id=str(payload.get("attempt_id") or "").strip(),
+        include_ai=bool(payload.get("include_ai", False)),
+        trace_run_id=run_id,
+        date_from=str(payload.get("date_from") or "").strip(),
+        date_to=str(payload.get("date_to") or "").strip(),
     )
     # Link the domain Diagnosis to the enclosing SkillRun so either audit row
     # can lead to the other.  Direct service callers keep their native version;
-    # only this adapter upgrades the row to the registered Skill identity.
+    # The row keeps its domain schema version; SkillRun records the registry version.
     diagnosis = db.get(E.Diagnosis, direct.get("diagnosis_id"))
     if diagnosis is not None:
         diagnosis.run_id = run_id
-        diagnosis.skill_version = (
-            f"{cfg.SKILL_REGISTRY_VERSION}/diagnose_classroom-1.0")
+        # Keep the domain contract version so latest_diagnosis and student
+        # feedback can retrieve it; SkillRun already stores the registry version.
         db.add(diagnosis)
         db.commit()
     return {
@@ -470,60 +474,33 @@ def diagnose_classroom(db: Session, payload: dict, *, run_id: str,
 
 def recommend_resources(db: Session, payload: dict, *, run_id: str,
                         thread_id: str, job_id: str, user_id: str) -> dict:
+    from backend.app.services.learning_resources import recommend
+    from backend.app.services.score_policy import admissible_score
     kp_ids = list(payload.get("kp_ids") or [])
     if not kp_ids and payload.get("attempt_id"):
+        attempt = db.get(E.Attempt, payload["attempt_id"])
+        version = db.get(E.AssessmentVersion, attempt.assessment_version_id) if attempt and attempt.assessment_version_id else None
         scores = db.execute(select(E.AnswerScore).where(
             E.AnswerScore.attempt_id == payload["attempt_id"])).scalars().all()
-        kp_ids = sorted({s.kp_id for s in scores if s.kp_id})
-    if not kp_ids:
+        kp_ids = list(dict.fromkeys(s.kp_id for s in scores if s.kp_id
+                      and s.correct is False and admissible_score(attempt, s, version)))
+    if not kp_ids and not payload.get("attempt_id"):
         states = db.execute(select(E.KnowledgeState).where(
             E.KnowledgeState.user_id == user_id,
-            E.KnowledgeState.state.in_(["需加强", "证据不足"]))).scalars().all()
+            E.KnowledgeState.state == "需加强")).scalars().all()
         kp_ids = [s.kp_id for s in states]
-    recs: list[dict] = []
-    search_summary = []
-    for kp_id in kp_ids[:8]:
-        name = _kp_name(db, kp_id)
-        found = retrieval.keyword_search(db, name, limit=3)
-        search_summary.append({"kp_id": kp_id, "query": name,
-                               "hits": found["total"], "mode": found["mode"]})
-        for r in found["results"][:2]:
-            src = (r["source_refs"] or [{}])[0]
-            page = src.get("page")
-            recs.append({
-                "type": "local_chunk", "kp_id": kp_id,
-                "title": f"{r['title']} · {name}",
-                "snippet": r["snippet"][:180],
-                "source_refs": r["source_refs"],
-                "review_status": r["review_status"],
-                "quality_note": ("该页需视觉/公式复核，查看原页图"
-                                 if r["review_status"].startswith("needs_") else ""),
-                "url": (f"/api/materials/{src.get('document_id')}/page/{page}/image"
-                        if src.get("document_id") and page else None),
-                "reason": "本地资料关键词检索命中，可回到实际页序",
-            })
-        from backend.app.services.classroom_content import is_search_entry
-        for res in db.execute(select(E.Resource).where(
-                E.Resource.kp_ids.contains(kp_id))).scalars().all():
-            if is_search_entry(res.url, res.title):
-                continue
-            recs.append({
-                "type": "external", "kp_id": kp_id, "title": res.title,
-                "url": res.url, "platform": res.platform,
-                "reason": res.reason, "verified": res.verified,
-                "verifiable_segment": res.verifiable_segment,
-                "note": "外部入口，未读取正文/字幕",
-            })
+    recs = recommend(db, kp_ids)
+    covered = {kp for r in recs for kp in r.get("kp_ids") or []}
+    missing = [kp for kp in kp_ids if kp not in covered]
     return {
         "result": {"kp_ids": kp_ids, "recommendations": recs,
-                   "search_summary": search_summary,
-                   "retrieval_mode": retrieval.retrieval_status()["mode"]},
-        "evidence_refs": [r.get("source_refs", []) for r in recs
-                          if r["type"] == "local_chunk"][:10],
-        "uncertainties": ["外部资源仅登记可访问入口，未读取正文/字幕，不编造内容",
-                         "标记为需复核的页，文本可能缺公式，请打开原页图"],
-        "next_actions": ["打开本地原页或外部链接学习", "学完后用新题验证"],
-        "engine": "deterministic+keyword_retrieval", "status": "succeeded",
+                   "uncovered_kp_ids": missing,
+                   "search_summary": [{"kp_id": kp, "hits": sum(kp in r.get("kp_ids",[]) for r in recs)} for kp in kp_ids],
+                   "retrieval_mode": "curated_course_pages+verified_resources"},
+        "evidence_refs": [r.get("source_refs",[]) for r in recs if r.get("source_refs")],
+        "uncertainties": (["这些知识点尚无可用材料：" + "、".join(missing)] if missing else []),
+        "next_actions": ["按推荐位置阅读，再按自测标准解释原错题并参加复测"],
+        "engine": "deterministic+curated_retrieval", "status": "succeeded",
     }
 
 
@@ -579,7 +556,7 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
                 context=_snippet_context(context, 6),
                 blueprint=json.dumps(bp, ensure_ascii=False))},
         ], skill_name="generate_questions",
-            prompt_version=prompts.PROMPT_VERSION, run_id=run_id,
+            prompt_version=prompts.QUESTION_GEN_PROMPT_VERSION, run_id=run_id,
             max_tokens=3200, timeout=120.0)
     except model_provider.ModelUnavailable as e:
         stage("generate_candidates", "failed", e.message)
@@ -605,6 +582,10 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
     parsed = model_provider.parse_json_content(out["content"])
     raw = parsed if isinstance(parsed, list) else (
         parsed.get("questions", []) if isinstance(parsed, dict) else [])
+    if not isinstance(raw, list):
+        return {"result": {"candidates": [], "pipeline": pipeline},
+                "status": "invalid_output", "engine": "model_failed",
+                "uncertainties": ["模型 questions 字段不是数组，未写入题库"]}
     stage("generate_candidates", "done",
           {"raw_count": len(raw), "usage": out["usage"],
            "usage_missing": out["usage_missing"],
@@ -620,25 +601,42 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
             rejected.append({"i": i, "reason": "不是对象"})
             continue
         qt = c.get("question_type")
-        stem = (c.get("stem") or "").strip()
+        stem = c.get("stem")
         opts = c.get("options") or []
         ans = c.get("answer_payload") or {}
         refs = c.get("source_chunk_ids") or []
+        if (not isinstance(stem, str) or not isinstance(qt, str)
+                or not isinstance(opts, list) or not all(isinstance(o, dict) for o in opts)
+                or not isinstance(ans, dict) or not isinstance(refs, list)
+                or not all(isinstance(r, str) for r in refs)):
+            rejected.append({"i": i, "reason": "题干、选项、答案或引用结构错误"})
+            continue
+        stem = stem.strip()
         problems = []
         if qt not in valid_types:
             problems.append("题型不合法或未知")
+        if bp.get("question_types") and qt not in bp["question_types"]:
+            problems.append("题型不符合本次出题要求")
+        if kp_ids and c.get("kp_id") not in kp_ids:
+            problems.append("知识点不属于本次复测目标")
         if len(stem) < 6:
             problems.append("题干过短")
         if qt in ("single_choice", "multi_choice") and len(opts) < 2:
             problems.append("选项不足")
         if not ans:
             problems.append("缺少答案")
-        if not refs or not any(r in {x["chunk_id"] for x in context} for r in refs):
+        if not refs or not all(r in {x["chunk_id"] for x in context} for r in refs):
             problems.append("缺少真实来源引用")
-        if qt == "single_choice" and ans.get("key") not in {o.get("key") for o in opts}:
+        if qt == "single_choice" and (not isinstance(ans.get("key"), str)
+                or ans.get("key") not in [o.get("key") for o in opts]):
             problems.append("答案不在选项内")
-        if qt == "multi_choice" and not set(ans.get("keys", [])) <= {o.get("key") for o in opts}:
-            problems.append("多选答案含无效选项")
+        if qt == "multi_choice":
+            keys = ans.get("keys")
+            if (not isinstance(keys, list) or not keys or
+                    not all(isinstance(k, str) and k in [o.get("key") for o in opts] for k in keys)):
+                problems.append("多选答案缺失或含无效选项")
+        if qt == "true_false" and not isinstance(ans.get("value"), bool):
+            problems.append("判断题答案必须是布尔值")
         if problems:
             rejected.append({"i": i, "reason": "；".join(problems)})
         else:
@@ -695,6 +693,7 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
             rejected.append({"stem": stem[:50], "reason": f"与题库重复 (相似度 {sim:.2f})"})
         else:
             deduped.append(v)
+            existing.append(stem)
     stage("dedupe", "done", {"kept": len(deduped), "total_rejected": len(rejected)})
 
     # --- review queue: never auto-publish ---
@@ -716,8 +715,14 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
             answer_payload=c["answer_payload"],
             explanation=v["verification_note"],
             scope_class=c.get("scope_class") or "unconfirmed",
-            notes=("AI 候选：未核验，成绩不用于上调阶段稳定状态；待人工审核后发布。"
-                   f"范围复检：{c.get('scope_basis', '')}"),
+            notes=json.dumps({"generation": {
+                "source": "ai_generated", "call_id": out.get("call_id", ""),
+                "run_id": run_id, "thread_id": thread_id,
+                "model": out.get("model", ""), "mode": bp.get("mode", ""),
+                "target_kp_ids": kp_ids,
+                "source_question_id": (bp.get("source_question") or {}).get("question_id", ""),
+                "scope_basis": c.get("scope_basis", ""),
+            }, "status": "候选题，须通过独立验答才能用于复测"}, ensure_ascii=False),
             created_by="skill:generate_questions",
         )
         db.add(row)
@@ -743,7 +748,7 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
         "uncertainties": ["模型自检只提供线索，不能独立认证答案正确",
                          "候选答案未经人工核验，不参与阶段稳定状态"],
         "next_actions": ["人工审核候选题并发布", "数值题以独立计算复核"],
-        "engine": "model+deterministic_validation", "status": "succeeded",
+        "engine": "model+deterministic_validation", "status": "succeeded" if created else "no_valid_candidates",
         "model": cfg.MODEL_CHAT_MODEL,
         "extra": {"pipeline": pipeline},
     }
@@ -753,11 +758,25 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
 
 def verify_learning(db: Session, payload: dict, *, run_id: str,
                     thread_id: str, job_id: str, user_id: str) -> dict:
+    # Formal teacher-issued retests use TargetedRetestCycle, not the legacy
+    # personal RetestTask. Both enter through the same auditable skill.
+    aid = str(payload.get("attempt_id") or "")
+    cycle = db.execute(select(E.TargetedRetestCycle).where(
+        E.TargetedRetestCycle.retest_attempt_id == aid)).scalars().first() if aid else None
+    if cycle:
+        from backend.app.services import targeted_retest
+        targeted_retest.refresh_cycle(db, cycle, commit=True)
+        result = targeted_retest.cycle_detail(db, cycle, include_items=False)
+        return {"result": result, "status": "succeeded", "engine": "deterministic",
+                "evidence_refs": [{"attempt_id": aid, "cycle_id": cycle.cycle_id}],
+                "uncertainties": ["本轮达标只说明本次新题表现，不能证明长期稳定掌握。"],
+                "next_actions": ["查看剩余错题和更新后的诊断"]}
     task_id = payload.get("retest_task_id", "")
     attempt_id = payload.get("attempt_id", "")
     task = db.get(E.RetestTask, task_id) if task_id else None
     if not task and attempt_id:
         task = db.execute(select(E.RetestTask).where(
+            E.RetestTask.user_id == user_id,
             E.RetestTask.paper_id == (db.get(E.Attempt, attempt_id).paper_id
                                       if db.get(E.Attempt, attempt_id) else ""),
         )).scalars().first()
@@ -778,6 +797,7 @@ def verify_learning(db: Session, payload: dict, *, run_id: str,
     if not aid and task.paper_id:
         atts = db.execute(select(E.Attempt).where(
             E.Attempt.paper_id == task.paper_id,
+            E.Attempt.user_id == task.user_id,
             E.Attempt.status == "submitted").order_by(
             E.Attempt.started_at.desc())).scalars().first()
         aid = atts.attempt_id if atts else ""
@@ -793,7 +813,18 @@ def verify_learning(db: Session, payload: dict, *, run_id: str,
          and not amap[s.question_id].solution_viewed
          and not amap[s.question_id].seen_before)
         for s in scores)
-    all_correct = bool(scores) and all(s.correct is True for s in scores)
+    attempt = db.get(E.Attempt, aid) if aid else None
+    items = db.execute(select(E.PaperItem).where(
+        E.PaperItem.paper_id == task.paper_id)).scalars().all()
+    version = (db.get(E.AssessmentVersion, attempt.assessment_version_id)
+               if attempt and attempt.assessment_version_id else None)
+    from backend.app.services.score_policy import admissible_score
+    scored = {(s.question_id, s.question_version): s for s in scores}
+    all_scored = bool(attempt and attempt.user_id == task.user_id and items
+        and all(admissible_score(attempt, scored.get((i.question_id, i.question_version)), version)
+                for i in items))
+    all_correct = all_scored and all(s.correct is True for s in scores)
+    target_covered = bool(task.kp_id and any(s.kp_id == task.kp_id for s in scores))
     new_family = bool(scores) and all(
         (s.family_id or s.question_id) != task.family_id for s in scores)
     # 同族但换了考查形式（题型/认知层次不同）只能算"变式证据"，
@@ -817,11 +848,15 @@ def verify_learning(db: Session, payload: dict, *, run_id: str,
     result = {
         "task_id": task.task_id, "attempt_id": aid, "kp_id": task.kp_id,
         "scored_items": len(scores), "independent": independent,
+        "all_items_scored": all_scored,
         "all_correct": all_correct, "new_question_family": new_family,
         "evidence_tier": evidence_tier,
-        "passed": bool(independent and all_correct and new_family),
+        "target_knowledge_point_covered": target_covered,
+        "passed": bool(independent and all_correct and new_family and target_covered),
     }
     uncertainties: list[str] = []
+    if not target_covered:
+        uncertainties.append("本次答卷未覆盖任务目标知识点，不能据此判定该知识点通过")
     if not independent:
         uncertainties.append("使用了提示/已见答案或同题族重复，不能冒充独立新题证据")
     if not new_family:
@@ -830,7 +865,7 @@ def verify_learning(db: Session, payload: dict, *, run_id: str,
         uncertainties.append("未找到评分记录（可能尚未作答或全为待评分题）")
     if result["passed"]:
         task.status = "completed"
-        task.result = {**result, "completed_at": E.utcnow()}
+        task.result = {**(task.result or {}), **result, "completed_at": E.utcnow()}
         wrong = db.get(E.WrongBookEntry, task.from_wrong_id) if task.from_wrong_id else None
         if wrong:
             wrong.status = "verified"
@@ -857,7 +892,7 @@ def verify_learning(db: Session, payload: dict, *, run_id: str,
         # 学生确实做了，但证据不够（答错 / 非独立 / 仍是同族变式）。
         # 不能永远挂在 pending，也不能伪造成 completed。
         task.status = "needs_more_evidence"
-        task.result = {**result, "checked_at": E.utcnow(),
+        task.result = {**(task.result or {}), **result, "checked_at": E.utcnow(),
                        "reason": ("同族变式题答对，只能证明会做这一类，不能证明迁移"
                                   if (result["all_correct"] and variant_only) else
                                   "存在答错或非独立作答，证据不足以判定掌握")}

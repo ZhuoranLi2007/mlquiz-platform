@@ -6,6 +6,7 @@ import { Collection, Position, WarningFilled } from '@element-plus/icons-vue'
 import MathText from './MathText.vue'
 import SourceQuestionContent from './SourceQuestionContent.vue'
 import DiagnosisAnalysisContent from './DiagnosisAnalysisContent.vue'
+import LearningResourceList from './LearningResourceList.vue'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
 import { analysisNotice } from '../utils/analysisNotice'
 
@@ -187,9 +188,9 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
           <header><div><h2>班级学情分析</h2></div></header>
           <DiagnosisAnalysisContent :analysis="analysis" scope="class_assessment" locatable @locate="locateQuestion" />
           <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
-          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="resources.length" class="resources"><a v-for="resource in resources" :key="resource.resource_id || resource.url" class="diagnosis-resource-link" :href="resource.url" target="_blank" rel="noopener noreferrer"><b class="resource-title">{{ resource.title }}</b><span>{{ resourceType(resource) }} · {{ resource.reason || '关联本卷共性问题' }}</span></a></div><div v-else class="side-empty">暂无相关资料。<el-button link type="primary" @click="router.push('/teacher/resources')">添加资源</el-button></div></section>
+          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><LearningResourceList :resources="resources" /></section>
 
-          <section class="retest-section"><h3>班级复测</h3><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道题。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
+          <section class="retest-section"><h3>班级复测</h3><p>AI 依据班级薄弱知识点生成新题，独立验答后发布。</p><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
         </section>
       </aside>
     </section>

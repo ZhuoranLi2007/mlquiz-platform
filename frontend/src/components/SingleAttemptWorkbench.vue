@@ -5,6 +5,7 @@ import { Collection, DocumentChecked, Position, Trophy, TrendCharts, WarningFill
 import AttemptEvidenceTable from './AttemptEvidenceTable.vue'
 import TargetedRetestHistory from './TargetedRetestHistory.vue'
 import DiagnosisAnalysisContent from './DiagnosisAnalysisContent.vue'
+import LearningResourceList from './LearningResourceList.vue'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
 import { analysisNotice } from '../utils/analysisNotice'
 
@@ -99,18 +100,12 @@ function resourceType(resource: any) {
 
           <div class="sidebar-section resource-section">
             <h3><el-icon><Collection /></el-icon>推荐学习资源</h3>
-            <div v-if="resources.length" class="resource-list">
-              <a v-for="resource in resources" :key="resource.resource_id || resource.url || resource.title"
-                class="diagnosis-resource-link" :href="resource.url" target="_blank" rel="noopener noreferrer">
-                <b class="resource-title">{{ resource.title }}</b>
-                <span>{{ resourceType(resource) }} · {{ resource.reason || '关联当前错题概念' }}</span>
-              </a>
-            </div>
-            <div v-else class="sidebar-empty">暂无相关资料。<button type="button" class="resource-action" @click="router.push('/teacher/resources')">添加资源</button></div>
+            <LearningResourceList :resources="resources" />
           </div>
 
           <div class="retest-section">
             <h3>复测建议</h3>
+            <p>AI 依据薄弱知识点生成新题，独立验答后发布。</p>
             <div v-if="plan.ready" class="plan-summary"><span>{{ plan.chapters?.map((item: any) => item.title).join('、') || '当前错题章节' }}</span><span>{{ plan.item_count }} 题 · {{ plan.suggested_types?.map(typeLabel).join('、') || '自动匹配题型' }}</span></div>
             <p v-else>{{ plan.reason || '当前没有适合生成复测的错题。' }}</p>
             <div v-if="generatedCandidates.length" class="candidate-note">已生成 {{ generatedCandidates.length }} 道候选题，校验通过后发布。</div>

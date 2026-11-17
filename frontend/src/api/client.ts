@@ -43,6 +43,23 @@ export const api = {
       .then((r) => r.data),
 }
 
+/** Slow AI workflows are durable jobs; each poll is a short HTTP request. */
+export async function runTeacherJob(url: string, payload: any): Promise<any> {
+  const queued: any = await api.post(url, payload)
+  const deadline = Date.now() + 40 * 60 * 1000
+  while (Date.now() < deadline) {
+    const job: any = await api.get(`/teacher/jobs/${queued.job_id}`)
+    if (job.status === 'succeeded') return job.result
+    if (job.status === 'failed' || job.status === 'cancelled') {
+      // A partial workflow still contains the truthful diagnosis and failure.
+      if (job.result?.outputs) return job.result
+      throw new Error(job.error || '后台任务未完成，请检查模型配置和后台服务')
+    }
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+  }
+  throw new Error('任务仍在后台处理，请确认 worker 正在运行；稍后再次点击会继续查看已有任务')
+}
+
 /** Fetch protected media with this tab's identity; never put tokens in URLs. */
 export async function protectedBlobUrl(url: string): Promise<string> {
   const response = await http.get<Blob>(url.replace(/^\/api/, ''), { responseType: 'blob' })

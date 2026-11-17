@@ -39,6 +39,20 @@ class State(TypedDict, total=False):
     errors: list[str]
     status: str
     scope_type: str
+    target_kp_ids: list[str]
+    remaining_kp_ids: list[str]
+    date_from: str
+    date_to: str
+
+
+def diagnosis_items(payload: dict) -> list[dict]:
+    """Normalize all three diagnosis contracts at the workflow boundary."""
+    rows = (payload.get("items") or payload.get("wrong_items") or
+            payload.get("high_frequency_errors") or [])
+    return [{**row,
+             "kp_id": row.get("kp_id") or (row.get("knowledge_point") or {}).get("kp_id", ""),
+             "chapter_id": row.get("chapter_id") or (row.get("chapter") or {}).get("chapter_id", "")}
+            for row in rows]
 
 
 def _stage(s: State, name: str, detail: Any = None) -> list[dict[str, Any]]:
@@ -244,6 +258,9 @@ def build_teacher_intervention_graph(db: Session):
         elif history_mode:
             request["student_id"] = s["student_id"]
             request["classroom_id"] = s["classroom_id"]
+            request["date_from"] = s.get("date_from", "")
+            request["date_to"] = s.get("date_to", "")
+            request["assessment_version_id"] = s.get("assessment_version_id", "")
         else:
             request["student_id"] = s["student_id"]
             request["assessment_version_id"] = s["assessment_version_id"]
@@ -262,12 +279,16 @@ def build_teacher_intervention_graph(db: Session):
                                (payload.get("retest_plan") or {}).get("anchor_attempt_id") or
                                s.get("attempt_id", ""))
         round_no = int(s.get("round_no") or 1)
-        if s.get("scope_type") == "student_attempt" and resolved_attempt_id:
+        if not class_mode and resolved_attempt_id:
             source_attempt = db.get(E.Attempt, resolved_attempt_id)
             if source_attempt is not None:
                 round_no = targeted_retest.next_round(
                     db, source_attempt_id=source_attempt.attempt_id,
                     student_id=s.get("student_id", ""))
+        # A five-item round cannot cover arbitrarily many concepts. Keep the
+        # diagnosis priority order and disclose what this round leaves out.
+        weak = list(dict.fromkeys(weak))
+        targets = weak[:max(1, int(s.get("count") or 5))]
         return {"stages": _stage(s, "diagnose", {
                     "diagnosis_id": (result.get("extra") or {}).get(
                         "diagnosis_id"),
@@ -277,6 +298,7 @@ def build_teacher_intervention_graph(db: Session):
                     "weak_chapter_ids": weak_chapters}),
                 "outputs": _out(s, "diagnosis", result),
                 "weak_kp_ids": weak, "weak_chapter_ids": weak_chapters,
+                "target_kp_ids": targets, "remaining_kp_ids": weak[len(targets):],
                 "attempt_id": resolved_attempt_id, "round_no": round_no,
                 "errors": errors}
 
@@ -299,19 +321,14 @@ def build_teacher_intervention_graph(db: Session):
         weak_chapters = s.get("weak_chapter_ids") or []
         diagnosis = (s.get("outputs") or {}).get("diagnosis") or {}
         diagnosed_payload = diagnosis.get("result") or {}
-        diagnosed_items = (diagnosed_payload.get("items") or
-                            diagnosed_payload.get("wrong_items") or
-                            diagnosed_payload.get("high_frequency_errors") or [])
-        weak = sorted({
-            str(item.get("kp_id")) for item in diagnosed_items
-            if item.get("chapter_id") in weak_chapters and item.get("kp_id")
-        })
+        diagnosed_items = diagnosis_items(diagnosed_payload)
+        weak = s.get("target_kp_ids") or []
         prior_stems = [
             str(item.get("stem") or "").strip()
             for item in diagnosed_items
             if item.get("correct") is False and item.get("stem")
         ][:3]
-        if not weak_chapters:
+        if not weak_chapters and not weak:
             result = {"status": "skipped", "result": {"candidates": []},
                       "message": "没有由可评分证据支持的低分章节。"}
         elif not weak:
@@ -326,7 +343,7 @@ def build_teacher_intervention_graph(db: Session):
             # silently publishing a short retest.  The published paper remains
             # exactly ``target`` questions.
             pool_target = min(12, target + 7)
-            by_kp: dict[str, list[dict]] = {kp_id: [] for kp_id in weak[:4]}
+            by_kp: dict[str, list[dict]] = {kp_id: [] for kp_id in weak}
             attempts: list[dict] = []
             per_kp_target = max(2, (pool_target + len(by_kp) - 1) // len(by_kp))
             generation_round = 0
@@ -395,8 +412,7 @@ def build_teacher_intervention_graph(db: Session):
                 payload = diagnosis.get("result") or {}
                 weak_chapters = list(s.get("weak_chapter_ids") or [])
                 chapter_by_kp = {}
-                for item in (payload.get("items") or payload.get("wrong_items") or
-                             payload.get("high_frequency_errors") or []):
+                for item in diagnosis_items(payload):
                     if item.get("chapter_id") in weak_chapters and item.get("kp_id"):
                         chapter_by_kp.setdefault(str(item["kp_id"]), set()).add(
                             str(item["chapter_id"]))
@@ -429,12 +445,14 @@ def build_teacher_intervention_graph(db: Session):
                         raise ValueError("班级没有可接收在线试卷的学生账号")
                 result = validate_and_publish(db,
                     candidate_ids=[c["question_id"] for c in candidates if c.get("question_id")],
-                    kp_ids=s.get("weak_kp_ids") or [],
+                    kp_ids=s.get("target_kp_ids") or [],
+                    untested_kp_ids=s.get("remaining_kp_ids") or [],
                     chapter_ids=weak_chapters, actor_user_id=s["actor_user_id"],
                     student_id=s.get("student_id", ""), student_ids=recipient_ids,
                     classroom_id=(payload.get("classroom_id") or
                                   (payload.get("classroom") or {}).get("classroom_id", "")),
                     source_attempt_id=s.get("attempt_id", ""),
+                    source_assessment_version_id=s.get("assessment_version_id", ""),
                     diagnosis_id=(diagnosis.get("extra") or {}).get("diagnosis_id", ""),
                     thread_id=s["thread_id"], round_no=int(s.get("round_no") or 1),
                     required_count=int(s.get("count") or
@@ -447,6 +465,8 @@ def build_teacher_intervention_graph(db: Session):
                 errors.append("自动复测未发布：" + reason)
         elif generation.get("status") != "skipped":
             errors.append("复测生成未产生可用新题：" + str(generation.get("status")))
+        result["target_kp_ids"] = s.get("target_kp_ids") or []
+        result["remaining_kp_ids"] = s.get("remaining_kp_ids") or []
         return {"stages": _stage(s, "validate_and_publish_retest", result),
                 "outputs": _out(s, "retest", result), "errors": errors,
                 "status": "partial" if errors else "succeeded"}
@@ -470,7 +490,11 @@ def run_teacher_intervention(db: Session, *, actor_user_id: str,
                              classroom_id: str = "",
                              scope_type: str = "student_attempt",
                              attempt_id: str = "",
-                             count: int = cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT) -> dict:
+                             date_from: str = "", date_to: str = "",
+                             count: int = cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT,
+                             thread_id: str = "") -> dict:
+    if scope_type not in {"student_attempt", "student_history", "class_assessment"}:
+        raise ValueError("不支持的诊断范围")
     if scope_type == "student_history" and (not classroom_id or not student_id):
         raise ValueError("多卷复测需要 classroom_id")
     if scope_type == "class_assessment" and (not classroom_id or not assessment_version_id):
@@ -483,11 +507,12 @@ def run_teacher_intervention(db: Session, *, actor_user_id: str,
     # semantics.
     count = cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT
     round_no = 1
-    thread_id = f"teacher-intervention:{uuid.uuid4().hex[:12]}"
+    thread_id = thread_id or f"teacher-intervention:{uuid.uuid4().hex[:12]}"
     initial: State = {"actor_user_id": actor_user_id, "student_id": student_id,
         "assessment_version_id": assessment_version_id,
         "classroom_id": classroom_id, "scope_type": scope_type, "count": count,
         "attempt_id": attempt_id, "round_no": round_no,
+        "date_from": date_from, "date_to": date_to,
         "thread_id": thread_id, "stages": [], "outputs": {},
         "weak_kp_ids": [], "weak_chapter_ids": [],
         "errors": [], "status": "queued"}
@@ -506,6 +531,7 @@ def build_post_submission_graph(db: Session):
             "scope_type": "student_attempt",
             "student_id": s["student_id"],
             "assessment_version_id": s["assessment_version_id"],
+            "attempt_id": s["attempt_id"],
         }, thread_id=s["thread_id"], user_id=s["actor_user_id"])
         payload = result.get("result") or {}
         errors = list(s.get("errors") or [])
@@ -546,13 +572,17 @@ def build_post_submission_graph(db: Session):
 
     def compare(s: State) -> dict:
         source = s.get("source_attempt_id", "")
+        verification = run_skill(db, "verify_learning", {
+            "attempt_id": s["attempt_id"]}, thread_id=s["thread_id"],
+            user_id=s["actor_user_id"]) if source else {"status": "not_a_retest"}
         result = (compare_attempts(db, source, s["attempt_id"])
                   if source else {"status": "not_a_retest"})
         return {"stages": _stage(s, "compare_retest", {
                     "source_attempt_id": source or None,
                     "comparable_count": len(result.get(
                         "comparable_knowledge_points") or [])}),
-                "outputs": _out(s, "retest_comparison", result)}
+                "outputs": {**_out(s, "retest_comparison", result),
+                            "verification": verification}}
 
     def recommend(s: State) -> dict:
         result = run_skill(db, "recommend_resources",

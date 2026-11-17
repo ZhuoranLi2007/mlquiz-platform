@@ -241,7 +241,7 @@ onMounted(load)
         <p v-if="paper?.assessment_classroom_id && paper.assessment_classroom_id !== classroomId" class="recipient-warning">这份旧试卷属于已归档的演示班固定版本，不能转发到正式班。请从题库复制题目生成新的正式试卷。</p>
         <label>截止时间（可选）<el-date-picker v-model="dueAt" type="datetime" value-format="YYYY-MM-DDTHH:mm:ss" placeholder="不设置则留空" /></label>
       </div>
-      <template #footer><el-button @click="publishOpen=false">取消</el-button><el-button type="primary" :loading="publishing" :disabled="!onlineStudents.length || (paper?.assessment_classroom_id && paper.assessment_classroom_id !== classroomId)" @click="publish">确认发布</el-button></template>
+      <template #footer><el-button @click="publishOpen=false">取消</el-button><el-button type="primary" :loading="publishing" :disabled="!onlineStudents.length || Boolean(paper?.assessment_classroom_id && paper.assessment_classroom_id !== classroomId)" @click="publish">确认发布</el-button></template>
     </el-dialog>
   </div>
 </template>

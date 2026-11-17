@@ -14,7 +14,7 @@ import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import (JSON, Boolean, Float, ForeignKey, Index, Integer,
-                        String, Text, UniqueConstraint)
+                        String, Text, UniqueConstraint, text)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.app.models.base import Base
@@ -640,9 +640,9 @@ class TargetedRetestCycle(Base):
         String(64), default="", index=True)
     diagnosis_id: Mapped[str] = mapped_column(String(64), default="", index=True)
     release_id: Mapped[str] = mapped_column(
-        String(64), default="", unique=True, index=True)
+        String(64), default="", index=True)
     retest_attempt_id: Mapped[str] = mapped_column(
-        String(64), default="", unique=True, index=True)
+        String(64), default="", index=True)
     workflow_run_id: Mapped[str] = mapped_column(String(64), default="")
     round_no: Mapped[int] = mapped_column(Integer, default=1)
     status: Mapped[str] = mapped_column(
@@ -657,6 +657,7 @@ class TargetedRetestCycle(Base):
     kp_ids: Mapped[list] = jdefault(list)
     concept_names: Mapped[list] = jdefault(list)
     generated_question_ids: Mapped[list] = jdefault(list)
+    untested_kp_ids: Mapped[list] = jdefault(list)
     remaining_kp_ids: Mapped[list] = jdefault(list)
     published_at: Mapped[str] = mapped_column(String(32), default=utcnow)
     submitted_at: Mapped[str] = mapped_column(String(32), default="")
@@ -666,6 +667,9 @@ class TargetedRetestCycle(Base):
     __table_args__ = (
         UniqueConstraint("source_attempt_id", "student_id", "round_no",
                          name="uq_targeted_retest_source_student_round"),
+        Index("uq_retest_release_student", "release_id", "student_id", unique=True),
+        Index("uq_retest_nonempty_attempt", "retest_attempt_id", unique=True,
+              sqlite_where=text("retest_attempt_id <> ''")),
     )
 
 
@@ -798,6 +802,16 @@ class ModelCall(Base):
     finish_reason: Mapped[str] = mapped_column(String(32), default="")
     status: Mapped[str] = mapped_column(String(32), default="ok")
     error: Mapped[str] = mapped_column(Text, default="")
+    created_at: Mapped[str] = mapped_column(String(32), default=utcnow)
+
+
+class PromptRecord(Base):
+    """Actual runtime requests/responses, separate from call usage metadata."""
+    __tablename__ = "prompt_records"
+    call_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    messages: Mapped[list] = jdefault(list)
+    response_text: Mapped[str] = mapped_column(Text, default="")
+    request_sha256: Mapped[str] = mapped_column(String(64), default="")
     created_at: Mapped[str] = mapped_column(String(32), default=utcnow)
 
 

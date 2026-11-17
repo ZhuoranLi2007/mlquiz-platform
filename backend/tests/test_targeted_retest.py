@@ -144,3 +144,57 @@ def test_teacher_intervention_keeps_fixed_five_question_round(
         db, actor_user_id="teacher", student_id="stu-1",
         assessment_version_id="av-source", count=2)
     assert captured["count"] == 5
+
+
+def test_uncovered_weakness_survives_perfect_round_and_diagnosis(db):
+    cycle = _round(db, 1, 5)
+    cycle.untested_kp_ids = ["kp.uncovered"]
+    targeted_retest.refresh_cycle(db, cycle, commit=True)
+    db.expire_all()
+    cycle = db.get(E.TargetedRetestCycle, cycle.cycle_id)
+    detail = targeted_retest.cycle_detail(db, cycle)
+    assert detail["passed"] is True  # only this round
+    assert detail["remaining_kp_ids"] == ["kp.uncovered"]
+    assert detail["untested_kp_ids"] == ["kp.uncovered"]
+    analysis = targeted_retest.enrich_analysis({}, [detail])
+    assert analysis["remaining_concepts"] == ["kp.uncovered"]
+    assert "不能视为掌握" in analysis["retest_summary"]["text"]
+    assert "继续复习" in analysis["next_step"]
+
+
+def test_pending_round_preserves_all_targets(db):
+    cycle = _round(db, 1, 4, pending=True)
+    cycle.untested_kp_ids = ["kp.uncovered"]
+    targeted_retest.refresh_cycle(db, cycle, commit=True)
+    assert cycle.status == "scoring_pending"
+    assert set(cycle.remaining_kp_ids) == {"kp.pca", "kp.nmf", "kp.uncovered"}
+
+
+def test_legacy_verification_cannot_pass_with_partial_score_rows(db):
+    from backend.app.skills.implementations import verify_learning
+    from sqlalchemy import delete
+    _round(db, 1, 5)
+    db.execute(delete(E.TargetedRetestCycle))
+    db.execute(delete(E.AnswerScore).where(E.AnswerScore.score_id == 'score-r1-4'))
+    db.add(E.RetestTask(task_id='legacy', user_id='student-user', kp_id='kp.pca',
+                       paper_id='paper-r1', family_id='old-family'))
+    db.commit()
+    result = verify_learning(db, {'retest_task_id': 'legacy', 'attempt_id': 'attempt-r1'},
+        run_id='test', thread_id='test', job_id='', user_id='student-user')['result']
+    assert result['all_items_scored'] is False
+    assert result['passed'] is False
+    assert db.get(E.RetestTask, 'legacy').status != 'completed'
+
+
+def test_legacy_verification_does_not_pass_an_uncovered_target(db):
+    from backend.app.skills.implementations import verify_learning
+    from sqlalchemy import delete
+    _round(db, 1, 5)
+    db.execute(delete(E.TargetedRetestCycle))
+    db.add(E.RetestTask(task_id='uncovered-task', user_id='student-user',
+        kp_id='kp.never-tested', paper_id='paper-r1', family_id='old-family'))
+    db.commit()
+    result = verify_learning(db, {'retest_task_id':'uncovered-task','attempt_id':'attempt-r1'},
+        run_id='test',thread_id='test',job_id='',user_id='student-user')['result']
+    assert result['all_items_scored'] and result['all_correct']
+    assert result['target_knowledge_point_covered'] is False and result['passed'] is False

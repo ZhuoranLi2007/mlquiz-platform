@@ -1,0 +1,97 @@
+[
+  {
+    "job_id": "job_5518798d69044dff",
+    "job_type": "verify_learning",
+    "status": "failed",
+    "stage": "failed_with_error",
+    "attempts": 3,
+    "error": "\"no_data\"",
+    "result": {
+      "skill": "verify_learning",
+      "result": {
+        "message": "未找到到期复测任务"
+      },
+      "evidence_refs": [],
+      "uncertainties": [
+        "无复测任务"
+      ],
+      "next_actions": [],
+      "skill_version": "skills-1.0/verify_learning-1.0",
+      "run_id": "run_4a1bf1fe2b0e46a6",
+      "status": "no_data",
+      "engine": "deterministic",
+      "model": "",
+      "prompt_version": "prompt-1.0",
+      "thread_id": "job:job_5518798d69044dff",
+      "job_id": "job_5518798d69044dff",
+      "error": "",
+      "extra": {}
+    }
+  },
+  {
+    "job_id": "job_75f7ecb4b6da4d4e",
+    "job_type": "verify_learning",
+    "status": "succeeded",
+    "stage": "succeeded",
+    "attempts": 1,
+    "error": "",
+    "result": {
+      "skill": "verify_learning",
+      "result": {
+        "cycle_id": "retestcycle_ce15a7d816454606",
+        "round": 2,
+        "status": "passed",
+        "passed": true,
+        "result_determinable": true,
+        "threshold": 0.8,
+        "question_count": 5,
+        "correct_count": 5,
+        "accuracy": 1.0,
+        "score": 10.0,
+        "max_score": 10.0,
+        "chapter_ids": [],
+        "kp_ids": [
+          "kp.eval.bias_var",
+          "kp.regularization.l1l2"
+        ],
+        "concept_names": [
+          "偏差-方差均衡",
+          "L1/L2 正则化"
+        ],
+        "remaining_kp_ids": [],
+        "untested_kp_ids": [],
+        "release_id": "release_02d74b2261124ef0",
+        "release_title": "当前错题概念 · 针对性复测（第2轮）",
+        "retest_attempt_id": "attempt_8e10ee544dfa4328",
+        "published_at": "2026-11-16T14:15:16+00:00",
+        "submitted_at": "2026-11-16T14:29:05+00:00",
+        "completed_at": "2026-11-16T14:29:05+00:00",
+        "items": [],
+        "wrong_items": [],
+        "correct_items": []
+      },
+      "evidence_refs": [
+        {
+          "attempt_id": "attempt_8e10ee544dfa4328",
+          "cycle_id": "retestcycle_ce15a7d816454606"
+        }
+      ],
+      "uncertainties": [
+        "本轮达标只说明本次新题表现，不能证明长期稳定掌握。"
+      ],
+      "next_actions": [
+        "查看剩余错题和更新后的诊断"
+      ],
+      "skill_version": "skills-1.0/verify_learning-1.0",
+      "run_id": "run_0ebc275ad2d44af9",
+      "status": "succeeded",
+      "engine": "deterministic",
+      "model": "",
+      "prompt_version": "prompt-1.0",
+      "thread_id": "job:job_75f7ecb4b6da4d4e",
+      "job_id": "job_75f7ecb4b6da4d4e",
+      "error": "",
+      "extra": {}
+    }
+  }
+]

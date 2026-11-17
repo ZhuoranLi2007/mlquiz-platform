@@ -32,6 +32,7 @@ DEFAULT_OUTPUT = ROOT / "data" / "demo" / "mlquiz-course-demo.sqlite3.gz"
 RUNTIME_TABLES = (
     "session_tokens",
     "model_calls",
+    "prompt_records",
     "skill_runs",
     "jobs",
     "chat_messages",
@@ -200,6 +201,11 @@ def _release_asset_references(db: sqlite3.Connection) -> tuple[set[Path], list[s
                 invalid.append(f"teacher_docx:{digest}:media_hash_mismatch")
                 continue
             paths.add(media)
+            if media.suffix.lower() == ".emf":
+                for suffix in (".png", ".render.json"):
+                    preview = Path(str(media) + suffix)
+                    if preview.is_file():
+                        paths.add(preview)
     return paths, invalid
 
 

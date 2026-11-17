@@ -3,6 +3,8 @@ import type { RouteRecordRaw } from 'vue-router'
 import { auth } from '../auth'
 
 const routes: RouteRecordRaw[] = [
+  { path: '/learn/:kpId', name: 'learning-material', component: () => import('../views/LearningMaterialView.vue'),
+    meta: { title: '课程精读', public: true } },
   { path: '/login', name: 'login', component: () => import('../views/LoginView.vue'),
     meta: { title: '登录', public: true } },
   { path: '/', redirect: '/teacher' },

@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
-import { api } from '../api/client'
+import { api, runTeacherJob } from '../api/client'
 import MathText from '../components/MathText.vue'
 import MasonryGrid from '../components/MasonryGrid.vue'
 import { friendlyError, questionTypeLabel } from '../utils/presentation'
@@ -316,6 +316,16 @@ async function load() {
   } finally { loading.value = false }
 }
 
+async function exportPrompts() {
+  try {
+    const history = await api.get('/teacher/prompt-history/export')
+    const url = URL.createObjectURL(new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' }))
+    const link = document.createElement('a')
+    link.href = url; link.download = 'runtime-prompts.json'; link.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  } catch (error) { ElMessage.error(friendlyError(error, '提示词记录导出失败')) }
+}
+
 function openCompose(mode: 'manual' | 'ai' | 'mixed' = 'ai') {
   switchComposeMode(mode)
   compose.optionalOpen = false
@@ -333,7 +343,7 @@ async function createDraft() {
     const selectedItems = compose.mode === 'ai' ? [] : selectedQuestions.value
     const requestedSupplement = compose.mode === 'mixed'
       ? finalQuestionCount.value - selectedIds.value.length : finalQuestionCount.value
-    const result: any = await api.post('/teacher/paper-drafts/compose', {
+    const result: any = await runTeacherJob('/teacher/paper-drafts/compose/jobs', {
       title: compose.title.trim(), instructions: compose.instructions, mode: compose.mode,
       selected_items: selectedItems.map((question) => ({
         question_id: question.question_id,
@@ -426,6 +436,7 @@ onBeforeUnmount(() => {
           {{ advancedOpen ? '收起高级筛选' : '更多筛选' }}{{ filters.kpId || filters.availability !== 'all' || filters.scope !== 'all' ? '（已应用）' : '' }}
         </el-button>
         <el-button link @click="draftsOpen = true">已保存试卷 {{ drafts.length }}</el-button>
+        <el-button link @click="exportPrompts">导出运行提示词</el-button>
         <el-button link :disabled="!hasActiveFilters" @click="clearFilters">清空筛选</el-button>
       </div>
       <div v-if="advancedOpen" class="advanced-filters">

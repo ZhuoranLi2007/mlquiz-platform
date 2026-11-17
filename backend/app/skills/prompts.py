@@ -13,6 +13,7 @@ Rules encoded in prompts:
 from __future__ import annotations
 
 PROMPT_VERSION = "prompt-1.0"
+QUESTION_GEN_PROMPT_VERSION = "question-gen-1.1"
 ANSWER_PROMPT_VERSION = "answer-solve-1.1"   # 1.1: LaTeX 定界符契约 + 缺图必须判信息不足
 RUBRIC_PROMPT_VERSION = "rubric-score-1.0"
 
@@ -47,6 +48,7 @@ QUESTION_GEN_SYSTEM = """你是机器学习课程出题助手。只依据【课�
 6. 当蓝图 mode=similar_to_wrong 时：必须围绕 source_question 的同一知识点和同一题型改写，
    可改数值、条件与应用场景，但不得照抄原题干、不得换成无关知识点；难度与原题相近或略高；
    仍然必须引用真实的 chunk_id。
+7. kp_id 必须从蓝图 kp_ids 中选择，题型必须符合 question_types；不得用其他知识点凑数。
 """
 
 QUESTION_GEN_USER = """【课程资料片段】

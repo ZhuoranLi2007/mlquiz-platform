@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-11-17T00:07:42.628891+08:00",
+  "integrity_check": "ok",
+  "counts": {
+    "questions": 832,
+    "attempts": 130,
+    "answers": 747,
+    "answer_scores": 749,
+    "prompt_records": 80,
+    "skill_runs": 121,
+    "session_tokens": 0
+  },
+  "authentication": "Removed sessions and password hashes from backup only; secure_delete and VACUUM applied",
+  "live_database_modified": false
+}

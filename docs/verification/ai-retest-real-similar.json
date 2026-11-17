@@ -1,0 +1,369 @@
+{
+  "kind": "real_model_legacy_similar_service_not_browser",
+  "result": {
+    "ok": true,
+    "task_id": "rt_d8b1723d3c124450",
+    "kind": "new_transfer",
+    "attempt_id": "attempt_e7749202b59f473d",
+    "paper_id": "paper_6d727cb3a23947a1",
+    "question_ids": [
+      "aiq_426e9d0d13204c0a"
+    ],
+    "item_count": 1,
+    "model": "deepseek-chat",
+    "question_source": "ai_generated",
+    "bank_selected_count": 0,
+    "message": "相似题只用于本次复测，不进入正式题库；交卷后可与原题对比"
+  },
+  "questions": [
+    {
+      "question_id": "aiq_426e9d0d13204c0a",
+      "stem": "在构建一个线性回归模型时，如果希望正则化项能够产生稀疏的权重向量，即让部分特征的系数恰好为零，从而起到特征选择的作用，那么应选择下列哪种正则化方法？",
+      "options": [
+        {
+          "key": "A",
+          "text": "L2 正则化（Ridge）"
+        },
+        {
+          "key": "B",
+          "text": "L1 正则化（LASSO）"
+        },
+        {
+          "key": "C",
+          "text": "Hinge 损失"
+        },
+        {
+          "key": "D",
+          "text": "Softmax 交叉熵"
+        }
+      ],
+      "source_refs": [
+        {
+          "chunk_id": "doc_314b0bf1ff3468_u0183"
+        },
+        {
+          "chunk_id": "doc_314b0bf1ff3468_q0011"
+        }
+      ],
+      "notes": "AI参考答案：由模型依据题干与课程资料生成并通过自动检查，不是教师或原试卷提供的标准答案；generation_id=gen_160bf3bbd32d4fa4；answer_version=1；自动检查通过\n{\"generation\": {\"source\": \"ai_generated\", \"call_id\": \"call_c775621ce96447e0\", \"run_id\": \"run_f5b86d902e814bb6\", \"thread_id\": \"direct:run_f5b86d902e814bb6\", \"model\": \"deepseek-flash\", \"mode\": \"similar_to_wrong\", \"target_kp_ids\": [\"kp.regularization.l1l2\"], \"source_question_id\": \"aiq_1525a732329b4672\", \"scope_basis\": \"课件支持深度=理解，变式题干体现的层级=识记（覆盖=covered）\"}, \"status\": \"候选题，须通过独立验答才能用于复测\"}\n{\"builder_validation\": \"automatic_builder_v2\", \"checked_at\": \"2026-11-16T15:47:53+00:00\", \"format_valid\": true, \"references_valid\": true, \"knowledge_point_match\": true, \"type_match\": true, \"scope_match\": true, \"max_duplicate_similarity\": 0.299, \"independent_answer_generation_id\": \"gen_160bf3bbd32d4fa4\", \"limitation\": \"两阶段自动校验保证结构、可评分性与独立求解一致性；不冒充教师或原卷答案\"}\n由错题生成并独立验答；仅用于本次复测，不可发布到正式题库。",
+      "answer_status": "ai_auto_checked",
+      "active": false
+    }
+  ],
+  "submission": [
+    {
+      "attempt_id": "attempt_e7749202b59f473d",
+      "paper_id": "paper_6d727cb3a23947a1",
+      "user_id": "stu002",
+      "student_id": "",
+      "assessment_version_id": "",
+      "mode": "quiz",
+      "status": "submitted",
+      "attendance_status": "attended",
+      "grading_status": "graded",
+      "started_at": "2026-11-16T15:47:53+00:00",
+      "submitted_at": "2026-11-16T15:47:53+00:00",
+      "server_started_ms": 1794844073025,
+      "duration_ms": 18,
+      "server_elapsed_ms": 18,
+      "elapsed_source": "recorded",
+      "score": 2.0,
+      "max_score": 2.0,
+      "max_score_reliable": true,
+      "objective_score": 2.0,
+      "manual_pending_count": 0,
+      "diagnosis_status": "not_requested",
+      "questions": [
+        {
+          "question_id": "aiq_426e9d0d13204c0a",
+          "question_version": 1,
+          "origin": "ai",
+          "original_exam_id": "",
+          "original_question_no": "",
+          "question_type": "single_choice",
+          "stem": "在构建一个线性回归模型时，如果希望正则化项能够产生稀疏的权重向量，即让部分特征的系数恰好为零，从而起到特征选择的作用，那么应选择下列哪种正则化方法？",
+          "options": [
+            {
+              "key": "A",
+              "label": "A",
+              "text": "L2 正则化（Ridge）",
+              "content": "L2 正则化（Ridge）",
+              "text_zh": "",
+              "missing_text": false
+            },
+            {
+              "key": "B",
+              "label": "B",
+              "text": "L1 正则化（LASSO）",
+              "content": "L1 正则化（LASSO）",
+              "text_zh": "",
+              "missing_text": false
+            },
+            {
+              "key": "C",
+              "label": "C",
+              "text": "Hinge 损失",
+              "content": "Hinge 损失",
+              "text_zh": "",
+              "missing_text": false
+            },
+            {
+              "key": "D",
+              "label": "D",
+              "text": "Softmax 交叉熵",
+              "content": "Softmax 交叉熵",
+              "text_zh": "",
+              "missing_text": false
+            }
+          ],
+          "stem_images": [],
+          "stem_zh": "",
+          "original_language": "",
+          "translation_status": "",
+          "score": 2.0,
+          "chapter_id": "",
+          "main_kp_id": "kp.regularization.l1l2",
+          "aux_kp_ids": [],
+          "cognitive_level": "理解",
+          "difficulty": "easy",
+          "estimated_minutes": 2.0,
+          "question_family_id": "fam_b882730c68814438",
+          "parent_question_id": "aiq_1525a732329b4672",
+          "review_status": "auto_checked",
+          "answer_status": "ai_auto_checked",
+          "active": false,
+          "answer_origin": "deepseek_generated",
+          "answer_payload": {
+            "key": "B"
+          },
+          "explanation": "L1 正则化在损失函数中加入 $\\lambda\\sum_{j=1}^{p}|w_j|$，其约束区域是菱形（$\\ell_1$ 球），最优解常落在坐标轴上，因此部分权重会被精确压缩为 0，产生稀疏解，起到特征选择作用。L2 正则化加入 $\\lambda\\sum_{j=1}^{p}w_j^2$，约束区域为圆形（$\\ell_2$ 球），通常只把权重收缩到接近 0 而不恰好为 0，不具备特征选择能力。Hinge 损失与 Softmax 交叉熵分别是 SVM 和分类模型的损失函数，不是正则化项。课程资料也明确指出 LASSO 的 L1 正则化项可将不重要特征的系数压缩为零，实现特征选择。",
+          "rubric": {
+            "points": [
+              {
+                "id": "p1",
+                "text": "选出 L1 正则化（LASSO），即选项 B",
+                "score": 2,
+                "accept": [
+                  "B",
+                  "L1 正则化",
+                  "LASSO",
+                  "L1 正则化（LASSO）"
+                ]
+              }
+            ]
+          },
+          "options_normalized": [
+            {
+              "label": "A",
+              "content": "L2 正则化（Ridge）"
+            },
+            {
+              "label": "B",
+              "content": "L1 正则化（LASSO）"
+            },
+            {
+              "label": "C",
+              "content": "Hinge 损失"
+            },
+            {
+              "label": "D",
+              "content": "Softmax 交叉熵"
+            }
+          ],
+          "options_incomplete": false,
+          "repair_hint": "",
+          "question_type_effective": "single_choice",
+          "question_type_inferred": false,
+          "source_refs": [
+            {
+              "chunk_id": "doc_314b0bf1ff3468_u0183",
+              "assets": []
+            },
+            {
+              "chunk_id": "doc_314b0bf1ff3468_q0011",
+              "assets": []
+            }
+          ],
+          "prompt_prefix": "",
+          "solution_revealed": true,
+          "mode": "quiz",
+          "answer_label": "AI参考答案",
+          "position": 1,
+          "item_id": "item_8761d02c115446dd"
+        }
+      ],
+      "answers": {
+        "aiq_426e9d0d13204c0a": {
+          "response": {
+            "key": "B"
+          },
+          "save_count": 1,
+          "saved_at": "2026-11-16T15:47:53+00:00",
+          "hints_used": 0,
+          "solution_viewed": false,
+          "seen_before": false,
+          "independent_evidence": true
+        }
+      },
+      "answers_by_item": {
+        "item_8761d02c115446dd": {
+          "response": {
+            "key": "B"
+          }
+        }
+      },
+      "scores": {
+        "aiq_426e9d0d13204c0a": {
+          "correct": true,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "detail": {
+            "question_type": "single_choice",
+            "rule": "exact_key",
+            "notes": [],
+            "given": "B",
+            "expected": "B",
+            "answer_provenance": {
+              "origin": "deepseek_generated",
+              "status": "ai_auto_checked",
+              "authority_status": "ai_auto_checked",
+              "answer_meta": {},
+              "source_refs": [
+                {
+                  "chunk_id": "doc_314b0bf1ff3468_u0183"
+                },
+                {
+                  "chunk_id": "doc_314b0bf1ff3468_q0011"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "scores_by_item": {
+        "item_8761d02c115446dd": {
+          "correct": true,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "detail": {
+            "question_type": "single_choice",
+            "rule": "exact_key",
+            "notes": [],
+            "given": "B",
+            "expected": "B",
+            "answer_provenance": {
+              "origin": "deepseek_generated",
+              "status": "ai_auto_checked",
+              "authority_status": "ai_auto_checked",
+              "answer_meta": {},
+              "source_refs": [
+                {
+                  "chunk_id": "doc_314b0bf1ff3468_u0183"
+                },
+                {
+                  "chunk_id": "doc_314b0bf1ff3468_q0011"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "scored_max_score": 2.0,
+      "nominal_max_score": 2.0,
+      "ungraded_max_score": 0,
+      "scored_item_count": 1,
+      "ungraded_item_count": 0,
+      "inferred_item_count": 0,
+      "grading_note": "只展示已可靠判分部分；未评分/未核验题不按零分计入分母，整卷名义满分另列。",
+      "scope_breakdown": {
+        "by_scope": {
+          "course": {
+            "label": "课程范围内",
+            "items": 1,
+            "correct": 1,
+            "scored": 1,
+            "awarded": 2.0,
+            "max": 2.0,
+            "nominal_max": 2.0,
+            "pending_max": 0.0,
+            "pending": 0,
+            "graded": 1,
+            "accuracy": 1.0
+          },
+          "extension": {
+            "label": "扩展性学习",
+            "items": 0,
+            "correct": 0,
+            "scored": 0,
+            "awarded": 0.0,
+            "max": 0.0,
+            "nominal_max": 0.0,
+            "pending_max": 0.0,
+            "pending": 0,
+            "graded": 0,
+            "accuracy": null
+          }
+        },
+        "course_counts_for_mastery": true,
+        "extension_counts_for_mastery": false,
+        "note": "课程范围内题目计入期末掌握度；扩展性学习题目单独统计正确率，不计入期末掌握，也不影响阶段判定"
+      },
+      "note": "客观题已确定性评分；文本型/答案为未知的题目标记为待评分，未计入已得分数",
+      "idempotent_replay": false,
+      "wrong_count": 0
+    },
+    true
+  ],
+  "verify_learning": {
+    "skill": "verify_learning",
+    "result": {
+      "task_id": "rt_d8b1723d3c124450",
+      "attempt_id": "attempt_e7749202b59f473d",
+      "kp_id": "kp.regularization.l1l2",
+      "scored_items": 1,
+      "independent": true,
+      "all_items_scored": true,
+      "all_correct": true,
+      "new_question_family": false,
+      "evidence_tier": "variant_same_family",
+      "target_knowledge_point_covered": true,
+      "passed": false,
+      "state_after": {
+        "state": "初步通过",
+        "evidence_count": 6,
+        "independent_family_count": 5,
+        "time_span_days": 0.08,
+        "hint_count": 0,
+        "excluded_non_independent": 0,
+        "delayed_retest_passed": false,
+        "explanation": "近期独立作答正确且覆盖多个题族；尚缺跨日期/延迟证据"
+      }
+    },
+    "evidence_refs": [
+      {
+        "attempt_id": "attempt_e7749202b59f473d",
+        "score_id": "score_720b7d47211d4718"
+      }
+    ],
+    "uncertainties": [
+      "仍为原题族，不能作为迁移验证",
+      "做对一次只更新状态，不删除旧错题记录",
+      "阶段稳定还需跨日期、不同题族与延迟复测证据"
+    ],
+    "next_actions": [
+      "订正后用不同题族的新题再次验证"
+    ],
+    "skill_version": "skills-1.0/verify_learning-1.0",
+    "run_id": "run_e44be16da03a41d4",
+    "status": "succeeded",
+    "engine": "deterministic",
+    "model": "",
+    "prompt_version": "prompt-1.0",
+    "thread_id": "direct:run_e44be16da03a41d4",
+    "job_id": "",
+    "error": "",
+    "extra": {}
+  }
+}

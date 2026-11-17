@@ -187,3 +187,13 @@ def persist_teacher_diagnosis(
         date_from=body.date_from,
         date_to=body.date_to,
     )
+
+
+@router.post("/diagnoses/jobs")
+def queue_teacher_diagnosis(
+    body: DiagnosisRunIn,
+    db: Session = Depends(get_session),
+    principal=Depends(auth_service.require_teacher),
+) -> dict:
+    from backend.app.api.role_routes import _queue_teacher_job
+    return _queue_teacher_job(db, principal, "teacher_diagnosis", body.model_dump())

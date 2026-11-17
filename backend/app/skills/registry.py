@@ -79,6 +79,9 @@ REGISTRY: dict[str, SkillSpec] = {
             "assessment_version_id": {"type": "string"},
             "paper_item_id": {"type": "string"},
             "attempt_id": {"type": "string"},
+            "date_from": {"type": "string"},
+            "date_to": {"type": "string"},
+            "include_ai": {"type": "boolean"},
         }, ["scope_type"]),
         output_schema=OUT_SCHEMA, execute=impl.diagnose_classroom,
         examples=[{
@@ -90,7 +93,7 @@ REGISTRY: dict[str, SkillSpec] = {
         }]),
     "recommend_resources": SkillSpec(
         name="recommend_resources", version=f"{VERSION}/recommend_resources-1.0",
-        description="按知识点检索本地资料片段与外部资源入口，给出可打开出处",
+        description="按知识点匹配已核对课程原页与具体外部内容，给出阅读位置和自测标准",
         requires_model=False, prompt_version=prompts.PROMPT_VERSION,
         input_schema=_in({"kp_ids": {"type": "array"},
                           "attempt_id": {"type": "string"}}),
@@ -108,7 +111,7 @@ REGISTRY: dict[str, SkillSpec] = {
                              "配置后候选 active=False、answer_status=candidate"}]),
     "verify_learning": SkillSpec(
         name="verify_learning", version=f"{VERSION}/verify_learning-1.0",
-        description="复测验证：独立新题证据判定、错题状态更新、延迟复测排期",
+        description="复测验证：教师复测逐学生判定达标；个人错题复测检查独立新题证据并安排延迟复测",
         requires_model=False, prompt_version=prompts.PROMPT_VERSION,
         input_schema=_in({"retest_task_id": {"type": "string"},
                           "attempt_id": {"type": "string"}}),

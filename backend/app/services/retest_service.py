@@ -90,33 +90,11 @@ def choose_new_questions(db: Session, task: E.RetestTask,
         fams.add(fam)
         if len(picked) >= count:
             break
-    # If the exact knowledge point has no unseen different-family question,
-    # relax the kp constraint but SAY SO (never pretend it is a perfect match).
-    # The relaxation must NOT weaken the answer-ready invariant: under the new
-    # policy a question is usable only with a verified OR auto-checked AI
-    # reference answer. Without this guard a retest can silently pick
-    # candidate/unknown questions that carry no usable, fixed answer.
-    relaxed = False
-    if len(picked) < count:
-        relaxed = True
-        relaxed_pool = [
-            q for q in all_q
-            if (q.question_family_id or q.question_id) != task.family_id
-            and q.question_id not in seen
-            and answer_pipeline.is_answer_ready(q)
-        ]
-        for q in relaxed_pool:
-            fam = q.question_family_id or q.question_id
-            if q in picked or fam in fams:
-                continue
-            picked.append(q)
-            fams.add(fam)
-            if len(picked) >= count:
-                break
+    # Unrelated questions cannot verify this task's knowledge point.
     report = {
         "target_count": count, "selected": len(picked),
         "shortfall": max(0, count - len(picked)),
-        "kp_constraint_relaxed": relaxed,
+        "kp_constraint_relaxed": False, "question_source": "question_bank",
         "rejected_reasons": reasons,
         "message": ("已选择不同题族、答案已就绪的新题" if len(picked) >= count else
                     "答案已就绪的题库中符合要求的新题不足；报告缺口，不伪造题目、"
@@ -263,7 +241,7 @@ def generate_similar_questions(db: Session, entry_id: str, *,
     `evidence_type` 决定题族归属（这是"不能靠随机换 id 伪造独立性"的落点）：
       concept  概念辨析：换问法、考同一个概念边界  → 同族
       variant  变式应用：换数值/条件/场景          → 同族
-      transfer 迁移应用：换考查方式或问题结构      → 新族（可作迁移证据）
+      transfer 迁移应用：要求换考查方式；未核实独立性前仍保留原族
     """
     entry = _wrong_entry(db, entry_id)
     q = _original_question(db, entry)
@@ -286,7 +264,7 @@ def generate_similar_questions(db: Session, entry_id: str, *,
         "count": count,
         "kp_ids": [entry.kp_id] if entry.kp_id else [],
         "question_types": [q.question_type],
-        "source_question": {"stem": q.stem or "",
+        "source_question": {"question_id": q.question_id, "stem": q.stem or "",
                             "question_type": q.question_type,
                             "score": q.score, "kp_name": kp,
                             "difficulty": q.difficulty},
@@ -302,51 +280,20 @@ def generate_similar_questions(db: Session, entry_id: str, *,
                 "uncertainties": out.get("uncertainties") or [],
                 "pipeline": result.get("pipeline") or []}
 
-    created: list[E.Question] = []
-    for cand in candidates[:count]:
-        stem = (cand.get("stem") or "").strip()
-        if not stem:
-            continue
-        created.append(E.Question(
-            row_id=E.new_id("qrow"), question_id=E.new_id("q"),
-            question_version=1, origin="ai_generated",
-            original_exam_id="", original_question_no="",
-            question_type=cand.get("question_type") or q.question_type,
-            stem=stem, stem_zh="", options=cand.get("options") or [],
-            stem_images=[], score=float(q.score or 5),
-            main_kp_id=entry.kp_id, aux_kp_ids=[],
-            cognitive_level=cand.get("cognitive_level") or q.cognitive_level,
-            difficulty=cand.get("difficulty") or q.difficulty,
-            estimated_minutes=float(q.estimated_minutes or 5),
-            source_refs=[{"document_id": "", "rel_path": "", "page": 0,
-                          "label": "由错题生成的相似题，引用见 source_quote"}],
-            # 题族归属必须与 evidence_type 一致：
-            # 概念/变式题继承原族（承认它们不是独立证据）；
-            # 迁移题换族（考查方式确实变了），族 id 带来源可追溯，不是随机数。
-            question_family_id=(
-                f"fam_transfer_{q.question_id}" if evidence_type == "transfer"
-                else (entry.family_id or q.question_family_id)),
-            parent_question_id=q.question_id, review_status="pending",
-            answer_status="ai_auto_checked", answer_origin="deepseek_generated",
-            answer_payload=cand.get("answer_payload") or {}, rubric={},
-            explanation=cand.get("explanation", "") or "",
-            # V3.5（RC-12）：这里原本是 active=True，于是 AI 相似题会出现在
-            # /api/questions 的正式题库里、还能被组卷选中 —— 直接违反
-            # 「AI 生成题目不自动进入正式题库抽题池」。改为 active=False：
-            # 试卷项用的是快照，题仍然能作答与评分，只是不进抽题池。
-            active=False,
-            created_by="wrong_book_similar",
-            notes=(f"由错题 {entry_id} 生成；未经人工审核，只用于本次复测，"
-                   f"不可发布，不进入正式题库抽题池"),
-            scope_class=cand.get("scope_class") or "in_scope",
-            original_language="zh"))
-    if not created:
-        raise RetestError("模型返回了候选，但题干为空，未写入")
-    # V3.5（RC-13）：这些 Question 对象以前只 append 到 Python 列表，从未
-    # db.add()，于是 flush/commit 都不会写库 —— 试卷项的快照里有题，
-    # questions 表里却查不到，/api/questions/{id} 直接 404，后续错题与
-    # 报告无法按 question_id 回溯。必须显式加入会话。
-    db.add_all(created)
+    # The skill returns an 80-character preview, not a complete question.
+    # Resolve the saved candidate by ID and independently solve it before use.
+    created = _validated_retest_candidates(db, candidates, count,
+        kp_ids=[entry.kp_id], requested_types={q.question_type},
+        source="wrong_book_similar", already_selected=[], score=float(q.score or 5))
+    if len(created) < count:
+        return {"ok": False, "status": "verification_failed",
+                "verified_count": len(created), "requested": count,
+                "message": "相似题独立验答或完整性检查未通过，本次未生成复测卷；可重新生成。"}
+    for c in created:
+        # A requested rewrite alone does not prove independent transfer.
+        c.question_family_id = entry.family_id or q.question_family_id or q.question_id
+        c.parent_question_id = q.question_id
+        c.notes = (c.notes or "") + "\n由错题生成并独立验答；仅用于本次复测，不可发布到正式题库。"
     db.flush()
 
     task = E.RetestTask(
@@ -366,7 +313,7 @@ def generate_similar_questions(db: Session, entry_id: str, *,
         item_count=len(created),
         estimated_minutes=sum(float(c.estimated_minutes or 5) for c in created),
         coverage_report={"source": "wrong_book_similar",
-                         "note": "AI 依据错题生成，已过结构与范围校验，未经人工审核"},
+                         "note": "AI 依据错题生成，完整候选已通过独立验答，保留AI参考答案标记"},
         source="ai_generated")
     db.add(paper)
     for i, c in enumerate(created, start=1):
@@ -389,6 +336,7 @@ def generate_similar_questions(db: Session, entry_id: str, *,
             "attempt_id": att["attempt_id"], "paper_id": paper.paper_id,
             "question_ids": [c.question_id for c in created],
             "item_count": len(created), "model": out.get("model", ""),
+            "question_source": "ai_generated", "bank_selected_count": 0,
             "message": "相似题只用于本次复测，不进入正式题库；交卷后可与原题对比"}
 
 
@@ -435,6 +383,25 @@ def _questions_from_candidates(db: Session, cands: list[dict],
     return out
 
 
+def _validated_retest_candidates(db, cands, limit, *, kp_ids, requested_types,
+                                source, already_selected, score=None):
+    from backend.app.services.paper_builder_service import _auto_validate_candidates
+    candidates = _questions_from_candidates(db, cands, len(cands))
+    candidates = list({q.question_id: q for q in candidates
+        if q.origin in {"ai", "ai_generated"} and not q.active
+        and q.review_status == "pending"}.values())
+    for q in candidates:
+        q.created_by = source
+        if score is not None:
+            q.score = score
+    accepted = _auto_validate_candidates(db, candidates, kp_ids=kp_ids,
+        requested_types=requested_types, already_selected=already_selected)
+    for q in candidates:
+        q.active = False
+    db.commit()
+    return accepted[:limit]
+
+
 def build_retest_paper(db: Session, *, entry_ids: list[str] | None = None,
                        scope: str = "all", kp_id: str = "", count: int = 5,
                        difficulty: str = "same", use_original: bool = True,
@@ -466,6 +433,8 @@ def build_retest_paper(db: Session, *, entry_ids: list[str] | None = None,
                 q = _original_question(db, entry)
             except RetestError:
                 continue
+            if not answer_pipeline.is_answer_ready(q) or any(x.question_id == q.question_id for x in picks):
+                continue
             picks.append(q)
             used_entries.append(entry)
             if len(picks) >= count:
@@ -475,7 +444,7 @@ def build_retest_paper(db: Session, *, entry_ids: list[str] | None = None,
     ai_n = 0
     ai_note = ""
     need = count - original_n
-    if use_ai and need > 0:
+    if use_ai and need > 0 and any(e.kp_id for e in entries):
         kps = sorted({e.kp_id for e in used_entries or entries if e.kp_id})
         source = (used_entries or entries)[0] if (used_entries or entries) else None
         blueprint = {
@@ -496,7 +465,9 @@ def build_retest_paper(db: Session, *, entry_ids: list[str] | None = None,
             out = skill_runtime.run_skill(db, "generate_questions", blueprint,
                                           user_id=user_id)
             cands = (out.get("result") or {}).get("candidates") or []
-            ai_qs = _questions_from_candidates(db, cands, need)
+            ai_qs = _validated_retest_candidates(db, cands, need,
+                kp_ids=kps, requested_types=set(), source="wrong_book_compose",
+                already_selected=picks)
             picks.extend(ai_qs)
             ai_n = len(ai_qs)
             if ai_n < need:
@@ -504,7 +475,7 @@ def build_retest_paper(db: Session, *, entry_ids: list[str] | None = None,
         except Exception as e:                                # noqa: BLE001
             ai_note = f"AI 补题失败：{type(e).__name__}"
     elif need > 0:
-        ai_note = "未开启 AI 补题"
+        ai_note = "缺少由错题支持的知识点，未调用AI泛化补题" if use_ai else "未开启 AI 补题"
 
     if not picks:
         return {"ok": False, "status": "failed",
@@ -517,7 +488,8 @@ def build_retest_paper(db: Session, *, entry_ids: list[str] | None = None,
         db, picks, title=f"错题复测卷（{len(picks)} 题）", mode="retest",
         source="wrong_book_compose",
         blueprint={"entry_ids": [e.entry_id for e in used_entries],
-                   "scope": scope, "kp_id": kp_id, "difficulty": difficulty},
+                   "scope": scope, "kp_id": kp_id, "difficulty": difficulty,
+                   "source_counts": {"original_reused": original_n, "ai_generated": ai_n, "bank_selected": 0}},
         scores=[float(q.score or 2) for q in picks], user_id=user_id)
 
     task = E.RetestTask(

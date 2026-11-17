@@ -1,0 +1,38 @@
+{
+  "kind": "real_browser_observations",
+  "date": "2026-11-17",
+  "base_url": "http://127.0.0.1:8003",
+  "teacher_modes": [
+    "student_attempt",
+    "class_assessment",
+    "student_history"
+  ],
+  "student_flow": [
+    "login STU001",
+    "open source attempt",
+    "open learning feedback",
+    "open local course pages"
+  ],
+  "screenshots": [
+    "class-ai-full.jpg",
+    "course-original.jpg",
+    "douyin-entry.jpg",
+    "history-ai.jpg",
+    "single-ai.jpg",
+    "student-course.jpg",
+    "student-feedback.jpg"
+  ],
+  "external_sample": "Douyin L1/L2 video opened and playing; Bilibili/CSDN prior-stage evidence retained separately",
+  "observed_counts": {
+    "history_assessments": 17,
+    "scored_item_events": 89,
+    "wrong_item_events": 27,
+    "unique_wrong_items": 24,
+    "class_scored_students": 2
+  },
+  "intermediate_issues": [
+    "Malformed model JSON was retained as invalid_output, then repaired and retried.",
+    "Student tab briefly loaded stale build chunk during rebuild; reload restored login and feedback."
+  ],
+  "cua_completed": true
+}

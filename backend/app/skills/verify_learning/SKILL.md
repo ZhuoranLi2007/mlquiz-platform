@@ -2,7 +2,7 @@
 
 - **版本**：`skills-1.0/verify_learning-1.0`
 - **执行函数**：`backend/app/skills/implementations.py::verify_learning`
-- **调用方**：LangGraph `retest_graph` 的 `verify` 节点；复测交卷后
+- **调用方**：LangGraph `retest_graph` 与 `classroom_workflow`；复测交卷后
 - **是否需要模型**：否
 
 ## 用途
@@ -15,10 +15,18 @@
 ```
 
 ## 输出 schema
+教师发布的针对性复测：先按 `attempt_id` 查找 `TargetedRetestCycle`，返回
+`cycle_id`、`round`、`status`、`passed`、`result_determinable`、`accuracy`、
+`threshold`、`remaining_kp_ids`。只有全部题目具备有效评分时才判定，默认正确率
+达到 0.8 为本轮达标；尚未评分完整时状态为 `scoring_pending`。同班发布按学生
+分别关联原卷和复测轮次，不共享其他学生的通过结果。本轮达标不等于长期掌握。
+
+以下为原有个人错题复测 `RetestTask` 路径的输出：
 `result`：`scored_items`、`independent`、`all_correct`、`new_question_family`、
 `passed`、`state_after`。`passed` 必须三项全为真（独立 + 全对 + 不同题族）。
 
 ## 规则
+- 教师针对性复测按上面的正确率规则处理；下面的全对和延迟任务规则属于个人错题复测路径。
 - 做对一次只更新状态，**不删除**旧错题记录。
 - 通过后把 `WrongBookEntry.status` 改为 `verified`，`RetestTask.status` 改为 `completed`。
 - 按项目规则 1 / 3 / 7 天安排下一次 `kind=delayed` 复测（可修改，不声称最优）。

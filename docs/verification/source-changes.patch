@@ -1,0 +1,868 @@
+--- a/README.md
++++ b/README.md
+@@ -14,8 +14,10 @@
+ 
+ ## 环境要求
+ 
++本次功能核查版的逐条结论见 [课程要求核查表](docs/REQUIREMENTS_AUDIT.md)，报告和PPT位于 `docs/submission/`，验证日志位于 `docs/verification/`。AI真实调用及指定开发平台历史记录仍需按核查表补验，不能仅凭自动化通过宣称全部完成。
++
+ - Windows 10/11与PowerShell
+-- Python 3.13（已按锁定依赖实际验证）
++- Python 3.13（原Windows启动脚本使用的锁定环境；本轮另在Linux/Python3.12.14按requirements.txt验证，未重做Windows实测）
+ - Node.js 20或更高版本（附带npm）
+ 
+ ## 快速开始
+@@ -33,6 +35,8 @@
+ 3. 在 `data/private/` 生成教师和16名学生的本地演示凭据。
+ 4. 安装前端依赖并执行生产构建。
+ 5. 启动FastAPI、后台worker并打开浏览器。
++
++本版教师AI干预与组卷使用后台任务，必须保持worker运行。教师端新增“导出运行提示词”，保存从本版开始产生的实际模型请求和响应；旧调用不会自动补造正文。
+ 
+ 访问地址：<http://127.0.0.1:8000/>
+ 
+--- a/backend/app/api/role_routes.py
++++ b/backend/app/api/role_routes.py
+@@ -59,6 +59,8 @@
+     scope_type: str = Field(default="student_attempt", max_length=32)
+     attempt_id: str = Field(default="", max_length=64)
+     count: int = Field(default=cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT, ge=1, le=5)
++    date_from: str = Field(default="", max_length=10)
++    date_to: str = Field(default="", max_length=10)
+ 
+ 
+ class ApproveCandidateIn(BaseModel):
+@@ -319,9 +321,57 @@
+             classroom_id=body.classroom_id,
+             scope_type=body.scope_type,
+             attempt_id=body.attempt_id,
++            date_from=body.date_from, date_to=body.date_to,
+             count=body.count)
+     except (classroom_diagnosis.ClassroomDiagnosisError, ValueError) as exc:
+         raise HTTPException(400, str(exc)) from exc
++
++
++def _queue_teacher_job(db: Session, principal, kind: str, payload: dict) -> dict:
++    from backend.app.workers.worker import create_job
++    # Reopening the page or double clicking joins an existing active request.
++    active = db.execute(select(E.Job).where(
++        E.Job.user_id == principal.user_id, E.Job.job_type == kind,
++        E.Job.status.in_(["queued", "running"]))).scalars().all()
++    for job in active:
++        if job.payload == payload:
++            return {"job_id": job.job_id, "status": job.status, "reused": True}
++    return create_job(db, kind, payload, user_id=principal.user_id)
++
++
++@router.post("/teacher/workflows/intervention/jobs")
++def queue_intervention(body: InterventionIn,
++                       principal=Depends(auth_service.require_teacher),
++                       db: Session = Depends(get_session)) -> dict:
++    return _queue_teacher_job(db, principal, "teacher_intervention", body.model_dump())
++
++
++@router.post("/teacher/paper-drafts/compose/jobs")
++def queue_composition(body: PaperDraftComposeIn,
++                      principal=Depends(auth_service.require_teacher),
++                      db: Session = Depends(get_session)) -> dict:
++    return _queue_teacher_job(db, principal, "teacher_compose", body.model_dump())
++
++
++@router.get("/teacher/jobs/{job_id}")
++def teacher_job(job_id: str, principal=Depends(auth_service.require_teacher),
++                db: Session = Depends(get_session)) -> dict:
++    job = db.get(E.Job, job_id)
++    if not job or job.user_id != principal.user_id:
++        raise HTTPException(404, "任务不存在")
++    return {"job_id": job.job_id, "status": job.status, "stage": job.stage,
++            "result": job.result, "error": job.error, "progress": job.progress}
++
++
++@router.get("/teacher/prompt-history/export")
++def export_prompts(_principal=Depends(auth_service.require_teacher),
++                   db: Session = Depends(get_session)):
++    import json
++    from fastapi.responses import Response
++    from backend.app.services.prompt_history import export_history
++    return Response(json.dumps(export_history(db), ensure_ascii=False, indent=2),
++                    media_type="application/json",
++                    headers={"Content-Disposition": 'attachment; filename="runtime-prompts.json"'})
+ 
+ 
+ @router.post("/teacher/ai-questions/generate")
+--- a/backend/app/graphs/classroom_workflow.py
++++ b/backend/app/graphs/classroom_workflow.py
+@@ -39,6 +39,20 @@
+     errors: list[str]
+     status: str
+     scope_type: str
++    target_kp_ids: list[str]
++    remaining_kp_ids: list[str]
++    date_from: str
++    date_to: str
++
++
++def diagnosis_items(payload: dict) -> list[dict]:
++    """Normalize all three diagnosis contracts at the workflow boundary."""
++    rows = (payload.get("items") or payload.get("wrong_items") or
++            payload.get("high_frequency_errors") or [])
++    return [{**row,
++             "kp_id": row.get("kp_id") or (row.get("knowledge_point") or {}).get("kp_id", ""),
++             "chapter_id": row.get("chapter_id") or (row.get("chapter") or {}).get("chapter_id", "")}
++            for row in rows]
+ 
+ 
+ def _stage(s: State, name: str, detail: Any = None) -> list[dict[str, Any]]:
+@@ -244,6 +258,9 @@
+         elif history_mode:
+             request["student_id"] = s["student_id"]
+             request["classroom_id"] = s["classroom_id"]
++            request["date_from"] = s.get("date_from", "")
++            request["date_to"] = s.get("date_to", "")
++            request["assessment_version_id"] = s.get("assessment_version_id", "")
+         else:
+             request["student_id"] = s["student_id"]
+             request["assessment_version_id"] = s["assessment_version_id"]
+@@ -262,12 +279,16 @@
+                                (payload.get("retest_plan") or {}).get("anchor_attempt_id") or
+                                s.get("attempt_id", ""))
+         round_no = int(s.get("round_no") or 1)
+-        if s.get("scope_type") == "student_attempt" and resolved_attempt_id:
++        if not class_mode and resolved_attempt_id:
+             source_attempt = db.get(E.Attempt, resolved_attempt_id)
+             if source_attempt is not None:
+                 round_no = targeted_retest.next_round(
+                     db, source_attempt_id=source_attempt.attempt_id,
+                     student_id=s.get("student_id", ""))
++        # A five-item round cannot cover arbitrarily many concepts. Keep the
++        # diagnosis priority order and disclose what this round leaves out.
++        weak = list(dict.fromkeys(weak))
++        targets = weak[:max(1, int(s.get("count") or 5))]
+         return {"stages": _stage(s, "diagnose", {
+                     "diagnosis_id": (result.get("extra") or {}).get(
+                         "diagnosis_id"),
+@@ -277,6 +298,7 @@
+                     "weak_chapter_ids": weak_chapters}),
+                 "outputs": _out(s, "diagnosis", result),
+                 "weak_kp_ids": weak, "weak_chapter_ids": weak_chapters,
++                "target_kp_ids": targets, "remaining_kp_ids": weak[len(targets):],
+                 "attempt_id": resolved_attempt_id, "round_no": round_no,
+                 "errors": errors}
+ 
+@@ -299,19 +321,14 @@
+         weak_chapters = s.get("weak_chapter_ids") or []
+         diagnosis = (s.get("outputs") or {}).get("diagnosis") or {}
+         diagnosed_payload = diagnosis.get("result") or {}
+-        diagnosed_items = (diagnosed_payload.get("items") or
+-                            diagnosed_payload.get("wrong_items") or
+-                            diagnosed_payload.get("high_frequency_errors") or [])
+-        weak = sorted({
+-            str(item.get("kp_id")) for item in diagnosed_items
+-            if item.get("chapter_id") in weak_chapters and item.get("kp_id")
+-        })
++        diagnosed_items = diagnosis_items(diagnosed_payload)
++        weak = s.get("target_kp_ids") or []
+         prior_stems = [
+             str(item.get("stem") or "").strip()
+             for item in diagnosed_items
+             if item.get("correct") is False and item.get("stem")
+         ][:3]
+-        if not weak_chapters:
++        if not weak_chapters and not weak:
+             result = {"status": "skipped", "result": {"candidates": []},
+                       "message": "没有由可评分证据支持的低分章节。"}
+         elif not weak:
+@@ -326,7 +343,7 @@
+             # silently publishing a short retest.  The published paper remains
+             # exactly ``target`` questions.
+             pool_target = min(12, target + 7)
+-            by_kp: dict[str, list[dict]] = {kp_id: [] for kp_id in weak[:4]}
++            by_kp: dict[str, list[dict]] = {kp_id: [] for kp_id in weak}
+             attempts: list[dict] = []
+             per_kp_target = max(2, (pool_target + len(by_kp) - 1) // len(by_kp))
+             generation_round = 0
+@@ -395,8 +412,7 @@
+                 payload = diagnosis.get("result") or {}
+                 weak_chapters = list(s.get("weak_chapter_ids") or [])
+                 chapter_by_kp = {}
+-                for item in (payload.get("items") or payload.get("wrong_items") or
+-                             payload.get("high_frequency_errors") or []):
++                for item in diagnosis_items(payload):
+                     if item.get("chapter_id") in weak_chapters and item.get("kp_id"):
+                         chapter_by_kp.setdefault(str(item["kp_id"]), set()).add(
+                             str(item["chapter_id"]))
+@@ -429,12 +445,13 @@
+                         raise ValueError("班级没有可接收在线试卷的学生账号")
+                 result = validate_and_publish(db,
+                     candidate_ids=[c["question_id"] for c in candidates if c.get("question_id")],
+-                    kp_ids=s.get("weak_kp_ids") or [],
++                    kp_ids=s.get("target_kp_ids") or [],
+                     chapter_ids=weak_chapters, actor_user_id=s["actor_user_id"],
+                     student_id=s.get("student_id", ""), student_ids=recipient_ids,
+                     classroom_id=(payload.get("classroom_id") or
+                                   (payload.get("classroom") or {}).get("classroom_id", "")),
+                     source_attempt_id=s.get("attempt_id", ""),
++                    source_assessment_version_id=s.get("assessment_version_id", ""),
+                     diagnosis_id=(diagnosis.get("extra") or {}).get("diagnosis_id", ""),
+                     thread_id=s["thread_id"], round_no=int(s.get("round_no") or 1),
+                     required_count=int(s.get("count") or
+@@ -447,6 +464,8 @@
+                 errors.append("自动复测未发布：" + reason)
+         elif generation.get("status") != "skipped":
+             errors.append("复测生成未产生可用新题：" + str(generation.get("status")))
++        result["target_kp_ids"] = s.get("target_kp_ids") or []
++        result["remaining_kp_ids"] = s.get("remaining_kp_ids") or []
+         return {"stages": _stage(s, "validate_and_publish_retest", result),
+                 "outputs": _out(s, "retest", result), "errors": errors,
+                 "status": "partial" if errors else "succeeded"}
+@@ -470,7 +489,10 @@
+                              classroom_id: str = "",
+                              scope_type: str = "student_attempt",
+                              attempt_id: str = "",
++                             date_from: str = "", date_to: str = "",
+                              count: int = cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT) -> dict:
++    if scope_type not in {"student_attempt", "student_history", "class_assessment"}:
++        raise ValueError("不支持的诊断范围")
+     if scope_type == "student_history" and (not classroom_id or not student_id):
+         raise ValueError("多卷复测需要 classroom_id")
+     if scope_type == "class_assessment" and (not classroom_id or not assessment_version_id):
+@@ -488,6 +510,7 @@
+         "assessment_version_id": assessment_version_id,
+         "classroom_id": classroom_id, "scope_type": scope_type, "count": count,
+         "attempt_id": attempt_id, "round_no": round_no,
++        "date_from": date_from, "date_to": date_to,
+         "thread_id": thread_id, "stages": [], "outputs": {},
+         "weak_kp_ids": [], "weak_chapter_ids": [],
+         "errors": [], "status": "queued"}
+@@ -506,6 +529,7 @@
+             "scope_type": "student_attempt",
+             "student_id": s["student_id"],
+             "assessment_version_id": s["assessment_version_id"],
++            "attempt_id": s["attempt_id"],
+         }, thread_id=s["thread_id"], user_id=s["actor_user_id"])
+         payload = result.get("result") or {}
+         errors = list(s.get("errors") or [])
+@@ -546,13 +570,17 @@
+ 
+     def compare(s: State) -> dict:
+         source = s.get("source_attempt_id", "")
++        verification = run_skill(db, "verify_learning", {
++            "attempt_id": s["attempt_id"]}, thread_id=s["thread_id"],
++            user_id=s["actor_user_id"]) if source else {"status": "not_a_retest"}
+         result = (compare_attempts(db, source, s["attempt_id"])
+                   if source else {"status": "not_a_retest"})
+         return {"stages": _stage(s, "compare_retest", {
+                     "source_attempt_id": source or None,
+                     "comparable_count": len(result.get(
+                         "comparable_knowledge_points") or [])}),
+-                "outputs": _out(s, "retest_comparison", result)}
++                "outputs": {**_out(s, "retest_comparison", result),
++                            "verification": verification}}
+ 
+     def recommend(s: State) -> dict:
+         result = run_skill(db, "recommend_resources",
+--- a/backend/app/models/base.py
++++ b/backend/app/models/base.py
+@@ -193,6 +193,21 @@
+             conn.execute(text(
+                 f"CREATE INDEX IF NOT EXISTS {name} ON {table} ({column})"))
+ 
++        # A class release has one cycle per student. Older unique indexes
++        # rejected the second recipient, and also treated two unopened blank
++        # attempt IDs as duplicates. Change indexes only; preserve every row.
++        cycle_indexes = {row[1]: row[2] for row in conn.execute(
++            text("PRAGMA index_list(targeted_retest_cycles)"))}
++        for column in ("release_id", "retest_attempt_id"):
++            name = f"ix_targeted_retest_cycles_{column}"
++            if cycle_indexes.get(name):
++                conn.execute(text(f"DROP INDEX {name}"))
++                conn.execute(text(f"CREATE INDEX {name} ON targeted_retest_cycles ({column})"))
++        conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_retest_release_student "
++                          "ON targeted_retest_cycles (release_id, student_id)"))
++        conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_retest_nonempty_attempt "
++                          "ON targeted_retest_cycles (retest_attempt_id) WHERE retest_attempt_id <> ''"))
++
+ 
+ def init_db() -> None:
+     from backend.app.models import entities  # noqa: F401  (register mappers)
+--- a/backend/app/models/entities.py
++++ b/backend/app/models/entities.py
+@@ -14,7 +14,7 @@
+ from datetime import datetime, timezone
+ 
+ from sqlalchemy import (JSON, Boolean, Float, ForeignKey, Index, Integer,
+-                        String, Text, UniqueConstraint)
++                        String, Text, UniqueConstraint, text)
+ from sqlalchemy.orm import Mapped, mapped_column
+ 
+ from backend.app.models.base import Base
+@@ -640,9 +640,9 @@
+         String(64), default="", index=True)
+     diagnosis_id: Mapped[str] = mapped_column(String(64), default="", index=True)
+     release_id: Mapped[str] = mapped_column(
+-        String(64), default="", unique=True, index=True)
++        String(64), default="", index=True)
+     retest_attempt_id: Mapped[str] = mapped_column(
+-        String(64), default="", unique=True, index=True)
++        String(64), default="", index=True)
+     workflow_run_id: Mapped[str] = mapped_column(String(64), default="")
+     round_no: Mapped[int] = mapped_column(Integer, default=1)
+     status: Mapped[str] = mapped_column(
+@@ -666,6 +666,9 @@
+     __table_args__ = (
+         UniqueConstraint("source_attempt_id", "student_id", "round_no",
+                          name="uq_targeted_retest_source_student_round"),
++        Index("uq_retest_release_student", "release_id", "student_id", unique=True),
++        Index("uq_retest_nonempty_attempt", "retest_attempt_id", unique=True,
++              sqlite_where=text("retest_attempt_id <> ''")),
+     )
+ 
+ 
+@@ -798,6 +801,16 @@
+     finish_reason: Mapped[str] = mapped_column(String(32), default="")
+     status: Mapped[str] = mapped_column(String(32), default="ok")
+     error: Mapped[str] = mapped_column(Text, default="")
++    created_at: Mapped[str] = mapped_column(String(32), default=utcnow)
++
++
++class PromptRecord(Base):
++    """Actual runtime requests/responses, separate from call usage metadata."""
++    __tablename__ = "prompt_records"
++    call_id: Mapped[str] = mapped_column(String(64), primary_key=True)
++    messages: Mapped[list] = jdefault(list)
++    response_text: Mapped[str] = mapped_column(Text, default="")
++    request_sha256: Mapped[str] = mapped_column(String(64), default="")
+     created_at: Mapped[str] = mapped_column(String(32), default=utcnow)
+ 
+ 
+--- a/backend/app/services/automatic_retest.py
++++ b/backend/app/services/automatic_retest.py
+@@ -18,7 +18,7 @@
+         raise ValueError("复测候选题不存在")
+     if chapter_ids and (not q.chapter_id or q.chapter_id not in chapter_ids):
+         raise ValueError("新题章节与复测目标不匹配")
+-    if not chapter_ids and (not q.main_kp_id or q.main_kp_id not in kp_ids):
++    if kp_ids and (not q.main_kp_id or q.main_kp_id not in kp_ids):
+         raise ValueError("新题知识点与复测目标不匹配")
+     if q.question_type not in {"single_choice", "multi_choice", "true_false"}:
+         raise ValueError("当前自动复测仅支持可确定评分的单选题、多选题和判断题")
+@@ -89,6 +89,7 @@
+ def validate_and_publish(db, *, candidate_ids, kp_ids=None, chapter_ids=None,
+                          actor_user_id, student_id="", student_ids=None, classroom_id,
+                          source_attempt_id, diagnosis_id, thread_id,
++                         source_assessment_version_id: str = "",
+                          round_no: int = 1, required_count: int | None = None):
+     kp_ids = [str(value) for value in (kp_ids or []) if value]
+     chapter_ids = [str(value) for value in (chapter_ids or []) if value]
+@@ -97,6 +98,25 @@
+     # Legacy/internal callers validate a deliberately small batch.  The
+     # targeted-retest workflow passes ``required_count=5`` explicitly.
+     expected_count = int(required_count or len(candidate_ids))
++    if len(set(kp_ids)) > expected_count:
++        raise ValueError("本轮题量不足以覆盖目标知识点，请分轮复测")
++    recipients = list(dict.fromkeys(
++        [str(value) for value in (student_ids or [student_id]) if value]))
++    anchors = {}
++    for sid in recipients:
++        source = db.get(E.Attempt, source_attempt_id) if source_attempt_id else None
++        if source and source.student_id != sid:
++            raise ValueError("原答卷与复测学生不匹配")
++        if not source and source_assessment_version_id:
++            source = db.execute(select(E.Attempt).where(
++                E.Attempt.student_id == sid,
++                E.Attempt.assessment_version_id == source_assessment_version_id,
++                E.Attempt.status == "submitted", E.Attempt.is_effective.is_(True),
++                E.Attempt.attendance_status == "attended",
++            ).order_by(E.Attempt.submitted_at.desc())).scalars().first()
++        if source:
++            anchors[sid] = (source, targeted_retest.next_round(
++                db, source_attempt_id=source.attempt_id, student_id=sid))
+     if len(candidate_ids) < expected_count:
+         raise ValueError(
+             f"需要{expected_count}道合格题，自动生成与筛选后仅有{len(candidate_ids)}道；本轮未发布"
+@@ -169,8 +189,6 @@
+             scores=[float(q.score or 2) for q, _, _ in questions],
+             blueprint={"source": "automatic_retest_v2_chapter",
+                        "chapter_ids": chapter_ids, "kp_ids": kp_ids}, commit=False)
+-        recipients = list(dict.fromkeys(
+-            [str(value) for value in (student_ids or [student_id]) if value]))
+         release = release_service.publish_release(db, teacher_user_id=actor_user_id,
+             student_ids=recipients, title=("班级针对性复测" if len(recipients) > 1 else release_title), paper_id=paper["paper_id"],
+             classroom_id=classroom_id, release_type="retest", source_attempt_id=source_attempt_id,
+@@ -179,17 +197,17 @@
+                              if len(recipients) == 1 and source_attempt_id else
+                              "automatic-retest:" + thread_id), commit=False)
+         cycle = None
+-        if len(recipients) == 1 and source_attempt_id:
+-            source_attempt = db.get(E.Attempt, source_attempt_id)
++        cycle_ids = []
++        for sid, (source_attempt, student_round) in anchors.items():
+             cycle = targeted_retest.create_cycle(
+-                db, student_id=recipients[0], source_attempt_id=source_attempt_id,
+-                source_assessment_version_id=(source_attempt.assessment_version_id
+-                                              if source_attempt else ""),
++                db, student_id=sid, source_attempt_id=source_attempt.attempt_id,
++                source_assessment_version_id=source_attempt.assessment_version_id,
+                 diagnosis_id=diagnosis_id, release_id=release["release_id"],
+-                workflow_run_id=thread_id, round_no=round_no,
++                workflow_run_id=thread_id, round_no=student_round,
+                 question_ids=[q.question_id for q, _, _ in questions],
+                 chapter_ids=chapter_ids, kp_ids=kp_ids,
+                 concept_names=concept_names)
++            cycle_ids.append(cycle.cycle_id)
+         db.commit()
+     except Exception:
+         db.rollback()
+@@ -200,5 +218,6 @@
+             "chapter_ids": chapter_ids,
+             "round": round_no,
+             "cycle_id": cycle.cycle_id if cycle else "",
++            "cycle_ids": cycle_ids,
+             "threshold": cfg.TARGETED_RETEST_ACCURACY_THRESHOLD,
+             "validation": "automatic_retest_v2_chapter"}
+--- a/backend/app/services/classroom_content.py
++++ b/backend/app/services/classroom_content.py
+@@ -38,6 +38,20 @@
+ 
+ 
+ def render_emf_png(path: Path) -> bytes:
++    # Packaged formulas have checked browser renderings. Keep the original EMF
++    # and manifest hashes untouched; Windows can still render new uploads.
++    preview = Path(str(path) + ".png")
++    metadata = Path(str(path) + ".render.json")
++    if preview.is_file() and metadata.is_file():
++        try:
++            checks = json.loads(metadata.read_text(encoding="utf-8"))
++            content = preview.read_bytes()
++            if (checks.get("source_sha256") == sha256(path.read_bytes()).hexdigest()
++                    and checks.get("png_sha256") == sha256(content).hexdigest()
++                    and content.startswith(b"\x89PNG\r\n\x1a\n")):
++                return content
++        except (ValueError, OSError):
++            pass
+     stat = path.stat()
+     return _emf_png(str(path), stat.st_mtime_ns, stat.st_size)
+ 
+--- a/backend/app/services/model_provider.py
++++ b/backend/app/services/model_provider.py
+@@ -143,6 +143,8 @@
+             usage_missing=usage_missing, finish_reason=finish_reason,
+             duration_ms=int((time.time() - t0) * 1000), status="ok",
+         ))
++        from backend.app.services.prompt_history import record
++        record(db, call_id, messages, content)
+         db.commit()
+         return {"content": content, "call_id": call_id,
+                 "usage": usage, "usage_missing": usage_missing,
+@@ -157,6 +159,8 @@
+             duration_ms=int((time.time() - t0) * 1000),
+             status="failed", error=f"[{code}] {hint} | {type(e).__name__}: {e}",
+         ))
++        from backend.app.services.prompt_history import record
++        record(db, call_id, messages)
+         db.commit()
+         raise ModelUnavailable(code, f"{hint}（{type(e).__name__}: {e}）", call_id)
+ 
+--- a/backend/app/services/release_service.py
++++ b/backend/app/services/release_service.py
+@@ -368,6 +368,16 @@
+         detail.pop("recipients", None)
+         detail["release_status"] = release_status
+         detail.update(own)
++        cycle = db.execute(select(E.TargetedRetestCycle).where(
++            E.TargetedRetestCycle.release_id == recipient.release_id,
++            E.TargetedRetestCycle.student_id == student_id)).scalars().first()
++        if cycle:
++            detail["targeted_retest"] = {
++                "cycle_id": cycle.cycle_id, "round": cycle.round_no,
++                "status": cycle.status, "question_count": cycle.question_count,
++                "correct_count": cycle.correct_count, "accuracy": cycle.accuracy}
++        else:
++            detail["targeted_retest"] = None
+         # A submitted answer sheet remains visible even if the release is
+         # subsequently closed.  Unsubmitted drafts/closed releases are not
+         # actionable; expired assignments are returned explicitly so the UI
+@@ -403,6 +413,11 @@
+     attempt = db.get(E.Attempt, created["attempt_id"])
+     attempt.assignment_recipient_id = recipient.recipient_id
+     attempt.retest_of_attempt_id = release.source_attempt_id
++    cycle = db.execute(select(E.TargetedRetestCycle).where(
++        E.TargetedRetestCycle.release_id == release.release_id,
++        E.TargetedRetestCycle.student_id == student_id)).scalars().first()
++    if cycle:
++        attempt.retest_of_attempt_id = cycle.source_attempt_id
+     attempt.diagnosis_cycle_id = release.source_diagnosis_id
+     recipient.attempt_id = attempt.attempt_id
+     recipient.status = "opened"
+@@ -448,7 +463,8 @@
+             from backend.app.graphs import classroom_workflow
+             workflow = classroom_workflow.run_post_submission(
+                 db,
+-                actor_user_id=(release.teacher_user_id if release else user_id),
++                actor_user_id=(release.teacher_user_id if release else
++                               db.get(E.Attempt, recipient.attempt_id).user_id),
+                 attempt_id=recipient.attempt_id,
+             )
+             result["classroom_workflow"] = workflow
+--- a/backend/app/services/targeted_retest.py
++++ b/backend/app/services/targeted_retest.py
+@@ -141,8 +141,12 @@
+ 
+ 
+ def record_submission(db: Session, *, release_id: str, attempt_id: str) -> dict | None:
++    attempt = db.get(E.Attempt, attempt_id)
++    if attempt is None:
++        raise ValueError("复测答卷不存在")
+     cycle = db.execute(select(E.TargetedRetestCycle).where(
+-        E.TargetedRetestCycle.release_id == release_id
++        E.TargetedRetestCycle.release_id == release_id,
++        E.TargetedRetestCycle.student_id == attempt.student_id,
+     )).scalars().first()
+     if cycle is None:
+         return None
+--- a/backend/app/skills/implementations.py
++++ b/backend/app/skills/implementations.py
+@@ -438,6 +438,8 @@
+             payload.get("assessment_version_id") or "").strip(),
+         paper_item_id=str(payload.get("paper_item_id") or "").strip(),
+         attempt_id=str(payload.get("attempt_id") or "").strip(),
++        date_from=str(payload.get("date_from") or "").strip(),
++        date_to=str(payload.get("date_to") or "").strip(),
+     )
+     # Link the domain Diagnosis to the enclosing SkillRun so either audit row
+     # can lead to the other.  Direct service callers keep their native version;
+@@ -482,6 +484,9 @@
+         kp_ids = [s.kp_id for s in states]
+     recs: list[dict] = []
+     search_summary = []
++    resource_rows = db.execute(select(E.Resource).where(
++        E.Resource.verified.is_(True), E.Resource.is_test_fixture.is_(False)
++    )).scalars().all()
+     for kp_id in kp_ids[:8]:
+         name = _kp_name(db, kp_id)
+         found = retrieval.keyword_search(db, name, limit=3)
+@@ -503,8 +508,9 @@
+                 "reason": "本地资料关键词检索命中，可回到实际页序",
+             })
+         from backend.app.services.classroom_content import is_search_entry
+-        for res in db.execute(select(E.Resource).where(
+-                E.Resource.kp_ids.contains(kp_id))).scalars().all():
++        for res in resource_rows:
++            if kp_id not in (res.kp_ids or []):
++                continue
+             if is_search_entry(res.url, res.title):
+                 continue
+             recs.append({
+@@ -605,6 +611,10 @@
+     parsed = model_provider.parse_json_content(out["content"])
+     raw = parsed if isinstance(parsed, list) else (
+         parsed.get("questions", []) if isinstance(parsed, dict) else [])
++    if not isinstance(raw, list):
++        return {"result": {"candidates": [], "pipeline": pipeline},
++                "status": "invalid_output", "engine": "model_failed",
++                "uncertainties": ["模型 questions 字段不是数组，未写入题库"]}
+     stage("generate_candidates", "done",
+           {"raw_count": len(raw), "usage": out["usage"],
+            "usage_missing": out["usage_missing"],
+@@ -620,10 +630,17 @@
+             rejected.append({"i": i, "reason": "不是对象"})
+             continue
+         qt = c.get("question_type")
+-        stem = (c.get("stem") or "").strip()
++        stem = c.get("stem")
+         opts = c.get("options") or []
+         ans = c.get("answer_payload") or {}
+         refs = c.get("source_chunk_ids") or []
++        if (not isinstance(stem, str) or not isinstance(qt, str)
++                or not isinstance(opts, list) or not all(isinstance(o, dict) for o in opts)
++                or not isinstance(ans, dict) or not isinstance(refs, list)
++                or not all(isinstance(r, str) for r in refs)):
++            rejected.append({"i": i, "reason": "题干、选项、答案或引用结构错误"})
++            continue
++        stem = stem.strip()
+         problems = []
+         if qt not in valid_types:
+             problems.append("题型不合法或未知")
+@@ -633,12 +650,18 @@
+             problems.append("选项不足")
+         if not ans:
+             problems.append("缺少答案")
+-        if not refs or not any(r in {x["chunk_id"] for x in context} for r in refs):
++        if not refs or not all(r in {x["chunk_id"] for x in context} for r in refs):
+             problems.append("缺少真实来源引用")
+-        if qt == "single_choice" and ans.get("key") not in {o.get("key") for o in opts}:
++        if qt == "single_choice" and (not isinstance(ans.get("key"), str)
++                or ans.get("key") not in [o.get("key") for o in opts]):
+             problems.append("答案不在选项内")
+-        if qt == "multi_choice" and not set(ans.get("keys", [])) <= {o.get("key") for o in opts}:
+-            problems.append("多选答案含无效选项")
++        if qt == "multi_choice":
++            keys = ans.get("keys")
++            if (not isinstance(keys, list) or not keys or
++                    not all(isinstance(k, str) and k in [o.get("key") for o in opts] for k in keys)):
++                problems.append("多选答案缺失或含无效选项")
++        if qt == "true_false" and not isinstance(ans.get("value"), bool):
++            problems.append("判断题答案必须是布尔值")
+         if problems:
+             rejected.append({"i": i, "reason": "；".join(problems)})
+         else:
+@@ -695,6 +718,7 @@
+             rejected.append({"stem": stem[:50], "reason": f"与题库重复 (相似度 {sim:.2f})"})
+         else:
+             deduped.append(v)
++            existing.append(stem)
+     stage("dedupe", "done", {"kept": len(deduped), "total_rejected": len(rejected)})
+ 
+     # --- review queue: never auto-publish ---
+@@ -753,6 +777,19 @@
+ 
+ def verify_learning(db: Session, payload: dict, *, run_id: str,
+                     thread_id: str, job_id: str, user_id: str) -> dict:
++    # Formal teacher-issued retests use TargetedRetestCycle, not the legacy
++    # personal RetestTask. Both enter through the same auditable skill.
++    aid = str(payload.get("attempt_id") or "")
++    cycle = db.execute(select(E.TargetedRetestCycle).where(
++        E.TargetedRetestCycle.retest_attempt_id == aid)).scalars().first() if aid else None
++    if cycle:
++        from backend.app.services import targeted_retest
++        targeted_retest.refresh_cycle(db, cycle, commit=True)
++        result = targeted_retest.cycle_detail(db, cycle, include_items=False)
++        return {"result": result, "status": "succeeded", "engine": "deterministic",
++                "evidence_refs": [{"attempt_id": aid, "cycle_id": cycle.cycle_id}],
++                "uncertainties": ["本轮达标只说明本次新题表现，不能证明长期稳定掌握。"],
++                "next_actions": ["查看剩余错题和更新后的诊断"]}
+     task_id = payload.get("retest_task_id", "")
+     attempt_id = payload.get("attempt_id", "")
+     task = db.get(E.RetestTask, task_id) if task_id else None
+--- a/backend/app/skills/registry.py
++++ b/backend/app/skills/registry.py
+@@ -79,6 +79,8 @@
+             "assessment_version_id": {"type": "string"},
+             "paper_item_id": {"type": "string"},
+             "attempt_id": {"type": "string"},
++            "date_from": {"type": "string"},
++            "date_to": {"type": "string"},
+         }, ["scope_type"]),
+         output_schema=OUT_SCHEMA, execute=impl.diagnose_classroom,
+         examples=[{
+@@ -108,7 +110,7 @@
+                              "配置后候选 active=False、answer_status=candidate"}]),
+     "verify_learning": SkillSpec(
+         name="verify_learning", version=f"{VERSION}/verify_learning-1.0",
+-        description="复测验证：独立新题证据判定、错题状态更新、延迟复测排期",
++        description="复测验证：教师复测逐学生判定达标；个人错题复测检查独立新题证据并安排延迟复测",
+         requires_model=False, prompt_version=prompts.PROMPT_VERSION,
+         input_schema=_in({"retest_task_id": {"type": "string"},
+                           "attempt_id": {"type": "string"}}),
+--- a/backend/app/skills/verify_learning/SKILL.md
++++ b/backend/app/skills/verify_learning/SKILL.md
+@@ -2,7 +2,7 @@
+ 
+ - **版本**：`skills-1.0/verify_learning-1.0`
+ - **执行函数**：`backend/app/skills/implementations.py::verify_learning`
+-- **调用方**：LangGraph `retest_graph` 的 `verify` 节点；复测交卷后
++- **调用方**：LangGraph `retest_graph` 与 `classroom_workflow`；复测交卷后
+ - **是否需要模型**：否
+ 
+ ## 用途
+@@ -15,10 +15,18 @@
+ ```
+ 
+ ## 输出 schema
++教师发布的针对性复测：先按 `attempt_id` 查找 `TargetedRetestCycle`，返回
++`cycle_id`、`round`、`status`、`passed`、`result_determinable`、`accuracy`、
++`threshold`、`remaining_kp_ids`。只有全部题目具备有效评分时才判定，默认正确率
++达到 0.8 为本轮达标；尚未评分完整时状态为 `scoring_pending`。同班发布按学生
++分别关联原卷和复测轮次，不共享其他学生的通过结果。本轮达标不等于长期掌握。
++
++以下为原有个人错题复测 `RetestTask` 路径的输出：
+ `result`：`scored_items`、`independent`、`all_correct`、`new_question_family`、
+ `passed`、`state_after`。`passed` 必须三项全为真（独立 + 全对 + 不同题族）。
+ 
+ ## 规则
++- 教师针对性复测按上面的正确率规则处理；下面的全对和延迟任务规则属于个人错题复测路径。
+ - 做对一次只更新状态，**不删除**旧错题记录。
+ - 通过后把 `WrongBookEntry.status` 改为 `verified`，`RetestTask.status` 改为 `completed`。
+ - 按项目规则 1 / 3 / 7 天安排下一次 `kind=delayed` 复测（可修改，不声称最优）。
+--- a/backend/app/workers/worker.py
++++ b/backend/app/workers/worker.py
+@@ -27,7 +27,7 @@
+ JOB_TYPES = {"diagnosis", "generate_questions", "retest", "study_plan",
+              "tutor", "verify_learning", "answer_generation", "paper_ingest",
+              "answer_booklet", "slides_questions", "external_paper_localize",
+-             "unified_import"}
++             "unified_import", "teacher_intervention", "teacher_compose"}
+ 
+ 
+ def create_job(db: Session, job_type: str, payload: dict,
+@@ -101,7 +101,19 @@
+     p = job.payload or {}
+     _set_stage(db, job, "running")
+     try:
+-        if job.job_type == "diagnosis":
++        if job.job_type == "teacher_intervention":
++            from backend.app.graphs import classroom_workflow
++            _set_stage(db, job, "diagnose_generate_verify_publish")
++            result = classroom_workflow.run_teacher_intervention(
++                db, actor_user_id=job.user_id, **p)
++            ok = result.get("status") == "succeeded"
++        elif job.job_type == "teacher_compose":
++            from backend.app.services import paper_builder_service
++            _set_stage(db, job, "compose_paper")
++            result = paper_builder_service.compose_draft(
++                db, teacher_user_id=job.user_id, **p)
++            ok = True
++        elif job.job_type == "diagnosis":
+             _set_stage(db, job, "run_diagnosis_graph",
+                        {"attempt_id": p.get("attempt_id")})
+             result = workflows.run_diagnosis(
+@@ -256,7 +268,8 @@
+         job.error = err
+         job.result = {}
+     job.updated_at = E.utcnow()
+-    if job.status == "failed" and job.attempts < MAX_ATTEMPTS:
++    if (job.status == "failed" and job.attempts < MAX_ATTEMPTS
++            and job.job_type not in {"teacher_intervention", "teacher_compose"}):
+         job.status = "queued"
+         job.stage = "retry_queued"
+     db.commit()
+--- a/backend/scripts/create_release_snapshot.py
++++ b/backend/scripts/create_release_snapshot.py
+@@ -32,6 +32,7 @@
+ RUNTIME_TABLES = (
+     "session_tokens",
+     "model_calls",
++    "prompt_records",
+     "skill_runs",
+     "jobs",
+     "chat_messages",
+@@ -200,6 +201,11 @@
+                 invalid.append(f"teacher_docx:{digest}:media_hash_mismatch")
+                 continue
+             paths.add(media)
++            if media.suffix.lower() == ".emf":
++                for suffix in (".png", ".render.json"):
++                    preview = Path(str(media) + suffix)
++                    if preview.is_file():
++                        paths.add(preview)
+     return paths, invalid
+ 
+ 
+--- a/frontend/src/api/client.ts
++++ b/frontend/src/api/client.ts
+@@ -43,6 +43,23 @@
+       .then((r) => r.data),
+ }
+ 
++/** Slow AI workflows are durable jobs; each poll is a short HTTP request. */
++export async function runTeacherJob(url: string, payload: any): Promise<any> {
++  const queued: any = await api.post(url, payload)
++  const deadline = Date.now() + 40 * 60 * 1000
++  while (Date.now() < deadline) {
++    const job: any = await api.get(`/teacher/jobs/${queued.job_id}`)
++    if (job.status === 'succeeded') return job.result
++    if (job.status === 'failed' || job.status === 'cancelled') {
++      // A partial workflow still contains the truthful diagnosis and failure.
++      if (job.result?.outputs) return job.result
++      throw new Error(job.error || '后台任务未完成，请检查模型配置和后台服务')
++    }
++    await new Promise((resolve) => setTimeout(resolve, 2000))
++  }
++  throw new Error('任务仍在后台处理，请确认 worker 正在运行；稍后再次点击会继续查看已有任务')
++}
++
+ /** Fetch protected media with this tab's identity; never put tokens in URLs. */
+ export async function protectedBlobUrl(url: string): Promise<string> {
+   const response = await http.get<Blob>(url.replace(/^\/api/, ''), { responseType: 'blob' })
+--- a/frontend/src/views/TeacherAnalysisView.vue
++++ b/frontend/src/views/TeacherAnalysisView.vue
+@@ -2,7 +2,7 @@
+ import { computed, onMounted, ref, watch } from 'vue'
+ import { ElMessage } from 'element-plus'
+ import { useRoute } from 'vue-router'
+-import { api } from '../api/client'
++import { api, runTeacherJob } from '../api/client'
+ import SingleAttemptWorkbench from '../components/SingleAttemptWorkbench.vue'
+ import MultiAttemptWorkbench from '../components/MultiAttemptWorkbench.vue'
+ import ClassAssessmentWorkbench from '../components/ClassAssessmentWorkbench.vue'
+@@ -379,15 +379,22 @@
+   if (!['student_attempt', 'student_history', 'class_assessment'].includes(scope.value)
+     || !result.value?.retest_plan?.ready) return
+   runningAi.value = true
+-  try {
+-    const value: any = await api.post('/teacher/workflows/intervention', {
++  const request = selectionRequest
++  try {
++    const value: any = await runTeacherJob('/teacher/workflows/intervention/jobs', {
+       student_id: scope.value === 'class_assessment' ? '' : studentId.value,
+-      assessment_version_id: scope.value === 'student_history' ? '' : assessmentVersionId.value,
++      assessment_version_id: scope.value === 'student_history' ? historyParams.value.assessment_version_id : assessmentVersionId.value,
+       classroom_id: scope.value === 'student_attempt' ? '' : classroomId.value,
+       scope_type: scope.value,
+       attempt_id: result.value?.attempt_id || result.value?.retest_plan?.anchor_attempt_id || '',
+       count: result.value.retest_plan.item_count || 5,
++      date_from: scope.value === 'student_history' ? historyParams.value.date_from : '',
++      date_to: scope.value === 'student_history' ? historyParams.value.date_to : '',
+     })
++    if (request !== selectionRequest) {
++      ElMessage.info('复测任务已处理完成，请返回原诊断对象查看结果')
++      return
++    }
+     intervention.value = value
+     result.value = value?.outputs?.diagnosis?.result || result.value
+     diagnosisReady.value = true
+@@ -401,6 +408,9 @@
+     }
+     if (value?.outputs?.retest?.status === 'published') {
+       ElMessage.success('复测题已通过自动校验并发布给学生')
++      if (value.outputs.retest.remaining_kp_ids?.length) {
++        ElMessage.info(`本轮先覆盖 ${value.outputs.retest.target_kp_ids.length} 个薄弱点，其余 ${value.outputs.retest.remaining_kp_ids.length} 个仍保留在诊断中`)
++      }
+       if (scope.value === 'student_attempt') await loadStudentSelection()
+     } else {
+       ElMessage.warning(
+--- a/frontend/src/views/TeacherWorkspaceView.vue
++++ b/frontend/src/views/TeacherWorkspaceView.vue
+@@ -2,7 +2,7 @@
+ import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
+ import { ElMessage } from 'element-plus'
+ import { useRoute, useRouter } from 'vue-router'
+-import { api } from '../api/client'
++import { api, runTeacherJob } from '../api/client'
+ import MathText from '../components/MathText.vue'
+ import MasonryGrid from '../components/MasonryGrid.vue'
+ import { friendlyError, questionTypeLabel } from '../utils/presentation'
+@@ -316,6 +316,16 @@
+   } finally { loading.value = false }
+ }
+ 
++async function exportPrompts() {
++  try {
++    const history = await api.get('/teacher/prompt-history/export')
++    const url = URL.createObjectURL(new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' }))
++    const link = document.createElement('a')
++    link.href = url; link.download = 'runtime-prompts.json'; link.click()
++    setTimeout(() => URL.revokeObjectURL(url), 1000)
++  } catch (error) { ElMessage.error(friendlyError(error, '提示词记录导出失败')) }
++}
++
+ function openCompose(mode: 'manual' | 'ai' | 'mixed' = 'ai') {
+   switchComposeMode(mode)
+   compose.optionalOpen = false
+@@ -333,7 +343,7 @@
+     const selectedItems = compose.mode === 'ai' ? [] : selectedQuestions.value
+     const requestedSupplement = compose.mode === 'mixed'
+       ? finalQuestionCount.value - selectedIds.value.length : finalQuestionCount.value
+-    const result: any = await api.post('/teacher/paper-drafts/compose', {
++    const result: any = await runTeacherJob('/teacher/paper-drafts/compose/jobs', {
+       title: compose.title.trim(), instructions: compose.instructions, mode: compose.mode,
+       selected_items: selectedItems.map((question) => ({
+         question_id: question.question_id,
+@@ -426,6 +436,7 @@
+           {{ advancedOpen ? '收起高级筛选' : '更多筛选' }}{{ filters.kpId || filters.availability !== 'all' || filters.scope !== 'all' ? '（已应用）' : '' }}
+         </el-button>
+         <el-button link @click="draftsOpen = true">已保存试卷 {{ drafts.length }}</el-button>
++        <el-button link @click="exportPrompts">导出运行提示词</el-button>
+         <el-button link :disabled="!hasActiveFilters" @click="clearFilters">清空筛选</el-button>
+       </div>
+       <div v-if="advancedOpen" class="advanced-filters">

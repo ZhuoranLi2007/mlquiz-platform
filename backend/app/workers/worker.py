@@ -9,6 +9,7 @@ import json
 import sys
 import time
 import traceback
+import threading
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -27,7 +28,7 @@ STALE_SECONDS = 900
 JOB_TYPES = {"diagnosis", "generate_questions", "retest", "study_plan",
              "tutor", "verify_learning", "answer_generation", "paper_ingest",
              "answer_booklet", "slides_questions", "external_paper_localize",
-             "unified_import"}
+             "unified_import", "teacher_intervention", "teacher_compose", "teacher_diagnosis"}
 
 
 def create_job(db: Session, job_type: str, payload: dict,
@@ -59,10 +60,26 @@ def recover_stale(db: Session) -> int:
         E.Job.status == "running")).scalars().all()
     n = 0
     for j in rows:
-        if (j.claimed_at or "") < cutoff:
-            j.status = "queued"
-            j.stage = "requeued_after_restart"
-            j.progress = {"note": "工作进程重启，运行中超时的任务被重新排队",
+        if max(j.claimed_at or "", j.updated_at or "") < cutoff:
+            # Publishing work must not be replayed blindly after a crash.
+            # A saved release is the authoritative commit marker.
+            release = db.execute(select(E.AssessmentRelease).where(
+                E.AssessmentRelease.workflow_run_id == f"teacher-job:{j.job_id}"
+            )).scalars().first() if j.job_type == "teacher_intervention" else None
+            if release:
+                j.status, j.stage = "succeeded", "recovered_published_release"
+                j.result = {"status": "succeeded", "outputs": {"retest": {
+                    "status": "published", "release": {"release_id": release.release_id}}}}
+            elif j.job_type in {"teacher_intervention", "teacher_compose", "teacher_diagnosis"} or j.attempts >= MAX_ATTEMPTS:
+                j.status, j.stage = "failed", "interrupted"
+                j.error = ("诊断任务中断；请先查看已保存结果，再决定是否重新运行。未自动重复调用模型。"
+                           if j.job_type == "teacher_diagnosis" else
+                           "任务中断；请检查已发布任务后重试。未自动重复出题或发布。")
+            else:
+                j.status = "queued"
+                j.stage = "requeued_after_restart"
+            j.progress = {"note": ("已重新排队" if j.status == "queued" else
+                                    "已恢复发布结果" if j.status == "succeeded" else "中断任务等待检查后重试"),
                           "previous_attempts": j.attempts}
             n += 1
     if n:
@@ -101,7 +118,39 @@ def process_job(db: Session, job: E.Job) -> None:
     p = job.payload or {}
     _set_stage(db, job, "running")
     try:
-        if job.job_type == "diagnosis":
+        if job.job_type == "teacher_intervention":
+            from backend.app.graphs import classroom_workflow
+            _set_stage(db, job, "diagnose_generate_verify_publish")
+            result = classroom_workflow.run_teacher_intervention(
+                db, actor_user_id=job.user_id, thread_id=f"teacher-job:{job.job_id}", **p)
+            ok = result.get("status") == "succeeded"
+        elif job.job_type == "teacher_diagnosis":
+            _set_stage(db, job, "analyze_answers_and_match_resources")
+            out = run_skill(db, "diagnose_classroom", p,
+                            thread_id=f"teacher-job:{job.job_id}", job_id=job.job_id,
+                            user_id=job.user_id)
+            diagnosis_id = (out.get("extra") or {}).get("diagnosis_id")
+            diagnosis = db.get(E.Diagnosis, diagnosis_id) if diagnosis_id else None
+            if diagnosis is None:
+                raise ValueError("诊断未保存，任务不能标为完成")
+            kp_ids = [r["kp_id"] for r in (out.get("result") or {}).get("ai_analysis", {}).get("learning_plan", []) if r.get("kp_id")]
+            if kp_ids:
+                rec = run_skill(db, "recommend_resources", {"kp_ids":kp_ids},
+                                thread_id=f"teacher-job:{job.job_id}", job_id=job.job_id,
+                                user_id=job.user_id)
+                if rec.get("status") != "succeeded":
+                    raise ValueError("学习资源匹配未完成")
+            result = {"diagnosis_id":diagnosis.diagnosis_id, "run_id":out["run_id"],
+                      "created_at":diagnosis.created_at, "engine":diagnosis.engine,
+                      "result":diagnosis.payload, "skill_version":diagnosis.skill_version}
+            ok = True
+        elif job.job_type == "teacher_compose":
+            from backend.app.services import paper_builder_service
+            _set_stage(db, job, "compose_paper")
+            result = paper_builder_service.compose_draft(
+                db, teacher_user_id=job.user_id, **p)
+            ok = True
+        elif job.job_type == "diagnosis":
             _set_stage(db, job, "run_diagnosis_graph",
                        {"attempt_id": p.get("attempt_id")})
             result = workflows.run_diagnosis(
@@ -220,6 +269,8 @@ def process_job(db: Session, job: E.Job) -> None:
         pending_config = (result.get("status") == "model_not_configured" or
                           (job.job_type in ("paper_ingest", "answer_booklet") and
                            result.get("status") == "parsed" and not awaiting))
+        if pending_config:
+            ok = False
         job.result = result
         job.status = "succeeded" if ok else "failed"
         job.stage = ("awaiting_answer_request" if awaiting else
@@ -248,7 +299,8 @@ def process_job(db: Session, job: E.Job) -> None:
         # ORM attribute afterwards raises PendingRollbackError *inside* the
         # handler, which used to kill the whole worker daemon (one bad question
         # id took the queue down with it). Roll back first, then re-read the job.
-        err = f"{type(e).__name__}: {e}\n{traceback.format_exc()[-600:]}"
+        from backend.app.services.prompt_history import redact
+        err = redact(f"{type(e).__name__}: {e}\n{traceback.format_exc()[-600:]}")
         db.rollback()
         job = db.get(E.Job, job.job_id) or job
         job.status = "failed"
@@ -256,10 +308,25 @@ def process_job(db: Session, job: E.Job) -> None:
         job.error = err
         job.result = {}
     job.updated_at = E.utcnow()
-    if job.status == "failed" and job.attempts < MAX_ATTEMPTS:
+    if (job.status == "failed" and job.attempts < MAX_ATTEMPTS
+            and job.stage != "pending_model_configuration"
+            and job.job_type not in {"teacher_intervention", "teacher_compose", "teacher_diagnosis"}):
         job.status = "queued"
         job.stage = "retry_queued"
     db.commit()
+
+
+def _heartbeat(job_id, stopped):
+    """Keep long model calls distinguishable from a dead worker."""
+    while not stopped.wait(30):
+        try:
+            with SessionLocal() as heartbeat_db:
+                heartbeat_db.execute(update(E.Job).where(
+                    E.Job.job_id == job_id, E.Job.status == "running").values(updated_at=E.utcnow()))
+                heartbeat_db.commit()
+        except Exception:
+            # A short SQLite write lock is harmless; the next heartbeat retries.
+            pass
 
 
 def run_forever(interval: float = 2.0, max_jobs: int | None = None) -> None:
@@ -280,11 +347,15 @@ def run_forever(interval: float = 2.0, max_jobs: int | None = None) -> None:
                 if max_jobs is not None:
                     print("[worker] 队列已清空，按 --max-jobs 模式退出", flush=True)
                     break
+                recover_stale(db)
                 time.sleep(interval)
                 continue
             print(f"[worker] 领取 {job.job_id} ({job.job_type})", flush=True)
             # One job must never take the daemon down: a worker restart also
             # un-claims the job, so crashing here silently stalls the queue.
+            stopped = threading.Event()
+            heartbeat = threading.Thread(target=_heartbeat, args=(job.job_id, stopped), daemon=True)
+            heartbeat.start()
             try:
                 process_job(db, job)
             except Exception as e:                    # noqa: BLE001
@@ -300,6 +371,9 @@ def run_forever(interval: float = 2.0, max_jobs: int | None = None) -> None:
                         db.commit()
                 except Exception:                     # noqa: BLE001
                     db.rollback()
+            finally:
+                stopped.set()
+                heartbeat.join(timeout=1)
             db.expire_all()
             print(f"[worker] 完成 {job.job_id} -> {job.status}/{job.stage}", flush=True)
             done += 1

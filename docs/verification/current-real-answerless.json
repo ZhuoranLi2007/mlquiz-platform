@@ -1,0 +1,88 @@
+{
+  "kind": "real_model_answerless_question",
+  "question_id": "acceptance_noanswer_20261116",
+  "solve": {
+    "skill": "solve_answer",
+    "result": {
+      "status": "succeeded",
+      "generation_id": "gen_de2bdf4d873e4eca",
+      "published": {
+        "question_id": "acceptance_noanswer_20261116",
+        "question_version": 1,
+        "answer_version": 1,
+        "label": "AI参考答案",
+        "human_confirmation_required": false
+      },
+      "checks": {
+        "structure_check": {
+          "passed": true,
+          "errors": []
+        },
+        "auto_check": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "rubric_total",
+              "passed": true,
+              "points_total": 2.0,
+              "question_score": 2.0
+            },
+            {
+              "name": "equivalent_expression_accepted",
+              "passed": true,
+              "points_without_accept": []
+            },
+            {
+              "name": "all_checks",
+              "passed": true
+            }
+          ],
+          "exception_code": "",
+          "exception_detail": ""
+        },
+        "request_fingerprint": "06573ee28c5aacacdb4282280801e6906db25f69cd7e1e944921baba8fc3d322",
+        "input_contract_keys": [
+          "context",
+          "options",
+          "question_type",
+          "score",
+          "stem"
+        ],
+        "model": "deepseek-flash",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 1687,
+          "completion_tokens": 358,
+          "total_tokens": 2045
+        },
+        "duration_ms": 2647
+      },
+      "cached": false,
+      "follow_up_job": null
+    },
+    "evidence_refs": [
+      {
+        "generation_id": "gen_de2bdf4d873e4eca"
+      }
+    ],
+    "uncertainties": [],
+    "next_actions": [],
+    "skill_version": "skills-1.0/solve_answer-1.0",
+    "run_id": "run_6c12c15b6b3847aa",
+    "status": "succeeded",
+    "engine": "model",
+    "model": "deepseek-chat",
+    "prompt_version": "answer-solve-1.1",
+    "thread_id": "acceptance-noanswer-20261116",
+    "job_id": "",
+    "error": "",
+    "extra": {}
+  },
+  "independent_check": {
+    "answer_payload": true,
+    "explanation": "偏差—方差理论指出，过拟合模型对训练数据过度敏感、泛化误差主要来自方差，因此表现为高方差；欠拟合模型无法捕捉数据基本结构，误差主要来自偏差，因此表现为高偏差。题干表述正确。",
+    "unambiguous": true,
+    "kp_matches": true,
+    "call_id": "call_e5811769a99e4062"
+  }
+}

@@ -1,0 +1,1 @@
+{"status": "passed", "score": "8/10", "remaining_kp_ids": ["kp.regularization.l1l2"], "new_model_calls": 19, "preservation": {"attempts": {"baseline_rows": 128, "changed_or_missing": 0}, "answers": {"baseline_rows": 741, "changed_or_missing": 0}, "answer_scores": {"baseline_rows": 743, "changed_or_missing": 0}}}

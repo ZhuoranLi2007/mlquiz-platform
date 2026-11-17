@@ -1,0 +1,73 @@
+{
+  "checked_at": "2026-11-16T23:21:42.481576+08:00",
+  "status": "passed",
+  "method": "Extracted ZIP to fresh directory without .env; reused freshly installed Python 3.13 lockfile environment; started actual uvicorn and worker; checked served frontend assets and API; stopped only launched subprocesses. Browser end-to-end evidence is separate.",
+  "default_snapshot": {
+    "bootstrap": {
+      "database": "D:\\文档\\机器学习复习平台搭建\\delivery-smoke-20261116-v2\\mlquiz-platform-main\\data\\db\\mlquiz.sqlite3",
+      "database_restored": true,
+      "release_assets_copied": 292,
+      "official_students": 16,
+      "credentials_created": true,
+      "accounts_ready": true
+    },
+    "health": 200,
+    "frontend": 200,
+    "built_assets_checked": 2,
+    "model_configured": false,
+    "teacher_demo_login": 200,
+    "graphs": [
+      "diagnosis_graph",
+      "generation_graph",
+      "retest_graph"
+    ]
+  },
+  "worker": "started and exited normally on empty queue",
+  "acceptance_snapshot": {
+    "bootstrap": {
+      "database": "D:\\文档\\机器学习复习平台搭建\\delivery-smoke-20261116-v2\\mlquiz-platform-main\\data\\acceptance-view\\db\\mlquiz.sqlite3",
+      "database_restored": false,
+      "release_assets_copied": 292,
+      "official_students": 16,
+      "credentials_created": true,
+      "accounts_ready": true
+    },
+    "health": 200,
+    "frontend": 200,
+    "built_assets_checked": 2,
+    "model_configured": false,
+    "teacher_demo_login": 200,
+    "graphs": [
+      "diagnosis_graph",
+      "generation_graph",
+      "retest_graph"
+    ],
+    "acceptance_api_database_check": {
+      "result": "passed",
+      "attempts": 6,
+      "cycles": 4,
+      "preservation": {
+        "attempts": {
+          "original_rows": 122,
+          "changed_or_missing": 0
+        },
+        "answers": {
+          "original_rows": 717,
+          "changed_or_missing": 0
+        },
+        "answer_scores": {
+          "original_rows": 719,
+          "changed_or_missing": 0
+        }
+      },
+      "counts": {
+        "questions": 819,
+        "attempts": 128,
+        "resources": 37,
+        "prompt_records": 61,
+        "skill_runs": 95
+      }
+    }
+  },
+  "restore_overwrite_protection": "passed"
+}

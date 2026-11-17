@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-11-17T21:28:42.482024+08:00",
+  "original_demo_snapshot_unchanged": true,
+  "acceptance_snapshot_integrity": "ok",
+  "acceptance_snapshot_counts": {
+    "questions": 819,
+    "attempts": 128,
+    "resources": 37,
+    "prompt_records": 61,
+    "skill_runs": 95,
+    "session_tokens": 0
+  },
+  "acceptance_authentication": "session rows removed, password hashes blank, secure_delete and VACUUM applied to copy only",
+  "known_local_model_keys_and_generated_student_passwords_scan": "passed, including embedded Office XML and gzip snapshots",
+  "excluded": [
+    ".env",
+    "virtual environments",
+    "node_modules",
+    "live DB",
+    "private credentials",
+    "local backups",
+    "caches"
+  ],
+  "report_visual_qa": "6 rendered pages inspected; no clipping or overflow",
+  "slides_visual_qa": "8 rendered slides inspected individually; no clipping or overflow; PPTX package/import validation passed",
+  "standalone_startup_evidence": "diagnosis-package-smoke.json; previous stages retained separately",
+  "diagnosis_resources": "35 course knowledge points, 80 unique reviewed page images; see diagnosis-persistence-and-api.json",
+  "diagnosis_snapshot": "mlquiz-diagnosis-resources-reviewed.sqlite3.gz; 85 real prompt records; sanitized copy verified by diagnosis-snapshot.json",
+  "ai_retest_snapshot": "mlquiz-ai-retest-reviewed.sqlite3.gz; 80 real prompt records; sanitized copy verified by ai-retest-snapshot.json",
+  "zip_crc_validation": "checked after writing; ZIP SHA-256 is delivered in the adjacent .sha256.txt file"
+}

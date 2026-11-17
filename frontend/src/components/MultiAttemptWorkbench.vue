@@ -6,6 +6,7 @@ import { Position, WarningFilled } from '@element-plus/icons-vue'
 import MathText from './MathText.vue'
 import SourceQuestionContent from './SourceQuestionContent.vue'
 import DiagnosisAnalysisContent from './DiagnosisAnalysisContent.vue'
+import LearningResourceList from './LearningResourceList.vue'
 import HistorySummaryTabs from './HistorySummaryTabs.vue'
 import { friendlyQuizCode } from '../utils/presentation'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
@@ -362,8 +363,8 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
 
       <aside class="history-side history-surface">
         <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 2)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看相关错题 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
-        <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div><div v-if="resources.length" class="side-resources"><a v-for="resource in resources.slice(0, 3)" :key="resource.resource_id || resource.url" :href="resource.url" target="_blank" rel="noopener noreferrer"><b>{{ resource.title }}</b><small>{{ resourceType(resource) }}</small></a></div><p v-else class="history-empty-inline">暂无关联资料，可前往教学资源添加。</p></section>
-        <section class="side-retest"><h2>针对性复测</h2><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="generatedCount" class="workflow-state">已生成 {{ generatedCount }} 道题</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+        <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div><LearningResourceList :resources="resources" /></section>
+        <section class="side-retest"><h2>针对性复测</h2><p>AI 依据薄弱知识点生成新题，独立验答后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="generatedCount" class="workflow-state">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
       </aside>
     </div>
 
@@ -385,7 +386,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
       <aside class="history-side history-surface">
         <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 3)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看作答依据 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
         <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div></section>
-        <section class="side-retest"><h2>针对性复测</h2><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+        <section class="side-retest"><h2>针对性复测</h2><p>AI 依据薄弱知识点生成新题，独立验答后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
       </aside>
     </div>
 

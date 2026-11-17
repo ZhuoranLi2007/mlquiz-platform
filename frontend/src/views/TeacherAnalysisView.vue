@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
-import { api } from '../api/client'
+import { api, runTeacherJob } from '../api/client'
 import SingleAttemptWorkbench from '../components/SingleAttemptWorkbench.vue'
 import MultiAttemptWorkbench from '../components/MultiAttemptWorkbench.vue'
 import ClassAssessmentWorkbench from '../components/ClassAssessmentWorkbench.vue'
@@ -305,7 +305,7 @@ watch([historyRangeMode, historyDates, historyPaperId], () => {
 }, { deep: true })
 
 async function analyze() {
-  if (historyRangeIncomplete.value) return
+  if (historyRangeIncomplete.value || loading.value) return
   loading.value = true
   selectionError.value = ''
   const request = ++selectionRequest
@@ -313,7 +313,7 @@ async function analyze() {
   const previousReady = diagnosisReady.value
   try {
     if (scope.value === 'student_attempt') {
-      const saved: any = await api.post('/teacher/diagnoses/run', {
+      const saved: any = await runTeacherJob('/teacher/diagnoses/jobs', {
         scope_type: scope.value,
         classroom_id: classroomId.value,
         student_id: studentId.value,
@@ -331,7 +331,7 @@ async function analyze() {
       intervention.value = null
       ElMessage.success('诊断已更新')
     } else if (scope.value === 'student_history') {
-      const saved: any = await api.post('/teacher/diagnoses/run', {
+      const saved: any = await runTeacherJob('/teacher/diagnoses/jobs', {
         scope_type: 'student_history',
         ...historyParams.value,
         include_ai: true,
@@ -347,7 +347,7 @@ async function analyze() {
       intervention.value = null
       ElMessage.success('多卷分析已更新')
     } else {
-      const saved: any = await api.post('/teacher/diagnoses/run', {
+      const saved: any = await runTeacherJob('/teacher/diagnoses/jobs', {
         scope_type: 'class_assessment',
         classroom_id: classroomId.value,
         assessment_version_id: assessmentVersionId.value,
@@ -379,15 +379,22 @@ async function runIntervention() {
   if (!['student_attempt', 'student_history', 'class_assessment'].includes(scope.value)
     || !result.value?.retest_plan?.ready) return
   runningAi.value = true
+  const request = selectionRequest
   try {
-    const value: any = await api.post('/teacher/workflows/intervention', {
+    const value: any = await runTeacherJob('/teacher/workflows/intervention/jobs', {
       student_id: scope.value === 'class_assessment' ? '' : studentId.value,
-      assessment_version_id: scope.value === 'student_history' ? '' : assessmentVersionId.value,
+      assessment_version_id: scope.value === 'student_history' ? historyParams.value.assessment_version_id : assessmentVersionId.value,
       classroom_id: scope.value === 'student_attempt' ? '' : classroomId.value,
       scope_type: scope.value,
       attempt_id: result.value?.attempt_id || result.value?.retest_plan?.anchor_attempt_id || '',
       count: result.value.retest_plan.item_count || 5,
+      date_from: scope.value === 'student_history' ? historyParams.value.date_from : '',
+      date_to: scope.value === 'student_history' ? historyParams.value.date_to : '',
     })
+    if (request !== selectionRequest) {
+      ElMessage.info('复测任务已处理完成，请返回原诊断对象查看结果')
+      return
+    }
     intervention.value = value
     result.value = value?.outputs?.diagnosis?.result || result.value
     diagnosisReady.value = true
@@ -401,6 +408,9 @@ async function runIntervention() {
     }
     if (value?.outputs?.retest?.status === 'published') {
       ElMessage.success('复测题已通过自动校验并发布给学生')
+      if (value.outputs.retest.remaining_kp_ids?.length) {
+        ElMessage.info(`本轮先覆盖 ${value.outputs.retest.target_kp_ids.length} 个薄弱点，其余 ${value.outputs.retest.remaining_kp_ids.length} 个仍保留在诊断中`)
+      }
       if (scope.value === 'student_attempt') await loadStudentSelection()
     } else {
       ElMessage.warning(

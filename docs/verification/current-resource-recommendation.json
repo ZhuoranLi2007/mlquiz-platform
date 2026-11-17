@@ -1,0 +1,230 @@
+{
+  "skill": "recommend_resources",
+  "result": {
+    "kp_ids": [
+      "kp.regularization.l1l2",
+      "kp.eval.bias_var"
+    ],
+    "recommendations": [
+      {
+        "type": "local_chunk",
+        "kp_id": "kp.regularization.l1l2",
+        "title": "题11 · L1/L2 正则化",
+        "snippet": "{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false",
+        "source_refs": [
+          {
+            "document_id": "doc_314b0bf1ff3468",
+            "document_version_id": "ver_314b0bf1ff3468_parse-10",
+            "rel_path": "机器学习导论_期末复习整合版.pdf",
+            "page": 203,
+            "unit_label": "page",
+            "chunk_label": "题11"
+          }
+        ],
+        "review_status": "auto_ok",
+        "quality_note": "",
+        "url": "/api/materials/doc_314b0bf1ff3468/page/203/image",
+        "reason": "本地资料关键词检索命中，可回到实际页序"
+      },
+      {
+        "type": "local_chunk",
+        "kp_id": "kp.regularization.l1l2",
+        "title": "题11 · L1/L2 正则化",
+        "snippet": "{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false",
+        "source_refs": [
+          {
+            "document_id": "doc_9b657c5718aca8",
+            "document_version_id": "ver_9b657c5718aca8_parse-10",
+            "rel_path": "机器学习期末复习_按章节拆分/第12章_机器学习相关理论.pdf",
+            "page": 37,
+            "unit_label": "page",
+            "chunk_label": "题11"
+          }
+        ],
+        "review_status": "auto_ok",
+        "quality_note": "",
+        "url": "/api/materials/doc_9b657c5718aca8/page/37/image",
+        "reason": "本地资料关键词检索命中，可回到实际页序"
+      },
+      {
+        "type": "external",
+        "kp_id": "kp.regularization.l1l2",
+        "title": "scikit-learn: Logistic Regression",
+        "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+        "platform": "docs",
+        "reason": "可核对正则化参数与求解器说明",
+        "verified": true,
+        "verifiable_segment": "只核验入口可访问；未读取正文/字幕，不编造视频内容或时间点",
+        "note": "外部入口，未读取正文/字幕"
+      },
+      {
+        "type": "external",
+        "kp_id": "kp.regularization.l1l2",
+        "title": "第11集 过拟合与 L1 L2 正则化",
+        "url": "https://www.douyin.com/video/7676487498093614235",
+        "platform": "douyin",
+        "reason": "对应正则化、过拟合及偏差方差知识点；复习时重点比较稀疏解与权重收缩。",
+        "verified": true,
+        "verifiable_segment": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+        "note": "外部入口，未读取正文/字幕"
+      },
+      {
+        "type": "local_chunk",
+        "kp_id": "kp.eval.bias_var",
+        "title": "page 1 · 偏差-方差均衡",
+        "snippet": "第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共1",
+        "source_refs": [
+          {
+            "document_id": "doc_6428a417b9bb36",
+            "document_version_id": "ver_6428a417b9bb36_parse-10",
+            "rel_path": "机器学习导论.2019-2020-2期末考试（A）.pdf",
+            "page": 1,
+            "unit_label": "page"
+          }
+        ],
+        "review_status": "needs_visual_review",
+        "quality_note": "该页需视觉/公式复核，查看原页图",
+        "url": "/api/materials/doc_6428a417b9bb36/page/1/image",
+        "reason": "本地资料关键词检索命中，可回到实际页序"
+      },
+      {
+        "type": "local_chunk",
+        "kp_id": "kp.eval.bias_var",
+        "title": "题7 · 偏差-方差均衡",
+        "snippet": "{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, ",
+        "source_refs": [
+          {
+            "document_id": "doc_314b0bf1ff3468",
+            "document_version_id": "ver_314b0bf1ff3468_parse-10",
+            "rel_path": "机器学习导论_期末复习整合版.pdf",
+            "page": 202,
+            "unit_label": "page",
+            "chunk_label": "题7"
+          }
+        ],
+        "review_status": "needs_formula_review",
+        "quality_note": "该页需视觉/公式复核，查看原页图",
+        "url": "/api/materials/doc_314b0bf1ff3468/page/202/image",
+        "reason": "本地资料关键词检索命中，可回到实际页序"
+      },
+      {
+        "type": "external",
+        "kp_id": "kp.eval.bias_var",
+        "title": "李宏毅《机器学习》课程合集（2021/2022 春）",
+        "url": "https://www.bilibili.com/video/BV1Wv411h7kN",
+        "platform": "bilibili",
+        "reason": "课程导论、泛化、激活函数与自注意力都有系统讲解，适合补课件没展开的直觉部分",
+        "verified": true,
+        "verifiable_segment": "已核查视频页可访问（HTTP 200，B站接口标题与 UP 主一致）；未核对具体分集内容与时间点",
+        "note": "外部入口，未读取正文/字幕"
+      },
+      {
+        "type": "external",
+        "kp_id": "kp.eval.bias_var",
+        "title": "知乎 · 机器学习话题",
+        "url": "https://www.zhihu.com/topic/19559424",
+        "platform": "zhihu",
+        "reason": "按话题浏览讨论与解释，适合在概念题上找不同角度的说法",
+        "verified": true,
+        "verifiable_segment": "已核查话题页可访问（HTTP 200）；具体回答质量参差，需自行判断",
+        "note": "外部入口，未读取正文/字幕"
+      },
+      {
+        "type": "external",
+        "kp_id": "kp.eval.bias_var",
+        "title": "南瓜书配套视频（周志华《机器学习》公式推导）",
+        "url": "https://www.bilibili.com/video/BV1Mh411e7VU",
+        "platform": "bilibili",
+        "reason": "逐条讲《机器学习》书中的公式推导，含 SVM 对偶与偏差方差分解。",
+        "verified": true,
+        "verifiable_segment": "仅核验标题、简介与可访问性；未读取字幕或正文",
+        "note": "外部入口，未读取正文/字幕"
+      },
+      {
+        "type": "external",
+        "kp_id": "kp.eval.bias_var",
+        "title": "第11集 过拟合与 L1 L2 正则化",
+        "url": "https://www.douyin.com/video/7676487498093614235",
+        "platform": "douyin",
+        "reason": "对应正则化、过拟合及偏差方差知识点；复习时重点比较稀疏解与权重收缩。",
+        "verified": true,
+        "verifiable_segment": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+        "note": "外部入口，未读取正文/字幕"
+      }
+    ],
+    "search_summary": [
+      {
+        "kp_id": "kp.regularization.l1l2",
+        "query": "L1/L2 正则化",
+        "hits": 224,
+        "mode": "keyword"
+      },
+      {
+        "kp_id": "kp.eval.bias_var",
+        "query": "偏差-方差均衡",
+        "hits": 173,
+        "mode": "keyword"
+      }
+    ],
+    "retrieval_mode": "keyword"
+  },
+  "evidence_refs": [
+    [
+      {
+        "document_id": "doc_314b0bf1ff3468",
+        "document_version_id": "ver_314b0bf1ff3468_parse-10",
+        "rel_path": "机器学习导论_期末复习整合版.pdf",
+        "page": 203,
+        "unit_label": "page",
+        "chunk_label": "题11"
+      }
+    ],
+    [
+      {
+        "document_id": "doc_9b657c5718aca8",
+        "document_version_id": "ver_9b657c5718aca8_parse-10",
+        "rel_path": "机器学习期末复习_按章节拆分/第12章_机器学习相关理论.pdf",
+        "page": 37,
+        "unit_label": "page",
+        "chunk_label": "题11"
+      }
+    ],
+    [
+      {
+        "document_id": "doc_6428a417b9bb36",
+        "document_version_id": "ver_6428a417b9bb36_parse-10",
+        "rel_path": "机器学习导论.2019-2020-2期末考试（A）.pdf",
+        "page": 1,
+        "unit_label": "page"
+      }
+    ],
+    [
+      {
+        "document_id": "doc_314b0bf1ff3468",
+        "document_version_id": "ver_314b0bf1ff3468_parse-10",
+        "rel_path": "机器学习导论_期末复习整合版.pdf",
+        "page": 202,
+        "unit_label": "page",
+        "chunk_label": "题7"
+      }
+    ]
+  ],
+  "uncertainties": [
+    "外部资源仅登记可访问入口，未读取正文/字幕，不编造内容",
+    "标记为需复核的页，文本可能缺公式，请打开原页图"
+  ],
+  "next_actions": [
+    "打开本地原页或外部链接学习",
+    "学完后用新题验证"
+  ],
+  "skill_version": "skills-1.0/recommend_resources-1.0",
+  "run_id": "run_b0127c9c794d4861",
+  "status": "succeeded",
+  "engine": "deterministic+keyword_retrieval",
+  "model": "",
+  "prompt_version": "prompt-1.0",
+  "thread_id": "acceptance-resource-check-20261116",
+  "job_id": "",
+  "error": "",
+  "extra": {}
+}

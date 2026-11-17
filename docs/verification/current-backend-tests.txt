@@ -1,0 +1,51 @@
+....................................................................F... [ 47%]
+........................................................................ [ 95%]
+.......                                                                  [100%]
+================================== FAILURES ===================================
+_____________ test_old_cycle_indexes_migrate_without_losing_rows ______________
+
+tmp_path = WindowsPath('D:/文档/机器学习复习平台搭建/delivery-work/mlquiz-platform-main/.pytest-runtime/test_old_cycle_indexes_migrate0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D90DDB3A80>
+
+    def test_old_cycle_indexes_migrate_without_losing_rows(tmp_path, monkeypatch):
+        from sqlalchemy import create_engine, text
+        from backend.app.models import base
+        engine = create_engine('sqlite:///'+str(tmp_path/'old.db'))
+        base.Base.metadata.create_all(engine)
+        with engine.begin() as c:
+            c.execute(text('ALTER TABLE targeted_retest_cycles DROP COLUMN untested_kp_ids'))
+            for col in ('release_id', 'retest_attempt_id'):
+                c.execute(text(f'DROP INDEX ix_targeted_retest_cycles_{col}'))
+                c.execute(text(f'CREATE UNIQUE INDEX ix_targeted_retest_cycles_{col} ON targeted_retest_cycles ({col})'))
+            c.execute(text("INSERT INTO targeted_retest_cycles (cycle_id,student_id,source_attempt_id,source_assessment_version_id,diagnosis_id,release_id,retest_attempt_id,workflow_run_id,round_no,status,threshold,question_count,chapter_ids,kp_ids,concept_names,generated_question_ids,remaining_kp_ids,published_at,submitted_at,completed_at,created_at,updated_at) VALUES ('keep','s','a','','','r','','',1,'published',0.8,5,'[]','[]','[]','[]','[]','','','','','')"))
+        monkeypatch.setattr(base, 'engine', engine)
+>       base.init_db()
+
+backend\tests\test_course_acceptance.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\app\models\base.py:215: in init_db
+    _backup_existing_schema()
+backend\app\models\base.py:252: in _backup_existing_schema
+    temporary.replace(backup)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/文档/机器学习复习平台搭建/delivery-work/mlquiz-platform-main/.pytest-runtime/test_old_cycle_indexes_migrate0/backups/old-before-schema-5355f73a2c3ed748.74328.tmp')
+target = WindowsPath('D:/文档/机器学习复习平台搭建/delivery-work/mlquiz-platform-main/.pytest-runtime/test_old_cycle_indexes_migrate0/backups/old-before-schema-5355f73a2c3ed748.sqlite3')
+
+    def replace(self, target):
+        """
+        Rename this path to the target path, overwriting if that path exists.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+>       os.replace(self, target)
+E       PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'D:\\文档\\机器学习复习平台搭建\\delivery-work\\mlquiz-platform-main\\.pytest-runtime\\test_old_cycle_indexes_migrate0\\backups\\old-before-schema-5355f73a2c3ed748.74328.tmp' -> 'D:\\文档\\机器学习复习平台搭建\\delivery-work\\mlquiz-platform-main\\.pytest-runtime\\test_old_cycle_indexes_migrate0\\backups\\old-before-schema-5355f73a2c3ed748.sqlite3'
+
+C:\Users\lizhi\.workbuddy\binaries\python\versions\3.13.12\Lib\pathlib\_local.py:780: PermissionError
+=========================== short test summary info ===========================
+FAILED backend/tests/test_course_acceptance.py::test_old_cycle_indexes_migrate_without_losing_rows
+1 failed, 150 passed in 72.18s (0:01:12)

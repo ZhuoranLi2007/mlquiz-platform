@@ -143,6 +143,8 @@ def chat(db: Session, *, messages: list[dict], skill_name: str = "",
             usage_missing=usage_missing, finish_reason=finish_reason,
             duration_ms=int((time.time() - t0) * 1000), status="ok",
         ))
+        from backend.app.services.prompt_history import record
+        record(db, call_id, messages, content)
         db.commit()
         return {"content": content, "call_id": call_id,
                 "usage": usage, "usage_missing": usage_missing,
@@ -150,15 +152,19 @@ def chat(db: Session, *, messages: list[dict], skill_name: str = "",
                 "duration_ms": int((time.time() - t0) * 1000)}
     except Exception as e:
         code, hint = _classify_error(e)
+        from backend.app.services.prompt_history import redact
+        safe_error = redact(f"{type(e).__name__}: {e}")
         db.add(E.ModelCall(
             call_id=call_id, run_id=run_id, skill_name=skill_name,
             provider=cfg.MODEL_PROVIDER, model=cfg.MODEL_CHAT_MODEL,
             prompt_version=prompt_version, usage={}, usage_missing=True,
             duration_ms=int((time.time() - t0) * 1000),
-            status="failed", error=f"[{code}] {hint} | {type(e).__name__}: {e}",
+            status="failed", error=f"[{code}] {hint} | {safe_error}",
         ))
+        from backend.app.services.prompt_history import record
+        record(db, call_id, messages)
         db.commit()
-        raise ModelUnavailable(code, f"{hint}（{type(e).__name__}: {e}）", call_id)
+        raise ModelUnavailable(code, f"{hint}（{safe_error}）", call_id) from None
 
 
 def parse_json_content(content: str) -> dict | list | None:

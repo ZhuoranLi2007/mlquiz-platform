@@ -6,7 +6,7 @@ import json
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
@@ -702,3 +702,28 @@ def test_class_endpoint_never_returns_other_students_answers(client: TestClient)
     assert "SECRET_RESPONSE_S2" not in response.text
     assert "SECRET_RESPONSE_S4" not in response.text
     assert "SECRET_RAW" not in response.text
+
+
+def test_class_true_false_preserves_false_as_reliable_response(db):
+    item = db.get(E.PaperItem, "item-1")
+    item.snapshot = {**item.snapshot, "question_type": "true_false",
+                     "answer_payload": {"value": True}}
+    for sid in (1, 2):
+        answer = db.execute(select(E.Answer).where(
+            E.Answer.attempt_id == f"attempt-s{sid}-v1",
+            E.Answer.paper_item_id == "item-1")).scalars().one()
+        answer.response = {"value": False}
+        answer.response_status = "answered"
+        score = db.get(E.AnswerScore, f"score-s{sid}-i1")
+        score.correct = False
+        score.awarded_score = 0
+    db.commit()
+    result = service.class_assessment(db, "class-1", "av-1")
+    row = next(r for r in result["question_analysis"] if r["position"] == 1)
+    assert row["common_wrong_answers"] == [{"answer": "错误", "count": 2}]
+    assert row["answer_mapping_counts"]["reliable"] == 2
+    evidence = service._v2_analysis_evidence("class_assessment", result)
+    observed = next(r for r in evidence if r["positions"] == [1])
+    assert observed["interpretation_allowed"] is True
+    assert observed["common_missed_keys"] == []
+    assert observed["common_extra_keys"] == []

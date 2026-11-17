@@ -129,7 +129,12 @@ def test_registry_and_skill_preserve_classroom_evidence_rules(db: Session):
     assert skill_run is not None and skill_run.status == "succeeded"
     assert diagnosis is not None and diagnosis.scope_type == "question_analysis"
     assert diagnosis.run_id == out["run_id"]
-    assert diagnosis.skill_version == out["skill_version"]
+    from backend.app.services.classroom_diagnosis import SKILL_VERSION, latest_diagnosis
+    assert diagnosis.skill_version == SKILL_VERSION
+    assert skill_run.skill_version == out["skill_version"]
+    saved = latest_diagnosis(db, actor_user_id="teacher", scope_type="question_analysis",
+                            assessment_version_id="version-fixed", paper_item_id="item-fixed")
+    assert saved["diagnosis_id"] == diagnosis.diagnosis_id
     rendered = json.dumps(out, ensure_ascii=False)
     assert "LATEST_WRONG_STEM" not in rendered
     assert "answer_payload" not in rendered

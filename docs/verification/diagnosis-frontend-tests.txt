@@ -1,0 +1,42 @@
+
+> ml-quiz-frontend@0.1.0 test:unit
+> node --test tests/*.test.ts
+
+✔ quality fallback is not described as an unavailable AI service (0.5027ms)
+✔ configuration and connection failures have distinct notices (0.0833ms)
+✔ 真实零分与未评分保持不同状态 (0.5172ms)
+✔ 考试类型和评分状态筛选互不覆盖 (0.4629ms)
+✔ 知识点分布使用真实错题按章节聚合 (0.1888ms)
+✔ 已核对的题干与 LDA 解析公式转换为 KaTeX 可渲染表达式 (6.7ms)
+✔ 已有公式和普通文字保持原样 (0.1302ms)
+✔ 题干内直接展示原图且学生页面不展示技术详情 (71.7162ms)
+✔ 下一步行动遵循继续答卷、到期复测、计划、薄弱点的固定优先级 (1.3995ms)
+✔ 英文状态统一显示为中文 (0.1068ms)
+✔ 诊断选择器隐藏内部试卷编号，保留课堂小测顺序 (0.2583ms)
+✔ 答案格式化忽略提示和查看解析元数据 (0.1772ms)
+✔ 诊断摘要提取中文知识点名称和建议 (0.4848ms)
+✔ 兼容路由保留原查询参数并强制目标标签 (0.1601ms)
+✔ 学生身份明确区分正式班和旧测试账号 (0.1006ms)
+✔ 教师诊断页只保留三种业务模式并加载当前版本结果 (25.0144ms)
+✔ 三种诊断的分析栏不再用运行后占位文案代替结论 (87.1044ms)
+✔ 教师首页保持四项统计并把发布表单收进快捷弹窗 (27.1641ms)
+✔ 登录页选择身份即登录并保留手动登录降级 (58.8656ms)
+✔ 学生学习反馈以错题和复测闭环为核心且不展示技术文案 (39.4452ms)
+✔ 学生端侧边栏复用教师在线资源页且保持角色路由隔离 (1.1953ms)
+✔ 资源页面复用共享标题并从筛选工具栏直接开始 (59.6661ms)
+✔ 完整错题卡支持历史原题选项并用选项键展示多选答案 (29.3947ms)
+✔ recommendation links preserve all knowledge-point resources and remove duplicate or unsafe URLs (0.5893ms)
+✔ 多选题明确区分选对、漏选、错选，映射不可靠时不猜漏选 (0.9014ms)
+✔ 判断题标记和未评分结果保持独立 (0.1023ms)
+✔ 全错、部分得分与完全未评分分别归入正确的区域 (0.0888ms)
+✔ 历史结构化作答仅显示答案内容，不暴露内部字段 (0.223ms)
+✔ 无分隔符的历史 LaTeX 答案交给现有 KaTeX 渲染 (0.1899ms)
+✔ average uses each complete scored attempt once and excludes missing or partial scores (0.9246ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 535.055

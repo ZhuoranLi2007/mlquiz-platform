@@ -30,14 +30,10 @@ data/demo/*
 !data/demo/assets/
 !data/demo/assets/**
 
-# The public repository keeps only scripts needed to restore/rebuild the demo
-backend/scripts/*
-!backend/scripts/bootstrap_demo.py
-!backend/scripts/create_release_snapshot.py
-!backend/scripts/migrate_single_class_accounts.py
+# Backend restoration and read-back verification scripts are versioned.
 
 # Local audits, generated reports and source-course material
-docs/
+# Sanitised docs, reports and verification evidence are versioned.
 materials/
 /*.md
 !/README.md
@@ -60,3 +56,15 @@ materials/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Reviewed acceptance snapshots only; live databases stay ignored
+!data/acceptance/
+data/acceptance/*
+!data/acceptance/*.sqlite3.gz
+
+# Local artifact generation environments
+.artifact-build/
+.artifact-output/
+.pytest-runtime/
+.venv-*/
+!data/acceptance/README.md

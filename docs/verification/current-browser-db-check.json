@@ -1,0 +1,168 @@
+{
+  "jobs": [
+    {
+      "job_id": "job_36cdaae6b3234784",
+      "job_type": "diagnosis",
+      "status": "succeeded",
+      "stage": "succeeded"
+    },
+    {
+      "job_id": "job_a46a08f669c34009",
+      "job_type": "teacher_intervention",
+      "status": "succeeded",
+      "stage": "succeeded"
+    },
+    {
+      "job_id": "job_01b50e24d93c40c6",
+      "job_type": "diagnosis",
+      "status": "succeeded",
+      "stage": "succeeded"
+    },
+    {
+      "job_id": "job_b08bf5f7810a43d7",
+      "job_type": "teacher_compose",
+      "status": "succeeded",
+      "stage": "succeeded"
+    }
+  ],
+  "model_calls": [
+    {
+      "call_id": "call_8876badcbc384094",
+      "skill_name": "diagnose_paper",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 1356
+    },
+    {
+      "call_id": "call_c39c045f55374385",
+      "skill_name": "diagnose_question",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 3104
+    },
+    {
+      "call_id": "call_ce1f2dbbb2d64e52",
+      "skill_name": "diagnose_question",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 3829
+    },
+    {
+      "call_id": "call_73b4e3ba18174756",
+      "skill_name": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 1209
+    },
+    {
+      "call_id": "call_35d69ff94edf495a",
+      "skill_name": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 1241
+    },
+    {
+      "call_id": "call_7550c2e2b9b94472",
+      "skill_name": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 1402
+    },
+    {
+      "call_id": "call_c3b6b4c2619c4594",
+      "skill_name": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 1106
+    },
+    {
+      "call_id": "call_09176762f61b4239",
+      "skill_name": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 2708
+    },
+    {
+      "call_id": "call_da1aa29b8423445f",
+      "skill_name": "generate_questions",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 2095
+    },
+    {
+      "call_id": "call_9eb4541d11574e14",
+      "skill_name": "generate_questions",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 4642
+    },
+    {
+      "call_id": "call_ae57d914eedc4bb1",
+      "skill_name": "generate_questions",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 1305
+    },
+    {
+      "call_id": "call_6b016db110954a9e",
+      "skill_name": "generate_questions",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 5198
+    },
+    {
+      "call_id": "call_325f90652fe74b45",
+      "skill_name": "diagnose_paper",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 2042
+    },
+    {
+      "call_id": "call_ea4a9d2ae555400c",
+      "skill_name": "diagnose_question",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 3035
+    },
+    {
+      "call_id": "call_31ca948001c34082",
+      "skill_name": "diagnose_question",
+      "model": "deepseek-flash",
+      "status": "ok",
+      "duration_ms": 3783
+    }
+  ],
+  "cycles": [
+    {
+      "cycle_id": "retestcycle_b900fc924db94e71",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "source_attempt_id": "attempt_9d95c27c402e4be5",
+      "retest_attempt_id": "",
+      "status": "published",
+      "kp_ids": "[\"kp.eval.bias_var\", \"kp.regularization.l1l2\"]",
+      "untested_kp_ids": "[]",
+      "release_id": "release_957b1fb1bda5413d"
+    }
+  ],
+  "attempts": [
+    {
+      "attempt_id": "attempt_9d95c27c402e4be5",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "status": "submitted",
+      "score": 0.0,
+      "max_score": 100.0
+    },
+    {
+      "attempt_id": "attempt_ced8885c73fc4f38",
+      "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+      "status": "submitted",
+      "score": 50.0,
+      "max_score": 100.0
+    }
+  ],
+  "counts": [
+    {
+      "prompt_records": 15
+    }
+  ]
+}

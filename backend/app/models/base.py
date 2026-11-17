@@ -52,6 +52,7 @@ def _ensure_columns() -> None:
     """
     from sqlalchemy import text
     wanted = [
+        ("targeted_retest_cycles", "untested_kp_ids", "JSON DEFAULT '[]'"),
         ("users", "role", "VARCHAR(24) DEFAULT 'student'"),
         ("users", "password_hash", "TEXT DEFAULT ''"),
         ("users", "active", "BOOLEAN DEFAULT 1"),
@@ -193,8 +194,60 @@ def _ensure_columns() -> None:
             conn.execute(text(
                 f"CREATE INDEX IF NOT EXISTS {name} ON {table} ({column})"))
 
+        # A class release has one cycle per student. Older unique indexes
+        # rejected the second recipient, and also treated two unopened blank
+        # attempt IDs as duplicates. Change indexes only; preserve every row.
+        cycle_indexes = {row[1]: row[2] for row in conn.execute(
+            text("PRAGMA index_list(targeted_retest_cycles)"))}
+        for column in ("release_id", "retest_attempt_id"):
+            name = f"ix_targeted_retest_cycles_{column}"
+            if cycle_indexes.get(name):
+                conn.execute(text(f"DROP INDEX {name}"))
+                conn.execute(text(f"CREATE INDEX {name} ON targeted_retest_cycles ({column})"))
+        conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_retest_release_student "
+                          "ON targeted_retest_cycles (release_id, student_id)"))
+        conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_retest_nonempty_attempt "
+                          "ON targeted_retest_cycles (retest_attempt_id) WHERE retest_attempt_id <> ''"))
+
 
 def init_db() -> None:
     from backend.app.models import entities  # noqa: F401  (register mappers)
+    _backup_existing_schema()
     Base.metadata.create_all(engine)
     _ensure_columns()
+
+
+def _backup_existing_schema() -> None:
+    """Online backup before touching an existing schema, once per schema hash.
+
+    sqlite3.backup includes committed WAL pages; copying only the .sqlite3 file
+    can silently omit recent answers. A failed backup aborts migration.
+    """
+    import hashlib
+    import os
+    import sqlite3
+    from contextlib import closing
+    from pathlib import Path
+    filename = engine.url.database
+    if not filename or filename == ":memory:":
+        return
+    path = Path(filename)
+    if not path.is_file() or path.stat().st_size == 0:
+        return
+    with closing(sqlite3.connect(f"file:{path.resolve().as_posix()}?mode=ro", uri=True)) as source:
+        schema = source.execute(
+            "SELECT type,name,sql FROM sqlite_master ORDER BY type,name").fetchall()
+        if not schema:
+            return
+        digest = hashlib.sha256(repr(schema).encode()).hexdigest()[:16]
+        directory = path.parent / "backups"
+        directory.mkdir(exist_ok=True)
+        backup = directory / f"{path.stem}-before-schema-{digest}.sqlite3"
+        if backup.exists():
+            return
+        temporary = backup.with_suffix(f".{os.getpid()}.tmp")
+        with closing(sqlite3.connect(temporary)) as target:
+            source.backup(target)
+            if target.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
+                raise RuntimeError("Database backup integrity check failed; migration aborted")
+        temporary.replace(backup)

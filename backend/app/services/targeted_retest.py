@@ -37,6 +37,7 @@ def create_cycle(
     source_assessment_version_id: str, diagnosis_id: str, release_id: str,
     workflow_run_id: str, round_no: int, question_ids: list[str],
     chapter_ids: list[str], kp_ids: list[str], concept_names: list[str],
+    untested_kp_ids: list[str] | None = None,
 ) -> E.TargetedRetestCycle:
     existing = db.execute(select(E.TargetedRetestCycle).where(
         E.TargetedRetestCycle.source_attempt_id == source_attempt_id,
@@ -58,6 +59,8 @@ def create_cycle(
         question_count=len(question_ids), chapter_ids=chapter_ids,
         kp_ids=kp_ids, concept_names=concept_names,
         generated_question_ids=question_ids,
+        untested_kp_ids=list(dict.fromkeys(untested_kp_ids or [])),
+        remaining_kp_ids=list(dict.fromkeys([*kp_ids, *(untested_kp_ids or [])])),
         published_at=E.utcnow(), updated_at=E.utcnow(),
     )
     db.add(cycle)
@@ -118,6 +121,8 @@ def refresh_cycle(db: Session, cycle: E.TargetedRetestCycle, *, commit: bool = F
         cycle.status = "scoring_pending"
         cycle.correct_count = None
         cycle.accuracy = None
+        cycle.remaining_kp_ids = list(dict.fromkeys(
+            [*(cycle.kp_ids or []), *(cycle.untested_kp_ids or [])]))
         cycle.completed_at = ""
         cycle.updated_at = E.utcnow()
         if commit:
@@ -130,10 +135,15 @@ def refresh_cycle(db: Session, cycle: E.TargetedRetestCycle, *, commit: bool = F
     cycle.accuracy = round(accuracy, 6)
     cycle.status = "passed" if accuracy >= cycle.threshold else "not_passed"
     cycle.completed_at = cycle.completed_at or E.utcnow()
-    cycle.remaining_kp_ids = list(dict.fromkeys(
-        str(row.kp_id) for row in reliable
-        if row and row.correct is False and row.kp_id
-    ))
+    covered = {str(item.snapshot.get("main_kp_id") or scores[item.item_id].kp_id or "")
+               for item in items}
+    cycle.remaining_kp_ids = list(dict.fromkeys([
+        *(cycle.untested_kp_ids or []),
+        *(kp for kp in (cycle.kp_ids or []) if kp not in covered),
+        *(str(row.kp_id or item.snapshot.get("main_kp_id") or "")
+          for item, row in zip(items, reliable) if row.correct is False),
+    ]))
+    cycle.remaining_kp_ids = [kp for kp in cycle.remaining_kp_ids if kp]
     cycle.updated_at = E.utcnow()
     if commit:
         db.commit()
@@ -141,8 +151,12 @@ def refresh_cycle(db: Session, cycle: E.TargetedRetestCycle, *, commit: bool = F
 
 
 def record_submission(db: Session, *, release_id: str, attempt_id: str) -> dict | None:
+    attempt = db.get(E.Attempt, attempt_id)
+    if attempt is None:
+        raise ValueError("复测答卷不存在")
     cycle = db.execute(select(E.TargetedRetestCycle).where(
-        E.TargetedRetestCycle.release_id == release_id
+        E.TargetedRetestCycle.release_id == release_id,
+        E.TargetedRetestCycle.student_id == attempt.student_id,
     )).scalars().first()
     if cycle is None:
         return None
@@ -212,6 +226,7 @@ def cycle_detail(db: Session, cycle: E.TargetedRetestCycle, *, include_items: bo
         "kp_ids": cycle.kp_ids or [],
         "concept_names": cycle.concept_names or [],
         "remaining_kp_ids": cycle.remaining_kp_ids or [],
+        "untested_kp_ids": cycle.untested_kp_ids or [],
         "release_id": cycle.release_id,
         "release_title": release.title if release else "针对性复测",
         "retest_attempt_id": cycle.retest_attempt_id,
@@ -253,11 +268,11 @@ def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
         "question_count": row.get("question_count"),
         "accuracy": row.get("accuracy"),
     } for row in history]
-    remaining = list(dict.fromkeys(
+    remaining = list(dict.fromkeys([*(latest.get("remaining_kp_ids") or []), *(
         str(item.get("main_kp_id") or item.get("kp_id") or "")
         for item in latest.get("wrong_items") or []
         if item.get("main_kp_id") or item.get("kp_id")
-    ))
+    )]))
     result["remaining_concepts"] = remaining
     result["mastery_status"] = latest["status"]
     summary = ""
@@ -274,7 +289,8 @@ def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
             f"{latest.get('correct_count')}/{latest.get('question_count')}题，"
             f"正确率{pct}%，本轮已达标。"
         )
-        result["next_step"] = "默认结束本轮复测；教师仍可按需安排新的巩固测验。"
+        result["next_step"] = ("仍有未验证或答错的知识点，请继续复习并安排后续复测。"
+                               if remaining else "本轮目标已达标，后续可安排间隔复测验证稳定性。")
     elif latest["status"] == "not_passed":
         pct = round(float(latest.get("accuracy") or 0) * 100)
         wrong_positions = [str(item.get("position")) for item in latest.get("wrong_items") or []
@@ -287,6 +303,10 @@ def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
             f"正确率{pct}%，尚未达到{round(float(latest['threshold']) * 100)}%目标。{focus}"
         )
         result["next_step"] = "复习最新错题后，由教师点击“再次生成复测”进入下一轮。"
+    untested = latest.get("untested_kp_ids") or []
+    if untested:
+        summary += f"另有{len(untested)}个原薄弱知识点本轮未覆盖，不能视为掌握。"
+    result["untested_kp_ids"] = untested
     result["retest_summary"] = {
         "status": latest["status"], "round": latest["round"],
         "accuracy": latest.get("accuracy"), "text": summary,

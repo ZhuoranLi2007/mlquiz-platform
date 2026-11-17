@@ -1,0 +1,47 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> ml-quiz-frontend@0.1.0 test:unit
+> node --test tests/*.test.ts
+
+✔ quality fallback is not described as an unavailable AI service (1.220958ms)
+✔ configuration and connection failures have distinct notices (0.249626ms)
+✔ 真实零分与未评分保持不同状态 (5.346492ms)
+✔ 考试类型和评分状态筛选互不覆盖 (2.445522ms)
+✔ 知识点分布使用真实错题按章节聚合 (5.440158ms)
+✔ 已核对的题干与 LDA 解析公式转换为 KaTeX 可渲染表达式 (76.133413ms)
+✔ 已有公式和普通文字保持原样 (0.260989ms)
+✔ 题干内直接展示原图且学生页面不展示技术详情 (2.497872ms)
+✔ 下一步行动遵循继续答卷、到期复测、计划、薄弱点的固定优先级 (14.513537ms)
+✔ 英文状态统一显示为中文 (0.24386ms)
+✔ 诊断选择器隐藏内部试卷编号，保留课堂小测顺序 (1.007765ms)
+✔ 答案格式化忽略提示和查看解析元数据 (0.351081ms)
+✔ 诊断摘要提取中文知识点名称和建议 (1.955749ms)
+✔ 兼容路由保留原查询参数并强制目标标签 (1.066014ms)
+✔ 学生身份明确区分正式班和旧测试账号 (0.828272ms)
+✔ 教师诊断页只保留三种业务模式并加载当前版本结果 (6.094147ms)
+✔ 三种诊断的分析栏不再用运行后占位文案代替结论 (24.530225ms)
+✔ 教师首页保持四项统计并把发布表单收进快捷弹窗 (9.045603ms)
+✔ 登录页选择身份即登录并保留手动登录降级 (5.509765ms)
+✔ 学生学习反馈以错题和复测闭环为核心且不展示技术文案 (3.406535ms)
+✔ 学生端侧边栏复用教师在线资源页且保持角色路由隔离 (6.40349ms)
+✔ 资源页面复用共享标题并从筛选工具栏直接开始 (5.613876ms)
+✔ 完整错题卡支持历史原题选项并用选项键展示多选答案 (1.064347ms)
+✔ 多选题明确区分选对、漏选、错选，映射不可靠时不猜漏选 (3.598815ms)
+✔ 判断题标记和未评分结果保持独立 (4.190078ms)
+✔ 全错、部分得分与完全未评分分别归入正确的区域 (0.375171ms)
+✔ 历史结构化作答仅显示答案内容，不暴露内部字段 (1.723305ms)
+✔ 无分隔符的历史 LaTeX 答案交给现有 KaTeX 渲染 (5.605358ms)
+✔ average uses each complete scored attempt once and excludes missing or partial scores (1.727054ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 910.559551
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> ml-quiz-frontend@0.1.0 typecheck
+> vue-tsc --noEmit
+

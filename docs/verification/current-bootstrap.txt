@@ -1,0 +1,8 @@
+{
+  "database": "D:\\文档\\机器学习复习平台搭建\\delivery-work\\mlquiz-platform-main\\data\\db\\mlquiz.sqlite3",
+  "database_restored": false,
+  "release_assets_copied": 0,
+  "official_students": 16,
+  "credentials_created": false,
+  "accounts_ready": true
+}

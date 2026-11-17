@@ -654,7 +654,7 @@ def publish_answer(db: Session, q: E.Question, gen: E.AnswerGeneration,
     q.answer_status = "ai_auto_checked"
     q.review_status = "auto_checked"
     q.answer_origin = GENERATED_ORIGIN
-    q.active = True
+    q.active = q.created_by not in {"wrong_book_similar", "wrong_book_compose"}
     # 发布答案时只替换「答案元数据」那一段，不能整段覆盖 notes：外部导入题、
     # 上传试卷题的来源说明（例如「题干为短摘录，完整题目见来源链接」）也放在
     # notes 里，曾被这里冲掉，导致来源标注丢失（V2.1 回归项实测发现）。

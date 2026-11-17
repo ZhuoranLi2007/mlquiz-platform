@@ -1,0 +1,96 @@
+{
+  "input_zip_sha256": "a9987ff40ce43453c57fcabf44438cf3735a2ff5e31dd653b4d8a2f8d4e7ddd2",
+  "modified_files": [
+    {
+      "path": "README.md",
+      "original_sha256": "b604e7c5723470399ef38c6c6c0ddb9507ddd9f3cc71b69275432c33867cb698",
+      "new_sha256": "9dc152a27fc12f731ff1aa3d7e21b610ada209b338424571b131096ca8b25300"
+    },
+    {
+      "path": "backend/app/api/role_routes.py",
+      "original_sha256": "2fdf681c5c677a6ef82983f262fc3b0e5de27c09bd8a2df98e745c2de9fd3608",
+      "new_sha256": "deda55ed551a42e215aee232e8fff0b90b9febadfef308f711719b3dd95a9848"
+    },
+    {
+      "path": "backend/app/graphs/classroom_workflow.py",
+      "original_sha256": "2ccbdfaddded2ec9a59bbefe005cb24b62f73810bdd15e502d9871b5c224a06c",
+      "new_sha256": "e847eec4eb6e46e1ab15e28b375657c5c29ba4ae4d9ae60c6a409d90c6725437"
+    },
+    {
+      "path": "backend/app/models/base.py",
+      "original_sha256": "3e37c905c961d679dfe7160983b38acd12a646e35b53ec20c08978f5886686f1",
+      "new_sha256": "e6a0824869c6142166845a3527091fa90718fe8eac4a49a0e7b4ae8dbac485f1"
+    },
+    {
+      "path": "backend/app/models/entities.py",
+      "original_sha256": "41aa3464af5202ef166d444c7921e15af70050b05aaaaec0e5a37b51557c2dd5",
+      "new_sha256": "e591252b5ed454f77330a6ba5e105b5d1cf0e7ac2b63337b8def2df9c93faec3"
+    },
+    {
+      "path": "backend/app/services/automatic_retest.py",
+      "original_sha256": "cea23f0f08ef710a9ddb21d1df559e68b5e6e03aa9cbb7c7f7e950efe7111f4d",
+      "new_sha256": "6f7df4ab3decdb30c23b73cecc966d5480b2a0c475e1daaffa313a233713c531"
+    },
+    {
+      "path": "backend/app/services/classroom_content.py",
+      "original_sha256": "31deca8a29218108fece7b9230aac9487636875d392af5be7bce0fed5617eb4d",
+      "new_sha256": "2f8a1011140cedf7c14ca10822f11992cd8849fb1e876698e754e17ff1263b8f"
+    },
+    {
+      "path": "backend/app/services/model_provider.py",
+      "original_sha256": "f4d0392d481ccd3317ba1730028a89ba2f11d6fe6a2ad60291ef4149b9382a8c",
+      "new_sha256": "0c5d24206cf430d5b3efc9329521c1320dda0ad04a2e3a0dab8ac0aa9378f018"
+    },
+    {
+      "path": "backend/app/services/release_service.py",
+      "original_sha256": "27bd2e762c15c47b9779590be528e36772ae8d10d5ad32efb943f9e35476fbf9",
+      "new_sha256": "c2aa83f48f8c322f1630352d843a7fb9986e6c0312783f16e40622ab396115ad"
+    },
+    {
+      "path": "backend/app/services/targeted_retest.py",
+      "original_sha256": "0c8e275543be92e83e7db6ad378fb1db6cc5c493819c34e11047d87e440b8491",
+      "new_sha256": "9c02f6a48deb7dc2d23d1aeef6c1fdb5194831fdfee9db49f517360041f5c9ea"
+    },
+    {
+      "path": "backend/app/skills/implementations.py",
+      "original_sha256": "9b58909d1ef1fe22384cff9a245a56b94a3777c762f4e8bb3dcee8ba16af73a2",
+      "new_sha256": "c756514e7a4e7dddd9bfc0e434c87ee30088d4813ba9b21094d49ff6ae93d760"
+    },
+    {
+      "path": "backend/app/skills/registry.py",
+      "original_sha256": "c18037c844486ef6b88d7c2b51d77d3d073992c74d3c1537fcad1e4627d7e3a2",
+      "new_sha256": "7c1529bc48f9904711c011d459cd70087e62d314a6b7a04687f9908b3519818d"
+    },
+    {
+      "path": "backend/app/skills/verify_learning/SKILL.md",
+      "original_sha256": "7ad0b1dba03173ecd65850c72760ad86607ac285e46c26206d083a66519da8aa",
+      "new_sha256": "89825e565cc631bc7e0dd8b669c4b97c88fd4b16f8596aa625aaaacb28ef6d31"
+    },
+    {
+      "path": "backend/app/workers/worker.py",
+      "original_sha256": "3f6458b240eec83334d1d6daed29a60835d1093890a5bb771ff01cc708364972",
+      "new_sha256": "3558f6c6224041ccd2cf0a12702c5609e1702e642dd6d11b737a7da140553809"
+    },
+    {
+      "path": "backend/scripts/create_release_snapshot.py",
+      "original_sha256": "133a6962f99dbc220ffe5dff059c0a53da4834419e63f6abfe155be510f65a65",
+      "new_sha256": "eb12d3b1afa5c460c4abebd4917ab6f0c6408e08645f44762465cce6f8a4e9b3"
+    },
+    {
+      "path": "frontend/src/api/client.ts",
+      "original_sha256": "c6577dd13be8faede0bbd214ec2c4b82e0313ebecc6aaaf379d9cdede4b80326",
+      "new_sha256": "8a13d749998d38292401353d28be3dcb953e125ff2c5df5ab8ec494d6fbd4f75"
+    },
+    {
+      "path": "frontend/src/views/TeacherAnalysisView.vue",
+      "original_sha256": "8c564ca9299e039c1703e1c27b3edc1e4bf0e35428008d6628f8f33921999e5c",
+      "new_sha256": "b69232e130b1c76bdb7cb4e427cdd07e464e66d164716686b138afb8801e1651"
+    },
+    {
+      "path": "frontend/src/views/TeacherWorkspaceView.vue",
+      "original_sha256": "c7730f95f965a7b4183a7d56e06178cfedf6451cebbdb52c5067d6a6bc180740",
+      "new_sha256": "83ac7efc3606047fd0937bc8e8d8b7682e0496fc989fdd3c77a9488d670ef761"
+    }
+  ],
+  "original_files_removed": []
+}

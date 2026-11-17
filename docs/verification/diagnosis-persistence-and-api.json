@@ -1,0 +1,2376 @@
+{
+  "checked_at": "2026-11-17T13:03:03.753090+00:00",
+  "status": "passed",
+  "method": "Read back browser-triggered real DeepSeek jobs; API/database assertions and HTTP resource checks. No new model calls in this script.",
+  "scopes": {
+    "student_attempt": {
+      "diagnosis_id": "diag_20e60475c19e44c1",
+      "job_id": "job_1c8a2448d1024b5a",
+      "run_id": "run_bbfc4ea2385f4dc6",
+      "call_id": "call_924b879162d14035",
+      "recommendation_run_id": "run_8fd3b446ae394ddc",
+      "analysis": {
+        "analysis_version": 3,
+        "status": "completed",
+        "source": "deepseek",
+        "summary": "本卷已评分2题，答错2题。优先处理L1/L2 正则化、偏差-方差均衡。",
+        "context": {
+          "label": "2026-11-16 · 验收20261116-基础双知识点-A",
+          "generated_at": "2026-11-17T12:18:22+00:00",
+          "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
+        },
+        "concept_hypotheses": [
+          {
+            "name": "L1/L2 正则化",
+            "kp_id": "kp.regularization.l1l2",
+            "chapter": "未映射章节",
+            "priority": 1,
+            "priority_reason": "涉及1道错题，失分50分",
+            "question_positions": [
+              1
+            ],
+            "question_refs": [
+              "第1题"
+            ],
+            "observation": "第1题作答为True，参考答案为False。",
+            "analysis": "第1题把 LASSO 与 L2 正则化对应，而 LASSO 实际使用 L1 正则化。L1 惩罚倾向于产生稀疏权重，可用于特征选择；L2 惩罚主要收缩权重，不必然产生零权重。该作答可能混淆了两种正则化的名称与稀疏性效果。",
+            "analysis_source": "model"
+          },
+          {
+            "name": "偏差-方差均衡",
+            "kp_id": "kp.eval.bias_var",
+            "chapter": "未映射章节",
+            "priority": 2,
+            "priority_reason": "涉及1道错题，失分50分",
+            "question_positions": [
+              2
+            ],
+            "question_refs": [
+              "第2题"
+            ],
+            "observation": "第2题作答为False，参考答案为True。",
+            "analysis": "第2题将“训练错误低、验证集或测试集错误高且不稳定”判为 False，而这是过拟合的典型表现。该描述对应低训练误差与较高泛化误差之间的差距，可能反映对过拟合表现与偏差-方差含义的对应关系不清。",
+            "analysis_source": "model"
+          }
+        ],
+        "learning_plan": [
+          {
+            "priority": 1,
+            "kp_id": "kp.regularization.l1l2",
+            "name": "L1/L2 正则化",
+            "question_refs": [
+              "第1题"
+            ],
+            "action": "对照 L1 与 L2 惩罚项，分别写出目标函数，并比较哪种惩罚更容易使部分权重变为零。",
+            "success_check": "能正确判断 LASSO 使用 L1 正则化，并说明 L1 产生稀疏解、L2 主要收缩权重。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.regularization.l1l2",
+              "res_es_linear_model_html_logistic_regression"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.regularization.l1l2",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "L1/L2 正则化 · 课程精读",
+                "url": "/learn/kp.regularization.l1l2",
+                "kp_id": "kp.regularization.l1l2",
+                "kp_ids": [
+                  "kp.regularization.l1l2"
+                ],
+                "kp_name": "L1/L2 正则化",
+                "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+                "suggested_minutes": 8,
+                "location": "12.机器学习的相关理论.pdf · 第15、16页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 15,
+                    "chunk_id": "doc_62cc358de7c7fc_u0015"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 16,
+                    "chunk_id": "doc_62cc358de7c7fc_u0016"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              },
+              {
+                "resource_id": "res_es_linear_model_html_logistic_regression",
+                "type": "external",
+                "source_type": "external",
+                "content_type": "article",
+                "platform": "docs",
+                "title": "scikit-learn: Logistic Regression",
+                "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+                "kp_id": "kp.regularization.l1l2",
+                "kp_ids": [
+                  "kp.regularization.l1l2"
+                ],
+                "kp_name": "L1/L2 正则化",
+                "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "location": "scikit-learn: Logistic Regression",
+                "verified": true,
+                "access_status": "ok",
+                "checked_date": "2026-11-05",
+                "verified_scope": "title_only",
+                "content_status": "intro_checked"
+              }
+            ]
+          },
+          {
+            "priority": 2,
+            "kp_id": "kp.eval.bias_var",
+            "name": "偏差-方差均衡",
+            "question_refs": [
+              "第2题"
+            ],
+            "action": "画出训练误差与验证误差随模型复杂度变化的曲线，标出欠拟合与过拟合区域，并写出各自误差特征。",
+            "success_check": "能根据训练误差低、验证误差高且不稳定判断过拟合，并区分高偏差与高方差的表现。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.eval.bias_var",
+              "res.douyin.regularization.7676487498093614235"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.eval.bias_var",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "偏差-方差均衡 · 课程精读",
+                "url": "/learn/kp.eval.bias_var",
+                "kp_id": "kp.eval.bias_var",
+                "kp_ids": [
+                  "kp.eval.bias_var"
+                ],
+                "kp_name": "偏差-方差均衡",
+                "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                "suggested_minutes": 8,
+                "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 11,
+                    "chunk_id": "doc_62cc358de7c7fc_u0011"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 19,
+                    "chunk_id": "doc_62cc358de7c7fc_u0019"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 20,
+                    "chunk_id": "doc_62cc358de7c7fc_u0020"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              },
+              {
+                "resource_id": "res.douyin.regularization.7676487498093614235",
+                "type": "external",
+                "source_type": "external",
+                "content_type": "video",
+                "platform": "douyin",
+                "title": "第11集 过拟合与 L1 L2 正则化",
+                "url": "https://www.douyin.com/video/7676487498093614235",
+                "kp_id": "kp.eval.bias_var",
+                "kp_ids": [
+                  "kp.eval.bias_var"
+                ],
+                "kp_name": "偏差-方差均衡",
+                "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                "verified": true,
+                "access_status": "ok",
+                "checked_date": "2026-11-16",
+                "verified_scope": "partial",
+                "content_status": "intro_checked"
+              }
+            ]
+          }
+        ],
+        "recommendations": [
+          "第1题：对照 L1 与 L2 惩罚项，分别写出目标函数，并比较哪种惩罚更容易使部分权重变为零。",
+          "第2题：画出训练误差与验证误差随模型复杂度变化的曲线，标出欠拟合与过拟合区域，并写出各自误差特征。"
+        ],
+        "evidence_details": [
+          {
+            "ref": "第1题",
+            "observation": "作答为True，参考答案为False。"
+          },
+          {
+            "ref": "第2题",
+            "observation": "作答为False，参考答案为True。"
+          }
+        ],
+        "retest_summary": {
+          "status": "passed",
+          "round": 3,
+          "accuracy": 0.8,
+          "text": "第3轮复测答对4/5题，正确率80%，本轮已达标。"
+        },
+        "validation": {
+          "accepted_count": 2,
+          "rejected_count": 0
+        },
+        "more_focus_count": 0,
+        "model": "deepseek-flash",
+        "call_id": "call_924b879162d14035",
+        "original_weak_concepts": [
+          "L1/L2 正则化",
+          "偏差-方差均衡"
+        ],
+        "retest_performance": [
+          {
+            "round": 1,
+            "status": "passed",
+            "correct_count": 5,
+            "question_count": 5,
+            "accuracy": 1.0
+          },
+          {
+            "round": 2,
+            "status": "passed",
+            "correct_count": 5,
+            "question_count": 5,
+            "accuracy": 1.0
+          },
+          {
+            "round": 3,
+            "status": "passed",
+            "correct_count": 4,
+            "question_count": 5,
+            "accuracy": 0.8
+          }
+        ],
+        "remaining_concepts": [
+          "kp.regularization.l1l2"
+        ],
+        "mastery_status": "passed",
+        "next_step": "仍有未验证或答错的知识点，请继续复习并安排后续复测。",
+        "untested_kp_ids": []
+      },
+      "resources": [
+        {
+          "resource_id": "course.kp.eval.bias_var",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "偏差-方差均衡 · 课程精读",
+          "url": "/learn/kp.eval.bias_var",
+          "kp_id": "kp.eval.bias_var",
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ],
+          "kp_name": "偏差-方差均衡",
+          "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+          "suggested_minutes": 8,
+          "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+          "source_refs": [
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 11,
+              "chunk_id": "doc_62cc358de7c7fc_u0011"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 19,
+              "chunk_id": "doc_62cc358de7c7fc_u0019"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 20,
+              "chunk_id": "doc_62cc358de7c7fc_u0020"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.regularization.l1l2",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "L1/L2 正则化 · 课程精读",
+          "url": "/learn/kp.regularization.l1l2",
+          "kp_id": "kp.regularization.l1l2",
+          "kp_ids": [
+            "kp.regularization.l1l2"
+          ],
+          "kp_name": "L1/L2 正则化",
+          "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+          "suggested_minutes": 8,
+          "location": "12.机器学习的相关理论.pdf · 第15、16页",
+          "source_refs": [
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 15,
+              "chunk_id": "doc_62cc358de7c7fc_u0015"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 16,
+              "chunk_id": "doc_62cc358de7c7fc_u0016"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "res.douyin.regularization.7676487498093614235",
+          "type": "external",
+          "source_type": "external",
+          "content_type": "video",
+          "platform": "douyin",
+          "title": "第11集 过拟合与 L1 L2 正则化",
+          "url": "https://www.douyin.com/video/7676487498093614235",
+          "kp_id": "kp.eval.bias_var",
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ],
+          "kp_name": "偏差-方差均衡",
+          "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+          "verified": true,
+          "access_status": "ok",
+          "checked_date": "2026-11-16",
+          "verified_scope": "partial",
+          "content_status": "intro_checked"
+        },
+        {
+          "resource_id": "res_es_linear_model_html_logistic_regression",
+          "type": "external",
+          "source_type": "external",
+          "content_type": "article",
+          "platform": "docs",
+          "title": "scikit-learn: Logistic Regression",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+          "kp_id": "kp.regularization.l1l2",
+          "kp_ids": [
+            "kp.regularization.l1l2"
+          ],
+          "kp_name": "L1/L2 正则化",
+          "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "location": "scikit-learn: Logistic Regression",
+          "verified": true,
+          "access_status": "ok",
+          "checked_date": "2026-11-05",
+          "verified_scope": "title_only",
+          "content_status": "intro_checked"
+        }
+      ],
+      "api_matches_database": true
+    },
+    "class_assessment": {
+      "diagnosis_id": "diag_f7943f0438e94553",
+      "job_id": "job_5c2e956b624248b7",
+      "run_id": "run_be4e9987be2d4127",
+      "call_id": "call_4986656b91864184",
+      "recommendation_run_id": "run_f7fe02e682654d97",
+      "analysis": {
+        "analysis_version": 3,
+        "status": "completed",
+        "source": "deepseek",
+        "summary": "本卷有2名学生完成有效评分。优先处理偏差-方差均衡、L1/L2 正则化。",
+        "context": {
+          "label": "2026-11-16 · 验收20261116-基础双知识点-A",
+          "generated_at": "2026-11-17T12:22:53+00:00",
+          "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
+        },
+        "concept_hypotheses": [
+          {
+            "name": "偏差-方差均衡",
+            "kp_id": "kp.eval.bias_var",
+            "chapter": "",
+            "priority": 1,
+            "priority_reason": "涉及1道题，累计2人次错答",
+            "question_positions": [
+              2
+            ],
+            "question_refs": [
+              "第2题"
+            ],
+            "observation": "第2题2/2人答错，常见错误作答为错误（2人）。",
+            "analysis": "2/2人把“训练错误低、验证/测试错误高且不稳定”判为错误，与过拟合的典型表现相反。该陈述对应高方差：模型对训练数据拟合过强，泛化误差偏高且波动。可能把“错误率高”误读成整体性能差，未区分训练集与验证集误差的差异。",
+            "analysis_source": "model"
+          },
+          {
+            "name": "L1/L2 正则化",
+            "kp_id": "kp.regularization.l1l2",
+            "chapter": "",
+            "priority": 2,
+            "priority_reason": "涉及1道题，累计1人次错答",
+            "question_positions": [
+              1
+            ],
+            "question_refs": [
+              "第1题"
+            ],
+            "observation": "第1题1/2人答错。",
+            "analysis": "已有有效作答，但尚未形成至少两人的相同错误模式，暂不能归纳共同错因。",
+            "analysis_source": "evidence_rules"
+          }
+        ],
+        "learning_plan": [
+          {
+            "priority": 1,
+            "kp_id": "kp.eval.bias_var",
+            "name": "偏差-方差均衡",
+            "question_refs": [
+              "第2题"
+            ],
+            "action": "分别画出训练误差与验证误差随模型复杂度变化的曲线，标出高偏差区和高方差区，并对照题干判断过拟合位置。",
+            "success_check": "能写出过拟合时训练误差低、验证误差高且方差大的判断依据，并说明降低方差的方向。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.eval.bias_var",
+              "res.douyin.regularization.7676487498093614235"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.eval.bias_var",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "偏差-方差均衡 · 课程精读",
+                "url": "/learn/kp.eval.bias_var",
+                "kp_id": "kp.eval.bias_var",
+                "kp_ids": [
+                  "kp.eval.bias_var"
+                ],
+                "kp_name": "偏差-方差均衡",
+                "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                "suggested_minutes": 8,
+                "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 11,
+                    "chunk_id": "doc_62cc358de7c7fc_u0011"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 19,
+                    "chunk_id": "doc_62cc358de7c7fc_u0019"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 20,
+                    "chunk_id": "doc_62cc358de7c7fc_u0020"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              },
+              {
+                "resource_id": "res.douyin.regularization.7676487498093614235",
+                "type": "external",
+                "source_type": "external",
+                "content_type": "video",
+                "platform": "douyin",
+                "title": "第11集 过拟合与 L1 L2 正则化",
+                "url": "https://www.douyin.com/video/7676487498093614235",
+                "kp_id": "kp.eval.bias_var",
+                "kp_ids": [
+                  "kp.eval.bias_var"
+                ],
+                "kp_name": "偏差-方差均衡",
+                "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                "verified": true,
+                "access_status": "ok",
+                "checked_date": "2026-11-16",
+                "verified_scope": "partial",
+                "content_status": "intro_checked"
+              }
+            ]
+          },
+          {
+            "priority": 2,
+            "kp_id": "kp.regularization.l1l2",
+            "name": "L1/L2 正则化",
+            "question_refs": [
+              "第1题"
+            ],
+            "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.regularization.l1l2",
+              "res_es_linear_model_html_logistic_regression"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.regularization.l1l2",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "L1/L2 正则化 · 课程精读",
+                "url": "/learn/kp.regularization.l1l2",
+                "kp_id": "kp.regularization.l1l2",
+                "kp_ids": [
+                  "kp.regularization.l1l2"
+                ],
+                "kp_name": "L1/L2 正则化",
+                "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+                "suggested_minutes": 8,
+                "location": "12.机器学习的相关理论.pdf · 第15、16页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 15,
+                    "chunk_id": "doc_62cc358de7c7fc_u0015"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 16,
+                    "chunk_id": "doc_62cc358de7c7fc_u0016"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              },
+              {
+                "resource_id": "res_es_linear_model_html_logistic_regression",
+                "type": "external",
+                "source_type": "external",
+                "content_type": "article",
+                "platform": "docs",
+                "title": "scikit-learn: Logistic Regression",
+                "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+                "kp_id": "kp.regularization.l1l2",
+                "kp_ids": [
+                  "kp.regularization.l1l2"
+                ],
+                "kp_name": "L1/L2 正则化",
+                "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "location": "scikit-learn: Logistic Regression",
+                "verified": true,
+                "access_status": "ok",
+                "checked_date": "2026-11-05",
+                "verified_scope": "title_only",
+                "content_status": "intro_checked"
+              }
+            ]
+          }
+        ],
+        "recommendations": [
+          "第2题：分别画出训练误差与验证误差随模型复杂度变化的曲线，标出高偏差区和高方差区，并对照题干判断过拟合位置。",
+          "第1题：对照L1、L2惩罚项，比较稀疏解与权重收缩。"
+        ],
+        "evidence_details": [
+          {
+            "ref": "第2题",
+            "observation": "2/2人答错，常见错误作答为错误（2人）。"
+          },
+          {
+            "ref": "第1题",
+            "observation": "1/2人答错。"
+          }
+        ],
+        "retest_summary": null,
+        "validation": {
+          "accepted_count": 1,
+          "rejected_count": 0
+        },
+        "more_focus_count": 0,
+        "common_errors": [
+          {
+            "question_positions": [
+              2
+            ],
+            "observation": "2/2人答错，常见错误作答为错误（2人）。"
+          },
+          {
+            "question_positions": [
+              1
+            ],
+            "observation": "1/2人答错。"
+          }
+        ],
+        "model": "deepseek-flash",
+        "call_id": "call_4986656b91864184"
+      },
+      "resources": [
+        {
+          "resource_id": "course.kp.eval.bias_var",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "偏差-方差均衡 · 课程精读",
+          "url": "/learn/kp.eval.bias_var",
+          "kp_id": "kp.eval.bias_var",
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ],
+          "kp_name": "偏差-方差均衡",
+          "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+          "suggested_minutes": 8,
+          "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+          "source_refs": [
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 11,
+              "chunk_id": "doc_62cc358de7c7fc_u0011"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 19,
+              "chunk_id": "doc_62cc358de7c7fc_u0019"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 20,
+              "chunk_id": "doc_62cc358de7c7fc_u0020"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.regularization.l1l2",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "L1/L2 正则化 · 课程精读",
+          "url": "/learn/kp.regularization.l1l2",
+          "kp_id": "kp.regularization.l1l2",
+          "kp_ids": [
+            "kp.regularization.l1l2"
+          ],
+          "kp_name": "L1/L2 正则化",
+          "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+          "suggested_minutes": 8,
+          "location": "12.机器学习的相关理论.pdf · 第15、16页",
+          "source_refs": [
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 15,
+              "chunk_id": "doc_62cc358de7c7fc_u0015"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 16,
+              "chunk_id": "doc_62cc358de7c7fc_u0016"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "res.douyin.regularization.7676487498093614235",
+          "type": "external",
+          "source_type": "external",
+          "content_type": "video",
+          "platform": "douyin",
+          "title": "第11集 过拟合与 L1 L2 正则化",
+          "url": "https://www.douyin.com/video/7676487498093614235",
+          "kp_id": "kp.eval.bias_var",
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ],
+          "kp_name": "偏差-方差均衡",
+          "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+          "verified": true,
+          "access_status": "ok",
+          "checked_date": "2026-11-16",
+          "verified_scope": "partial",
+          "content_status": "intro_checked"
+        },
+        {
+          "resource_id": "res_es_linear_model_html_logistic_regression",
+          "type": "external",
+          "source_type": "external",
+          "content_type": "article",
+          "platform": "docs",
+          "title": "scikit-learn: Logistic Regression",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+          "kp_id": "kp.regularization.l1l2",
+          "kp_ids": [
+            "kp.regularization.l1l2"
+          ],
+          "kp_name": "L1/L2 正则化",
+          "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "location": "scikit-learn: Logistic Regression",
+          "verified": true,
+          "access_status": "ok",
+          "checked_date": "2026-11-05",
+          "verified_scope": "title_only",
+          "content_status": "intro_checked"
+        }
+      ],
+      "api_matches_database": true
+    },
+    "student_history": {
+      "diagnosis_id": "diag_1dcb275d4c644e6e",
+      "job_id": "job_d71b67c0a7804af9",
+      "run_id": "run_cec32aa2387c4a3a",
+      "call_id": "call_4d2fbb3459d041e9",
+      "recommendation_run_id": "run_395a326899cf4930",
+      "analysis": {
+        "analysis_version": 3,
+        "status": "completed",
+        "source": "deepseek",
+        "summary": "所选17次考试中记录到27次错答。优先处理交叉验证与评估指标、K-means 与初始敏感。",
+        "context": {
+          "label": "2025-09-22 至 2026-11-16 · 17次考试",
+          "generated_at": "2026-11-17T12:35:55+00:00",
+          "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
+        },
+        "concept_hypotheses": [
+          {
+            "name": "交叉验证与评估指标",
+            "kp_id": "kp.eval.cv",
+            "chapter": "第6章 模型评估",
+            "priority": 1,
+            "priority_reason": "所选考试累计4次错答",
+            "question_positions": [
+              4,
+              5,
+              1,
+              2
+            ],
+            "question_refs": [
+              "小测6 机器学习模型评估第4题",
+              "验收 · AI简洁组卷-无筛选第5题",
+              "验收 · AI简洁组卷-无筛选第1题",
+              "验收 · AI简洁组卷-无筛选第2题"
+            ],
+            "observation": "小测6 机器学习模型评估第4题同题出现2次错误；最近一次漏选C、D；验收 · AI简洁组卷-无筛选第1题选择A，参考答案B。",
+            "analysis": "查准率的分母是“被预测为正例的样本”，即 $TP/(TP+FP)$；而 $TP/(TP+FN)$ 是召回率。F1 是查准率与召回率的调和平均，$F1=2PR/(P+R)$，且 $1/F1=\\frac12(1/P+1/R)$；它不是算术平均。调和平均对较小值更敏感，因此 F1 更关注查准率与召回率中较低的一方。",
+            "analysis_source": "model"
+          },
+          {
+            "name": "K-means 与初始敏感",
+            "kp_id": "kp.cluster.kmeans",
+            "chapter": "第10章 聚类",
+            "priority": 2,
+            "priority_reason": "所选考试累计3次错答",
+            "question_positions": [
+              2,
+              1
+            ],
+            "question_refs": [
+              "小测10 聚类第2题",
+              "机器学习课堂测验第1题",
+              "机器学习课堂测验第2题"
+            ],
+            "observation": "小测10 聚类第2题作答选项无法与原题选项可靠对应，需核对答卷；机器学习课堂测验第1题选择B，参考答案C。",
+            "analysis": "需要核对的重点：能解释初始中心不同为何可能得到不同局部解。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "BP 误差项与权重梯度",
+            "kp_id": "kp.nn.bp",
+            "chapter": "第3章 神经网络",
+            "priority": 3,
+            "priority_reason": "所选考试累计2次错答",
+            "question_positions": [
+              4,
+              6
+            ],
+            "question_refs": [
+              "小测3 神经网络第4题",
+              "验收 · AI简洁组卷-无筛选第6题"
+            ],
+            "observation": "小测3 神经网络第4题同题出现2次错误；最近一次漏选A、B、D，错选C。",
+            "analysis": "反向传播按链式法则求梯度，梯度下降沿负梯度方向更新权重。输出层误差项 $\\delta=a-y$ 只在损失函数与输出激活函数的特定组合下成立，不能当作通用公式；隐藏层误差项还需乘以激活函数导数。Sigmoid 的导数为 $g(z)(1-g(z))$，这是链式法则中的局部导数。",
+            "analysis_source": "model"
+          },
+          {
+            "name": "第8章 网络机器学习 · 作答复习",
+            "kp_id": "",
+            "chapter": "第8章 网络机器学习",
+            "priority": 4,
+            "priority_reason": "所选考试累计2次错答",
+            "question_positions": [
+              2,
+              8
+            ],
+            "question_refs": [
+              "小测8 网络机器学习第2题",
+              "验收 · AI简洁组卷-无筛选第8题"
+            ],
+            "observation": "小测8 网络机器学习第2题同题出现2次错误；最近一次作答为错误，参考答案为正确。",
+            "analysis": "需要核对的重点：不看答案复述判断依据，再完成一道不同条件的新题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "间隔与最大间隔超平面",
+            "kp_id": "kp.svm.margin",
+            "chapter": "第5章 支持向量机",
+            "priority": 5,
+            "priority_reason": "所选考试累计2次错答",
+            "question_positions": [
+              2,
+              3
+            ],
+            "question_refs": [
+              "小测5 支持向量机第2题",
+              "验收 · AI简洁组卷-无筛选第3题"
+            ],
+            "observation": "小测5 支持向量机第2题错选D；验收 · AI简洁组卷-无筛选第3题选择C，参考答案A。",
+            "analysis": "原始硬间隔 SVM 针对线性可分的二分类问题，要求所有训练样本满足约束，目标是最大化间隔 $2/\\|w\\|$，等价于最小化 $\\frac12\\|w\\|^2$。引入松弛因子属于软间隔 SVM，不是原始硬间隔 SVM 的设定；核方法扩展了 SVM 处理非线性问题的能力，但不改变原始 SVM 的线性可分前提。",
+            "analysis_source": "model"
+          },
+          {
+            "name": "L1/L2 正则化",
+            "kp_id": "kp.regularization.l1l2",
+            "chapter": "未映射章节",
+            "priority": 6,
+            "priority_reason": "所选考试累计2次错答",
+            "question_positions": [
+              1,
+              4
+            ],
+            "question_refs": [
+              "验收20261116-基础双知识点-A第1题",
+              "当前错题概念 · 针对性复测（第3轮）第4题"
+            ],
+            "observation": "验收20261116-基础双知识点-A第1题作答为正确，参考答案为错误；当前错题概念 · 针对性复测（第3轮）第4题作答为错误，参考答案为正确。",
+            "analysis": "需要核对的重点：能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "Logistic 梯度推导",
+            "kp_id": "kp.logistic.gradient",
+            "chapter": "第2章 线性模型",
+            "priority": 7,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              5
+            ],
+            "question_refs": [
+              "小测1.2 Logistic回归与LDA第5题"
+            ],
+            "observation": "小测1.2 Logistic回归与LDA第5题作答为错误，参考答案为正确。",
+            "analysis": "反向传播按链式法则求梯度，梯度下降沿负梯度方向更新权重。输出层误差项 $\\delta=a-y$ 只在损失函数与输出激活函数的特定组合下成立，不能当作通用公式；隐藏层误差项还需乘以激活函数导数。Sigmoid 的导数为 $g(z)(1-g(z))$，这是链式法则中的局部导数。",
+            "analysis_source": "model"
+          },
+          {
+            "name": "激活函数与非线性",
+            "kp_id": "kp.nn.activation",
+            "chapter": "第3章 神经网络",
+            "priority": 8,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              1
+            ],
+            "question_refs": [
+              "小测3 神经网络第1题"
+            ],
+            "observation": "小测3 神经网络第1题错选C。",
+            "analysis": "需要核对的重点：能说明解决XOR需要合适的非线性网络结构。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "对偶问题与 KKT 求 b*",
+            "kp_id": "kp.svm.kkt",
+            "chapter": "第5章 支持向量机",
+            "priority": 9,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              7
+            ],
+            "question_refs": [
+              "小测5 支持向量机第7题"
+            ],
+            "observation": "小测5 支持向量机第7题选择C，参考答案A。",
+            "analysis": "需要核对的重点：能区分边界支持向量与落在间隔内的样本。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "第8章 网络机器学习 · 作答复习",
+            "kp_id": "",
+            "chapter": "第8章 网络机器学习",
+            "priority": 10,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              1
+            ],
+            "question_refs": [
+              "小测8 网络机器学习第1题"
+            ],
+            "observation": "小测8 网络机器学习第1题作答为错误，参考答案为正确。",
+            "analysis": "需要核对的重点：不看答案复述判断依据，再完成一道不同条件的新题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "第8章 网络机器学习 · 作答复习",
+            "kp_id": "",
+            "chapter": "第8章 网络机器学习",
+            "priority": 11,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              6
+            ],
+            "question_refs": [
+              "小测8 网络机器学习第6题"
+            ],
+            "observation": "小测8 网络机器学习第6题作答为错误，参考答案为正确。",
+            "analysis": "需要核对的重点：不看答案复述判断依据，再完成一道不同条件的新题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "第9章 集成学习 · 作答复习",
+            "kp_id": "",
+            "chapter": "第9章 集成学习",
+            "priority": 12,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              2
+            ],
+            "question_refs": [
+              "小测9 集成学习第2题"
+            ],
+            "observation": "小测9 集成学习第2题作答为错误，参考答案为正确。",
+            "analysis": "需要核对的重点：不看答案复述判断依据，再完成一道不同条件的新题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "PCA 主成分与累计方差",
+            "kp_id": "kp.pca.variance",
+            "chapter": "第11章 矩阵分解",
+            "priority": 13,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              3
+            ],
+            "question_refs": [
+              "小测11 矩阵分解第3题"
+            ],
+            "observation": "小测11 矩阵分解第3题作答选项无法与原题选项可靠对应，需核对答卷。",
+            "analysis": "作答缺失或无效，暂不能判断具体概念理解问题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "NMF 损失函数",
+            "kp_id": "kp.nmf.loss",
+            "chapter": "第11章 矩阵分解",
+            "priority": 14,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              5
+            ],
+            "question_refs": [
+              "小测11 矩阵分解第5题"
+            ],
+            "observation": "小测11 矩阵分解第5题作答选项无法与原题选项可靠对应，需核对答卷。",
+            "analysis": "作答缺失或无效，暂不能判断具体概念理解问题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "随机森林与多样性",
+            "kp_id": "kp.ensemble.forest",
+            "chapter": "第9章 集成学习",
+            "priority": 15,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              4
+            ],
+            "question_refs": [
+              "验收 · AI简洁组卷-无筛选第4题"
+            ],
+            "observation": "验收 · AI简洁组卷-无筛选第4题选择B，参考答案C。",
+            "analysis": "需要核对的重点：能区分随机森林的并行集成和Boosting的序列训练。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "第3章 神经网络 · 作答复习",
+            "kp_id": "",
+            "chapter": "第3章 神经网络",
+            "priority": 16,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              9
+            ],
+            "question_refs": [
+              "验收 · AI简洁组卷-无筛选第9题"
+            ],
+            "observation": "验收 · AI简洁组卷-无筛选第9题至少有一个空未匹配参考答案或等价表达。",
+            "analysis": "作答缺失或无效，暂不能判断具体概念理解问题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "第9章 集成学习 · 作答复习",
+            "kp_id": "",
+            "chapter": "第9章 集成学习",
+            "priority": 17,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              10
+            ],
+            "question_refs": [
+              "验收 · AI简洁组卷-无筛选第10题"
+            ],
+            "observation": "验收 · AI简洁组卷-无筛选第10题至少有一个空未匹配参考答案或等价表达。",
+            "analysis": "作答缺失或无效，暂不能判断具体概念理解问题。",
+            "analysis_source": "evidence_rules"
+          },
+          {
+            "name": "偏差-方差均衡",
+            "kp_id": "kp.eval.bias_var",
+            "chapter": "未映射章节",
+            "priority": 18,
+            "priority_reason": "所选考试累计1次错答",
+            "question_positions": [
+              2
+            ],
+            "question_refs": [
+              "验收20261116-基础双知识点-A第2题"
+            ],
+            "observation": "验收20261116-基础双知识点-A第2题作答为错误，参考答案为正确。",
+            "analysis": "需要核对的重点：能区分高偏差和高方差，并说明相应调整方向。",
+            "analysis_source": "evidence_rules"
+          }
+        ],
+        "learning_plan": [
+          {
+            "priority": 1,
+            "kp_id": "kp.eval.cv",
+            "name": "交叉验证与评估指标",
+            "question_refs": [
+              "小测6 机器学习模型评估第4题",
+              "验收 · AI简洁组卷-无筛选第5题",
+              "验收 · AI简洁组卷-无筛选第1题",
+              "验收 · AI简洁组卷-无筛选第2题"
+            ],
+            "action": "画一个混淆矩阵，分别标出查准率与召回率的分母；再由 $F1=2PR/(P+R)$ 推导 $1/F1=\\frac12(1/P+1/R)$，并代入一组 $P$、$R$ 数值比较算术平均与调和平均。",
+            "success_check": "能写出查准率、召回率、F1 的定义式，并用同一组 $P$、$R$ 算出 F1 与算术平均，说明两者数值不同。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.eval.cv"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.eval.cv",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "交叉验证与评估指标 · 课程精读",
+                "url": "/learn/kp.eval.cv",
+                "kp_id": "kp.eval.cv",
+                "kp_ids": [
+                  "kp.eval.cv"
+                ],
+                "kp_name": "交叉验证与评估指标",
+                "reason": "画出训练、验证、测试数据的分工，并计算混淆矩阵指标。",
+                "study_focus": "画出训练、验证、测试数据的分工，并计算混淆矩阵指标。",
+                "success_check": "能说明测试集为何不能反复参与调参。",
+                "suggested_minutes": 8,
+                "location": "6.机器学习模型评估.pdf · 第8、9、15、16、18页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_0a4a7227f99560",
+                    "page": 8,
+                    "chunk_id": "doc_0a4a7227f99560_u0008"
+                  },
+                  {
+                    "document_id": "doc_0a4a7227f99560",
+                    "page": 9,
+                    "chunk_id": "doc_0a4a7227f99560_u0009"
+                  },
+                  {
+                    "document_id": "doc_0a4a7227f99560",
+                    "page": 15,
+                    "chunk_id": "doc_0a4a7227f99560_u0015"
+                  },
+                  {
+                    "document_id": "doc_0a4a7227f99560",
+                    "page": 16,
+                    "chunk_id": "doc_0a4a7227f99560_u0016"
+                  },
+                  {
+                    "document_id": "doc_0a4a7227f99560",
+                    "page": 18,
+                    "chunk_id": "doc_0a4a7227f99560_u0018"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 2,
+            "kp_id": "kp.cluster.kmeans",
+            "name": "K-means 与初始敏感",
+            "question_refs": [
+              "小测10 聚类第2题",
+              "机器学习课堂测验第1题",
+              "机器学习课堂测验第2题"
+            ],
+            "action": "手算一次样本分配和聚类中心更新。",
+            "success_check": "能解释初始中心不同为何可能得到不同局部解。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.cluster.kmeans"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.cluster.kmeans",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "K-means 与初始敏感 · 课程精读",
+                "url": "/learn/kp.cluster.kmeans",
+                "kp_id": "kp.cluster.kmeans",
+                "kp_ids": [
+                  "kp.cluster.kmeans"
+                ],
+                "kp_name": "K-means 与初始敏感",
+                "reason": "手算一次样本分配和聚类中心更新。",
+                "study_focus": "手算一次样本分配和聚类中心更新。",
+                "success_check": "能解释初始中心不同为何可能得到不同局部解。",
+                "suggested_minutes": 8,
+                "location": "10.聚类.pdf · 第9、11页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_ce7bf27b6ef467",
+                    "page": 9,
+                    "chunk_id": "doc_ce7bf27b6ef467_u0009"
+                  },
+                  {
+                    "document_id": "doc_ce7bf27b6ef467",
+                    "page": 11,
+                    "chunk_id": "doc_ce7bf27b6ef467_u0011"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 3,
+            "kp_id": "kp.nn.bp",
+            "name": "BP 误差项与权重梯度",
+            "question_refs": [
+              "小测3 神经网络第4题",
+              "验收 · AI简洁组卷-无筛选第6题"
+            ],
+            "action": "画一条从损失到某层权重的计算路径，逐层写出局部导数并相乘；分别对输出层与隐藏层写出误差项，并标注权重矩阵的维度。",
+            "success_check": "能说明 $\\delta=a-y$ 成立所需的损失与激活组合，并写出含 $g'(z)$ 的隐藏层误差项及权重梯度维度。",
+            "suggested_minutes": 10,
+            "resource_ids": [
+              "course.kp.nn.bp"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.nn.bp",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "BP 误差项与权重梯度 · 课程精读",
+                "url": "/learn/kp.nn.bp",
+                "kp_id": "kp.nn.bp",
+                "kp_ids": [
+                  "kp.nn.bp"
+                ],
+                "kp_name": "BP 误差项与权重梯度",
+                "reason": "画出一条从损失到权重的计算路径，逐层相乘求梯度。",
+                "study_focus": "画出一条从损失到权重的计算路径，逐层相乘求梯度。",
+                "success_check": "能检查输出层与隐藏层误差项的差别和矩阵维度。",
+                "suggested_minutes": 10,
+                "location": "3.神经网络-2026.pdf · 第25、26、28页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_351f1ba549192a",
+                    "page": 25,
+                    "chunk_id": "doc_351f1ba549192a_u0025"
+                  },
+                  {
+                    "document_id": "doc_351f1ba549192a",
+                    "page": 26,
+                    "chunk_id": "doc_351f1ba549192a_u0026"
+                  },
+                  {
+                    "document_id": "doc_351f1ba549192a",
+                    "page": 28,
+                    "chunk_id": "doc_351f1ba549192a_u0028"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 4,
+            "kp_id": "",
+            "name": "第8章 网络机器学习 · 作答复习",
+            "question_refs": [
+              "小测8 网络机器学习第2题",
+              "验收 · AI简洁组卷-无筛选第8题"
+            ],
+            "action": "对照第8章 网络机器学习 · 作答复习的原题与解析，逐项写明正确与错误判断的依据。",
+            "success_check": "不看答案复述判断依据，再完成一道不同条件的新题。",
+            "suggested_minutes": 8,
+            "resource_ids": [],
+            "resources": []
+          },
+          {
+            "priority": 5,
+            "kp_id": "kp.svm.margin",
+            "name": "间隔与最大间隔超平面",
+            "question_refs": [
+              "小测5 支持向量机第2题",
+              "验收 · AI简洁组卷-无筛选第3题"
+            ],
+            "action": "分别写出硬间隔与软间隔 SVM 的优化目标与约束，标出松弛因子出现的位置；用点到超平面的距离解释几何间隔 $2/\\|w\\|$。",
+            "success_check": "能区分硬间隔与软间隔的约束差异，并说明原始 SVM 解决的是线性可分二分类问题。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.svm.margin"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.svm.margin",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "间隔与最大间隔超平面 · 课程精读",
+                "url": "/learn/kp.svm.margin",
+                "kp_id": "kp.svm.margin",
+                "kp_ids": [
+                  "kp.svm.margin"
+                ],
+                "kp_name": "间隔与最大间隔超平面",
+                "reason": "用点到超平面的距离解释几何间隔。",
+                "study_focus": "用点到超平面的距离解释几何间隔。",
+                "success_check": "能区分函数间隔和归一化后的几何间隔。",
+                "suggested_minutes": 8,
+                "location": "5.支持向量机-2026.pdf · 第6、7页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_e4ee00952a0dcf",
+                    "page": 6,
+                    "chunk_id": "doc_e4ee00952a0dcf_u0006"
+                  },
+                  {
+                    "document_id": "doc_e4ee00952a0dcf",
+                    "page": 7,
+                    "chunk_id": "doc_e4ee00952a0dcf_u0007"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 6,
+            "kp_id": "kp.regularization.l1l2",
+            "name": "L1/L2 正则化",
+            "question_refs": [
+              "验收20261116-基础双知识点-A第1题",
+              "当前错题概念 · 针对性复测（第3轮）第4题"
+            ],
+            "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.regularization.l1l2"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.regularization.l1l2",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "L1/L2 正则化 · 课程精读",
+                "url": "/learn/kp.regularization.l1l2",
+                "kp_id": "kp.regularization.l1l2",
+                "kp_ids": [
+                  "kp.regularization.l1l2"
+                ],
+                "kp_name": "L1/L2 正则化",
+                "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+                "suggested_minutes": 8,
+                "location": "12.机器学习的相关理论.pdf · 第15、16页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 15,
+                    "chunk_id": "doc_62cc358de7c7fc_u0015"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 16,
+                    "chunk_id": "doc_62cc358de7c7fc_u0016"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 7,
+            "kp_id": "kp.logistic.gradient",
+            "name": "Logistic 梯度推导",
+            "question_refs": [
+              "小测1.2 Logistic回归与LDA第5题"
+            ],
+            "action": "画一条从损失到某层权重的计算路径，逐层写出局部导数并相乘；分别对输出层与隐藏层写出误差项，并标注权重矩阵的维度。",
+            "success_check": "能说明 $\\delta=a-y$ 成立所需的损失与激活组合，并写出含 $g'(z)$ 的隐藏层误差项及权重梯度维度。",
+            "suggested_minutes": 10,
+            "resource_ids": [
+              "course.kp.logistic.gradient"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.logistic.gradient",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "Logistic 梯度推导 · 课程精读",
+                "url": "/learn/kp.logistic.gradient",
+                "kp_id": "kp.logistic.gradient",
+                "kp_ids": [
+                  "kp.logistic.gradient"
+                ],
+                "kp_name": "Logistic 梯度推导",
+                "reason": "将预测概率代入Logistic损失，逐步计算一次权重梯度。",
+                "study_focus": "将预测概率代入Logistic损失，逐步计算一次权重梯度。",
+                "success_check": "能写出预测概率与标签之差在梯度中的作用。",
+                "suggested_minutes": 10,
+                "location": "2.线性模型-2026.pdf · 第46、47、48页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_9664129dbe0e6d",
+                    "page": 46,
+                    "chunk_id": "doc_9664129dbe0e6d_u0046"
+                  },
+                  {
+                    "document_id": "doc_9664129dbe0e6d",
+                    "page": 47,
+                    "chunk_id": "doc_9664129dbe0e6d_u0047"
+                  },
+                  {
+                    "document_id": "doc_9664129dbe0e6d",
+                    "page": 48,
+                    "chunk_id": "doc_9664129dbe0e6d_u0048"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 8,
+            "kp_id": "kp.nn.activation",
+            "name": "激活函数与非线性",
+            "question_refs": [
+              "小测3 神经网络第1题"
+            ],
+            "action": "比较含非线性激活和全部线性层的网络表达能力。",
+            "success_check": "能说明解决XOR需要合适的非线性网络结构。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.nn.activation"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.nn.activation",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "激活函数与非线性 · 课程精读",
+                "url": "/learn/kp.nn.activation",
+                "kp_id": "kp.nn.activation",
+                "kp_ids": [
+                  "kp.nn.activation"
+                ],
+                "kp_name": "激活函数与非线性",
+                "reason": "比较含非线性激活和全部线性层的网络表达能力。",
+                "study_focus": "比较含非线性激活和全部线性层的网络表达能力。",
+                "success_check": "能说明解决XOR需要合适的非线性网络结构。",
+                "suggested_minutes": 8,
+                "location": "3.神经网络-2026.pdf · 第14、15、18页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_351f1ba549192a",
+                    "page": 14,
+                    "chunk_id": "doc_351f1ba549192a_u0014"
+                  },
+                  {
+                    "document_id": "doc_351f1ba549192a",
+                    "page": 15,
+                    "chunk_id": "doc_351f1ba549192a_u0015"
+                  },
+                  {
+                    "document_id": "doc_351f1ba549192a",
+                    "page": 18,
+                    "chunk_id": "doc_351f1ba549192a_u0018"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 9,
+            "kp_id": "kp.svm.kkt",
+            "name": "对偶问题与 KKT 求 b*",
+            "question_refs": [
+              "小测5 支持向量机第7题"
+            ],
+            "action": "用满足条件的支持向量代入KKT关系求偏置。",
+            "success_check": "能区分边界支持向量与落在间隔内的样本。",
+            "suggested_minutes": 10,
+            "resource_ids": [
+              "course.kp.svm.kkt"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.svm.kkt",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "对偶问题与 KKT 求 b* · 课程精读",
+                "url": "/learn/kp.svm.kkt",
+                "kp_id": "kp.svm.kkt",
+                "kp_ids": [
+                  "kp.svm.kkt"
+                ],
+                "kp_name": "对偶问题与 KKT 求 b*",
+                "reason": "用满足条件的支持向量代入KKT关系求偏置。",
+                "study_focus": "用满足条件的支持向量代入KKT关系求偏置。",
+                "success_check": "能区分边界支持向量与落在间隔内的样本。",
+                "suggested_minutes": 10,
+                "location": "5.支持向量机-2026.pdf · 第13、14、22页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_e4ee00952a0dcf",
+                    "page": 13,
+                    "chunk_id": "doc_e4ee00952a0dcf_u0013"
+                  },
+                  {
+                    "document_id": "doc_e4ee00952a0dcf",
+                    "page": 14,
+                    "chunk_id": "doc_e4ee00952a0dcf_u0014"
+                  },
+                  {
+                    "document_id": "doc_e4ee00952a0dcf",
+                    "page": 22,
+                    "chunk_id": "doc_e4ee00952a0dcf_u0022"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 10,
+            "kp_id": "",
+            "name": "第8章 网络机器学习 · 作答复习",
+            "question_refs": [
+              "小测8 网络机器学习第1题"
+            ],
+            "action": "对照第8章 网络机器学习 · 作答复习的原题与解析，逐项写明正确与错误判断的依据。",
+            "success_check": "不看答案复述判断依据，再完成一道不同条件的新题。",
+            "suggested_minutes": 8,
+            "resource_ids": [],
+            "resources": []
+          },
+          {
+            "priority": 11,
+            "kp_id": "",
+            "name": "第8章 网络机器学习 · 作答复习",
+            "question_refs": [
+              "小测8 网络机器学习第6题"
+            ],
+            "action": "对照第8章 网络机器学习 · 作答复习的原题与解析，逐项写明正确与错误判断的依据。",
+            "success_check": "不看答案复述判断依据，再完成一道不同条件的新题。",
+            "suggested_minutes": 8,
+            "resource_ids": [],
+            "resources": []
+          },
+          {
+            "priority": 12,
+            "kp_id": "",
+            "name": "第9章 集成学习 · 作答复习",
+            "question_refs": [
+              "小测9 集成学习第2题"
+            ],
+            "action": "对照第9章 集成学习 · 作答复习的原题与解析，逐项写明正确与错误判断的依据。",
+            "success_check": "不看答案复述判断依据，再完成一道不同条件的新题。",
+            "suggested_minutes": 8,
+            "resource_ids": [],
+            "resources": []
+          },
+          {
+            "priority": 13,
+            "kp_id": "kp.pca.variance",
+            "name": "PCA 主成分与累计方差",
+            "question_refs": [
+              "小测11 矩阵分解第3题"
+            ],
+            "action": "先核对本题提交记录和原题选项，再补做一次有效作答。",
+            "success_check": "取得可比较的作答及有效评分后再分析错因。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.pca.variance"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.pca.variance",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "PCA 主成分与累计方差 · 课程精读",
+                "url": "/learn/kp.pca.variance",
+                "kp_id": "kp.pca.variance",
+                "kp_ids": [
+                  "kp.pca.variance"
+                ],
+                "kp_name": "PCA 主成分与累计方差",
+                "reason": "将特征值按大小排序，手算累计解释方差比。",
+                "study_focus": "将特征值按大小排序，手算累计解释方差比。",
+                "success_check": "能根据累计比例选择维数，而不把原始特征直接当作主成分。",
+                "suggested_minutes": 8,
+                "location": "11.主成分分析与非负矩阵分解.pdf · 第17、18页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_b63605948fd562",
+                    "page": 17,
+                    "chunk_id": "doc_b63605948fd562_u0017"
+                  },
+                  {
+                    "document_id": "doc_b63605948fd562",
+                    "page": 18,
+                    "chunk_id": "doc_b63605948fd562_u0018"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 14,
+            "kp_id": "kp.nmf.loss",
+            "name": "NMF 损失函数",
+            "question_refs": [
+              "小测11 矩阵分解第5题"
+            ],
+            "action": "先核对本题提交记录和原题选项，再补做一次有效作答。",
+            "success_check": "取得可比较的作答及有效评分后再分析错因。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.nmf.loss"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.nmf.loss",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "NMF 损失函数 · 课程精读",
+                "url": "/learn/kp.nmf.loss",
+                "kp_id": "kp.nmf.loss",
+                "kp_ids": [
+                  "kp.nmf.loss"
+                ],
+                "kp_name": "NMF 损失函数",
+                "reason": "写出非负分解的重构目标及矩阵非负约束。",
+                "study_focus": "写出非负分解的重构目标及矩阵非负约束。",
+                "success_check": "能区分NMF的非负约束与PCA的正交方向。",
+                "suggested_minutes": 8,
+                "location": "11.主成分分析与非负矩阵分解.pdf · 第21、25页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_b63605948fd562",
+                    "page": 21,
+                    "chunk_id": "doc_b63605948fd562_u0021"
+                  },
+                  {
+                    "document_id": "doc_b63605948fd562",
+                    "page": 25,
+                    "chunk_id": "doc_b63605948fd562_u0025"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 15,
+            "kp_id": "kp.ensemble.forest",
+            "name": "随机森林与多样性",
+            "question_refs": [
+              "验收 · AI简洁组卷-无筛选第4题"
+            ],
+            "action": "分别说明自助采样和特征随机选择增加多样性的方式。",
+            "success_check": "能区分随机森林的并行集成和Boosting的序列训练。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.ensemble.forest"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.ensemble.forest",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "随机森林与多样性 · 课程精读",
+                "url": "/learn/kp.ensemble.forest",
+                "kp_id": "kp.ensemble.forest",
+                "kp_ids": [
+                  "kp.ensemble.forest"
+                ],
+                "kp_name": "随机森林与多样性",
+                "reason": "分别说明自助采样和特征随机选择增加多样性的方式。",
+                "study_focus": "分别说明自助采样和特征随机选择增加多样性的方式。",
+                "success_check": "能区分随机森林的并行集成和Boosting的序列训练。",
+                "suggested_minutes": 8,
+                "location": "9.集成学习.pdf · 第27、29页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_5ce7fd19a48bfb",
+                    "page": 27,
+                    "chunk_id": "doc_5ce7fd19a48bfb_u0027"
+                  },
+                  {
+                    "document_id": "doc_5ce7fd19a48bfb",
+                    "page": 29,
+                    "chunk_id": "doc_5ce7fd19a48bfb_u0029"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          },
+          {
+            "priority": 16,
+            "kp_id": "",
+            "name": "第3章 神经网络 · 作答复习",
+            "question_refs": [
+              "验收 · AI简洁组卷-无筛选第9题"
+            ],
+            "action": "先核对本题提交记录和原题选项，再补做一次有效作答。",
+            "success_check": "取得可比较的作答及有效评分后再分析错因。",
+            "suggested_minutes": 8,
+            "resource_ids": [],
+            "resources": []
+          },
+          {
+            "priority": 17,
+            "kp_id": "",
+            "name": "第9章 集成学习 · 作答复习",
+            "question_refs": [
+              "验收 · AI简洁组卷-无筛选第10题"
+            ],
+            "action": "先核对本题提交记录和原题选项，再补做一次有效作答。",
+            "success_check": "取得可比较的作答及有效评分后再分析错因。",
+            "suggested_minutes": 8,
+            "resource_ids": [],
+            "resources": []
+          },
+          {
+            "priority": 18,
+            "kp_id": "kp.eval.bias_var",
+            "name": "偏差-方差均衡",
+            "question_refs": [
+              "验收20261116-基础双知识点-A第2题"
+            ],
+            "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+            "suggested_minutes": 8,
+            "resource_ids": [
+              "course.kp.eval.bias_var"
+            ],
+            "resources": [
+              {
+                "resource_id": "course.kp.eval.bias_var",
+                "type": "local_course",
+                "source_type": "local",
+                "content_type": "course_pages",
+                "platform": "课程原页",
+                "title": "偏差-方差均衡 · 课程精读",
+                "url": "/learn/kp.eval.bias_var",
+                "kp_id": "kp.eval.bias_var",
+                "kp_ids": [
+                  "kp.eval.bias_var"
+                ],
+                "kp_name": "偏差-方差均衡",
+                "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                "suggested_minutes": 8,
+                "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                "source_refs": [
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 11,
+                    "chunk_id": "doc_62cc358de7c7fc_u0011"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 19,
+                    "chunk_id": "doc_62cc358de7c7fc_u0019"
+                  },
+                  {
+                    "document_id": "doc_62cc358de7c7fc",
+                    "page": 20,
+                    "chunk_id": "doc_62cc358de7c7fc_u0020"
+                  }
+                ],
+                "verified": true,
+                "access_status": "offline_available"
+              }
+            ]
+          }
+        ],
+        "recommendations": [
+          "小测6 机器学习模型评估第4题、验收 · AI简洁组卷-无筛选第5题：画一个混淆矩阵，分别标出查准率与召回率的分母；再由 $F1=2PR/(P+R)$ 推导 $1/F1=\\frac12(1/P+1/R)$，并代入一组 $P$、$R$ 数值比较算术平均与调和平均。",
+          "小测10 聚类第2题、机器学习课堂测验第1题：手算一次样本分配和聚类中心更新。",
+          "小测3 神经网络第4题、验收 · AI简洁组卷-无筛选第6题：画一条从损失到某层权重的计算路径，逐层写出局部导数并相乘；分别对输出层与隐藏层写出误差项，并标注权重矩阵的维度。"
+        ],
+        "evidence_details": [
+          {
+            "ref": "小测6 机器学习模型评估第4题、验收 · AI简洁组卷-无筛选第5题",
+            "observation": "同题出现2次错误；最近一次漏选C、D。"
+          },
+          {
+            "ref": "小测3 神经网络第4题、验收 · AI简洁组卷-无筛选第6题",
+            "observation": "同题出现2次错误；最近一次漏选A、B、D，错选C。"
+          },
+          {
+            "ref": "小测8 网络机器学习第2题、验收 · AI简洁组卷-无筛选第8题",
+            "observation": "同题出现2次错误；最近一次作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "小测1.2 Logistic回归与LDA第5题",
+            "observation": "作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "小测3 神经网络第1题",
+            "observation": "错选C。"
+          },
+          {
+            "ref": "小测5 支持向量机第2题",
+            "observation": "错选D。"
+          },
+          {
+            "ref": "小测5 支持向量机第7题",
+            "observation": "选择C，参考答案A。"
+          },
+          {
+            "ref": "小测8 网络机器学习第1题",
+            "observation": "作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "小测8 网络机器学习第6题",
+            "observation": "作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "小测9 集成学习第2题",
+            "observation": "作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "小测10 聚类第2题",
+            "observation": "作答选项无法与原题选项可靠对应，需核对答卷。"
+          },
+          {
+            "ref": "小测11 矩阵分解第3题",
+            "observation": "作答选项无法与原题选项可靠对应，需核对答卷。"
+          },
+          {
+            "ref": "小测11 矩阵分解第5题",
+            "observation": "作答选项无法与原题选项可靠对应，需核对答卷。"
+          },
+          {
+            "ref": "验收 · AI简洁组卷-无筛选第1题",
+            "observation": "选择A，参考答案B。"
+          },
+          {
+            "ref": "验收 · AI简洁组卷-无筛选第2题",
+            "observation": "选择B，参考答案A。"
+          },
+          {
+            "ref": "验收 · AI简洁组卷-无筛选第3题",
+            "observation": "选择C，参考答案A。"
+          },
+          {
+            "ref": "验收 · AI简洁组卷-无筛选第4题",
+            "observation": "选择B，参考答案C。"
+          },
+          {
+            "ref": "验收 · AI简洁组卷-无筛选第9题",
+            "observation": "至少有一个空未匹配参考答案或等价表达。"
+          },
+          {
+            "ref": "验收 · AI简洁组卷-无筛选第10题",
+            "observation": "至少有一个空未匹配参考答案或等价表达。"
+          },
+          {
+            "ref": "机器学习课堂测验第1题",
+            "observation": "选择B，参考答案C。"
+          },
+          {
+            "ref": "机器学习课堂测验第2题",
+            "observation": "作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "验收20261116-基础双知识点-A第1题",
+            "observation": "作答为正确，参考答案为错误。"
+          },
+          {
+            "ref": "验收20261116-基础双知识点-A第2题",
+            "observation": "作答为错误，参考答案为正确。"
+          },
+          {
+            "ref": "当前错题概念 · 针对性复测（第3轮）第4题",
+            "observation": "作答为错误，参考答案为正确。"
+          }
+        ],
+        "retest_summary": null,
+        "validation": {
+          "accepted_count": 6,
+          "rejected_count": 0,
+          "json_math_escapes_repaired": false
+        },
+        "more_focus_count": 15,
+        "model": "deepseek-flash",
+        "call_id": "call_4d2fbb3459d041e9"
+      },
+      "resources": [
+        {
+          "resource_id": "course.kp.eval.cv",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "交叉验证与评估指标 · 课程精读",
+          "url": "/learn/kp.eval.cv",
+          "kp_id": "kp.eval.cv",
+          "kp_ids": [
+            "kp.eval.cv"
+          ],
+          "kp_name": "交叉验证与评估指标",
+          "reason": "画出训练、验证、测试数据的分工，并计算混淆矩阵指标。",
+          "study_focus": "画出训练、验证、测试数据的分工，并计算混淆矩阵指标。",
+          "success_check": "能说明测试集为何不能反复参与调参。",
+          "suggested_minutes": 8,
+          "location": "6.机器学习模型评估.pdf · 第8、9、15、16、18页",
+          "source_refs": [
+            {
+              "document_id": "doc_0a4a7227f99560",
+              "page": 8,
+              "chunk_id": "doc_0a4a7227f99560_u0008"
+            },
+            {
+              "document_id": "doc_0a4a7227f99560",
+              "page": 9,
+              "chunk_id": "doc_0a4a7227f99560_u0009"
+            },
+            {
+              "document_id": "doc_0a4a7227f99560",
+              "page": 15,
+              "chunk_id": "doc_0a4a7227f99560_u0015"
+            },
+            {
+              "document_id": "doc_0a4a7227f99560",
+              "page": 16,
+              "chunk_id": "doc_0a4a7227f99560_u0016"
+            },
+            {
+              "document_id": "doc_0a4a7227f99560",
+              "page": 18,
+              "chunk_id": "doc_0a4a7227f99560_u0018"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.cluster.kmeans",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "K-means 与初始敏感 · 课程精读",
+          "url": "/learn/kp.cluster.kmeans",
+          "kp_id": "kp.cluster.kmeans",
+          "kp_ids": [
+            "kp.cluster.kmeans"
+          ],
+          "kp_name": "K-means 与初始敏感",
+          "reason": "手算一次样本分配和聚类中心更新。",
+          "study_focus": "手算一次样本分配和聚类中心更新。",
+          "success_check": "能解释初始中心不同为何可能得到不同局部解。",
+          "suggested_minutes": 8,
+          "location": "10.聚类.pdf · 第9、11页",
+          "source_refs": [
+            {
+              "document_id": "doc_ce7bf27b6ef467",
+              "page": 9,
+              "chunk_id": "doc_ce7bf27b6ef467_u0009"
+            },
+            {
+              "document_id": "doc_ce7bf27b6ef467",
+              "page": 11,
+              "chunk_id": "doc_ce7bf27b6ef467_u0011"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.nn.bp",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "BP 误差项与权重梯度 · 课程精读",
+          "url": "/learn/kp.nn.bp",
+          "kp_id": "kp.nn.bp",
+          "kp_ids": [
+            "kp.nn.bp"
+          ],
+          "kp_name": "BP 误差项与权重梯度",
+          "reason": "画出一条从损失到权重的计算路径，逐层相乘求梯度。",
+          "study_focus": "画出一条从损失到权重的计算路径，逐层相乘求梯度。",
+          "success_check": "能检查输出层与隐藏层误差项的差别和矩阵维度。",
+          "suggested_minutes": 10,
+          "location": "3.神经网络-2026.pdf · 第25、26、28页",
+          "source_refs": [
+            {
+              "document_id": "doc_351f1ba549192a",
+              "page": 25,
+              "chunk_id": "doc_351f1ba549192a_u0025"
+            },
+            {
+              "document_id": "doc_351f1ba549192a",
+              "page": 26,
+              "chunk_id": "doc_351f1ba549192a_u0026"
+            },
+            {
+              "document_id": "doc_351f1ba549192a",
+              "page": 28,
+              "chunk_id": "doc_351f1ba549192a_u0028"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.regularization.l1l2",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "L1/L2 正则化 · 课程精读",
+          "url": "/learn/kp.regularization.l1l2",
+          "kp_id": "kp.regularization.l1l2",
+          "kp_ids": [
+            "kp.regularization.l1l2"
+          ],
+          "kp_name": "L1/L2 正则化",
+          "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+          "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+          "suggested_minutes": 8,
+          "location": "12.机器学习的相关理论.pdf · 第15、16页",
+          "source_refs": [
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 15,
+              "chunk_id": "doc_62cc358de7c7fc_u0015"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 16,
+              "chunk_id": "doc_62cc358de7c7fc_u0016"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.svm.margin",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "间隔与最大间隔超平面 · 课程精读",
+          "url": "/learn/kp.svm.margin",
+          "kp_id": "kp.svm.margin",
+          "kp_ids": [
+            "kp.svm.margin"
+          ],
+          "kp_name": "间隔与最大间隔超平面",
+          "reason": "用点到超平面的距离解释几何间隔。",
+          "study_focus": "用点到超平面的距离解释几何间隔。",
+          "success_check": "能区分函数间隔和归一化后的几何间隔。",
+          "suggested_minutes": 8,
+          "location": "5.支持向量机-2026.pdf · 第6、7页",
+          "source_refs": [
+            {
+              "document_id": "doc_e4ee00952a0dcf",
+              "page": 6,
+              "chunk_id": "doc_e4ee00952a0dcf_u0006"
+            },
+            {
+              "document_id": "doc_e4ee00952a0dcf",
+              "page": 7,
+              "chunk_id": "doc_e4ee00952a0dcf_u0007"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.logistic.gradient",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "Logistic 梯度推导 · 课程精读",
+          "url": "/learn/kp.logistic.gradient",
+          "kp_id": "kp.logistic.gradient",
+          "kp_ids": [
+            "kp.logistic.gradient"
+          ],
+          "kp_name": "Logistic 梯度推导",
+          "reason": "将预测概率代入Logistic损失，逐步计算一次权重梯度。",
+          "study_focus": "将预测概率代入Logistic损失，逐步计算一次权重梯度。",
+          "success_check": "能写出预测概率与标签之差在梯度中的作用。",
+          "suggested_minutes": 10,
+          "location": "2.线性模型-2026.pdf · 第46、47、48页",
+          "source_refs": [
+            {
+              "document_id": "doc_9664129dbe0e6d",
+              "page": 46,
+              "chunk_id": "doc_9664129dbe0e6d_u0046"
+            },
+            {
+              "document_id": "doc_9664129dbe0e6d",
+              "page": 47,
+              "chunk_id": "doc_9664129dbe0e6d_u0047"
+            },
+            {
+              "document_id": "doc_9664129dbe0e6d",
+              "page": 48,
+              "chunk_id": "doc_9664129dbe0e6d_u0048"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.nmf.loss",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "NMF 损失函数 · 课程精读",
+          "url": "/learn/kp.nmf.loss",
+          "kp_id": "kp.nmf.loss",
+          "kp_ids": [
+            "kp.nmf.loss"
+          ],
+          "kp_name": "NMF 损失函数",
+          "reason": "写出非负分解的重构目标及矩阵非负约束。",
+          "study_focus": "写出非负分解的重构目标及矩阵非负约束。",
+          "success_check": "能区分NMF的非负约束与PCA的正交方向。",
+          "suggested_minutes": 8,
+          "location": "11.主成分分析与非负矩阵分解.pdf · 第21、25页",
+          "source_refs": [
+            {
+              "document_id": "doc_b63605948fd562",
+              "page": 21,
+              "chunk_id": "doc_b63605948fd562_u0021"
+            },
+            {
+              "document_id": "doc_b63605948fd562",
+              "page": 25,
+              "chunk_id": "doc_b63605948fd562_u0025"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.pca.variance",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "PCA 主成分与累计方差 · 课程精读",
+          "url": "/learn/kp.pca.variance",
+          "kp_id": "kp.pca.variance",
+          "kp_ids": [
+            "kp.pca.variance"
+          ],
+          "kp_name": "PCA 主成分与累计方差",
+          "reason": "将特征值按大小排序，手算累计解释方差比。",
+          "study_focus": "将特征值按大小排序，手算累计解释方差比。",
+          "success_check": "能根据累计比例选择维数，而不把原始特征直接当作主成分。",
+          "suggested_minutes": 8,
+          "location": "11.主成分分析与非负矩阵分解.pdf · 第17、18页",
+          "source_refs": [
+            {
+              "document_id": "doc_b63605948fd562",
+              "page": 17,
+              "chunk_id": "doc_b63605948fd562_u0017"
+            },
+            {
+              "document_id": "doc_b63605948fd562",
+              "page": 18,
+              "chunk_id": "doc_b63605948fd562_u0018"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.eval.bias_var",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "偏差-方差均衡 · 课程精读",
+          "url": "/learn/kp.eval.bias_var",
+          "kp_id": "kp.eval.bias_var",
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ],
+          "kp_name": "偏差-方差均衡",
+          "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+          "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+          "suggested_minutes": 8,
+          "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+          "source_refs": [
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 11,
+              "chunk_id": "doc_62cc358de7c7fc_u0011"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 19,
+              "chunk_id": "doc_62cc358de7c7fc_u0019"
+            },
+            {
+              "document_id": "doc_62cc358de7c7fc",
+              "page": 20,
+              "chunk_id": "doc_62cc358de7c7fc_u0020"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.svm.kkt",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "对偶问题与 KKT 求 b* · 课程精读",
+          "url": "/learn/kp.svm.kkt",
+          "kp_id": "kp.svm.kkt",
+          "kp_ids": [
+            "kp.svm.kkt"
+          ],
+          "kp_name": "对偶问题与 KKT 求 b*",
+          "reason": "用满足条件的支持向量代入KKT关系求偏置。",
+          "study_focus": "用满足条件的支持向量代入KKT关系求偏置。",
+          "success_check": "能区分边界支持向量与落在间隔内的样本。",
+          "suggested_minutes": 10,
+          "location": "5.支持向量机-2026.pdf · 第13、14、22页",
+          "source_refs": [
+            {
+              "document_id": "doc_e4ee00952a0dcf",
+              "page": 13,
+              "chunk_id": "doc_e4ee00952a0dcf_u0013"
+            },
+            {
+              "document_id": "doc_e4ee00952a0dcf",
+              "page": 14,
+              "chunk_id": "doc_e4ee00952a0dcf_u0014"
+            },
+            {
+              "document_id": "doc_e4ee00952a0dcf",
+              "page": 22,
+              "chunk_id": "doc_e4ee00952a0dcf_u0022"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.nn.activation",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "激活函数与非线性 · 课程精读",
+          "url": "/learn/kp.nn.activation",
+          "kp_id": "kp.nn.activation",
+          "kp_ids": [
+            "kp.nn.activation"
+          ],
+          "kp_name": "激活函数与非线性",
+          "reason": "比较含非线性激活和全部线性层的网络表达能力。",
+          "study_focus": "比较含非线性激活和全部线性层的网络表达能力。",
+          "success_check": "能说明解决XOR需要合适的非线性网络结构。",
+          "suggested_minutes": 8,
+          "location": "3.神经网络-2026.pdf · 第14、15、18页",
+          "source_refs": [
+            {
+              "document_id": "doc_351f1ba549192a",
+              "page": 14,
+              "chunk_id": "doc_351f1ba549192a_u0014"
+            },
+            {
+              "document_id": "doc_351f1ba549192a",
+              "page": 15,
+              "chunk_id": "doc_351f1ba549192a_u0015"
+            },
+            {
+              "document_id": "doc_351f1ba549192a",
+              "page": 18,
+              "chunk_id": "doc_351f1ba549192a_u0018"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        },
+        {
+          "resource_id": "course.kp.ensemble.forest",
+          "type": "local_course",
+          "source_type": "local",
+          "content_type": "course_pages",
+          "platform": "课程原页",
+          "title": "随机森林与多样性 · 课程精读",
+          "url": "/learn/kp.ensemble.forest",
+          "kp_id": "kp.ensemble.forest",
+          "kp_ids": [
+            "kp.ensemble.forest"
+          ],
+          "kp_name": "随机森林与多样性",
+          "reason": "分别说明自助采样和特征随机选择增加多样性的方式。",
+          "study_focus": "分别说明自助采样和特征随机选择增加多样性的方式。",
+          "success_check": "能区分随机森林的并行集成和Boosting的序列训练。",
+          "suggested_minutes": 8,
+          "location": "9.集成学习.pdf · 第27、29页",
+          "source_refs": [
+            {
+              "document_id": "doc_5ce7fd19a48bfb",
+              "page": 27,
+              "chunk_id": "doc_5ce7fd19a48bfb_u0027"
+            },
+            {
+              "document_id": "doc_5ce7fd19a48bfb",
+              "page": 29,
+              "chunk_id": "doc_5ce7fd19a48bfb_u0029"
+            }
+          ],
+          "verified": true,
+          "access_status": "offline_available"
+        }
+      ],
+      "api_matches_database": true
+    }
+  },
+  "student_projection_matches": true,
+  "material_kps": 35,
+  "unique_course_page_images": 80,
+  "image_requests": 82,
+  "all_resource_hashes_match": true,
+  "preservation": {
+    "questions": {
+      "baseline_rows": 832,
+      "changed_or_missing": 0
+    },
+    "attempts": {
+      "baseline_rows": 130,
+      "changed_or_missing": 0
+    },
+    "answers": {
+      "baseline_rows": 747,
+      "changed_or_missing": 0
+    },
+    "answer_scores": {
+      "baseline_rows": 749,
+      "changed_or_missing": 0
+    }
+  },
+  "new_model_call_ids": [
+    "call_4986656b91864184",
+    "call_4d2fbb3459d041e9",
+    "call_924b879162d14035",
+    "call_a41fc166b1e145cc",
+    "call_de3f4dd477154f56"
+  ],
+  "new_model_calls": 5,
+  "total_prompt_records": 85,
+  "recorded_intermediate_failure": {
+    "job_id": "job_677038ad97f54070",
+    "model_status": "invalid_output",
+    "reason": "Unescaped LaTeX backslash made model JSON invalid; retained original response and honest rule fallback; subsequent real calls passed after parser and prompt repair."
+  },
+  "integrity_check": "ok"
+}

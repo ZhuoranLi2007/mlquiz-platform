@@ -368,6 +368,16 @@ def list_student_assignments(db: Session, student_id: str) -> list[dict]:
         detail.pop("recipients", None)
         detail["release_status"] = release_status
         detail.update(own)
+        cycle = db.execute(select(E.TargetedRetestCycle).where(
+            E.TargetedRetestCycle.release_id == recipient.release_id,
+            E.TargetedRetestCycle.student_id == student_id)).scalars().first()
+        if cycle:
+            detail["targeted_retest"] = {
+                "cycle_id": cycle.cycle_id, "round": cycle.round_no,
+                "status": cycle.status, "question_count": cycle.question_count,
+                "correct_count": cycle.correct_count, "accuracy": cycle.accuracy}
+        else:
+            detail["targeted_retest"] = None
         # A submitted answer sheet remains visible even if the release is
         # subsequently closed.  Unsubmitted drafts/closed releases are not
         # actionable; expired assignments are returned explicitly so the UI
@@ -403,6 +413,11 @@ def start_assignment(db: Session, recipient_id: str, *, student_id: str,
     attempt = db.get(E.Attempt, created["attempt_id"])
     attempt.assignment_recipient_id = recipient.recipient_id
     attempt.retest_of_attempt_id = release.source_attempt_id
+    cycle = db.execute(select(E.TargetedRetestCycle).where(
+        E.TargetedRetestCycle.release_id == release.release_id,
+        E.TargetedRetestCycle.student_id == student_id)).scalars().first()
+    if cycle:
+        attempt.retest_of_attempt_id = cycle.source_attempt_id
     attempt.diagnosis_cycle_id = release.source_diagnosis_id
     recipient.attempt_id = attempt.attempt_id
     recipient.status = "opened"
@@ -448,7 +463,8 @@ def submit_assignment(db: Session, recipient_id: str, *, student_id: str,
             from backend.app.graphs import classroom_workflow
             workflow = classroom_workflow.run_post_submission(
                 db,
-                actor_user_id=(release.teacher_user_id if release else user_id),
+                actor_user_id=(release.teacher_user_id if release else
+                               db.get(E.Attempt, recipient.attempt_id).user_id),
                 attempt_id=recipient.attempt_id,
             )
             result["classroom_workflow"] = workflow

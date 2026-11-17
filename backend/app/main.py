@@ -19,6 +19,7 @@ from backend.app.api.upload_routes import router as upload_router
 from backend.app.api.auth_routes import router as auth_router
 from backend.app.api.role_routes import router as role_router
 from backend.app.api.classroom_routes import router as classroom_router
+from backend.app.api.learning_routes import router as learning_router
 from backend.app.models.base import init_db
 
 init_db()
@@ -46,6 +47,7 @@ app.include_router(upload_router)
 app.include_router(auth_router)
 app.include_router(role_router)
 app.include_router(classroom_router)
+app.include_router(learning_router)
 
 DIST = cfg.PROJECT_ROOT / "frontend" / "dist"
 

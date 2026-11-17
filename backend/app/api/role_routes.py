@@ -59,6 +59,8 @@ class InterventionIn(BaseModel):
     scope_type: str = Field(default="student_attempt", max_length=32)
     attempt_id: str = Field(default="", max_length=64)
     count: int = Field(default=cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT, ge=1, le=5)
+    date_from: str = Field(default="", max_length=10)
+    date_to: str = Field(default="", max_length=10)
 
 
 class ApproveCandidateIn(BaseModel):
@@ -319,9 +321,62 @@ def teacher_intervention(
             classroom_id=body.classroom_id,
             scope_type=body.scope_type,
             attempt_id=body.attempt_id,
+            date_from=body.date_from, date_to=body.date_to,
             count=body.count)
     except (classroom_diagnosis.ClassroomDiagnosisError, ValueError) as exc:
         raise HTTPException(400, str(exc)) from exc
+
+
+def _queue_teacher_job(db: Session, principal, kind: str, payload: dict) -> dict:
+    from backend.app.workers.worker import create_job
+    from sqlalchemy import text
+    # Reserve SQLite's writer before reading active jobs. Two tabs/processes
+    # must not both observe an empty result and enqueue the same paid workflow.
+    db.execute(text("BEGIN IMMEDIATE"))
+    # Reopening the page or double clicking joins an existing active request.
+    active = db.execute(select(E.Job).where(
+        E.Job.user_id == principal.user_id, E.Job.job_type == kind,
+        E.Job.status.in_(["queued", "running"]))).scalars().all()
+    for job in active:
+        if job.payload == payload:
+            db.commit()
+            return {"job_id": job.job_id, "status": job.status, "reused": True}
+    return create_job(db, kind, payload, user_id=principal.user_id)
+
+
+@router.post("/teacher/workflows/intervention/jobs")
+def queue_intervention(body: InterventionIn,
+                       principal=Depends(auth_service.require_teacher),
+                       db: Session = Depends(get_session)) -> dict:
+    return _queue_teacher_job(db, principal, "teacher_intervention", body.model_dump())
+
+
+@router.post("/teacher/paper-drafts/compose/jobs")
+def queue_composition(body: PaperDraftComposeIn,
+                      principal=Depends(auth_service.require_teacher),
+                      db: Session = Depends(get_session)) -> dict:
+    return _queue_teacher_job(db, principal, "teacher_compose", body.model_dump())
+
+
+@router.get("/teacher/jobs/{job_id}")
+def teacher_job(job_id: str, principal=Depends(auth_service.require_teacher),
+                db: Session = Depends(get_session)) -> dict:
+    job = db.get(E.Job, job_id)
+    if not job or job.user_id != principal.user_id:
+        raise HTTPException(404, "任务不存在")
+    return {"job_id": job.job_id, "status": job.status, "stage": job.stage,
+            "result": job.result, "error": job.error, "progress": job.progress}
+
+
+@router.get("/teacher/prompt-history/export")
+def export_prompts(_principal=Depends(auth_service.require_teacher),
+                   db: Session = Depends(get_session)):
+    import json
+    from fastapi.responses import Response
+    from backend.app.services.prompt_history import export_history
+    return Response(json.dumps(export_history(db), ensure_ascii=False, indent=2),
+                    media_type="application/json",
+                    headers={"Content-Disposition": 'attachment; filename="runtime-prompts.json"'})
 
 
 @router.post("/teacher/ai-questions/generate")
@@ -723,9 +778,14 @@ def _student_question_view(item: dict[str, Any]) -> dict[str, Any]:
 
 def _student_analysis_view(payload: dict[str, Any]) -> dict[str, Any]:
     analysis = payload.get("ai_analysis") or {}
-    if analysis.get("analysis_version") == 2:
+    if analysis.get("analysis_version") in {2, 3}:
         return {
-            "analysis_version": 2,
+            "analysis_version": analysis.get("analysis_version"),
+            "context": analysis.get("context"),
+            "learning_plan": analysis.get("learning_plan") or [],
+            "source": analysis.get("source"),
+            "status": analysis.get("status"),
+            "model_status": analysis.get("model_status"),
             "summary": analysis.get("summary") or "",
             "concepts": [{
                 "name": row.get("name") or "",
@@ -734,7 +794,10 @@ def _student_analysis_view(payload: dict[str, Any]) -> dict[str, Any]:
                 "question_refs": row.get("question_refs") or [],
                 "observation": row.get("observation") or "",
                 "analysis": row.get("analysis") or "",
-            } for row in (analysis.get("concept_hypotheses") or [])[:3]
+                "priority": row.get("priority"),
+                "priority_reason": row.get("priority_reason"),
+                "analysis_source": row.get("analysis_source"),
+            } for row in (analysis.get("concept_hypotheses") or [])
                 if isinstance(row, dict)],
             "recommendations": (analysis.get("recommendations") or [])[:3],
             "retest_summary": analysis.get("retest_summary"),
@@ -938,11 +1001,14 @@ def student_feedback_detail(
     comparison = payload.get("class_comparison") or {}
     score_summary = payload.get("score_summary") or {}
     resources = [{
+        **{key:row.get(key) for key in ('resource_id','kp_id','kp_ids','kp_name','location',
+                                      'study_focus','success_check','suggested_minutes','platform',
+                                      'content_type','source_type','checked_date')},
         "title": row.get("title") or "学习资源",
         "type": row.get("platform") or row.get("source_type") or "资源",
         "reason": row.get("reason") or "与本次错题相关",
         "url": row.get("url") or "",
-    } for row in (payload.get("resources") or [])[:3]
+    } for row in (payload.get("resources") or [])
        if isinstance(row, dict) and row.get("url")]
     retest_history = []
     for round_row in payload.get("retest_history") or []:

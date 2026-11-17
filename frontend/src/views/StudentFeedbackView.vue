@@ -9,6 +9,7 @@ import { useRoute } from 'vue-router'
 import { api } from '../api/client'
 import AttemptEvidenceTable from '../components/AttemptEvidenceTable.vue'
 import DiagnosisAnalysisContent from '../components/DiagnosisAnalysisContent.vue'
+import LearningResourceList from '../components/LearningResourceList.vue'
 import { friendlyError } from '../utils/presentation'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
 
@@ -166,7 +167,7 @@ onMounted(load)
         <aside class="analysis-panel">
           <header><span><el-icon><DataAnalysis /></el-icon></span><div><h2>学情分析</h2></div></header>
           <DiagnosisAnalysisContent :analysis="detail.analysis" scope="student_feedback" />
-          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><div v-if="sideResources.length" class="resource-list"><a v-for="row in sideResources" :key="row.url" class="diagnosis-resource-link" :href="row.url" target="_blank" rel="noopener noreferrer"><b class="resource-title">{{ row.title }}</b><span>{{ row.type }}</span></a></div><p v-else class="side-empty">暂无匹配资源。</p></section>
+          <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><LearningResourceList :resources="sideResources" /></section>
           <section class="side-section retest-side"><h3><el-icon><RefreshRight /></el-icon>针对性复测</h3><div :class="['retest-result', retestState.tone]"><el-icon><Check v-if="retestState.tone === 'passed'" /><Clock v-else /></el-icon><div><b>{{ retestState.label }}</b><span>{{ latestRetest ? `第${latestRetest.round}轮 · ${latestRetest.accuracy === null || latestRetest.accuracy === undefined ? '等待完成' : percent(latestRetest.accuracy)}` : '等待教师布置复测' }}</span></div></div></section>
         </aside>
       </section>

@@ -10,7 +10,7 @@ export function resourceHref(value: unknown): string {
   }
 }
 
-export function recommendedResourceLinks(primary: any[], fallback: any[] = [], limit = 3): any[] {
+export function recommendedResourceLinks(primary: any[], fallback: any[] = [], limit = 100): any[] {
   const links: any[] = []
   const seen = new Set<string>()
   for (const resource of [...primary, ...fallback]) {

@@ -1,0 +1,1330 @@
+{
+  "version": 1,
+  "checked_date": "2026-11-17",
+  "method": "Source PDF SHA-256 matched to indexed version; original pages rendered without rewriting formulas; study targets are suggested exercises.",
+  "knowledge_points": {
+    "kp.intro.definition": {
+      "name": "机器学习定义（任务T/经验E/性能P）",
+      "pages": [
+        {
+          "chunk_id": "doc_c322d6928e3747_u0006",
+          "document_id": "doc_c322d6928e3747",
+          "page": 6,
+          "title": "1.绪论-2026.pdf",
+          "source_sha256": "c322d6928e3747b93c02db9ddcd2db74ae0f18092d699956dea6966dbb0755b1",
+          "image_sha256": "424a468af7d58934e545bc79c787d4aeb98151bb037da2766984583ac63747db",
+          "asset_path": "assets/pages/doc_c322d6928e3747/p0006.png",
+          "excerpt": "1.1 机器学习的定义\n6\n• 定义1.1[Arthur Samuel, 1959]:机器学习是一个赋予计算机不通过显式编程而获得学习能\n力的研究领域。\n• Machine Learning is fields of study that gives computers the ability to learn without beding \nexplicitly programmed. \n• 定义1.2 [Tom Mitchell, 1997]:机器学习是一段关于任务T(使用性能指标P度量)的能够从经\n验E中学习并提升性能P的计算机程序。\n• A computer program is said to learn from experience E with respect to some class of tasks T and \nperformance measure P, if its performance at tasks in T, as measured by P, improves with \nexperience E.\n• 在大型数据库中的应用称为”数据挖掘”,是“大数据”中智能分析的主要技术。\nArthur Samuel. Some studies in machine learning using the game of checkers. IBM Journal. 1959.\n"
+        }
+      ],
+      "terms": [
+        "任务",
+        "经验",
+        "性能",
+        "学习"
+      ],
+      "document_prefix": "1.绪论",
+      "action": "用一个垃圾邮件分类例子分别写出任务T、经验E和性能P。",
+      "success_check": "能够区分训练数据、预测目标和评估指标。",
+      "suggested_minutes": 8
+    },
+    "kp.intro.hypothesis": {
+      "name": "假设空间与归纳偏好",
+      "pages": [
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0007",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 7,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "7f7ec00ba26873af19da0db14450dfd44c3b70eff1f32eb743daa2f829df7441",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0007.png",
+          "excerpt": "12.1 归纳偏置(Induction Bias)\n•\n归纳(Induction)是从特殊到一般的泛化过程。既从具体的观测归结\n出一般性规律。(区别于演绎Deduction)\n•\n而从样例中学习,显然是一个归纳的过程,因此也称归纳学习。\n•\n狭义的归纳学习要求从训练数据中学得概念(数据挖掘)\n•\n从归纳的角度,假设空间可以是候选概念集合,归纳学习是从假设\n空间中找到与训练集匹配(fit)的模型或假设。\n偏置(bias):bias的含义要结合上下文环境来判断。在神经元模型中指分类判决阈值。\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0008",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 8,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "5d4a4bce97e8597ef7241e3aeae59e0f83dc57ab5b820d6fe63495b5bd558ed4",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0008.png",
+          "excerpt": "12.1 典型的归纳偏置\n• 归纳偏好:评估候选假设或概念的准则,并利用该特性将\n机器学习工作从枚举变为搜索(带剪枝)。智能也体现在\n此。\n– 最小描述长度(Minimum description length,奥卡姆剃刀):\n在训练误差相同的情况下,选择模型最简单的\n– 最大间隔(Maximum Margin):距离两类训练样本的分割\n面更利于预测(提升泛化能力)\n– 平滑性偏好:输入微小变化时输出也变化微小,距离越近越\n相似KNN、RWR中连接两端节点输出相似概率高\n– 稀疏性偏好:对于某些具有很多特征的任务,很多情况下只\n有少数特征决定最后的判决模型。\n"
+        }
+      ],
+      "terms": [
+        "假设空间",
+        "归纳偏好"
+      ],
+      "document_prefix": "1.绪论",
+      "action": "列出两个都能拟合训练样本的假设，并说明选择它们的依据。",
+      "success_check": "能说明归纳偏好为何不等于由训练样本唯一确定的结论。",
+      "suggested_minutes": 8
+    },
+    "kp.intro.generalization": {
+      "name": "泛化与训练/测试误差",
+      "pages": [
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0011",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 11,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "b3f71107797aca0a7f830258d5b3a6cb8312704b44e59a952f27ab16c3c3563d",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0011.png",
+          "excerpt": "12.2 偏差-方差模型的背景\ny\nx\n高偏差(欠拟合)\n拟合的刚刚好\n低偏差、高方差(过拟合)\ny\nx\ny\nx\n模型与真实任务分布的匹配(fit)程度\nunderfitting\noverfitting\n11\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0019",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 19,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "5395046d12d24683b79e4105ed027f1e568eb8754cc100ae1ec0d2f1255015e3",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0019.png",
+          "excerpt": "12.2 偏差-方差理论的正式定义\n• 偏差(Bias):期望输出与真实标记的差别成为偏差\n•\n方差(Variance):使用样本数相同的不同训练集产生的方差\n"
+        }
+      ],
+      "terms": [
+        "泛化",
+        "测试误差",
+        "训练误差"
+      ],
+      "document_prefix": "1.绪论",
+      "action": "分别解释训练误差和测试误差，并画出二者随模型复杂度的变化。",
+      "success_check": "能判断训练误差低但测试误差高的情形。",
+      "suggested_minutes": 8
+    },
+    "kp.linear.mse": {
+      "name": "线性回归损失函数（MSE）",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0010",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 10,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "14dc1b9202c51c159a3b84158b02febf3213b2881fbe0c0ba162820c0c5e4b65",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0010.png",
+          "excerpt": "使\n代表的线性模型\n2.1.2 使用代价函数去衡量拟合(或偏离)程度\n代价函数(或损失函数):\n训练过程:\n误差平方和\n【注】:代价函数是关于模型参数的函数\n10\n尽量拟合训练数据{(x(i),y(i))}\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0013",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 13,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "a55fefc6c8d8eea54dcb88ff7f0768cd1d65697a9c29eeedf28bc2990522a8f4",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0013.png",
+          "excerpt": "2.1.3 优化-求导法\n然后\n对每个\n进行求导\n因为损失函数为二次多项式,因此,存在最低点,\n最低点出现在一阶导数为0处。\n损失函数是关于模型参数\n的二次函数:\n13\n具体的损失函数为:\n即可求得损失函数最小时的模型参数\n"
+        }
+      ],
+      "terms": [
+        "均方误差",
+        "最小二乘",
+        "平方损失"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "对两个样本手算预测值、残差和均方误差。",
+      "success_check": "能区分误差平方和与按样本数平均的MSE。",
+      "suggested_minutes": 8
+    },
+    "kp.linear.gradient": {
+      "name": "梯度与梯度下降更新",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0017",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 17,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "83e6982b3b469c2c03615c7777850a0de76ae140c6fc73872068e5fb45ab267d",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0017.png",
+          "excerpt": "2.1.4 优化- 梯度下降法\n• 【依据】:梯度的方向是函数增长\n最快的方向,负梯度的方向是代价\n函数下降最快的方向。(数学证明\n自行搜索)\n• 计算一个函数的最小值,就可以从\n一个初始点,向着当前位置梯度方\n向逐渐下降的方法来做。\n【注1】:损失函数是关于模型参数的函数\n【注2】:模型参数根据负梯度进行小幅调整\n17\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0020",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 20,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "bab34be205f640f70e1c6600ad1caaa9894693cd7dc8bc181814ee90175a4089",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0020.png",
+          "excerpt": "2.1.4 优化-梯度下降法-代码实现\n1、要同时更新\n和\n20\n2、每轮迭代都要使用所有\n训练样本\n注意:\n"
+        }
+      ],
+      "terms": [
+        "梯度下降",
+        "负梯度",
+        "学习率"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "写出损失梯度并代入一次参数更新。",
+      "success_check": "能解释负号与学习率分别控制方向和步长。",
+      "suggested_minutes": 10
+    },
+    "kp.linear.normal_eq": {
+      "name": "正规方程/解析解",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0014",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 14,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "8c55404a77030a32e4fdcc25a2d4dc6ce6960514f96504dd863b7a97a9d4ca92",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0014.png",
+          "excerpt": "2.1.3 优化-求导法-过程\n14\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0015",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 15,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "94e53efe840e4f08b61568f5f38356214aa1bbdcd64b249e71aaed6082d61e4c",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0015.png",
+          "excerpt": "通过计算\n来获得\n时的参数\n左侧是个二次型,可以用向量表示上式:\n简略表示为:\n15\n其中,\n需要可逆\n讨论算法软件实现的局限性\n"
+        }
+      ],
+      "terms": [
+        "正规方程",
+        "闭式解",
+        "最小二乘",
+        "逆矩阵"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "从平方损失的一阶条件推导正规方程。",
+      "success_check": "能说明矩阵不可逆时不能直接使用普通逆。",
+      "suggested_minutes": 8
+    },
+    "kp.logistic.cost": {
+      "name": "Logistic 回归代价函数",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0043",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 43,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "44a671050ca88553bfa5efd028e3af3a1ef23dfceae3e165928396eca8f536cc",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0043.png",
+          "excerpt": "2.3.2 Logistic回归的分段代价函数\n当y = 1时\n当y=1时\n如果fw(x)=1,意味着预测正确,代价为0;\n如果fw(x)=0,意味着预测错误,代价为+ ∞ 。\n从惩罚的角度来看,正确的时候不罚(=0),错\n误的时候罚+ ∞。\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0045",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 45,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "1bf085cfd641984f56e3a4645ff250174bcc3de9a370b530fe6b22fbb963e9c0",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0045.png",
+          "excerpt": "2.3.2 Logistic回归的代价函数\n注意:y(i)是样本的标注,只能取值0或1\n• ⺫标:通过最小化\n来获得最拟合训练样本的模型参数w\n二元交叉熵(Binary Cross Entropy)\n"
+        }
+      ],
+      "terms": [
+        "对数似然",
+        "交叉熵",
+        "Logistic",
+        "对数几率"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "从伯努利似然写出二分类负对数似然。",
+      "success_check": "能解释正样本和负样本各自对应的损失项。",
+      "suggested_minutes": 8
+    },
+    "kp.logistic.gradient": {
+      "name": "Logistic 梯度推导",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0046",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 46,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "c833b636a2c76e166e6c382c691d27e03afc3c1413543a5c822c33f42340dfa9",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0046.png",
+          "excerpt": "2.3.3 基于梯度下降法的代价函数最小化\n最小化\n:\n迭代\n要同时更新所有的\n其中,\n注意Logistic回归和线性回归的梯度的相似之处和区别\n线性回归的\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0047",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 47,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "0d6f80335c2d950ffa195043740ed8810f70bb568f66dd2abf0a6a8ec840098c",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0047.png",
+          "excerpt": "附:代价函数相对于模型参数的导数求导过程(1/2)\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0048",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 48,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "8a984aa21e709b593acacc6c86b91631e88fac9451120861fad249c7104ed9a9",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0048.png",
+          "excerpt": "附:代价函数相对于模型参数的导数求导过程(2/2)\n"
+        }
+      ],
+      "terms": [
+        "对数几率",
+        "Logistic",
+        "梯度"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "将预测概率代入Logistic损失，逐步计算一次权重梯度。",
+      "success_check": "能写出预测概率与标签之差在梯度中的作用。",
+      "suggested_minutes": 10
+    },
+    "kp.logistic.boundary": {
+      "name": "分类判别与决策边界",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0040",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 40,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "4a652a9fa2af210ca58feeb59d81be9455cf2835af02d26f378373c8f50bf345",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0040.png",
+          "excerpt": "2.3 Logistic回归模型\n• 主要使用sigmoid函数,将线性输\n出\n大部分变换到0或1附近\n• Logistic回归模型主体:\n其中,\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0042",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 42,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "b8ad6cc0a08aee179ee69a733b43c582e26c38c57baa8f536282ff2c272382a8",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0042.png",
+          "excerpt": "2.3 判决边界或判决函数(Decision Boundary, Prediction Model)\nx1\nx2\n1\n2\n3\n1\n2\n3\n预测“          “ 当\n判决边界或预测模型:\n在示例中:\n预测“          “ 当\n"
+        }
+      ],
+      "terms": [
+        "决策边界",
+        "分类边界",
+        "对数几率"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "用给定权重求概率等于0.5时的判别边界。",
+      "success_check": "能区分概率输出、阈值与最终类别。",
+      "suggested_minutes": 8
+    },
+    "kp.lda.idea": {
+      "name": "LDA 基本思路",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0052",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 52,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "d12f6bf246fe6bbdbd9b0a076729f5f5b4ddc09f2e3b2893fbfdad606f87e36e",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0052.png",
+          "excerpt": "2.4 线性判别分析(Linear Discriminate Analysis)\n• 线性判别分析(Linear Discriminate \nAnalysis,LDA)\n• 将训练样本投影到分割面的法\n线上,在法线上使得同类样本\n的投影点尽可能接近,非同类\n样本投影尽可能远。\n• 分类时,将待分类样本同样投\n影到该直线上,根据投影位置\n确定样本类别\n52\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0053",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 53,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "fc3396d5a67d00f1126f8271620ac9e1944f9f5b8651b8c37f328d4d80e134c9",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0053.png",
+          "excerpt": "2.4 LDA的示意图\n53\n仿照Pattern Recognition and Machine Learning. 2006\n"
+        }
+      ],
+      "terms": [
+        "线性判别分析",
+        "类内",
+        "类间"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "画出投影前后的两类样本，比较类内紧凑与类间分离。",
+      "success_check": "能区分LDA使用类别标签和PCA不使用标签。",
+      "suggested_minutes": 8
+    },
+    "kp.lda.objective": {
+      "name": "LDA 目标函数与求解",
+      "pages": [
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0056",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 56,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "e1a49f5380dc53f3df6c48052a3bdd1a05f8b70961a6ff34791c57d2f7821f75",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0056.png",
+          "excerpt": "2.4 LDA的代价函数(优化目标)\n•给定训练样本集合D={(xi,yi)} i=1...m, yi=1或0。\n56\n最大化类间距:\n最小化类内距:\n优化目标:\n【注】:令法向量w模为1\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0057",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 57,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "dec291772dc8e4b6fb5e83259521f3603b48d8d532d3e3967b636bcfc9fe0174",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0057.png",
+          "excerpt": "优化目标:\n类内散度矩阵(Within-class scatter matrix):\n类间散度矩阵(Between-class scatter matrix):\n57\n"
+        },
+        {
+          "chunk_id": "doc_9664129dbe0e6d_u0060",
+          "document_id": "doc_9664129dbe0e6d",
+          "page": 60,
+          "title": "2.线性模型-2026.pdf",
+          "source_sha256": "9664129dbe0e6d9d7af7712246bf30cd37c7f5649358ecd5bd9ce234483e15f8",
+          "image_sha256": "587fb23b63e31d0701d79c514571cb65f5e383ea16dcdda94fecae1b14294ce6",
+          "asset_path": "assets/pages/doc_9664129dbe0e6d/p0060.png",
+          "excerpt": "最优方向:\n分割平面:\n判别式:\n60\n或\n"
+        }
+      ],
+      "terms": [
+        "广义瑞利商",
+        "类内散度",
+        "类间散度",
+        "线性判别分析"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "列出类内、类间散度矩阵并写出投影目标。",
+      "success_check": "能说明目标函数分子、分母分别衡量什么。",
+      "suggested_minutes": 10
+    },
+    "kp.regularization.l1l2": {
+      "name": "L1/L2 正则化",
+      "pages": [
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0015",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 15,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "306640451f01bda3467c870a03c24150991c6094204ec8805a78d53f43ae671a",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0015.png",
+          "excerpt": "12.2 不同正则化项的线性回归\n• 为避免过拟合,使用正则化方法提升线性回归\n– 岭回归(Ridge Regression)\n– LASSO: Least Absolute Shrinkage and Selection \nOperator (1996)\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0016",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 16,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "a72d3f9d5f8d64a6593ebc1ac4af895beec86c98a33615cc1606892f491b4466",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0016.png",
+          "excerpt": "图来自T. Hastie, R. Tibshirani, J. Friedman. The Elements of Statistic Learning: Data Mining, Inference, and Prediction. 2017\nw2\nw1\nw2\nw1\n岭回归的代价函数\nLASSO的代价函数\n12.2 正则化线性回归的代价函数\n"
+        }
+      ],
+      "terms": [
+        "L1",
+        "L2",
+        "正则化",
+        "稀疏"
+      ],
+      "document_prefix": "2.线性模型",
+      "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+      "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+      "suggested_minutes": 8
+    },
+    "kp.nn.activation": {
+      "name": "激活函数与非线性",
+      "pages": [
+        {
+          "chunk_id": "doc_351f1ba549192a_u0014",
+          "document_id": "doc_351f1ba549192a",
+          "page": 14,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "8aa7a44b11d28b8665db086ff2456b35bb9436350d2893ef665f5657ce54fabe",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0014.png",
+          "excerpt": "3.1 逻辑异或XOR 与第一次神经网络的衰落\nx1\nx2\n见周志华《机器学习》第5章神经网络章后小故事P.120\nMinsky和Papert 1969年指出,单层感知器无\n法解决非线性问题,而多层网络训练算法尚\n难提出。\n神经元的研究进入寒冬\n"
+        },
+        {
+          "chunk_id": "doc_351f1ba549192a_u0015",
+          "document_id": "doc_351f1ba549192a",
+          "page": 15,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "23ba1c03e076830018af847e27071b14c89a1c605c1bddbee666002444a29b77",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0015.png",
+          "excerpt": "3.1 使用多层感知器(神经网络)解决逻辑异或的实现\n0\n0\n0\n0\n0\n0\n1\n1\n0\n1\n1\n0\n0\n1\n1\n1\n1\n0\n0\n0\n0\n0\n0\n0\n1\n1\n1\n0\n1\n1\n1\n0\n此处已知a(2)的情况在其他非线性问题上不能都满足\n"
+        },
+        {
+          "chunk_id": "doc_351f1ba549192a_u0018",
+          "document_id": "doc_351f1ba549192a",
+          "page": 18,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "4db00abc28d3650c486bf7716e4bcefdb549f41133d9c9aba9d007beb42175d6",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0018.png",
+          "excerpt": "3.2 隐含层:多个感知器组成的多线性分割面\n万能近似定理(universal approximation theorem)一个前馈神经网络只\n要给予网络足够数量的隐含层单元,它可以以任意精度来近似任何从一\n个有限维空间到另一个有限维空间的Borel可测函数。\nK. Hornik, M. Stinchcombe, and H. White. Multilayer feedforward networks are universal approximators. Neural Networks. 2(5):359-366. 1989.\n"
+        }
+      ],
+      "terms": [
+        "激活函数",
+        "非线性",
+        "Sigmoid",
+        "Tanh"
+      ],
+      "document_prefix": "3.神经网络",
+      "action": "比较含非线性激活和全部线性层的网络表达能力。",
+      "success_check": "能说明解决XOR需要合适的非线性网络结构。",
+      "suggested_minutes": 8
+    },
+    "kp.nn.bp": {
+      "name": "BP 误差项与权重梯度",
+      "pages": [
+        {
+          "chunk_id": "doc_351f1ba549192a_u0025",
+          "document_id": "doc_351f1ba549192a",
+          "page": 25,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "2cd8f908621b8f1972b387c53be34d50ebcff8c9394a6c03e88268ceaf6a3dd4",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0025.png",
+          "excerpt": "3.3 反向传播(Back Propagation)算法\n1、本质是梯度下降法,核心是在求代价函数相对于连接权重的导数\n2、求解\n尤其是\n时,困难源于\n是\n的多级嵌套函数\n3、使用链式求导法\n将梯度分解:\n代价函数分解到输入z上的部分:\n"
+        },
+        {
+          "chunk_id": "doc_351f1ba549192a_u0026",
+          "document_id": "doc_351f1ba549192a",
+          "page": 26,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "be97d561bb6d60b436c834705ddefac8da4fe25850f3474791cd03f4485dc02c",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0026.png",
+          "excerpt": "3.3 梯度计算—— d 1/2\n当激活函数为sigmoid函数时\n"
+        },
+        {
+          "chunk_id": "doc_351f1ba549192a_u0028",
+          "document_id": "doc_351f1ba549192a",
+          "page": 28,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "15cbdfa067eda431fceb66b32525c4b7225c0fe33381d1926f058b893b835011",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0028.png",
+          "excerpt": "3.3 梯度计算——\n"
+        }
+      ],
+      "terms": [
+        "反向传播",
+        "误差项",
+        "链式法则",
+        "梯度"
+      ],
+      "document_prefix": "3.神经网络",
+      "action": "画出一条从损失到权重的计算路径，逐层相乘求梯度。",
+      "success_check": "能检查输出层与隐藏层误差项的差别和矩阵维度。",
+      "suggested_minutes": 10
+    },
+    "kp.nn.loss": {
+      "name": "神经网络两种损失函数",
+      "pages": [
+        {
+          "chunk_id": "doc_351f1ba549192a_u0022",
+          "document_id": "doc_351f1ba549192a",
+          "page": 22,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "2815f7ab75bd285ea4971aed8944c3cf0b1b4f28ce6b4bbcc47c163da03d9fdf",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0022.png",
+          "excerpt": "3.3 神经网络的代价函数\nLogistic回归(二元交叉熵):\n神经网络的代价函数(二元交叉熵):\nLayer 1\nLayer 2\nLayer 3\nLayer 4\n"
+        },
+        {
+          "chunk_id": "doc_351f1ba549192a_u0023",
+          "document_id": "doc_351f1ba549192a",
+          "page": 23,
+          "title": "3.神经网络-2026.pdf",
+          "source_sha256": "351f1ba549192a1801d6d1c68004f01348d5b430e7e963fb3f0f982934c5dd16",
+          "image_sha256": "7c65ff1657c04574c72eb7c7cab4b1d98aa8813b31688c82b71a2e6cc9fdc137",
+          "asset_path": "assets/pages/doc_351f1ba549192a/p0023.png",
+          "excerpt": "3.3 与基于平方误差的损失函数的对比\n基于交叉熵的损失函数:\n基于平方误差的损失函数:\n"
+        }
+      ],
+      "terms": [
+        "损失函数",
+        "交叉熵",
+        "平方误差"
+      ],
+      "document_prefix": "3.神经网络",
+      "action": "比较平方误差和交叉熵对应的预测输出与任务。",
+      "success_check": "能说明损失函数和激活函数不是同一个概念。",
+      "suggested_minutes": 8
+    },
+    "kp.dl.residual": {
+      "name": "残差连接",
+      "pages": [
+        {
+          "chunk_id": "doc_900d5b7530aeb8_u0026",
+          "document_id": "doc_900d5b7530aeb8",
+          "page": 26,
+          "title": "4.深度学习-Transformer.pdf",
+          "source_sha256": "900d5b7530aeb85374f1aed1e9a2df2b0a20f1f3483c64154989aeda13b151a7",
+          "image_sha256": "ae59902bafcf6657133e1a9fbc72c374d6c1c658e60ac7f0fe869feee1756b9b",
+          "asset_path": "assets/pages/doc_900d5b7530aeb8/p0026.png",
+          "excerpt": "层归一化输出\n(3, 5, 512)\nFF + Add\n神经网络输出+ 残差\n(3, 5, 512)\n...\n...\n...\n...\n...\n...\n层归一化\nLayer Normalization\n(Norm)\nEncoder/Decoder输出\n(3, 5, 512)\n残差连接\n(Add)\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n我\n是\n一名\n学生\n<pad>\n我\n十分\n喜欢\n机器\n学习\n他\n英语\n还行\n<pad>\n<pad>\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n我\n是\n一名\n学生\n<pad>\n我\n十分\n喜欢\n机器\n学习\n他\n英语\n还行\n<pad>\n<pad>\n+\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n......\n我\n是\n一名\n学生\n<pad>\n我\n十分\n喜欢\n机器\n学习\n他\n英语\n还行\n<pad>\n<pad>\n3.3 FFN + Add & Norm\n"
+        },
+        {
+          "chunk_id": "doc_900d5b7530aeb8_u0028",
+          "document_id": "doc_900d5b7530aeb8",
+          "page": 28,
+          "title": "4.深度学习-Transformer.pdf",
+          "source_sha256": "900d5b7530aeb85374f1aed1e9a2df2b0a20f1f3483c64154989aeda13b151a7",
+          "image_sha256": "a1cee71088054ad67e4aedbdca3686c4e1bcf2f340ab58bfb0312bbd9b6ff07f",
+          "asset_path": "assets/pages/doc_900d5b7530aeb8/p0028.png",
+          "excerpt": "28\n3.4 Add & Norm(残差后进行层归一化)\n• 残差链接能够缓解网络退化问题\n• 层归一化(Layer Normalization)\n能够让模型更快地收敛。\n"
+        }
+      ],
+      "terms": [
+        "残差",
+        "跳跃连接",
+        "ResNet"
+      ],
+      "document_prefix": "4.深度学习-2026",
+      "action": "画出残差分支与捷径分支，写出二者相加的输出。",
+      "success_check": "能解释维度不同时不能直接相加。",
+      "suggested_minutes": 8
+    },
+    "kp.dl.transformer": {
+      "name": "Transformer 与注意力",
+      "pages": [
+        {
+          "chunk_id": "doc_900d5b7530aeb8_u0014",
+          "document_id": "doc_900d5b7530aeb8",
+          "page": 14,
+          "title": "4.深度学习-Transformer.pdf",
+          "source_sha256": "900d5b7530aeb85374f1aed1e9a2df2b0a20f1f3483c64154989aeda13b151a7",
+          "image_sha256": "0321ece564b6e3e725aa9db545d78eef70f5385d0fc67231737e122b7b938eaf",
+          "asset_path": "assets/pages/doc_900d5b7530aeb8/p0014.png",
+          "excerpt": "14\n3.2 注意力机制(Attention Mechanism):度量Q和KV间的相关性\n• Attention机制:“聚焦关键信息,忽略无关内容”\nQ:Query(可看作输入):\nKV(Key-Value)(可看作输出):\nKey可看作书名或标签,用来判断是否匹配;\nValue可看作从书中提取有用部分,作为输出的素材。\n• 以图书馆查书为例\n《Python 基础教程》\n《操作系统原理》\n《深度学习理论与实践》\nQuery:\n深度学习项目实战\n•\n先根据QKT计算出相关性权重\n•\n再用这个相关性对Value做加权\n"
+        },
+        {
+          "chunk_id": "doc_900d5b7530aeb8_u0017",
+          "document_id": "doc_900d5b7530aeb8",
+          "page": 17,
+          "title": "4.深度学习-Transformer.pdf",
+          "source_sha256": "900d5b7530aeb85374f1aed1e9a2df2b0a20f1f3483c64154989aeda13b151a7",
+          "image_sha256": "179a58956fefcadf6dac031c7ad1b9497fd80af948ae9dc8cb5e2db6d46258c4",
+          "asset_path": "assets/pages/doc_900d5b7530aeb8/p0017.png",
+          "excerpt": "17\n3.2 计算QKT相关性\n"
+        },
+        {
+          "chunk_id": "doc_900d5b7530aeb8_u0019",
+          "document_id": "doc_900d5b7530aeb8",
+          "page": 19,
+          "title": "4.深度学习-Transformer.pdf",
+          "source_sha256": "900d5b7530aeb85374f1aed1e9a2df2b0a20f1f3483c64154989aeda13b151a7",
+          "image_sha256": "d84f5cbb748b344b00ae5bc5b435998400c2bae6d30879cb7d019a860493e832",
+          "asset_path": "assets/pages/doc_900d5b7530aeb8/p0019.png",
+          "excerpt": "19\n3.2 多头自注意力机制(并行)\n• Attention机制\n• 线性映射矩阵\n• 自注意力机制\n• 多头注意力机制(反映不同语义角度的特征表示,更主要是分布计算)\n"
+        }
+      ],
+      "terms": [
+        "注意力",
+        "Attention",
+        "Query",
+        "Transformer"
+      ],
+      "document_prefix": "4.深度学习-Transformer",
+      "action": "画出Q、K、V的来源，并写出缩放点积注意力的计算顺序。",
+      "success_check": "能区分权重计算、归一化与对V的加权求和。",
+      "suggested_minutes": 8
+    },
+    "kp.svm.margin": {
+      "name": "间隔与最大间隔超平面",
+      "pages": [
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0006",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 6,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "e1487fe2301232babac9f5543fb79b34fc439dd53470995cb59d9b0e546143ef",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0006.png",
+          "excerpt": "5.1 线性可分问题& 最大化间隔策略\n注意:\n使用yf(x)的正负来度量训练误差\n6\n大间隔\n小间隔\n"
+        },
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0007",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 7,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "eab9ca1f604422eea6cd3a121b3f6aa603a6132515612b9262704f662124ba6d",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0007.png",
+          "excerpt": "5.1 间隔与结构(置信)风险\n:两类样本间的margin\n点到直线距离:\n所以,\n上的点到\n是\n。\n7\n"
+        }
+      ],
+      "terms": [
+        "几何间隔",
+        "最大间隔",
+        "超平面"
+      ],
+      "document_prefix": "5.支持向量机",
+      "action": "用点到超平面的距离解释几何间隔。",
+      "success_check": "能区分函数间隔和归一化后的几何间隔。",
+      "suggested_minutes": 8
+    },
+    "kp.svm.kkt": {
+      "name": "对偶问题与 KKT 求 b*",
+      "pages": [
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0013",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 13,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "4a95b0b41068823c95220c2b16029cd8a18a6ee6dbc2973455442dc8c89be2f5",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0013.png",
+          "excerpt": "5.1 基于“KKT条件”定理计算b*\n由\n和\n可知存在一个\n得:\n即:\n13\nKKT条件:\n选择一个支持向量(αj >0),\n"
+        },
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0014",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 14,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "246eca0b6db5da94b8c1793f4bd3f7c9b015d27b05ad02272e475c08163db42b",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0014.png",
+          "excerpt": "5.1 “KKT条件”定理\n带约束问题\n转换为拉格朗日函数,其最优解的必要条件为式5.18\n式5.18\n转换为拉格朗日函数,其最优解的必要条件为式5.18\n如果f(x)是凸函数,那么KKT条件则是最优解的充分必要条件\n"
+        },
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0022",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 22,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "bb385361c1a265503ca1048e21ce8085ca2a2783d2d4b13896f61c13993897fe",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0022.png",
+          "excerpt": "5.2 软间隔CSVM的支持向量\n22\n当αi=0时,对应的训练样本(xi,yi)位于间隔外;\n当0<αi<C时,必有βi=C-αi>0,进而可知ξi=0和yj= w∗Txj+b∗,\n即xi落在最大间隔边界上,是决定最大间隔的支持向量;\n当αi=C时,根据KKT条件αi+βi=C可知βi=0,如果样本对\n应的0≤ξi ≤1,则它落在间隔内,如果ξi >1则样本落入对面\n间隔外,即错分\n"
+        }
+      ],
+      "terms": [
+        "KKT",
+        "对偶",
+        "拉格朗日"
+      ],
+      "document_prefix": "5.支持向量机",
+      "action": "用满足条件的支持向量代入KKT关系求偏置。",
+      "success_check": "能区分边界支持向量与落在间隔内的样本。",
+      "suggested_minutes": 10
+    },
+    "kp.svm.kernel": {
+      "name": "核技巧与核函数",
+      "pages": [
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0025",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 25,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "f49dba6016fe3970dd210d156004f00aa8e31be7f4fc2840d0301e9601cdf83d",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0025.png",
+          "excerpt": "5.3  通过空间变换将非线性可分问题转变为线性可分问题\n25\n(a)在x1和x2张成的空间中\n(b) 在y1、y2和y3张成的空间中\n"
+        },
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0026",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 26,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "540ef07b910184dccb486b72d01572b50429fde6adc1a180a100c86d2ce6b925",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0026.png",
+          "excerpt": "5.3 核函数:考虑空间变换前后的相似度度量变换\n26\n核函数(kernel function)K(xi,xj) 是一个空间变换后的内积函数。\nK(xi,xj)=⟨φ(xi),φ(xj)〉\n常见的核函数\n线性核\n多项式核\n高斯核\n不需要显式地设计映射函数f(),可直接获得变换后空间中的相似度。\n"
+        }
+      ],
+      "terms": [
+        "核函数",
+        "核技巧",
+        "内积"
+      ],
+      "document_prefix": "5.支持向量机",
+      "action": "对比显式特征映射后的内积与核函数值。",
+      "success_check": "能解释核技巧如何避免直接计算高维特征。",
+      "suggested_minutes": 8
+    },
+    "kp.svm.soft_margin": {
+      "name": "软间隔与 Hinge 损失",
+      "pages": [
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0018",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 18,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "aca0fc6e17cb503fe23e7fa047c897fad61a29efeeb5079b0b275297911788f5",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0018.png",
+          "excerpt": "5.2 用于软间隔SVM的Hinge损失\n18\n"
+        },
+        {
+          "chunk_id": "doc_e4ee00952a0dcf_u0019",
+          "document_id": "doc_e4ee00952a0dcf",
+          "page": 19,
+          "title": "5.支持向量机-2026.pdf",
+          "source_sha256": "e4ee00952a0dcfe8ebde397c8f11ecf67132a8e190304a919663994aad73ccc3",
+          "image_sha256": "81db2cc5489ad3d951cfd61c53cb3277edeb76e64b2f76809cd38645464b60e3",
+          "asset_path": "assets/pages/doc_e4ee00952a0dcf/p0019.png",
+          "excerpt": "5.2 软间隔SVM的优化\n对于线性不完全可分的情况,引入\n软间隔的SVM,即允许某些样本不\n满足约束:\n19\n"
+        }
+      ],
+      "terms": [
+        "软间隔",
+        "松弛",
+        "Hinge"
+      ],
+      "document_prefix": "5.支持向量机",
+      "action": "对三个不同间隔值手算Hinge损失。",
+      "success_check": "能说明惩罚系数C对间隔与违约惩罚的权衡。",
+      "suggested_minutes": 8
+    },
+    "kp.eval.bias_var": {
+      "name": "偏差-方差均衡",
+      "pages": [
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0011",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 11,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "b3f71107797aca0a7f830258d5b3a6cb8312704b44e59a952f27ab16c3c3563d",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0011.png",
+          "excerpt": "12.2 偏差-方差模型的背景\ny\nx\n高偏差(欠拟合)\n拟合的刚刚好\n低偏差、高方差(过拟合)\ny\nx\ny\nx\n模型与真实任务分布的匹配(fit)程度\nunderfitting\noverfitting\n11\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0019",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 19,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "5395046d12d24683b79e4105ed027f1e568eb8754cc100ae1ec0d2f1255015e3",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0019.png",
+          "excerpt": "12.2 偏差-方差理论的正式定义\n• 偏差(Bias):期望输出与真实标记的差别成为偏差\n•\n方差(Variance):使用样本数相同的不同训练集产生的方差\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0020",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 20,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "7456137e1d88c1afc7ee8a01876a53ee4a9d6379abdaa8ab9aea47e6e441ec4f",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0020.png",
+          "excerpt": "12.2 多种偏差-方差示意图\n"
+        }
+      ],
+      "terms": [
+        "偏差",
+        "方差",
+        "过拟合",
+        "欠拟合"
+      ],
+      "document_prefix": "6.机器学习模型评估",
+      "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+      "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+      "suggested_minutes": 8
+    },
+    "kp.eval.cv": {
+      "name": "交叉验证与评估指标",
+      "pages": [
+        {
+          "chunk_id": "doc_0a4a7227f99560_u0008",
+          "document_id": "doc_0a4a7227f99560",
+          "page": 8,
+          "title": "6.机器学习模型评估.pdf",
+          "source_sha256": "0a4a7227f99560e09e41b074359871cad8fea67f6e4d2af5130a6efada6179f8",
+          "image_sha256": "4247dd31085990c365964450c1d4cf2c8bf9045d6ab5d286c5d8e1ed07f32cdb",
+          "asset_path": "assets/pages/doc_0a4a7227f99560/p0008.png",
+          "excerpt": "6.1.1 标注数据集划分\n基于MindSpore的\n基于sklearn的\n"
+        },
+        {
+          "chunk_id": "doc_0a4a7227f99560_u0009",
+          "document_id": "doc_0a4a7227f99560",
+          "page": 9,
+          "title": "6.机器学习模型评估.pdf",
+          "source_sha256": "0a4a7227f99560e09e41b074359871cad8fea67f6e4d2af5130a6efada6179f8",
+          "image_sha256": "d7d8e7d9c66c8aba5c542f658e304eeeb9ff4cf99ec6c45c55c67c03be7d6f8f",
+          "asset_path": "assets/pages/doc_0a4a7227f99560/p0009.png",
+          "excerpt": "6.1.2 交叉验证\n•K折交叉验证(K-fold Cross-Validation)\n将整个训练数据集划分成n份,选取其中一份作为验证数据集,其余n-1\n份作为训练数据集。\n进行轮换让每一份数据都有机会作为验证数据集。尽可能避免过拟合\n• 留一交叉验证(Leave One Out Cross-Validation)\n是N折交叉验证的特例——每个样本都当作一份验证数据集\n9\n交叉验证能够充分利用标注数据,得到更好的模型和更全面的性能评估\n"
+        },
+        {
+          "chunk_id": "doc_0a4a7227f99560_u0015",
+          "document_id": "doc_0a4a7227f99560",
+          "page": 15,
+          "title": "6.机器学习模型评估.pdf",
+          "source_sha256": "0a4a7227f99560e09e41b074359871cad8fea67f6e4d2af5130a6efada6179f8",
+          "image_sha256": "c756e62bba5f79faef833e240961d0d59fd6a5913a3fe2c20631ebafe84f3322",
+          "asset_path": "assets/pages/doc_0a4a7227f99560/p0015.png",
+          "excerpt": "6.2.1 混淆矩阵的4种组合\nTP:True Positive,被判定\n为正样本,事实上也是正样\n本。\nTN:True Negative,被判定\n为负样本,事实上也是负样\n本。\nFN:False Negative,被判定为负样本,但事实上是正样本。\nFP:False Positive,被判定为正样本,但事实上是负样本。\n15\n"
+        },
+        {
+          "chunk_id": "doc_0a4a7227f99560_u0016",
+          "document_id": "doc_0a4a7227f99560",
+          "page": 16,
+          "title": "6.机器学习模型评估.pdf",
+          "source_sha256": "0a4a7227f99560e09e41b074359871cad8fea67f6e4d2af5130a6efada6179f8",
+          "image_sha256": "4303cb5f0d98713bee8951144866b43930c56663aaa9f97e4c31983084aa73d5",
+          "asset_path": "assets/pages/doc_0a4a7227f99560/p0016.png",
+          "excerpt": "6.2.1 查准率与查全率\n查准率(Precision):即在分类器预测出的正例中,真正正\n确的个数占整个结果的比例。\n召回率(Recall,查全率):即在预测结果中真正正确的个数\n占整个标注数据集中正例个数的比例。\n16\n"
+        },
+        {
+          "chunk_id": "doc_0a4a7227f99560_u0018",
+          "document_id": "doc_0a4a7227f99560",
+          "page": 18,
+          "title": "6.机器学习模型评估.pdf",
+          "source_sha256": "0a4a7227f99560e09e41b074359871cad8fea67f6e4d2af5130a6efada6179f8",
+          "image_sha256": "d54b703da3ce5574e578b130152660a4881ce6873df64ad4f4eb7676d9b97f67",
+          "asset_path": "assets/pages/doc_0a4a7227f99560/p0018.png",
+          "excerpt": "6.2.1 F1 score\n相比于P-R曲线的平衡点,F1度量更为专业一些,它是\nprecision和recall的调和平均(harmonic mean),最差为0,\n最好为1\n调和平均(harmonic mean)又叫倒数平均\n18\n"
+        }
+      ],
+      "terms": [
+        "交叉验证",
+        "精确率",
+        "召回率",
+        "F1"
+      ],
+      "document_prefix": "6.机器学习模型评估",
+      "action": "画出训练、验证、测试数据的分工，并计算混淆矩阵指标。",
+      "success_check": "能说明测试集为何不能反复参与调参。",
+      "suggested_minutes": 8
+    },
+    "kp.bayes.formula": {
+      "name": "贝叶斯公式各项",
+      "pages": [
+        {
+          "chunk_id": "doc_49105fd8f90f0f_u0004",
+          "document_id": "doc_49105fd8f90f0f",
+          "page": 4,
+          "title": "7.贝叶斯分类器.pdf",
+          "source_sha256": "49105fd8f90f0f2dd87fa5d4ada328bab5e087fd2441784340e28dc305ef4ccc",
+          "image_sha256": "f10b42a1c81e313b3e6b13bd2e53a0b9a89eb05eac217072030d59effd39a981",
+          "asset_path": "assets/pages/doc_49105fd8f90f0f/p0004.png",
+          "excerpt": "7.1 贝叶斯定理(1763年)\n• 由条件概率公式\n• 可得贝叶斯公式\n• 分母也可根据全概公式\n进行分解:\n4\n"
+        },
+        {
+          "chunk_id": "doc_49105fd8f90f0f_u0005",
+          "document_id": "doc_49105fd8f90f0f",
+          "page": 5,
+          "title": "7.贝叶斯分类器.pdf",
+          "source_sha256": "49105fd8f90f0f2dd87fa5d4ada328bab5e087fd2441784340e28dc305ef4ccc",
+          "image_sha256": "aad92fb8c22af2f67ce2f06e1bdab5d84cf4756e80e2f7db456b7e03fcfc860a",
+          "asset_path": "assets/pages/doc_49105fd8f90f0f/p0005.png",
+          "excerpt": "7.1 从预测角度看估计后验概率\n:样本\n在样本空间中出现的概率\n:代表样本x相对于类别c 的类条件概率(class-\nconditional probability),或称为似然(likelyhood)\n:\n中各\n的先验概率\n5\n"
+        }
+      ],
+      "terms": [
+        "贝叶斯",
+        "先验",
+        "后验",
+        "似然"
+      ],
+      "document_prefix": "7.贝叶斯",
+      "action": "在贝叶斯公式中标出先验、似然、证据与后验。",
+      "success_check": "能区分给定类别看特征与给定特征看类别。",
+      "suggested_minutes": 8
+    },
+    "kp.bayes.naive": {
+      "name": "朴素贝叶斯与条件独立",
+      "pages": [
+        {
+          "chunk_id": "doc_49105fd8f90f0f_u0007",
+          "document_id": "doc_49105fd8f90f0f",
+          "page": 7,
+          "title": "7.贝叶斯分类器.pdf",
+          "source_sha256": "49105fd8f90f0f2dd87fa5d4ada328bab5e087fd2441784340e28dc305ef4ccc",
+          "image_sha256": "82eb4b7cd7d82cf311e2f6b6bf1313630d1b8410b67ef5d9d254234fd0ce7321",
+          "asset_path": "assets/pages/doc_49105fd8f90f0f/p0007.png",
+          "excerpt": "7.2 朴素贝叶斯分类器(Naïve Bayes Classifier)\n• 在估计\n时很难估计\n所有维联合发生的概率,原因\n在于很难用频率估计概率,因此,通过假设“各维度条件\n独立”,将联合概率的估计变成各维度概率连乘。\n7\n"
+        },
+        {
+          "chunk_id": "doc_49105fd8f90f0f_u0008",
+          "document_id": "doc_49105fd8f90f0f",
+          "page": 8,
+          "title": "7.贝叶斯分类器.pdf",
+          "source_sha256": "49105fd8f90f0f2dd87fa5d4ada328bab5e087fd2441784340e28dc305ef4ccc",
+          "image_sha256": "fe8d9e3420c81aa18016663703aaf69d8d2c8bd93d256d37038c083db5d64ac5",
+          "asset_path": "assets/pages/doc_49105fd8f90f0f/p0008.png",
+          "excerpt": "7.2 朴素贝叶斯分类器的判决函数\n• 由于对于给定\n,其\n对于所有\n是一样\n的。\n• 朴素贝叶斯的判决函数简化为:\n8\n"
+        }
+      ],
+      "terms": [
+        "朴素贝叶斯",
+        "条件独立"
+      ],
+      "document_prefix": "7.贝叶斯",
+      "action": "写出给定类别后多个特征的联合概率分解。",
+      "success_check": "能说明条件独立不同于无条件独立。",
+      "suggested_minutes": 8
+    },
+    "kp.network.rwr": {
+      "name": "带重启随机游走与损失函数",
+      "pages": [
+        {
+          "chunk_id": "doc_fa2ec4c20ad3d3_u0015",
+          "document_id": "doc_fa2ec4c20ad3d3",
+          "page": 15,
+          "title": "8.网络机器学习.pdf",
+          "source_sha256": "fa2ec4c20ad3d31c6561e2746a2d72b335bc077e9ec6f0d8d3eb0fc98aeede0f",
+          "image_sha256": "ff9ec3b66f1d3ffa8ee13434154edcd9e7b760029056f0850af5488016f6ba99",
+          "asset_path": "assets/pages/doc_fa2ec4c20ad3d3/p0015.png",
+          "excerpt": "8.1 带重启的随机游走(Random Walk with Restart,RWR)\n• 无外链页面会吞噬PageRank值\n• d:继续访问下一个页面的概率\n• 1-d:停止点击,随机浏览新页面\n15\n"
+        },
+        {
+          "chunk_id": "doc_fa2ec4c20ad3d3_u0021",
+          "document_id": "doc_fa2ec4c20ad3d3",
+          "page": 21,
+          "title": "8.网络机器学习.pdf",
+          "source_sha256": "fa2ec4c20ad3d31c6561e2746a2d72b335bc077e9ec6f0d8d3eb0fc98aeede0f",
+          "image_sha256": "203e799131f4344742f8e5a606e2b5dc21aef1f8a0c56daa5ad3dfde5f529481",
+          "asset_path": "assets/pages/doc_fa2ec4c20ad3d3/p0021.png",
+          "excerpt": "8.2 RWR的代价函数\nDengYong Zhou. Learning with Local and Global Consistency. NIPS 2013\n21\n使用相邻关系作为正则项\n连接两端节点输出相近的概率高\n训练误差\n"
+        }
+      ],
+      "terms": [
+        "重启",
+        "随机游走",
+        "random walk"
+      ],
+      "document_prefix": "8.网络机器学习",
+      "action": "画出普通随机游走与重启到指定分布两种转移，写出概率权重。",
+      "success_check": "能区分重启概率与继续游走概率。",
+      "suggested_minutes": 8
+    },
+    "kp.ensemble.adaboost": {
+      "name": "AdaBoost 与指数损失",
+      "pages": [
+        {
+          "chunk_id": "doc_5ce7fd19a48bfb_u0012",
+          "document_id": "doc_5ce7fd19a48bfb",
+          "page": 12,
+          "title": "9.集成学习.pdf",
+          "source_sha256": "5ce7fd19a48bfb878003eaaf5c8f391b6265e4cf543b6abe0796b93ecbdb3fbc",
+          "image_sha256": "955589b28cc4ae58248c38db7dae6c0946dcbf60a97eb4712ad4a66bbc55bcab",
+          "asset_path": "assets/pages/doc_5ce7fd19a48bfb/p0012.png",
+          "excerpt": "12\n9.2 AdaBoost算法示意\n分类器1\n分类器2\n分类器3\n强分类器\n弱分类器:\nBoosting\n"
+        },
+        {
+          "chunk_id": "doc_5ce7fd19a48bfb_u0014",
+          "document_id": "doc_5ce7fd19a48bfb",
+          "page": 14,
+          "title": "9.集成学习.pdf",
+          "source_sha256": "5ce7fd19a48bfb878003eaaf5c8f391b6265e4cf543b6abe0796b93ecbdb3fbc",
+          "image_sha256": "27a4c1d0c09d558b5bc023f45d9dd450f28ed505fb3c3f6faad6560bc0cd9c45",
+          "asset_path": "assets/pages/doc_5ce7fd19a48bfb/p0014.png",
+          "excerpt": "9.2 AdaBoost的损失函数\n• 使用指数函数(Exponential Loss Function)度量经验误差\nJ. Friedman , T. Hastie , R. Tibshirani. Additive logistic Regression: A Statistical View of Boosting. The Annals of Statistics. 28(2):337-407. 2000\n14\n设\n当第t个子分类器训练出来后,关于权重\nαt的代价函数\n"
+        },
+        {
+          "chunk_id": "doc_5ce7fd19a48bfb_u0015",
+          "document_id": "doc_5ce7fd19a48bfb",
+          "page": 15,
+          "title": "9.集成学习.pdf",
+          "source_sha256": "5ce7fd19a48bfb878003eaaf5c8f391b6265e4cf543b6abe0796b93ecbdb3fbc",
+          "image_sha256": "fb0379abc48d9cc40ecf9a0e9db94bd76484b7efa86d374757e224e7258cea4f",
+          "asset_path": "assets/pages/doc_5ce7fd19a48bfb/p0015.png",
+          "excerpt": "9.2 算法:AdaBoost弱分类器ft 的权重优化(通过求导=0)\n15\n其中,\n可得:\n"
+        }
+      ],
+      "terms": [
+        "AdaBoost",
+        "指数损失",
+        "样本权重"
+      ],
+      "document_prefix": "9.集成学习",
+      "action": "跟踪一次弱分类器训练后正确和错误样本的权重变化。",
+      "success_check": "能说明为什么被错分样本在下一轮更受关注。",
+      "suggested_minutes": 8
+    },
+    "kp.ensemble.forest": {
+      "name": "随机森林与多样性",
+      "pages": [
+        {
+          "chunk_id": "doc_5ce7fd19a48bfb_u0027",
+          "document_id": "doc_5ce7fd19a48bfb",
+          "page": 27,
+          "title": "9.集成学习.pdf",
+          "source_sha256": "5ce7fd19a48bfb878003eaaf5c8f391b6265e4cf543b6abe0796b93ecbdb3fbc",
+          "image_sha256": "25e18560e30504297fcbc632d31d0b4133f240a66e247a0006ae80d89d171d6c",
+          "asset_path": "assets/pages/doc_5ce7fd19a48bfb/p0027.png",
+          "excerpt": "9.3 Bootstrap Sampling(自助采样法)\n• 给定包含m个样本的数据集D, 我们对它进行m次放回采样\n(Bootstrap采样),得到数据集D’。改变了数据集分布,引入\n了估计偏差。\n• 样本在m次采样始终不被采到的概率是(1-1/m)m ,其极限为:\n• 对于样本规模小,难以进行交叉检验时经常使用。\nB. Efron and R. Tibshirani. An Introduction to Bootstrap. 1993.\n27\n"
+        },
+        {
+          "chunk_id": "doc_5ce7fd19a48bfb_u0029",
+          "document_id": "doc_5ce7fd19a48bfb",
+          "page": 29,
+          "title": "9.集成学习.pdf",
+          "source_sha256": "5ce7fd19a48bfb878003eaaf5c8f391b6265e4cf543b6abe0796b93ecbdb3fbc",
+          "image_sha256": "ba50851002226b4b060e38be54e123d609e8abfd49c49f290667db17bd0fb61e",
+          "asset_path": "assets/pages/doc_5ce7fd19a48bfb/p0029.png",
+          "excerpt": "9.3 随机森林(Random Forest) –Bagging策略的代表方法\n• 以决策树为基学习器构建Bagging集成分类器;\n• 在决策树的训练过程中引入了随机属性选择\n• 先从d个属性中随机选择k个属性(如k=log2d )\n• 再从这k个属性中选择一个最优属性\n29\n委员会\n投票\n"
+        }
+      ],
+      "terms": [
+        "随机森林",
+        "多样性",
+        "随机子空间"
+      ],
+      "document_prefix": "9.集成学习",
+      "action": "分别说明自助采样和特征随机选择增加多样性的方式。",
+      "success_check": "能区分随机森林的并行集成和Boosting的序列训练。",
+      "suggested_minutes": 8
+    },
+    "kp.cluster.kmeans": {
+      "name": "K-means 与初始敏感",
+      "pages": [
+        {
+          "chunk_id": "doc_ce7bf27b6ef467_u0009",
+          "document_id": "doc_ce7bf27b6ef467",
+          "page": 9,
+          "title": "10.聚类.pdf",
+          "source_sha256": "ce7bf27b6ef4674434ad94b72ae02814cbe934071659b33591ee7795a1612c7f",
+          "image_sha256": "92c0875872909674557acb12bc868fce6890d38a4698b88b21b4c5eb6c60e08a",
+          "asset_path": "assets/pages/doc_ce7bf27b6ef467/p0009.png",
+          "excerpt": "10.1.1 k-Means聚类算法\n算法10.1 K-Means聚类算法\nE步:\n决定\n样本\n簇归\n属\nM步:\n计算\n簇中\n心\n判定\n是否\n收敛\n9\n"
+        },
+        {
+          "chunk_id": "doc_ce7bf27b6ef467_u0011",
+          "document_id": "doc_ce7bf27b6ef467",
+          "page": 11,
+          "title": "10.聚类.pdf",
+          "source_sha256": "ce7bf27b6ef4674434ad94b72ae02814cbe934071659b33591ee7795a1612c7f",
+          "image_sha256": "e57c460375635cc783711ee6443cb8e64a3a739be53bf00168daacefadbb8e59",
+          "asset_path": "assets/pages/doc_ce7bf27b6ef467/p0011.png",
+          "excerpt": "1\n2\n3\n4\n5\n6\n7\n8\n10.1.1 k-Means聚类的一些情况\n11\n1. 簇中心需要初始化(随机、分散)\n2. 聚类优化有可能陷入局部极值\n通过多轮随机初始化簇中心加以解决\n3. 簇个数的设置\n设置为期望簇个数\n设置为期望簇个数的K倍,后期再对这些簇做进一步聚类以达到期望\n通过拐点法(Elbow Point)确定个数,从快速变化到平缓变化的拐点\n代价函数\n聚簇个数\n拐点\n"
+        }
+      ],
+      "terms": [
+        "k-means",
+        "k均值",
+        "均值聚类",
+        "初始"
+      ],
+      "document_prefix": "10.聚类",
+      "action": "手算一次样本分配和聚类中心更新。",
+      "success_check": "能解释初始中心不同为何可能得到不同局部解。",
+      "suggested_minutes": 8
+    },
+    "kp.cluster.dbscan": {
+      "name": "基于密度的聚类",
+      "pages": [
+        {
+          "chunk_id": "doc_ce7bf27b6ef467_u0023",
+          "document_id": "doc_ce7bf27b6ef467",
+          "page": 23,
+          "title": "10.聚类.pdf",
+          "source_sha256": "ce7bf27b6ef4674434ad94b72ae02814cbe934071659b33591ee7795a1612c7f",
+          "image_sha256": "de5f81308512bf3fce7829940fff76afe082205855c91e35cfbdd9d810eeae46",
+          "asset_path": "assets/pages/doc_ce7bf27b6ef467/p0023.png",
+          "excerpt": "10.3 DBSCAN算法的基础概念\nDBSCAN算法聚类的过程就是寻找密度相连的样本集合\n"
+        },
+        {
+          "chunk_id": "doc_ce7bf27b6ef467_u0024",
+          "document_id": "doc_ce7bf27b6ef467",
+          "page": 24,
+          "title": "10.聚类.pdf",
+          "source_sha256": "ce7bf27b6ef4674434ad94b72ae02814cbe934071659b33591ee7795a1612c7f",
+          "image_sha256": "7df54c32da96ee6710306ac8792f7accf24c1b3b02c8d3f5ebb34b00f42bedd9",
+          "asset_path": "assets/pages/doc_ce7bf27b6ef467/p0024.png",
+          "excerpt": "10.3 DBSCAN算法\n算法10.4 基于密度的DBSCAN算法\n"
+        }
+      ],
+      "terms": [
+        "DBSCAN",
+        "密度",
+        "核心对象"
+      ],
+      "document_prefix": "10.聚类",
+      "action": "用邻域半径和最少点数区分核心点、边界点与噪声。",
+      "success_check": "能说明密度可达与距离很近并不等价。",
+      "suggested_minutes": 8
+    },
+    "kp.pca.variance": {
+      "name": "PCA 主成分与累计方差",
+      "pages": [
+        {
+          "chunk_id": "doc_b63605948fd562_u0017",
+          "document_id": "doc_b63605948fd562",
+          "page": 17,
+          "title": "11.主成分分析与非负矩阵分解.pdf",
+          "source_sha256": "b63605948fd56291b6e9564a30385bf7c8cf884d412d38db3edb733fe0d91bad",
+          "image_sha256": "3005972afcacbe0d4986cd4f54e227a2061aa4d85b38162cb53bd5bac34eb297",
+          "asset_path": "assets/pages/doc_b63605948fd562/p0017.png",
+          "excerpt": "2.2 PCA算法-2. 主算法\n计算各维度间的协方差矩阵\n计算维度协方差矩阵\n的特征向量(eigenvector)\n[U,S,V] = svd(Sigma); // 常用\n[V,D]=eig(Sigma);\n// 也可用\n计算维度间的协方差矩阵\n求解协方差矩阵的特征值、特征向量就是在相互正\n交的维度上最大化方差。\n特征向量:表征变换后的新的方向\n17\n"
+        },
+        {
+          "chunk_id": "doc_b63605948fd562_u0018",
+          "document_id": "doc_b63605948fd562",
+          "page": 18,
+          "title": "11.主成分分析与非负矩阵分解.pdf",
+          "source_sha256": "b63605948fd56291b6e9564a30385bf7c8cf884d412d38db3edb733fe0d91bad",
+          "image_sha256": "b05e4ef5baa7f5a45e8c8704d58be31ac265c80c739415f9740ab2f84bdd06f1",
+          "asset_path": "assets/pages/doc_b63605948fd562/p0018.png",
+          "excerpt": "2.3 PCA的优化目标\n• 优化目标:最大化投影后样本点的方差\n• 约束:新方向相互正交\n18\n"
+        }
+      ],
+      "terms": [
+        "主成分",
+        "累计贡献",
+        "方差",
+        "PCA"
+      ],
+      "document_prefix": "11.主成分",
+      "action": "将特征值按大小排序，手算累计解释方差比。",
+      "success_check": "能根据累计比例选择维数，而不把原始特征直接当作主成分。",
+      "suggested_minutes": 8
+    },
+    "kp.nmf.loss": {
+      "name": "NMF 损失函数",
+      "pages": [
+        {
+          "chunk_id": "doc_b63605948fd562_u0021",
+          "document_id": "doc_b63605948fd562",
+          "page": 21,
+          "title": "11.主成分分析与非负矩阵分解.pdf",
+          "source_sha256": "b63605948fd56291b6e9564a30385bf7c8cf884d412d38db3edb733fe0d91bad",
+          "image_sha256": "3aeb3685d1e2c33c87d2c993731dc52cf648b22e2b2748f92cf1f7109b3001dc",
+          "asset_path": "assets/pages/doc_b63605948fd562/p0021.png",
+          "excerpt": "3.非负矩阵分解\n• 给定非负矩阵V, 将其分解为非负矩阵W和H如下:\nV(n*m) ≈ W(n*r) H(r*m)\n21\nV(n*m)\n=\nW(n*r)\nH(r*m)\n×\nr << m, n\n(m+n) * r < nm\n"
+        },
+        {
+          "chunk_id": "doc_b63605948fd562_u0025",
+          "document_id": "doc_b63605948fd562",
+          "page": 25,
+          "title": "11.主成分分析与非负矩阵分解.pdf",
+          "source_sha256": "b63605948fd56291b6e9564a30385bf7c8cf884d412d38db3edb733fe0d91bad",
+          "image_sha256": "bc93c06b07cdb1bdb84f29854f0179cf2f6347c5b5ed057b8eff448b3f8e55e3",
+          "asset_path": "assets/pages/doc_b63605948fd562/p0025.png",
+          "excerpt": "代价函数\n•分解前后的误差:\n25\n• 损失函数:\n使用欧式距离衡量误差\n包含KL散度的误差\n"
+        }
+      ],
+      "terms": [
+        "非负矩阵",
+        "NMF",
+        "重构误差"
+      ],
+      "document_prefix": "11.主成分",
+      "action": "写出非负分解的重构目标及矩阵非负约束。",
+      "success_check": "能区分NMF的非负约束与PCA的正交方向。",
+      "suggested_minutes": 8
+    },
+    "kp.theory.vc": {
+      "name": "VC 维与假设空间复杂度",
+      "pages": [
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0024",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 24,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "8af3b85d5dc2b995fadd5f7f470ddfe7482d87bcf3ebfb3956f03a65e723a5e3",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0024.png",
+          "excerpt": "12.3 统计学习理论与VC维\n• VC维(Vapnik-Chervonenkis Dimension)用来衡量模型“表达能力” 或“泛化能力上\n限” 的核心概念,建立“模型复杂度” 与“泛化误差” 的量化关联,VC 维\n越小,模型泛化误差界越紧,泛化能力越有保障\n•\n打散:对于假设空间H(模型所有可能的预测函数集合),若存在一个大小\n为m的样本集S,使得H能对S的所有可能标签组合都实现正确分类,则称S可\n被H“打散”(Shattering)。\n•\nVC维:假设空间H能打散的最大样本集大小\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0025",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 25,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "ccc5d06cea844bb74e95a16d5679c72894b62b47b8d325bc72e2856f4ff62b75",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0025.png",
+          "excerpt": "12.3 假设空间打散(Shatter)样本集的示例\n周志华. 机器学习. 12.4节. P273\n• 线性模型假设空间打散样本的能力\n"
+        }
+      ],
+      "terms": [
+        "VC维",
+        "VC 维",
+        "打散",
+        "假设空间"
+      ],
+      "document_prefix": "12.机器学习",
+      "action": "用一组平面点说明线性分类器能否实现所有二分类标记。",
+      "success_check": "能说明打散要求实现所有标记，而非只拟合某一种标记。",
+      "suggested_minutes": 8
+    },
+    "kp.theory.pac": {
+      "name": "PAC 学习框架",
+      "pages": [
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0029",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 29,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "2ed8ba12fe5a1719b15eba1d54ea7fef7b409235d95ef860a61614241394a310",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0029.png",
+          "excerpt": "12.4 计算学习理论与PAC学习\n• 计算学习理论(Computational Learning Theory)\n• 量化模型从有限训练数据中学习的能力\n• 在什么条件下,算法能以高概率(1−δ)找到一个误差不超过ε 的假设,\n为学习算法提供理论基础。\n• 几个重要的不等式(估计与期望间误差足够小的概率)\n• Jensen不等式\n• Hoeffding不等式\n• McDiarmid不等式\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0032",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 32,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "6d3c1463c058ba9a97ed4ac1c37205cdb1650758167c139dab9aa3f536b9b5d2",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0032.png",
+          "excerpt": "12.4 PAC学习的主要概念- PAC 辨识\n• PAC 辨识(PAC Identity)\n• 学习算法L从假设空间H中PAC辨识概念类C\n• 对于分布D和概念类C中的任意c,如果算法L能够学到h ∈H,且满足\n则称学习算法L能从假设空间H中PAC辨识C\n• 学习算法通过有限训练样本以极大概率找到与真实概念近\n似一致的假设\n"
+        },
+        {
+          "chunk_id": "doc_62cc358de7c7fc_u0033",
+          "document_id": "doc_62cc358de7c7fc",
+          "page": 33,
+          "title": "12.机器学习的相关理论.pdf",
+          "source_sha256": "62cc358de7c7fc4033374333496197e52eb18ee89f6f0b3b43703dbfd5ba6676",
+          "image_sha256": "c90c066ba533ff6104f9e777932dbbf39a9923572489000cc910ff2f47fed903",
+          "asset_path": "assets/pages/doc_62cc358de7c7fc/p0033.png",
+          "excerpt": "12.4 PAC学习的主要概念- PAC可学习和样本复杂度\n• PAC 可学习(PAC Learnable)\n• 从假设空间H中“PAC 辨识”概念类C,则称概念类C 对假\n设空间H而言是PAC可学习的\n• 将“模型能否学习”变成可量化的概率条件\n• 对于所有分布D,如果存在学习算法L和一个多项式函数poly(),使得对于任\n何样本数量m≥poly(1/ δ, 1/ε , size(x), size(c)),学习算法L都能从假设空间H\n中PAC辨识概念类C,那么则称概念类C 对假设空间H而言是PAC可学习的\n• 最小m被称为算法L的样本复杂度\n"
+        }
+      ],
+      "terms": [
+        "PAC",
+        "概率近似",
+        "近似正确"
+      ],
+      "document_prefix": "12.机器学习",
+      "action": "分别解释PAC中的误差容限和失败概率。",
+      "success_check": "能区分近似正确与以高概率成立。",
+      "suggested_minutes": 8
+    },
+    "kp.framework.mindspore": {
+      "name": "MindSpore 框架概念",
+      "pages": [
+        {
+          "chunk_id": "doc_d3ea9d865a587e_u0042",
+          "document_id": "doc_d3ea9d865a587e",
+          "page": 42,
+          "title": "4.深度学习-2026.pdf",
+          "source_sha256": "d3ea9d865a587e6e990995bb7961b912f83c173017894186b2fdfba57b54bd24",
+          "image_sha256": "742cde02d3497eb1b37082e16bdd9709974cfe4540c5e484b33a92b26d94fec9",
+          "asset_path": "assets/pages/doc_d3ea9d865a587e/p0042.png",
+          "excerpt": "科学计算\n领域套件与扩展包\n硬件\n芯片、板卡\n边\n端\n云\nCANN:Computing Architecture for Neural Network\n统一异构计算架构\n大语言模型\nMind Armour (AI安全)\n密态AI、模型混淆、端云协同隐私保护\nMindRT\nMindRT\nMindRT Lite/Macro\nMindCompiler\nMindIR (中间表达层,Intermediate Representation)\n量化/剪枝/蒸馏/....\nMindAKG(计算规范化、自动调度、后端优化)\nMindExpress\nJulia等第三方前端\nMind Data\n数据加载\n格式转换\n数据增强\n异构加速\n分布式异构并行\n算子\n异构并行\n算子\n图算融合\n内存优化\n流水线执行\n自动微分\n类型推导\n自动并行\n二阶优化\nnn\ndataset\nops\ntrain\n推理\nMind Insight\n调试调优(网络、性能、精度)\n载体(云边端)\n驱动软件\n深度计算平台\n深度计算平台框架\nMind Studio\n开发工具\n软件\ncuDNN\nModel\nTransformers\nCV\nYOLO\n强化学习\n科学计算\nNLP\n生物信息\n量子计算\n4.4 MindSpore深度学习框架架构\n"
+        },
+        {
+          "chunk_id": "doc_d3ea9d865a587e_u0058",
+          "document_id": "doc_d3ea9d865a587e",
+          "page": 58,
+          "title": "4.深度学习-2026.pdf",
+          "source_sha256": "d3ea9d865a587e6e990995bb7961b912f83c173017894186b2fdfba57b54bd24",
+          "image_sha256": "15aef204aa414519972266450bd6fbfec8e65448568de4b58e97e09bd3765282",
+          "asset_path": "assets/pages/doc_d3ea9d865a587e/p0058.png",
+          "excerpt": "4.4.2.3 使用mindspore.nn.Cell定义传统三层神经网络\n58\n相比于上页通过属性fc、\nrelu等挂接相应函数,\n此处使用\nFeedForwSequental容\n器进行装载。\n这样在construct里实现\n正向传播也变得容易\n"
+        },
+        {
+          "chunk_id": "doc_d3ea9d865a587e_u0059",
+          "document_id": "doc_d3ea9d865a587e",
+          "page": 59,
+          "title": "4.深度学习-2026.pdf",
+          "source_sha256": "d3ea9d865a587e6e990995bb7961b912f83c173017894186b2fdfba57b54bd24",
+          "image_sha256": "76ed3ff86dd57d93a6a3b15ad632ad514b28c6f622a35efb478233c29850f37b",
+          "asset_path": "assets/pages/doc_d3ea9d865a587e/p0059.png",
+          "excerpt": "4.4.2.3 使用mindspore.train.Model训练和评估传统三层神经网络\n59\n将神经网络模型结构定义(nn.Cell)和模型训练(train.Model)分开。\n将代价函数、训练优化算法、结构定义都分隔开,相互独立,利于各种组装。\n"
+        }
+      ],
+      "terms": [
+        "MindSpore",
+        "MindIR",
+        "MindRT",
+        "nn.Cell"
+      ],
+      "document_prefix": "",
+      "action": "区分网络组件、模型训练封装、计算表示和运行时。",
+      "success_check": "能说明nn.Cell与训练接口承担不同职责。",
+      "suggested_minutes": 8
+    }
+  }
+}

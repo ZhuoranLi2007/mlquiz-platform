@@ -1,0 +1,73 @@
+{
+  "checked_at": "2026-11-17T21:23:47.517776+08:00",
+  "status": "passed",
+  "method": "Extracted ZIP to fresh directory without .env; reused freshly installed Python 3.13 lockfile environment; started actual uvicorn and worker; checked served frontend assets and API; stopped only launched subprocesses. Browser end-to-end evidence is separate.",
+  "default_snapshot": {
+    "bootstrap": {
+      "database": "D:\\文档\\机器学习复习平台搭建\\delivery-diagnosis-smoke-20261117\\mlquiz-platform-main\\data\\db\\mlquiz.sqlite3",
+      "database_restored": true,
+      "release_assets_copied": 354,
+      "official_students": 16,
+      "credentials_created": true,
+      "accounts_ready": true
+    },
+    "health": 200,
+    "frontend": 200,
+    "built_assets_checked": 2,
+    "model_configured": false,
+    "teacher_demo_login": 200,
+    "graphs": [
+      "diagnosis_graph",
+      "generation_graph",
+      "retest_graph"
+    ]
+  },
+  "worker": "started and exited normally on empty queue",
+  "diagnosis_review_snapshot": {
+    "bootstrap": {
+      "database": "D:\\文档\\机器学习复习平台搭建\\delivery-diagnosis-smoke-20261117\\mlquiz-platform-main\\data\\acceptance-view\\db\\mlquiz.sqlite3",
+      "database_restored": false,
+      "release_assets_copied": 354,
+      "official_students": 16,
+      "credentials_created": true,
+      "accounts_ready": true
+    },
+    "health": 200,
+    "frontend": 200,
+    "built_assets_checked": 2,
+    "model_configured": false,
+    "teacher_demo_login": 200,
+    "graphs": [
+      "diagnosis_graph",
+      "generation_graph",
+      "retest_graph"
+    ],
+    "acceptance_api_database_check": {
+      "status": "passed",
+      "material_kps": 35,
+      "unique_course_page_images": 80,
+      "image_requests": 82,
+      "preservation": {
+        "questions": {
+          "baseline_rows": 832,
+          "changed_or_missing": 0
+        },
+        "attempts": {
+          "baseline_rows": 130,
+          "changed_or_missing": 0
+        },
+        "answers": {
+          "baseline_rows": 747,
+          "changed_or_missing": 0
+        },
+        "answer_scores": {
+          "baseline_rows": 749,
+          "changed_or_missing": 0
+        }
+      },
+      "new_model_calls": 5,
+      "total_prompt_records": 85
+    }
+  },
+  "restore_overwrite_protection": "passed"
+}

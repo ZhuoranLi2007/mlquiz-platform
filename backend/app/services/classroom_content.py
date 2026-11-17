@@ -38,6 +38,20 @@ def _emf_png(path: str, mtime_ns: int, size: int) -> bytes:
 
 
 def render_emf_png(path: Path) -> bytes:
+    # Packaged formulas have checked browser renderings. Keep the original EMF
+    # and manifest hashes untouched; Windows can still render new uploads.
+    preview = Path(str(path) + ".png")
+    metadata = Path(str(path) + ".render.json")
+    if preview.is_file() and metadata.is_file():
+        try:
+            checks = json.loads(metadata.read_text(encoding="utf-8"))
+            content = preview.read_bytes()
+            if (checks.get("source_sha256") == sha256(path.read_bytes()).hexdigest()
+                    and checks.get("png_sha256") == sha256(content).hexdigest()
+                    and content.startswith(b"\x89PNG\r\n\x1a\n")):
+                return content
+        except (ValueError, OSError):
+            pass
     stat = path.stat()
     return _emf_png(str(path), stat.st_mtime_ns, stat.st_size)
 

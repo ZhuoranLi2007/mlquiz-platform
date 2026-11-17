@@ -39,7 +39,7 @@ from backend.app.services.diagnosis_analysis_v2 import SCIENCE_GUIDANCE, evidenc
 from backend.app.services.score_policy import admissible_score
 
 
-SKILL_VERSION = "classroom-chapter-diagnosis-v5"
+SKILL_VERSION = "classroom-chapter-diagnosis-v6"
 PENDING_SCORE_STATUSES = {
     "pending_key", "needs_manual", "needs_model_scoring", "ungraded",
 }
@@ -452,32 +452,8 @@ def _kp_labels(db: Session, kp_ids: Iterable[str]) -> dict[str, str]:
 
 
 def _resources(db: Session, kp_ids: Iterable[str], limit: int = 12) -> list[dict]:
-    wanted = {k for k in kp_ids if k}
-    if not wanted:
-        return []
-    rows = db.execute(select(E.Resource).where(
-        E.Resource.verified.is_(True),
-        E.Resource.is_test_fixture.is_(False),
-    ).order_by(E.Resource.title, E.Resource.resource_id)).scalars().all()
-    out = []
-    for row in rows:
-        if is_search_entry(row.url, row.title):
-            continue
-        matched = sorted(wanted & set(row.kp_ids or []))
-        if not matched:
-            continue
-        out.append({
-            "resource_id": row.resource_id,
-            "title": row.title,
-            "platform": row.platform,
-            "url": row.url,
-            "reason": row.reason,
-            "source_type": row.source_type,
-            "kp_ids": matched,
-        })
-        if len(out) >= limit:
-            break
-    return out
+    from backend.app.services.learning_resources import recommend
+    return recommend(db, kp_ids, limit=limit)
 
 
 def _answer_value(payload: Any) -> Any:
@@ -2659,7 +2635,18 @@ def class_assessment(
             answer = _answers_by_item(db, attempt, [item]).get(item.item_id)
             if score.correct is True:
                 continue
-            if question_type in {"single_choice", "multiple_choice", "multi_choice"} or (
+            if question_type == "true_false":
+                # Booleans are structured public choices, not private free text.
+                # In particular False is a valid answer, never a missing value.
+                value = _answer_value(answer.response) if answer else None
+                if answer is None or answer.response_status == "unanswered":
+                    mapping_counts["unanswered"] += 1
+                elif isinstance(value, bool):
+                    mapping_counts["reliable"] += 1
+                    response_counts["正确" if value else "错误"] += 1
+                else:
+                    mapping_counts["unmapped"] += 1
+            elif question_type in {"single_choice", "multiple_choice", "multi_choice"} or (
                 valid_option_keys and _answer_keys(
                     (question_view.get("answer_reference") or {}).get("payload"))
             ):
@@ -2840,7 +2827,9 @@ def class_assessment(
                        "assessment_version_id": version.assessment_version_id,
                        "quiz_code": assessment.quiz_code,
                        "title": assessment.title,
+                       "scheduled_at": assessment.scheduled_at,
                        "version_no": version.version_no},
+        "scored_submission_dates": sorted({a.submitted_at[:10] for _, _, a in all_valid if a.submitted_at}),
         "participation": {
             "enrolled": len(members),
             "scored": len(scored_rows),
@@ -2978,6 +2967,9 @@ def _v2_observation(item: dict[str, Any]) -> str:
     if qtype in {"numeric", "calculation", "true_false"}:
         response = _answer_value(item.get("response"))
         reference = _answer_value((item.get("answer_reference") or {}).get("payload"))
+        if qtype == "true_false":
+            response = ("正确" if response else "错误") if isinstance(response, bool) else response
+            reference = ("正确" if reference else "错误") if isinstance(reference, bool) else reference
         if all(isinstance(value, (str, int, float, bool)) and len(str(value)) <= 32
                for value in (response, reference)):
             return f"作答为{response}，参考答案为{reference}。"
@@ -2990,11 +2982,12 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
         wrong = [item for item in payload.get("items") or []
                  if item.get("evidence_status") == "scored"
                  and item.get("correct") is False]
-        for index, item in enumerate(wrong[:8], 1):
+        for index, item in enumerate(wrong, 1):
             position = item.get("position")
             rows.append({
                 "id": f"q{index}", "name": (item.get("knowledge_point") or {}).get("name") or "本题对应概念",
                 "chapter": (item.get("chapter") or {}).get("title") or "",
+                "kp_id": (item.get("knowledge_point") or {}).get("kp_id") or item.get("kp_id") or "",
                 "positions": [position], "refs": [f"第{position}题"],
                 "observation": _v2_observation(item),
                 "interpretation_allowed": (
@@ -3009,7 +3002,7 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
                 "score": {"awarded": item.get("awarded_score"), "maximum": item.get("max_score")},
             })
     elif scope == "student_history":
-        for index, item in enumerate((payload.get("wrong_items") or [])[:12], 1):
+        for index, item in enumerate(payload.get("wrong_items") or [], 1):
             occurrences = sorted(item.get("occurrences") or [],
                                  key=lambda row: str(row.get("exam_time") or ""))
             refs = [f"{row.get('assessment_title') or '考试'}第{row.get('position')}题"
@@ -3029,6 +3022,7 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
             rows.append({
                 "id": f"h{index}", "name": (item.get("knowledge_point") or {}).get("name") or "本题对应概念",
                 "chapter": (item.get("chapter") or {}).get("title") or "",
+                "kp_id": (item.get("knowledge_point") or {}).get("kp_id") or item.get("kp_id") or "",
                 "positions": [row.get("position") for row in occurrences if row.get("position")],
                 "refs": refs or [f"第{item.get('position')}题"],
                 "observation": observation,
@@ -3050,7 +3044,7 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
                 } for row in (occurrences[:1] + occurrences[-1:] if len(occurrences) > 1 else occurrences)],
             })
     elif scope == "class_assessment":
-        for index, item in enumerate((payload.get("high_frequency_errors") or [])[:5], 1):
+        for index, item in enumerate(payload.get("high_frequency_errors") or [], 1):
             position = item.get("position")
             common = item.get("common_wrong_answers") or []
             answer_known = bool(item.get("scoring_reference_status") == "available"
@@ -3059,14 +3053,15 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
             wrong_answer = "；".join(
                 f"{row['answer']}（{row['count']}人）" for row in common) if answer_known else ""
             correct_keys = set(_answer_keys((item.get("answer_reference") or {}).get("payload")))
+            choice_question = item.get("question_type") in {"single_choice", "multiple_choice", "multi_choice"}
             common_missed = (set.intersection(*(
                 correct_keys - {key.strip() for key in str(row.get("answer") or "").split(",")}
                 for row in common))
-                if answer_known else set())
+                if answer_known and choice_question else set())
             common_extra = (set.intersection(*(
                 {key.strip() for key in str(row.get("answer") or "").split(",")} - correct_keys
                 for row in common))
-                if answer_known else set())
+                if answer_known and choice_question else set())
             observation = (f"{item.get('incorrect_count')}/{item.get('denominator')}人答错"
                            + (f"，常见错误作答为{wrong_answer}。" if wrong_answer else "。")
                            + (f"共同漏选{'、'.join(sorted(common_missed))}。" if common_missed else "")
@@ -3074,8 +3069,11 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
             rows.append({
                 "id": f"c{index}", "name": (item.get("knowledge_point") or {}).get("name") or "本题对应概念",
                 "chapter": (item.get("chapter") or {}).get("title") or "",
+                "kp_id": (item.get("knowledge_point") or {}).get("kp_id") or item.get("kp_id") or "",
                 "positions": [position], "refs": [f"第{position}题"],
                 "observation": observation, "interpretation_allowed": answer_known,
+                "interpretation_limit": ("distributed_answers" if not answer_known and
+                    (item.get("answer_mapping_counts") or {}).get("reliable", 0) > 0 else ""),
                 "stem": item.get("stem"), "question_type": item.get("question_type"),
                 "options": item.get("options") or item.get("source_options") or [],
                 "high_frequency_wrong_answer": wrong_answer or None,
@@ -3093,77 +3091,69 @@ def _v2_analysis_evidence(scope: str, payload: dict[str, Any]) -> list[dict[str,
 
 
 def _v2_fallback(scope: str, payload: dict[str, Any]) -> dict[str, Any]:
-    legacy = (
-        _deterministic_ai_analysis(payload) if scope == "student_attempt" else
-        _history_ai_fallback(payload) if scope == "student_history" else
-        _class_ai_fallback(payload)
-    )
-    evidence = _v2_analysis_evidence(scope, payload)
-    if evidence:
-        compact = evidence_analysis(scope, evidence)
-    else:
-        has_scores = bool((payload.get("score_summary") or {}).get("scored_items")
-                          or (payload.get("statistics") or {}).get("scored_item_events")
-                          or (payload.get("participation") or {}).get("scored"))
-        compact = evidence_analysis(scope if has_scores else "insufficient", [])
-    return {**legacy, **compact}
+    from backend.app.services.diagnosis_coaching import coaching
+    return coaching(scope, _v2_analysis_evidence(scope, payload), payload)
 
 
 def _model_analysis_v2(db: Session, scope: str, payload: dict[str, Any], run_id: str) -> dict[str, Any]:
-    fallback = _v2_fallback(scope, payload)
+    from backend.app.services.diagnosis_coaching import coaching, context, parse_model_output
+    from backend.app.services.learning_catalog import target
     evidence = _v2_analysis_evidence(scope, payload)
-    if not evidence:
-        return fallback
-    interpretable = [row for row in evidence if row.get("interpretation_allowed", True)]
+    fallback = coaching(scope, evidence, payload)
+    interpretable = [r for r in evidence if r.get("interpretation_allowed", True)]
     if not interpretable:
-        # A class aggregate of only unanswered/invalid responses gives no
-        # evidence for a conceptual hypothesis. This is not an AI outage.
         return fallback
-    focus = {
-        "student_attempt": "本次答卷中每题实际错在哪里",
-        "student_history": "跨考试同题反复错误及作答变化，不把同章节不同题称为同题重复",
-        "class_assessment": "班级聚合的共性问题，不推断任何学生的个人心理原因",
-    }[scope]
+    # Keep every scored error in deterministic coverage/priority. Bound only the
+    # model prompt, selecting representative evidence in the actual priority order.
+    ranked_kps = list(dict.fromkeys(c["kp_id"] for c in fallback["concept_hypotheses"] if c["kp_id"]))
+    model_evidence = []
+    for kp in ranked_kps:
+        related = [r for r in interpretable if r.get("kp_id", "") == kp]
+        model_evidence.extend(related[:2])
+        if len(model_evidence) >= 12:
+            break
+    model_evidence = model_evidence[:12]
+    if not model_evidence:
+        model_evidence = interpretable[:8]
+    focus = {"student_attempt":"本次答卷的具体作答差异",
+             "student_history":"所选日期范围内的反复错误，不把同知识点的不同题称为同题重复",
+             "class_assessment":"班级实际作答分布，不推断个人心理原因"}[scope]
     system = (
-        f"你是认真批改机器学习课程作业的教师。重点：{focus}。"
-        "只依据提供的真实题干、选项、作答、答案、评分和解析写简短评语。"
-        "每个 observable_mismatch 是确定性证据；先辨认漏选、错选、计算结果不符或未作答，"
-        "再谨慎推测可能的理解问题。不得把计算错误或审题失误写成确定事实。"
-        "综合结论也只总结作答表现；心理原因必须写可能，不得直接断言概念混淆。"
-        "返回严格 JSON：summary 为不含题号和分数的1句话（不超过70字）；"
-        "concept_hypotheses 优先2至3项；只有一项可分析证据时只返回1项。每项只含"
-        " evidence_ids（输入中的 id 数组）和 analysis（不超过45字）；"
-        "recommendations 为2至3项，每项只含 evidence_ids 和 action（不超过45字）。"
-        "不要返回 observation、题号、HTML、JSON说明或泛泛的学习话术；服务端会附上真实观察与题号。"
-        "interpretation_allowed=false 的记录只能描述作答缺失或无效，不能推断概念误解。"
-        "班级并列错答要分别看；只把各组共同漏选或共同错选的选项写成班级共性，"
-        "不要把某一组独有的漏选推广到所有答错学生。"
-        "数学符号必须用$...$或$$...$$的有效LaTeX，例如 $a^{(l-1)}$、"
-        "$\\frac{\\partial L}{\\partial W}$、$\\tanh(x)$。"
-        + SCIENCE_GUIDANCE
-    )
+        f"你是机器学习课程教师，依据{focus}给出具体、易读的诊断。"
+        "只使用提供的题干、选项、答案、评分和资料，不重复统计数字、不编造题号、日期或学习期限。"
+        "不要写加强基础、多做练习、认真听讲、继续努力这类没有具体对象的占位话。"
+        "输出严格JSON，只有concept_hypotheses数组，最多3项；一项真实证据也可以分析，不强凑数量。"
+        "evidence_ids只填写在专用字段，analysis/action/success_check不得出现h1、q1、c1等内部证据编号。"
+        "题目来源、选了什么、漏了什么、错误次数由页面按数据库展示，分析中不要复述这些作答统计，避免把最近一次差异套到历次。"
+        "analysis应解释关键概念的区别与成立条件；action和success_check写具体学习产出。"
+        "反向传播输出层误差依赖损失和激活函数，delta=a-y仅在相应组合下成立，不能当作通用公式。"
+        "每项包含evidence_ids（原id数组）、analysis（解释作答差异及关键概念，50至130字）、"
+        "action（指出要比较、计算或画出的具体内容，20至100字）、"
+        "success_check（可检查的学习产出，20至100字）。不要把整段分析写成一句泛泛建议。"
+        "可观察的错误与推测原因分开；推测用可能，不能断言粗心、审题失误或心理原因。"
+        "interpretation_allowed=false不能归因为理解问题。班级只把各组共同的漏选/错选称为共性。"
+        "学习资源由系统按知识点匹配，禁止编造URL、页码、视频时间点或已掌握结论。"
+        "数学公式使用$...$或$$...$$。" + SCIENCE_GUIDANCE)
+    learning = [{"kp_id":r.get("kp_id"), **target(r.get("kp_id", ""), r.get("name", ""))}
+              for r in model_evidence]
     try:
         response = model_provider.chat(
-            db, messages=[{"role": "system", "content": system},
-                          {"role": "user", "content": json.dumps({
-                              "scope": scope, "wrong_evidence": evidence,
-                              "retest_history": [{
-                                  "round": row.get("round"), "status": row.get("status"),
-                                  "accuracy": row.get("accuracy"),
-                                  "wrong_positions": [item.get("position") for item in row.get("wrong_items") or []],
-                              } for row in (payload.get("retest_history") or [])[-2:]],
-                          }, ensure_ascii=False)}],
-            skill_name="diagnose_classroom", prompt_version=f"{scope}-analysis-v2",
-            run_id=run_id, temperature=0.1, max_tokens=1100, timeout=60.0)
+            db, messages=[{"role":"system", "content":system},
+                          {"role":"user", "content":json.dumps({
+                              "scope":scope, "selection_context":context(scope,payload),
+                                "wrong_evidence":model_evidence, "study_targets":learning}, ensure_ascii=False)}],
+            skill_name="diagnose_classroom", prompt_version=f"{scope}-coaching-v3",
+            run_id=run_id, temperature=.1, max_tokens=2200, timeout=90.)
         if response.get("finish_reason") == "length":
             raise model_provider.ModelUnavailable("truncated", "模型输出被截断")
-        parsed = model_provider.parse_json_content(response.get("content") or "")
-        compact = evidence_analysis(scope, evidence, parsed, model_meta=response)
-        if compact["source"] != "deepseek":
-            raise model_provider.ModelUnavailable("invalid_output", "模型分析未通过证据与篇幅校验")
-        return {**fallback, **compact}
+        parsed, repaired = parse_model_output(response.get("content") or "")
+        result = coaching(scope, evidence, payload, parsed, response)
+        result["validation"]["json_math_escapes_repaired"] = repaired
+        if result["source"] != "deepseek":
+            return {**result, "model_status":"invalid_output"}
+        return result
     except model_provider.ModelUnavailable as exc:
-        return {**fallback, "model_status": exc.status, "model_message": exc.message}
+        return {**fallback, "model_status":exc.status, "model_message":exc.message}
 
 
 def _diagnosis_target(scope_type: str, values: Iterable[str]) -> str:
@@ -3184,6 +3174,7 @@ def run_diagnosis(
     include_ai: bool = False,
     date_from: str = "",
     date_to: str = "",
+    trace_run_id: str = "",
 ) -> dict:
     """Compute and persist one explicit teacher diagnosis scope."""
     if scope_type == "student_attempt":
@@ -3228,7 +3219,7 @@ def run_diagnosis(
             "scope_type 必须是 student_attempt、student_history、"
             "class_assessment 或 question_analysis")
 
-    run_id = E.new_id("run")
+    run_id = trace_run_id or E.new_id("run")
     if scope_type == "student_attempt" and include_ai:
         from backend.app.services import targeted_retest
         payload["ai_analysis"] = targeted_retest.enrich_analysis(

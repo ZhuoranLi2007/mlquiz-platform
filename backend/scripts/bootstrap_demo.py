@@ -127,6 +127,10 @@ def bootstrap(*, repair_credentials: bool = False) -> dict:
             f"packaged snapshot should contain 16 students, found {students}"
         )
 
+    init_db()
+    from backend.app.services.resource_updates import seed_reviewed_resources
+    with SessionLocal() as db:
+        seed_reviewed_resources(db)
     return {
         "database": str(cfg.DB_PATH),
         "database_restored": restored,

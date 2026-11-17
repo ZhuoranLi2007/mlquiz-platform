@@ -20,7 +20,9 @@ param(
     [switch]$NoBrowser,
     [switch]$RebuildFrontend,
     [switch]$Check,
-    [switch]$Stop
+    [switch]$Stop,
+    [ValidateRange(1024,65535)][int]$Port = 8000,
+    [string]$PythonExe = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -34,7 +36,7 @@ $WorkerOut = Join-Path $DataDb 'worker.log'
 $WorkerErr = Join-Path $DataDb 'worker.err.log'
 $BackendPid = Join-Path $DataDb 'backend.pid'
 $WorkerPid = Join-Path $DataDb 'worker.pid'
-$BaseUrl = 'http://127.0.0.1:8000'
+$BaseUrl = "http://127.0.0.1:$Port"
 
 if (-not (Test-Path $DataDb)) {
     New-Item -ItemType Directory -Path $DataDb -Force | Out-Null
@@ -70,8 +72,11 @@ function Stop-ByPidFile($file, $label) {
     if (Test-Path $file) {
         $raw = (Get-Content $file -Raw).Trim()
         if ($raw) {
-            $proc = Get-Process -Id ([int]$raw) -ErrorAction SilentlyContinue
-            if ($proc) {
+            $proc = Get-CimInstance Win32_Process -Filter "ProcessId = $raw" -ErrorAction SilentlyContinue
+            if ($proc -and $proc.CommandLine -like "*$Py*") {
+                # Only children of this checkout's recorded launcher belong to us.
+                Get-CimInstance Win32_Process -Filter "ParentProcessId = $raw" |
+                    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
                 Stop-Process -Id ([int]$raw) -Force
                 Say "Stopped $label PID $raw"
             }
@@ -84,21 +89,6 @@ function Stop-ByPidFile($file, $label) {
 if ($Stop) {
     Stop-ByPidFile $BackendPid 'backend'
     Stop-ByPidFile $WorkerPid 'worker'
-    # venv 的 python.exe 可能是启动器，会派生子进程；PID 文件不一定等于真实监听进程。
-    # 因此再按端口与命令行清理，确保 -Stop 真正停止服务。
-    $conn = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue
-    if ($conn) {
-        $conn | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object {
-            $p = Get-Process -Id $_ -ErrorAction SilentlyContinue
-            if ($p) { Stop-Process -Id $_ -Force; Say "Stopped listener PID $_" }
-        }
-    }
-    Get-CimInstance Win32_Process -Filter "Name = 'python.exe'" |
-        Where-Object { $_.CommandLine -like '*backend.app.workers.worker*' } |
-        ForEach-Object {
-            Stop-Process -Id $_.ProcessId -Force
-            Say "Stopped worker process PID $($_.ProcessId)"
-        }
     Say 'Stopped. Database and parsed files are untouched.'
     return
 }
@@ -122,7 +112,12 @@ if (-not (Test-Path $Py)) {
     Say 'Creating isolated virtualenv .venv ...'
     $pythonCommand = $null
     $pythonArgs = @()
-    if (Get-Command py -ErrorAction SilentlyContinue) {
+    if ($PythonExe) {
+        & $PythonExe -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 13) else 1)"
+        if ($LASTEXITCODE -ne 0) { throw '-PythonExe must point to Python 3.13' }
+        $pythonCommand = $PythonExe
+    }
+    if (-not $pythonCommand -and (Get-Command py -ErrorAction SilentlyContinue)) {
         & py -3.13 -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 13) else 1)" *> $null
         if ($LASTEXITCODE -eq 0) {
             $pythonCommand = 'py'
@@ -134,7 +129,16 @@ if (-not (Test-Path $Py)) {
         if ($LASTEXITCODE -eq 0) { $pythonCommand = 'python' }
     }
     if (-not $pythonCommand) {
-        throw 'Python 3.13 not found. Install Python 3.13 (including the py launcher) and retry.'
+        $bundled = Join-Path $env:USERPROFILE '.workbuddy\binaries\python\versions'
+        if (Test-Path $bundled) {
+            foreach ($candidate in (Get-ChildItem -LiteralPath $bundled -Filter '3.13*' -Directory)) {
+                $candidatePy = Join-Path $candidate.FullName 'python.exe'
+                if (Test-Path $candidatePy) { $pythonCommand = $candidatePy; break }
+            }
+        }
+    }
+    if (-not $pythonCommand) {
+        throw 'Python 3.13 not found. Install it or supply -PythonExe with its full path.'
     }
     & $pythonCommand @pythonArgs -m venv (Join-Path $Root '.venv')
     if ($LASTEXITCODE -ne 0) { throw 'Failed to create virtualenv' }
@@ -159,7 +163,19 @@ if ($LASTEXITCODE -ne 0) { throw 'Demo data bootstrap failed' }
 # ------------------------------------------------------------------ 3. 前端构建
 $node = Get-Command node -ErrorAction SilentlyContinue
 $npm = Get-Command npm -ErrorAction SilentlyContinue
-if (-not $node -or -not $npm) {
+$npmCli = ''
+if (-not $npm) {
+    $bundledNode = Join-Path $env:USERPROFILE '.workbuddy\binaries\node\versions'
+    if (Test-Path $bundledNode) {
+        $npmCli = Get-ChildItem -LiteralPath $bundledNode -Filter npm-cli.js -Recurse -File |
+            Select-Object -First 1 -ExpandProperty FullName
+    }
+}
+function Invoke-ProjectNpm {
+    if ($npm) { & $npm.Source @args } else { & $node.Source $npmCli @args }
+    if ($LASTEXITCODE -ne 0) { throw 'npm command failed' }
+}
+if (-not $node -or (-not $npm -and -not $npmCli)) {
     throw 'Node.js 20+ with npm is required'
 }
 $nodeMajor = [int](& node -p "process.versions.node.split('.')[0]")
@@ -172,10 +188,10 @@ if ($RebuildFrontend -or -not (Test-Path $dist)) {
     Push-Location (Join-Path $Root 'frontend')
     try {
         if (-not (Test-Path 'node_modules')) {
-            & npm ci --no-audit --no-fund
+            Invoke-ProjectNpm ci --no-audit --no-fund
             if ($LASTEXITCODE -ne 0) { throw 'npm ci failed' }
         }
-        & npm run build
+        Invoke-ProjectNpm run build
         if ($LASTEXITCODE -ne 0) { throw 'Frontend build failed' }
     } finally {
         Pop-Location
@@ -186,11 +202,18 @@ if ($RebuildFrontend -or -not (Test-Path $dist)) {
 Reset-DuplicateCaseEnv
 
 if (Test-Backend) {
+    $owned = $false
+    if (Test-Path $BackendPid) {
+        $recorded = (Get-Content $BackendPid -Raw).Trim()
+        $existing = Get-CimInstance Win32_Process -Filter "ProcessId = $recorded" -ErrorAction SilentlyContinue
+        $owned = $existing -and $existing.CommandLine -like "*$Py*"
+    }
+    if (-not $owned) { throw "Port $Port is used by another instance. Choose -Port 8001 (or another free port)." }
     Say "Backend already running at $BaseUrl - not starting a duplicate"
 } else {
     Say 'Starting FastAPI backend ...'
     $bargs = @('-X', 'utf8', '-m', 'uvicorn', 'backend.app.main:app',
-               '--host', '127.0.0.1', '--port', '8000')
+               '--host', '127.0.0.1', '--port', "$Port")
     $backend = Start-Process -FilePath $Py -ArgumentList $bargs `
         -WorkingDirectory $Root -RedirectStandardOutput $BackendOut `
         -RedirectStandardError $BackendErr -WindowStyle Hidden -PassThru
@@ -203,8 +226,10 @@ $workerRunning = $false
 if (Test-Path $WorkerPid) {
     $raw = (Get-Content $WorkerPid -Raw).Trim()
     if ($raw) {
-        $p = Get-Process -Id ([int]$raw) -ErrorAction SilentlyContinue
-        if ($p) { $workerRunning = $true }
+        $p = Get-CimInstance Win32_Process -Filter "ProcessId = $raw" -ErrorAction SilentlyContinue
+        if ($p -and $p.CommandLine -like "*$Py*" -and $p.CommandLine -match 'backend.app.workers.worker') {
+            $workerRunning = $true
+        }
     }
     if (-not $workerRunning) { Remove-Item $WorkerPid -Force -ErrorAction SilentlyContinue }
 }

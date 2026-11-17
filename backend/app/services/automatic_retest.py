@@ -16,9 +16,11 @@ def _validate_candidate(db, *, qid: str, prior_stems, chapter_ids, kp_ids,
     q = answer_pipeline.latest_question(db, qid)
     if q is None:
         raise ValueError("复测候选题不存在")
+    if q.origin not in {"ai", "ai_generated"}:
+        raise ValueError("AI复测必须使用本次生成的候选题，不能用题库原题冒充")
     if chapter_ids and (not q.chapter_id or q.chapter_id not in chapter_ids):
         raise ValueError("新题章节与复测目标不匹配")
-    if not chapter_ids and (not q.main_kp_id or q.main_kp_id not in kp_ids):
+    if kp_ids and (not q.main_kp_id or q.main_kp_id not in kp_ids):
         raise ValueError("新题知识点与复测目标不匹配")
     if q.question_type not in {"single_choice", "multi_choice", "true_false"}:
         raise ValueError("当前自动复测仅支持可确定评分的单选题、多选题和判断题")
@@ -89,26 +91,53 @@ def _validate_candidate(db, *, qid: str, prior_stems, chapter_ids, kp_ids,
 def validate_and_publish(db, *, candidate_ids, kp_ids=None, chapter_ids=None,
                          actor_user_id, student_id="", student_ids=None, classroom_id,
                          source_attempt_id, diagnosis_id, thread_id,
+                         source_assessment_version_id: str = "",
+                         untested_kp_ids: list[str] | None = None,
                          round_no: int = 1, required_count: int | None = None):
     kp_ids = [str(value) for value in (kp_ids or []) if value]
     chapter_ids = [str(value) for value in (chapter_ids or []) if value]
+    candidate_ids = list(dict.fromkeys(candidate_ids))
     if not candidate_ids or not (chapter_ids or kp_ids):
         raise ValueError("没有可自动校验的新题或可靠的目标章节")
     # Legacy/internal callers validate a deliberately small batch.  The
     # targeted-retest workflow passes ``required_count=5`` explicitly.
     expected_count = int(required_count or len(candidate_ids))
+    if len(set(kp_ids)) > expected_count:
+        raise ValueError("本轮题量不足以覆盖目标知识点，请分轮复测")
+    recipients = list(dict.fromkeys(
+        [str(value) for value in (student_ids or [student_id]) if value]))
+    anchors = {}
+    for sid in recipients:
+        source = db.get(E.Attempt, source_attempt_id) if source_attempt_id else None
+        if source and source.student_id != sid:
+            raise ValueError("原答卷与复测学生不匹配")
+        if not source and source_assessment_version_id:
+            source = db.execute(select(E.Attempt).where(
+                E.Attempt.student_id == sid,
+                E.Attempt.assessment_version_id == source_assessment_version_id,
+                E.Attempt.status == "submitted", E.Attempt.is_effective.is_(True),
+                E.Attempt.attendance_status == "attended",
+            ).order_by(E.Attempt.submitted_at.desc())).scalars().first()
+        if source:
+            anchors[sid] = (source, targeted_retest.next_round(
+                db, source_attempt_id=source.attempt_id, student_id=sid))
     if len(candidate_ids) < expected_count:
         raise ValueError(
             f"需要{expected_count}道合格题，自动生成与筛选后仅有{len(candidate_ids)}道；本轮未发布"
         )
     questions = []
     rejected = []
-    prior_stems = db.execute(select(E.Question.question_id, E.Question.stem)).all()
+    # Compare with the existing bank and already accepted candidates. Two
+    # similar unvalidated candidates must not reject each other symmetrically.
+    prior_stems = list(db.execute(select(E.Question.question_id, E.Question.stem).where(
+        E.Question.question_id.not_in(candidate_ids))).all())
     for qid in candidate_ids:
         try:
             questions.append(_validate_candidate(
                 db, qid=qid, prior_stems=prior_stems,
                 chapter_ids=chapter_ids, kp_ids=kp_ids, thread_id=thread_id))
+            accepted = questions[-1][0]
+            prior_stems.append((accepted.question_id, accepted.stem))
         except ValueError as exc:
             rejected.append({"question_id": qid, "reason": str(exc)})
         covered = {str(q.main_kp_id or "") for q, _, _ in questions}
@@ -152,7 +181,12 @@ def validate_and_publish(db, *, candidate_ids, kp_ids=None, chapter_ids=None,
             q.answer_status = "ai_auto_checked"
             q.answer_origin = "deepseek_generated"
             q.explanation = check["explanation"]
-            q.notes = json.dumps({"validation": "automatic_retest_v2_chapter", "call_id": call_id,
+            try:
+                provenance = json.loads(q.notes or "{}").get("generation", {})
+            except (ValueError, AttributeError):
+                provenance = {}
+            q.notes = json.dumps({"generation": provenance,
+                "validation": "automatic_retest_v2_chapter", "call_id": call_id,
                 "checked_at": E.utcnow(), "independent_solution": check,
                 "target_chapter_ids": chapter_ids,
                 "limitation": "独立模型解答一致不等于教师权威答案；保留 AI 参考答案标签"}, ensure_ascii=False)
@@ -168,9 +202,9 @@ def validate_and_publish(db, *, candidate_ids, kp_ids=None, chapter_ids=None,
             title=release_title, mode="retest", source="teacher_retest", user_id=actor_user_id,
             scores=[float(q.score or 2) for q, _, _ in questions],
             blueprint={"source": "automatic_retest_v2_chapter",
+                       "question_source": "ai_generated",
+                       "source_counts": {"ai_generated": len(questions), "bank_selected": 0, "original_reused": 0},
                        "chapter_ids": chapter_ids, "kp_ids": kp_ids}, commit=False)
-        recipients = list(dict.fromkeys(
-            [str(value) for value in (student_ids or [student_id]) if value]))
         release = release_service.publish_release(db, teacher_user_id=actor_user_id,
             student_ids=recipients, title=("班级针对性复测" if len(recipients) > 1 else release_title), paper_id=paper["paper_id"],
             classroom_id=classroom_id, release_type="retest", source_attempt_id=source_attempt_id,
@@ -179,26 +213,29 @@ def validate_and_publish(db, *, candidate_ids, kp_ids=None, chapter_ids=None,
                              if len(recipients) == 1 and source_attempt_id else
                              "automatic-retest:" + thread_id), commit=False)
         cycle = None
-        if len(recipients) == 1 and source_attempt_id:
-            source_attempt = db.get(E.Attempt, source_attempt_id)
+        cycle_ids = []
+        for sid, (source_attempt, student_round) in anchors.items():
             cycle = targeted_retest.create_cycle(
-                db, student_id=recipients[0], source_attempt_id=source_attempt_id,
-                source_assessment_version_id=(source_attempt.assessment_version_id
-                                              if source_attempt else ""),
+                db, student_id=sid, source_attempt_id=source_attempt.attempt_id,
+                source_assessment_version_id=source_attempt.assessment_version_id,
                 diagnosis_id=diagnosis_id, release_id=release["release_id"],
-                workflow_run_id=thread_id, round_no=round_no,
+                workflow_run_id=thread_id, round_no=student_round,
                 question_ids=[q.question_id for q, _, _ in questions],
                 chapter_ids=chapter_ids, kp_ids=kp_ids,
-                concept_names=concept_names)
+                concept_names=concept_names, untested_kp_ids=untested_kp_ids)
+            cycle_ids.append(cycle.cycle_id)
         db.commit()
     except Exception:
         db.rollback()
         raise
     selected_ids = [q.question_id for q, _, _ in questions]
     return {"status": "published", "paper_id": paper["paper_id"], "release": release,
+            "question_source": "ai_generated",
+            "source_counts": {"ai_generated": len(questions), "bank_selected": 0, "original_reused": 0},
             "candidate_question_ids": selected_ids, "rejected_candidates": rejected,
             "chapter_ids": chapter_ids,
             "round": round_no,
             "cycle_id": cycle.cycle_id if cycle else "",
+            "cycle_ids": cycle_ids,
             "threshold": cfg.TARGETED_RETEST_ACCURACY_THRESHOLD,
             "validation": "automatic_retest_v2_chapter"}
