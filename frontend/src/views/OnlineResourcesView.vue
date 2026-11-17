@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from '../components/WorkbenchPage.vue'
 import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Link, VideoPlay } from '@element-plus/icons-vue'
@@ -101,7 +102,8 @@ onMounted(load)
 </script>
 
 <template>
-  <section class="online-page">
+  <WorkbenchPage class="online-page" label="在线资源列表">
+    <template #header>
     <div class="toolbar">
       <div class="category-filter" aria-label="平台筛选">
         <button v-for="tab in PLATFORM_TABS" :key="tab.key" type="button"
@@ -121,6 +123,7 @@ onMounted(load)
       </div>
     </div>
 
+    </template>
     <div v-loading="loading" class="resource-grid">
       <article v-for="item in rows" :key="item.resource_id" class="resource-card">
         <!-- 左：真实封面（16:9），拿不到就降级成平台色块，绝不用假图 -->
@@ -166,7 +169,7 @@ onMounted(load)
       </div>
     </div>
 
-  </section>
+  </WorkbenchPage>
 </template>
 
 <style scoped>

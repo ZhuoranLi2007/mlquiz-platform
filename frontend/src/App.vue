@@ -42,7 +42,7 @@ onMounted(() => void auth.ensure())
 </script>
 
 <template>
-  <router-view v-if="publicPage" />
+  <div v-if="publicPage" class="public-shell"><router-view /></div>
   <div v-else-if="immersive" class="immersive-shell"><router-view /></div>
   <div v-else class="role-shell" :class="[auth.role.value || 'loading', { 'question-bank-shell': questionBankPage, 'teacher-dashboard-shell': teacherDashboardPage, 'student-feedback-shell': studentFeedbackPage, 'student-task-shell': studentTaskPage, 'teacher-resource-shell': teacherResourcePage }]">
     <button v-if="mobileOpen" class="nav-scrim" aria-label="关闭导航" @click="mobileOpen=false" />
@@ -75,15 +75,15 @@ onMounted(() => void auth.ensure())
 </template>
 
 <style scoped>
-.immersive-shell{min-height:100vh}
-.role-shell{min-height:100vh;background:var(--app-bg);color:var(--app-text);--el-color-primary:var(--app-primary);--el-color-primary-light-3:#7289bc;--el-color-primary-light-5:#a4b4d3;--el-color-primary-light-8:#e1e9f5;--el-color-primary-light-9:#f0f4fa;--el-border-radius-base:10px}
-.role-side{position:fixed;z-index:20;inset:0 auto 0 0;width:220px;padding:24px 14px 18px;display:flex;flex-direction:column;justify-content:flex-start;background:#f8faff;border-right:1px solid var(--app-border)}
+.immersive-shell{height:100dvh;min-height:0;overflow:auto}
+.role-shell{height:100dvh;min-height:0;overflow:hidden;background:var(--app-bg);color:var(--app-text);--el-color-primary:var(--app-primary);--el-color-primary-light-3:#7289bc;--el-color-primary-light-5:#a4b4d3;--el-color-primary-light-8:#e1e9f5;--el-color-primary-light-9:#f0f4fa;--el-border-radius-base:10px}
+.role-side{position:fixed;z-index:20;inset:0 auto 0 0;width:220px;overflow:auto;padding:24px 14px 18px;display:flex;flex-direction:column;justify-content:flex-start;background:#f8faff;border-right:1px solid var(--app-border)}
 .brand{display:flex;flex:none;align-items:center;gap:12px;padding:0 6px;text-decoration:none;color:#17243d;line-height:1.3}
 .brand-mark{display:grid;flex:none;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--app-primary);color:#fff;font-size:15px;font-weight:800;letter-spacing:-.04em;box-shadow:0 5px 14px rgb(66 99 173 / 15%)}
 .brand b,.brand small{display:block}
 .brand b{font-size:16px;font-weight:var(--font-weight-bold);white-space:nowrap}
 .brand small{margin-top:3px;color:var(--text-muted);font-size:var(--font-size-min)}
-.role-side nav{display:grid;gap:6px;margin-top:34px}
+.role-side nav{display:grid;min-height:0;overflow:auto;gap:6px;margin-top:34px}
 .role-side nav a{display:flex;min-height:46px;align-items:center;gap:12px;padding:0 13px;border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:15px;font-weight:var(--font-weight-medium);transition:background .15s ease,color .15s ease}
 .role-side nav a:hover{background:#eef3fd;color:#244fbd}
 .role-side nav a.active{background:#e9f0fa;color:var(--app-primary);font-weight:var(--font-weight-semibold)}
@@ -94,22 +94,22 @@ onMounted(() => void auth.ensure())
 .side-foot p{margin:0 0 10px;color:var(--text-muted);font-size:var(--font-size-min)}
 .side-foot button{display:flex;width:100%;min-height:42px;align-items:center;gap:8px;padding:5px 2px;border:0;background:none;color:var(--text-secondary);cursor:pointer;font:inherit;font-size:14px}
 .side-foot button:hover{color:#315cf0}
-.role-main{min-height:100vh;margin-left:220px}
-.role-topbar{position:sticky;z-index:10;top:0;display:flex;height:77px;align-items:center;justify-content:space-between;padding:0 34px;border-bottom:1px solid var(--app-border);background:var(--app-bg)}
+.role-main{display:flex;flex-direction:column;height:100%;min-height:0;min-width:0;margin-left:220px}
+.role-topbar{flex:none;position:relative;z-index:10;top:0;display:flex;height:77px;align-items:center;justify-content:space-between;padding:0 34px;border-bottom:1px solid var(--app-border);background:var(--app-bg)}
 .teacher-resource-shell .role-topbar{background:#f6f8fe;backdrop-filter:none}
 .role-topbar>div:first-of-type span{color:var(--app-primary);font-size:14px;font-weight:var(--font-weight-semibold);letter-spacing:.03em}
 .role-topbar h1{margin:2px 0;color:var(--text-primary);font-size:var(--font-size-page);font-weight:var(--font-weight-bold);line-height:1.3}
 .student-feedback-shell .role-topbar h1{font-size:24px;font-weight:800}
 .identity{text-align:right}.identity b,.identity small{display:block}.identity b{font-size:14px}.identity small{margin-top:3px;color:var(--text-muted);font-size:14px}
-.role-content{max-width:1440px;margin:0 auto;padding:22px 32px 54px}
+.role-content{flex:1;min-height:0;min-width:0;width:100%;max-width:none;margin:0;overflow:auto;padding:16px 22px;overscroll-behavior:contain}
 .question-bank-shell .role-content{max-width:none;padding:18px 22px 48px}
 .mobile-menu{display:none;border:0;background:none;color:#17243d;font-size:23px}
 .bank-mobile-menu{position:fixed;z-index:12;top:14px;left:14px;width:40px;height:40px;border:1px solid #dce4f2;border-radius:10px;background:#fff;box-shadow:0 6px 18px rgb(32 55 94 / 12%)}
 .nav-scrim{display:none}
 @media(max-width:820px){.role-side{width:min(82vw,300px);transform:translateX(-102%);transition:.2s}.role-side.open{transform:translateX(0)}.role-main{margin-left:0}.mobile-menu{display:block}.role-topbar{padding:0 18px}.role-content,.question-bank-shell .role-content{padding:70px 15px 40px}.role-shell:not(.question-bank-shell):not(.teacher-dashboard-shell) .role-content{padding-top:20px}.nav-scrim{display:block;position:fixed;z-index:19;inset:0;border:0;background:rgba(11,28,40,.4)}}
 .student-task-shell{height:100dvh;min-height:0;overflow:hidden;background:#f5f8fe}
-.student-task-shell .role-side{isolation:isolate;overflow:hidden;width:200px;padding:22px 10px 16px;background:linear-gradient(165deg,#f9fbff 0%,#f1f6ff 66%,#edf4ff 100%);border-color:#e5eaf3}
-.student-task-shell .role-side::before,.student-task-shell .role-side::after{position:absolute;z-index:0;pointer-events:none;border-radius:50%;content:''}
+.student-task-shell .role-side{isolation:isolate;overflow:hidden;width:200px;padding:22px 10px 16px;background:#f8faff;border-color:#e5eaf3}
+.student-task-shell .role-side::before,.student-task-shell .role-side::after{display:none;position:absolute;z-index:0;pointer-events:none;border-radius:50%;content:''}
 .student-task-shell .role-side::before{left:-75px;bottom:62px;width:335px;height:150px;background:rgb(255 255 255 / 35%);transform:rotate(15deg)}
 .student-task-shell .role-side::after{left:-100px;bottom:-20px;width:370px;height:125px;background:rgb(221 235 255 / 33%);transform:rotate(-9deg)}
 .student-task-shell .role-side>*{position:relative;z-index:1}
@@ -128,7 +128,7 @@ onMounted(() => void auth.ensure())
 .student-task-shell .identity{display:flex;align-items:center;gap:8px}
 .student-task-shell .task-avatar{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#dfeaff;color:#5e87d4;font-size:17px}
 .analysis-title-note{margin-left:18px;padding-left:18px;border-left:1px solid var(--app-border);color:var(--text-secondary);font-size:14px;font-weight:var(--font-weight-normal)}
-@media(max-width:1120px){.student-task-shell{height:auto;min-height:100vh;overflow:visible}.student-task-shell .role-main{height:auto;min-height:100vh}.student-task-shell .role-content{flex:none;overflow:visible;padding-bottom:30px}}
+@media(max-width:1120px){.student-task-shell .role-content{overflow:auto}}
 @media(max-width:820px){.student-task-shell .role-side{width:min(82vw,300px)}.student-task-shell .role-main{margin-left:0}.student-task-shell .role-topbar{padding:0 16px}}
 @media(max-width:820px){.student-task-shell .task-title-note{display:none}.student-task-shell .role-topbar h1{font-size:21px}}
 @media(max-width:820px){.analysis-title-note{display:none}}
