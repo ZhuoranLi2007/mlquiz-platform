@@ -1,0 +1,15 @@
+
+> ml-quiz-frontend@0.1.0 typecheck
+> vue-tsc --noEmit
+
+
+
+> ml-quiz-frontend@0.1.0 build
+> vite build
+
+vite v6.4.5 building for production...
+transforming...
+dist/assets/MathText.vue_vue_type_script_setup_true_lang-mKZyVq8B.js    264.18 kB │ gzip:  78.89 kB
+dist/assets/TeacherAnalysisView-CnhZYEDd.js                           1,111.75 kB │ gzip: 367.16 kB
+dist/assets/index-CIZ80uJA.js                                         1,136.32 kB │ gzip: 375.88 kB
+✓ built in 13.01s

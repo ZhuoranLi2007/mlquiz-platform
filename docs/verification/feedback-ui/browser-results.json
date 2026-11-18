@@ -1,0 +1,436 @@
+{
+  "time": "2026-11-18T05:49:31.098413+00:00",
+  "students": {
+    "stu001": {
+      "source": {
+        "attempt_id": "attempt_d660ce810c684cfd",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "score": 0.0
+      },
+      "retest": {
+        "attempt_id": "attempt_edc64a9bc77b4fbc",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "score": 10.0,
+        "retest_of_attempt_id": "attempt_d660ce810c684cfd"
+      },
+      "concepts": [
+        {
+          "name": "L1/L2 正则化",
+          "resource_links": [
+            "/learn/kp.regularization.l1l2",
+            "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression"
+          ],
+          "errors": 1,
+          "latest_retest_errors": 0,
+          "footer_visible": true
+        },
+        {
+          "name": "偏差-方差均衡",
+          "resource_links": [
+            "/learn/kp.eval.bias_var",
+            "https://www.douyin.com/video/7676487498093614235"
+          ],
+          "errors": 1,
+          "latest_retest_errors": 0,
+          "footer_visible": true
+        }
+      ],
+      "exam_switch": "attempt_9d95c27c402e4be5",
+      "alternate_no_retest": false,
+      "drawer_keyboard": true,
+      "wrong_navigation": true,
+      "retest_route": true,
+      "course_image_loaded": true,
+      "multi_round": {
+        "source_attempt_id": "attempt_9d95c27c402e4be5",
+        "rounds": 3,
+        "latest_status": "passed",
+        "weak_concepts": 1
+      },
+      "no_retest": {
+        "source_attempt_id": "attempt_98fd016ccfdb406a",
+        "waiting_for_teacher": true
+      }
+    },
+    "stu002": {
+      "source": {
+        "attempt_id": "attempt_7bc74a1a495e4925",
+        "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+        "score": 50.0
+      },
+      "retest": {
+        "attempt_id": "attempt_b2c33f0d57b24fc1",
+        "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+        "score": 6.0,
+        "retest_of_attempt_id": "attempt_7bc74a1a495e4925"
+      },
+      "concepts": [
+        {
+          "name": "偏差-方差均衡",
+          "resource_links": [
+            "/learn/kp.eval.bias_var",
+            "https://www.douyin.com/video/7676487498093614235"
+          ],
+          "errors": 1,
+          "latest_retest_errors": 1,
+          "footer_visible": true
+        },
+        {
+          "name": "L1/L2 正则化",
+          "resource_links": [],
+          "errors": 0,
+          "latest_retest_errors": 1,
+          "footer_visible": true
+        }
+      ],
+      "exam_switch": "attempt_ced8885c73fc4f38",
+      "alternate_no_retest": false,
+      "drawer_keyboard": true,
+      "wrong_navigation": true,
+      "retest_route": true,
+      "course_image_loaded": true,
+      "multi_round": {
+        "source_attempt_id": "attempt_ced8885c73fc4f38",
+        "rounds": 2,
+        "latest_status": "passed",
+        "weak_concepts": 0
+      },
+      "no_retest": {
+        "source_attempt_id": "attempt_d8d852719bf74419",
+        "waiting_for_teacher": true
+      }
+    }
+  },
+  "layouts": [
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 356,
+          "scroll": 429,
+          "top": 73,
+          "reaches_end": true,
+          "visible_height": 355.828125,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 308,
+          "scroll": 429,
+          "top": 121,
+          "reaches_end": true,
+          "visible_height": 307.828125,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 375,
+          "scroll": 380,
+          "top": 5,
+          "reaches_end": true,
+          "visible_height": 375.09375,
+          "within_viewport": true
+        },
+        {
+          "class": "diagnosis-layout",
+          "client": 295,
+          "scroll": 588,
+          "top": 293,
+          "reaches_end": true,
+          "visible_height": 294.90625,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 178,
+          "scroll": 336,
+          "top": 158,
+          "reaches_end": true,
+          "visible_height": 180,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 262,
+          "scroll": 533,
+          "top": 271,
+          "reaches_end": true,
+          "visible_height": 261.609375,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 222,
+          "top": 55,
+          "reaches_end": true,
+          "visible_height": 166.59375,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 295,
+          "scroll": 455,
+          "top": 160,
+          "reaches_end": true,
+          "visible_height": 297.40625,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 133,
+          "scroll": 451,
+          "top": 318,
+          "reaches_end": true,
+          "visible_height": 132.734375,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 356,
+          "scroll": 429,
+          "top": 73,
+          "reaches_end": true,
+          "visible_height": 355.828125,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu002"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 308,
+          "scroll": 429,
+          "top": 121,
+          "reaches_end": true,
+          "visible_height": 307.828125,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu002"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "account": "stu002"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "account": "stu002"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 375,
+          "scroll": 380,
+          "top": 5,
+          "reaches_end": true,
+          "visible_height": 375.09375,
+          "within_viewport": true
+        },
+        {
+          "class": "diagnosis-layout",
+          "client": 295,
+          "scroll": 588,
+          "top": 293,
+          "reaches_end": true,
+          "visible_height": 294.90625,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 178,
+          "scroll": 336,
+          "top": 158,
+          "reaches_end": true,
+          "visible_height": 180,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 262,
+          "scroll": 533,
+          "top": 271,
+          "reaches_end": true,
+          "visible_height": 261.609375,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu002"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 222,
+          "top": 55,
+          "reaches_end": true,
+          "visible_height": 166.59375,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 295,
+          "scroll": 455,
+          "top": 160,
+          "reaches_end": true,
+          "visible_height": 297.40625,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-content workbench-scroll",
+          "client": 155,
+          "scroll": 451,
+          "top": 296,
+          "reaches_end": true,
+          "visible_height": 155.125,
+          "within_viewport": true
+        }
+      ],
+      "account": "stu002"
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "mocked_responses": false,
+  "attempt_records_unchanged": true
+}
