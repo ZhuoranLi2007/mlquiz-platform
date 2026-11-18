@@ -194,7 +194,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
           <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
           <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><LearningResourceList :resources="resources" /></section>
 
-          <section class="retest-section"><h3>班级复测</h3><p>优先从题库选择符合班级薄弱知识点的新题，缺题时由 AI 补充，校验后发布。</p><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
+          <section class="retest-section"><h3>班级复测</h3><p>依据班级薄弱知识点，由 AI 生成新题，独立验答通过后发布。</p><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
         </section>
       </aside>
     </section>

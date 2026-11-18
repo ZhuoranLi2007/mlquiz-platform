@@ -1,0 +1,115 @@
+{
+  "account": "stu003",
+  "purpose": "isolated layout-only draft; deliberately not submitted",
+  "layout": [
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "last_question_reached": true,
+      "submit_visible": true,
+      "confirmation_keyboard_cancelled": true
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "last_question_reached": true,
+      "submit_visible": true,
+      "confirmation_keyboard_cancelled": true
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "last_question_reached": true,
+      "submit_visible": true,
+      "confirmation_keyboard_cancelled": true
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "last_question_reached": true,
+      "submit_visible": true,
+      "confirmation_keyboard_cancelled": true
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "last_question_reached": true,
+      "submit_visible": true,
+      "confirmation_keyboard_cancelled": true
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "question-content workbench-scroll",
+          "client": 181,
+          "scroll": 321,
+          "top": 140,
+          "reaches_end": true,
+          "visible_height": 181.390625,
+          "within_viewport": true
+        }
+      ],
+      "last_question_reached": true,
+      "submit_visible": true,
+      "confirmation_keyboard_cancelled": true
+    }
+  ],
+  "failures": [],
+  "attempt_id": "attempt_e64e64a2853d418c",
+  "release_id": "release_d3d22142b98246b0",
+  "recipient_id": "recipient_33ac29df49f64e09",
+  "database_after_cancel": {
+    "status": "in_progress",
+    "submitted_at": "",
+    "score": 0.0
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "created_at": "2026-11-18T02:57:47.101331+00:00",
+  "original_data_preservation": {
+    "questions": {
+      "baseline_rows": 832,
+      "changed_or_missing": 0,
+      "changed_ids": []
+    },
+    "attempts": {
+      "baseline_rows": 130,
+      "changed_or_missing": 0,
+      "changed_ids": []
+    },
+    "answers": {
+      "baseline_rows": 747,
+      "changed_or_missing": 0,
+      "changed_ids": []
+    },
+    "answer_scores": {
+      "baseline_rows": 749,
+      "changed_or_missing": 0,
+      "changed_ids": []
+    }
+  },
+  "snapshot": "mlquiz-workbench-reviewed.sqlite3.gz",
+  "counts": {
+    "questions": 843,
+    "attempts": 135,
+    "answers": 761,
+    "answer_scores": 763,
+    "prompt_records": 116,
+    "skill_runs": 188,
+    "targeted_retest_cycles": 7,
+    "session_tokens": 0
+  },
+  "sha256": "470fada3dd4e74226c7c5317a550168cfd0d4f146044863a803923657600a161",
+  "integrity_check": "ok",
+  "source_modified": false,
+  "authentication": "sessions removed and password hashes blank in copy only",
+  "real_prompt_count": 116,
+  "new_call_ids_since_baseline": [
+    "call_115c0c0f9eab4561",
+    "call_0452a53085eb4028",
+    "call_7659dc6408ef4320",
+    "call_938cc8004d614eb8",
+    "call_55856ad778504f33",
+    "call_64dfbafb6a6f4ab8",
+    "call_b751c430de854d9d",
+    "call_ce61d758e6944a5b",
+    "call_0878a2b264d04373",
+    "call_8cd15e3dc2964d55",
+    "call_68a037872cb14da9",
+    "call_f255657d5c094fc2",
+    "call_8afd8e17c5ea4fa7",
+    "call_645fccf118824183",
+    "call_a3b5312e95214284",
+    "call_d9345fd371134ad3",
+    "call_dc5b65d6b22249f1",
+    "call_472063911fb24315",
+    "call_46f7eb6241014ad1",
+    "call_cb17bab88d5b4ac2",
+    "call_18e42588f89a46dc",
+    "call_f5f7ddb1770c4394",
+    "call_cbbf12de45cc47c0",
+    "call_f7d900438cc146a0",
+    "call_fee7a885a6a04dd2",
+    "call_301c104c7c4a4561",
+    "call_2b0ca68eb57a4916",
+    "call_fa189a0109204ec0",
+    "call_ccade7681f49459a",
+    "call_30ce56a2e7a44c33"
+  ]
+}

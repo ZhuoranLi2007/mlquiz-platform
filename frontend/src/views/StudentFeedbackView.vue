@@ -150,7 +150,7 @@ onMounted(load)
               <b>{{ concept.name }}</b>
               <span>{{ concept.statistics.wrong_count }} 道错题 / {{ concept.statistics.scored_count }} 道已评分题 · 错误比例 {{ percent(concept.statistics.error_rate) }}</span>
               <span>{{ concept.chapter }}</span>
-              <span>{{ concept.priority ? `复习顺序 ${concept.priority}` : (concept.statistics.ungraded_count ? '待评分' : '原卷相关题已答对') }} · {{ concept.retest_state }}</span>
+              <span>{{ concept.priority ? `复习顺序 ${concept.priority}` : (concept.statistics.ungraded_count ? '原卷有题待评分' : concept.statistics.wrong_count ? '原卷错题已完成复习检测' : '原卷相关题已答对') }} · {{ concept.retest_state }}</span>
             </button>
           </div>
         </aside>

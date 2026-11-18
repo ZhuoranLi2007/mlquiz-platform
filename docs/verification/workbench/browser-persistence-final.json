@@ -1,0 +1,2561 @@
+{
+  "students": {
+    "stu001": {
+      "source": {
+        "attempt_id": "attempt_d660ce810c684cfd",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "score": 0.0,
+        "status": "submitted"
+      },
+      "retest": {
+        "attempt_id": "attempt_edc64a9bc77b4fbc",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "score": 10.0,
+        "max_score": 10.0,
+        "status": "submitted",
+        "retest_of_attempt_id": "attempt_d660ce810c684cfd",
+        "grading_status": "graded"
+      },
+      "cycle": {
+        "cycle_id": "retestcycle_0275845651a74ffa",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "source_attempt_id": "attempt_d660ce810c684cfd",
+        "source_assessment_version_id": "av_7367b55548402028827c56c3",
+        "diagnosis_id": "diag_9ca507eda0c741ef",
+        "release_id": "release_d3d22142b98246b0",
+        "retest_attempt_id": "attempt_edc64a9bc77b4fbc",
+        "workflow_run_id": "teacher-job:job_bb8032dfde1541e8",
+        "round_no": 1,
+        "status": "passed",
+        "threshold": 0.8,
+        "question_count": 5,
+        "correct_count": 5,
+        "accuracy": 1.0,
+        "score": 10.0,
+        "max_score": 10.0,
+        "chapter_ids": "[]",
+        "kp_ids": "[\"kp.eval.bias_var\", \"kp.regularization.l1l2\"]",
+        "concept_names": "[\"\\u504f\\u5dee-\\u65b9\\u5dee\\u5747\\u8861\", \"L1/L2 \\u6b63\\u5219\\u5316\"]",
+        "generated_question_ids": "[\"aiq_7ffbc38ab4614c54\", \"aiq_e7d6c471f2b340a6\", \"aiq_4edb202fd43e4243\", \"aiq_1930c82113ed40a2\", \"aiq_cff23c96d84e4cd8\"]",
+        "remaining_kp_ids": "[]",
+        "published_at": "2026-11-18T02:27:30+00:00",
+        "submitted_at": "2026-11-18T02:30:49+00:00",
+        "completed_at": "2026-11-18T02:30:49+00:00",
+        "created_at": "2026-11-18T02:27:30+00:00",
+        "updated_at": "2026-11-18T03:02:21+00:00",
+        "untested_kp_ids": "[]"
+      },
+      "verify_learning": {
+        "run_id": "run_718d2a3915fd4ed4",
+        "status": "succeeded",
+        "engine": "deterministic"
+      },
+      "api": {
+        "diagnosis_workbench": {
+          "version": 1,
+          "summary": "本卷已评分2题，答错2题，涉及2个需复习概念。结合本卷各概念的最新复测记录，当前0个概念仍需复习；待评分和未覆盖项保留原判断。",
+          "statistics": {
+            "question_count": 2,
+            "scored_count": 2,
+            "ungraded_count": 0,
+            "wrong_count": 2,
+            "correct_count": 0,
+            "error_rate": 1.0,
+            "accuracy": 0.0
+          },
+          "weak_concept_count": 2,
+          "current_weak_concept_count": 0,
+          "concepts": [
+            {
+              "id": "kp.regularization.l1l2",
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化",
+              "statistics": {
+                "question_count": 1,
+                "scored_count": 1,
+                "ungraded_count": 0,
+                "wrong_count": 1,
+                "correct_count": 0,
+                "error_rate": 1.0,
+                "accuracy": 0.0
+              },
+              "chapter": "未映射章节",
+              "question_positions": [
+                1
+              ],
+              "errors": [
+                {
+                  "paper_item_id": "item_ee3d3e6699024439",
+                  "question_id": "seed_human_tf_lasso_l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "position": 1,
+                  "question_type": "true_false",
+                  "stem": "LASSO 使用的是 L2 正则化。",
+                  "options": [],
+                  "shared_materials": [],
+                  "source_blocks": [],
+                  "source_options": [],
+                  "content_warning": "",
+                  "is_scoring_revision": false,
+                  "original_question": null,
+                  "chapter_id": "",
+                  "chapter": {
+                    "title": "未映射章节"
+                  },
+                  "knowledge_point": {
+                    "kp_id": "kp.regularization.l1l2",
+                    "name": "L1/L2 正则化"
+                  },
+                  "response_status": "answered",
+                  "response": {
+                    "value": true
+                  },
+                  "evidence_status": "scored",
+                  "correct": false,
+                  "awarded_score": 0.0,
+                  "max_score": 50.0,
+                  "answer_reference": {
+                    "available": true,
+                    "payload": {
+                      "value": false
+                    },
+                    "explanation": "复习整合版 p203 题11：LASSO 使用 L1 正则化",
+                    "rubric": {}
+                  },
+                  "error_analysis": {
+                    "label": "判断与参考结论相反"
+                  },
+                  "class_comparison": {
+                    "denominator": 2,
+                    "correct_count": 1,
+                    "correct_rate": 0.5
+                  }
+                }
+              ],
+              "hypotheses": [],
+              "evidence_limit": "当前证据只能确认作答差异，具体错因需专项复测进一步确认。",
+              "corrections": [
+                {
+                  "text": "L1 惩罚是权重绝对值之和，常使部分权重变为零；L2 惩罚是权重平方和，通常连续收缩权重。LASSO 使用 L1，Ridge 使用 L2。",
+                  "source": "课程概念对照"
+                }
+              ],
+              "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+              "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+              "resources": [
+                {
+                  "resource_id": "course.kp.regularization.l1l2",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "L1/L2 正则化 · 课程精读",
+                  "url": "/learn/kp.regularization.l1l2",
+                  "kp_id": "kp.regularization.l1l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "kp_name": "L1/L2 正则化",
+                  "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+                  "location": "12.机器学习的相关理论.pdf · 第15、16页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 15,
+                      "chunk_id": "doc_62cc358de7c7fc_u0015"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 16,
+                      "chunk_id": "doc_62cc358de7c7fc_u0016"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res_es_linear_model_html_logistic_regression",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "article",
+                  "platform": "docs",
+                  "title": "scikit-learn: Logistic Regression",
+                  "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+                  "kp_id": "kp.regularization.l1l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "kp_name": "L1/L2 正则化",
+                  "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "location": "scikit-learn: Logistic Regression",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-05",
+                  "verified_scope": "title_only",
+                  "content_status": "intro_checked"
+                }
+              ],
+              "retests": [
+                {
+                  "question_count": 2,
+                  "scored_count": 2,
+                  "ungraded_count": 0,
+                  "wrong_count": 0,
+                  "correct_count": 2,
+                  "error_rate": 0.0,
+                  "accuracy": 1.0,
+                  "round": 1,
+                  "state": "correct_this_round",
+                  "label": "本轮相关题全部答对",
+                  "wrong_items": [],
+                  "accuracy_change": 1.0,
+                  "release_id": "release_d3d22142b98246b0",
+                  "release_title": "班级针对性复测",
+                  "attempt_id": "attempt_edc64a9bc77b4fbc",
+                  "submitted_at": "2026-11-18T02:30:49+00:00",
+                  "published_at": "2026-11-18T02:27:30+00:00"
+                }
+              ],
+              "retest_state": "本轮相关题全部答对",
+              "needs_review": false,
+              "priority": null
+            },
+            {
+              "id": "kp.eval.bias_var",
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "statistics": {
+                "question_count": 1,
+                "scored_count": 1,
+                "ungraded_count": 0,
+                "wrong_count": 1,
+                "correct_count": 0,
+                "error_rate": 1.0,
+                "accuracy": 0.0
+              },
+              "chapter": "未映射章节",
+              "question_positions": [
+                2
+              ],
+              "errors": [
+                {
+                  "paper_item_id": "item_3df2a7c93102400e",
+                  "question_id": "seed_human_tf_overfit",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "position": 2,
+                  "question_type": "true_false",
+                  "stem": "过拟合的典型表现是训练错误低，但验证集/测试集错误率高且不稳定。",
+                  "options": [],
+                  "shared_materials": [],
+                  "source_blocks": [],
+                  "source_options": [],
+                  "content_warning": "",
+                  "is_scoring_revision": false,
+                  "original_question": null,
+                  "chapter_id": "",
+                  "chapter": {
+                    "title": "未映射章节"
+                  },
+                  "knowledge_point": {
+                    "kp_id": "kp.eval.bias_var",
+                    "name": "偏差-方差均衡"
+                  },
+                  "response_status": "answered",
+                  "response": {
+                    "value": false
+                  },
+                  "evidence_status": "scored",
+                  "correct": false,
+                  "awarded_score": 0.0,
+                  "max_score": 50.0,
+                  "answer_reference": {
+                    "available": true,
+                    "payload": {
+                      "value": true
+                    },
+                    "explanation": "2019-2020(A) 是非题第5题；预测分析标注为『对』",
+                    "rubric": {}
+                  },
+                  "error_analysis": {
+                    "label": "判断与参考结论相反"
+                  },
+                  "class_comparison": {
+                    "denominator": 2,
+                    "correct_count": 0,
+                    "correct_rate": 0.0
+                  }
+                }
+              ],
+              "hypotheses": [],
+              "evidence_limit": "当前证据只能确认作答差异，具体错因需专项复测进一步确认。",
+              "corrections": [
+                {
+                  "text": "训练误差和测试误差都高，常提示欠拟合或高偏差；训练误差低而测试误差明显较高，常提示过拟合或高方差。应同时比较两种误差，不能仅凭测试误差判断。",
+                  "source": "课程概念对照"
+                }
+              ],
+              "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+              "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+              "resources": [
+                {
+                  "resource_id": "course.kp.eval.bias_var",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "偏差-方差均衡 · 课程精读",
+                  "url": "/learn/kp.eval.bias_var",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                  "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 11,
+                      "chunk_id": "doc_62cc358de7c7fc_u0011"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 19,
+                      "chunk_id": "doc_62cc358de7c7fc_u0019"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 20,
+                      "chunk_id": "doc_62cc358de7c7fc_u0020"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res.douyin.regularization.7676487498093614235",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "video",
+                  "platform": "douyin",
+                  "title": "第11集 过拟合与 L1 L2 正则化",
+                  "url": "https://www.douyin.com/video/7676487498093614235",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-16",
+                  "verified_scope": "partial",
+                  "content_status": "intro_checked"
+                }
+              ],
+              "retests": [
+                {
+                  "question_count": 3,
+                  "scored_count": 3,
+                  "ungraded_count": 0,
+                  "wrong_count": 0,
+                  "correct_count": 3,
+                  "error_rate": 0.0,
+                  "accuracy": 1.0,
+                  "round": 1,
+                  "state": "correct_this_round",
+                  "label": "本轮相关题全部答对",
+                  "wrong_items": [],
+                  "accuracy_change": 1.0,
+                  "release_id": "release_d3d22142b98246b0",
+                  "release_title": "班级针对性复测",
+                  "attempt_id": "attempt_edc64a9bc77b4fbc",
+                  "submitted_at": "2026-11-18T02:30:49+00:00",
+                  "published_at": "2026-11-18T02:27:30+00:00"
+                }
+              ],
+              "retest_state": "本轮相关题全部答对",
+              "needs_review": false,
+              "priority": null
+            }
+          ],
+          "scope_note": "仅当前学生、当前原卷；同题可涉及多个概念，总错题数按题去重。复测正确率反映本轮题目表现，不等于完全掌握。"
+        },
+        "attempt_id": "attempt_d660ce810c684cfd",
+        "assessment": {
+          "title": "工作台验收20261118-双知识点双学生",
+          "quiz_code": "paper_8d6f24ce3c3249f4",
+          "topic": "工作台验收20261118-双知识点双学生",
+          "scheduled_at": ""
+        },
+        "submitted_at": "2026-11-18T02:25:54+00:00",
+        "score_summary": {
+          "nominal_max_score": 100.0,
+          "ungraded_item_count": 0,
+          "ungraded_max_score": 0.0,
+          "grading_status": "graded",
+          "scored_items": 2,
+          "correct_items": 0,
+          "wrong_items": 2,
+          "partial_items": 0,
+          "awarded_score": 0.0,
+          "max_score": 100.0,
+          "score_rate": 0.0
+        },
+        "class_comparison": {
+          "status": "available",
+          "rank": 2,
+          "participant_count": 2,
+          "reason": "同一固定试卷版本、全部题目可靠评分且满分一致。"
+        },
+        "items": [
+          {
+            "paper_item_id": "item_ee3d3e6699024439",
+            "question_id": "seed_human_tf_lasso_l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "position": 1,
+            "question_type": "true_false",
+            "stem": "LASSO 使用的是 L2 正则化。",
+            "options": [],
+            "shared_materials": [],
+            "source_blocks": [],
+            "source_options": [],
+            "content_warning": "",
+            "is_scoring_revision": false,
+            "original_question": null,
+            "chapter_id": "",
+            "chapter": {
+              "title": "未映射章节"
+            },
+            "knowledge_point": {
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化"
+            },
+            "response_status": "answered",
+            "response": {
+              "value": true
+            },
+            "evidence_status": "scored",
+            "correct": false,
+            "awarded_score": 0.0,
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": false
+              },
+              "explanation": "复习整合版 p203 题11：LASSO 使用 L1 正则化",
+              "rubric": {}
+            },
+            "error_analysis": {
+              "label": "判断与参考结论相反"
+            },
+            "class_comparison": {
+              "denominator": 2,
+              "correct_count": 1,
+              "correct_rate": 0.5
+            }
+          },
+          {
+            "paper_item_id": "item_3df2a7c93102400e",
+            "question_id": "seed_human_tf_overfit",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "position": 2,
+            "question_type": "true_false",
+            "stem": "过拟合的典型表现是训练错误低，但验证集/测试集错误率高且不稳定。",
+            "options": [],
+            "shared_materials": [],
+            "source_blocks": [],
+            "source_options": [],
+            "content_warning": "",
+            "is_scoring_revision": false,
+            "original_question": null,
+            "chapter_id": "",
+            "chapter": {
+              "title": "未映射章节"
+            },
+            "knowledge_point": {
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡"
+            },
+            "response_status": "answered",
+            "response": {
+              "value": false
+            },
+            "evidence_status": "scored",
+            "correct": false,
+            "awarded_score": 0.0,
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": true
+              },
+              "explanation": "2019-2020(A) 是非题第5题；预测分析标注为『对』",
+              "rubric": {}
+            },
+            "error_analysis": {
+              "label": "判断与参考结论相反"
+            },
+            "class_comparison": {
+              "denominator": 2,
+              "correct_count": 0,
+              "correct_rate": 0.0
+            }
+          }
+        ],
+        "analysis": {
+          "analysis_version": 3,
+          "context": {
+            "label": "2026-11-18 · 工作台验收20261118-双知识点双学生",
+            "generated_at": "2026-11-18T02:25:54+00:00",
+            "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
+          },
+          "learning_plan": [
+            {
+              "priority": 1,
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化",
+              "question_refs": [
+                "第1题"
+              ],
+              "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+              "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+              "resource_ids": [
+                "course.kp.regularization.l1l2",
+                "res_es_linear_model_html_logistic_regression"
+              ],
+              "resources": [
+                {
+                  "resource_id": "course.kp.regularization.l1l2",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "L1/L2 正则化 · 课程精读",
+                  "url": "/learn/kp.regularization.l1l2",
+                  "kp_id": "kp.regularization.l1l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "kp_name": "L1/L2 正则化",
+                  "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+                  "location": "12.机器学习的相关理论.pdf · 第15、16页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 15,
+                      "chunk_id": "doc_62cc358de7c7fc_u0015"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 16,
+                      "chunk_id": "doc_62cc358de7c7fc_u0016"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res_es_linear_model_html_logistic_regression",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "article",
+                  "platform": "docs",
+                  "title": "scikit-learn: Logistic Regression",
+                  "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+                  "kp_id": "kp.regularization.l1l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "kp_name": "L1/L2 正则化",
+                  "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "location": "scikit-learn: Logistic Regression",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-05",
+                  "verified_scope": "title_only",
+                  "content_status": "intro_checked"
+                }
+              ]
+            },
+            {
+              "priority": 2,
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "question_refs": [
+                "第2题"
+              ],
+              "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+              "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+              "resource_ids": [
+                "course.kp.eval.bias_var",
+                "res.douyin.regularization.7676487498093614235"
+              ],
+              "resources": [
+                {
+                  "resource_id": "course.kp.eval.bias_var",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "偏差-方差均衡 · 课程精读",
+                  "url": "/learn/kp.eval.bias_var",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                  "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 11,
+                      "chunk_id": "doc_62cc358de7c7fc_u0011"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 19,
+                      "chunk_id": "doc_62cc358de7c7fc_u0019"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 20,
+                      "chunk_id": "doc_62cc358de7c7fc_u0020"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res.douyin.regularization.7676487498093614235",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "video",
+                  "platform": "douyin",
+                  "title": "第11集 过拟合与 L1 L2 正则化",
+                  "url": "https://www.douyin.com/video/7676487498093614235",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-16",
+                  "verified_scope": "partial",
+                  "content_status": "intro_checked"
+                }
+              ]
+            }
+          ],
+          "source": "evidence_rules",
+          "status": "evidence_grounded_fallback",
+          "model_status": null,
+          "summary": "本卷已评分2题，答错2题。优先处理L1/L2 正则化、偏差-方差均衡。",
+          "concepts": [
+            {
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化",
+              "chapter": "未映射章节",
+              "question_positions": [
+                1
+              ],
+              "question_refs": [
+                "第1题"
+              ],
+              "observation": "第1题作答为正确，参考答案为错误。",
+              "analysis": "需要核对的重点：能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+              "priority": 1,
+              "priority_reason": "涉及1道错题，失分50分",
+              "analysis_source": "evidence_rules"
+            },
+            {
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "chapter": "未映射章节",
+              "question_positions": [
+                2
+              ],
+              "question_refs": [
+                "第2题"
+              ],
+              "observation": "第2题作答为错误，参考答案为正确。",
+              "analysis": "需要核对的重点：能区分高偏差和高方差，并说明相应调整方向。",
+              "priority": 2,
+              "priority_reason": "涉及1道错题，失分50分",
+              "analysis_source": "evidence_rules"
+            }
+          ],
+          "recommendations": [
+            "第1题：对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "第2题：画出训练和测试误差，分别判断欠拟合与过拟合。"
+          ],
+          "retest_summary": {
+            "status": "passed",
+            "round": 1,
+            "accuracy": 1.0,
+            "text": "第1轮复测答对5/5题，正确率100%，本轮已达标。"
+          },
+          "evidence_details": [
+            {
+              "ref": "第1题",
+              "observation": "作答为正确，参考答案为错误。"
+            },
+            {
+              "ref": "第2题",
+              "observation": "作答为错误，参考答案为正确。"
+            }
+          ]
+        },
+        "resources": [
+          {
+            "resource_id": "course.kp.eval.bias_var",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+            "suggested_minutes": null,
+            "platform": "课程原页",
+            "content_type": "course_pages",
+            "source_type": "local",
+            "checked_date": null,
+            "title": "偏差-方差均衡 · 课程精读",
+            "type": "课程原页",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "url": "/learn/kp.eval.bias_var"
+          },
+          {
+            "resource_id": "course.kp.regularization.l1l2",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "kp_name": "L1/L2 正则化",
+            "location": "12.机器学习的相关理论.pdf · 第15、16页",
+            "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+            "suggested_minutes": null,
+            "platform": "课程原页",
+            "content_type": "course_pages",
+            "source_type": "local",
+            "checked_date": null,
+            "title": "L1/L2 正则化 · 课程精读",
+            "type": "课程原页",
+            "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "url": "/learn/kp.regularization.l1l2"
+          },
+          {
+            "resource_id": "res.douyin.regularization.7676487498093614235",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": null,
+            "suggested_minutes": null,
+            "platform": "douyin",
+            "content_type": "video",
+            "source_type": "external",
+            "checked_date": "2026-11-16",
+            "title": "第11集 过拟合与 L1 L2 正则化",
+            "type": "douyin",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "url": "https://www.douyin.com/video/7676487498093614235"
+          },
+          {
+            "resource_id": "res_es_linear_model_html_logistic_regression",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "kp_name": "L1/L2 正则化",
+            "location": "scikit-learn: Logistic Regression",
+            "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "success_check": null,
+            "suggested_minutes": null,
+            "platform": "docs",
+            "content_type": "article",
+            "source_type": "external",
+            "checked_date": "2026-11-05",
+            "title": "scikit-learn: Logistic Regression",
+            "type": "docs",
+            "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression"
+          }
+        ],
+        "retest_history": [
+          {
+            "cycle_id": "retestcycle_0275845651a74ffa",
+            "kp_ids": [
+              "kp.eval.bias_var",
+              "kp.regularization.l1l2"
+            ],
+            "remaining_kp_ids": [],
+            "untested_kp_ids": [],
+            "release_id": "release_d3d22142b98246b0",
+            "release_title": "班级针对性复测",
+            "retest_attempt_id": "attempt_edc64a9bc77b4fbc",
+            "result_determinable": true,
+            "round": 1,
+            "status": "passed",
+            "threshold": 0.8,
+            "question_count": 5,
+            "correct_count": 5,
+            "accuracy": 1.0,
+            "published_at": "2026-11-18T02:27:30+00:00",
+            "submitted_at": "2026-11-18T02:30:49+00:00",
+            "wrong_items": []
+          }
+        ],
+        "retest_threshold": 0.8
+      },
+      "metrics": "本次成绩\n0 / 100\n班级第 2 / 2 名\n错题数量\n2 / 2 已评分题\n按题去重统计\n薄弱知识点\n0\n原卷 2 个 · 结合已测概念更新\n复测状态\n本轮达标\n第 1 轮 · 100%",
+      "drawer_keyboard": {
+        "tab_focus_contained": true,
+        "escape_closes": true
+      },
+      "exam_switch": {
+        "alternate_attempt_id": "attempt_9d95c27c402e4be5",
+        "scores_questions_title_updated": true,
+        "returned_to_original": "attempt_d660ce810c684cfd",
+        "concept_selection_retained": true
+      }
+    },
+    "stu002": {
+      "source": {
+        "attempt_id": "attempt_7bc74a1a495e4925",
+        "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+        "score": 50.0,
+        "status": "submitted"
+      },
+      "retest": {
+        "attempt_id": "attempt_b2c33f0d57b24fc1",
+        "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+        "score": 6.0,
+        "max_score": 10.0,
+        "status": "submitted",
+        "retest_of_attempt_id": "attempt_7bc74a1a495e4925",
+        "grading_status": "graded"
+      },
+      "cycle": {
+        "cycle_id": "retestcycle_3cdc5a3111e84cc2",
+        "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+        "source_attempt_id": "attempt_7bc74a1a495e4925",
+        "source_assessment_version_id": "av_7367b55548402028827c56c3",
+        "diagnosis_id": "diag_9ca507eda0c741ef",
+        "release_id": "release_d3d22142b98246b0",
+        "retest_attempt_id": "attempt_b2c33f0d57b24fc1",
+        "workflow_run_id": "teacher-job:job_bb8032dfde1541e8",
+        "round_no": 1,
+        "status": "not_passed",
+        "threshold": 0.8,
+        "question_count": 5,
+        "correct_count": 3,
+        "accuracy": 0.6,
+        "score": 6.0,
+        "max_score": 10.0,
+        "chapter_ids": "[]",
+        "kp_ids": "[\"kp.eval.bias_var\", \"kp.regularization.l1l2\"]",
+        "concept_names": "[\"\\u504f\\u5dee-\\u65b9\\u5dee\\u5747\\u8861\", \"L1/L2 \\u6b63\\u5219\\u5316\"]",
+        "generated_question_ids": "[\"aiq_7ffbc38ab4614c54\", \"aiq_e7d6c471f2b340a6\", \"aiq_4edb202fd43e4243\", \"aiq_1930c82113ed40a2\", \"aiq_cff23c96d84e4cd8\"]",
+        "remaining_kp_ids": "[\"kp.eval.bias_var\", \"kp.regularization.l1l2\"]",
+        "published_at": "2026-11-18T02:27:30+00:00",
+        "submitted_at": "2026-11-18T02:30:58+00:00",
+        "completed_at": "2026-11-18T02:30:58+00:00",
+        "created_at": "2026-11-18T02:27:30+00:00",
+        "updated_at": "2026-11-18T03:02:47+00:00",
+        "untested_kp_ids": "[]"
+      },
+      "verify_learning": {
+        "run_id": "run_666c9efb4f1c4c93",
+        "status": "succeeded",
+        "engine": "deterministic"
+      },
+      "api": {
+        "diagnosis_workbench": {
+          "version": 1,
+          "summary": "本卷已评分2题，答错1题，涉及1个需复习概念。结合本卷各概念的最新复测记录，当前2个概念仍需复习；待评分和未覆盖项保留原判断。",
+          "statistics": {
+            "question_count": 2,
+            "scored_count": 2,
+            "ungraded_count": 0,
+            "wrong_count": 1,
+            "correct_count": 1,
+            "error_rate": 0.5,
+            "accuracy": 0.5
+          },
+          "weak_concept_count": 1,
+          "current_weak_concept_count": 2,
+          "concepts": [
+            {
+              "id": "kp.eval.bias_var",
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "statistics": {
+                "question_count": 1,
+                "scored_count": 1,
+                "ungraded_count": 0,
+                "wrong_count": 1,
+                "correct_count": 0,
+                "error_rate": 1.0,
+                "accuracy": 0.0
+              },
+              "chapter": "未映射章节",
+              "question_positions": [
+                2
+              ],
+              "errors": [
+                {
+                  "paper_item_id": "item_3df2a7c93102400e",
+                  "question_id": "seed_human_tf_overfit",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "position": 2,
+                  "question_type": "true_false",
+                  "stem": "过拟合的典型表现是训练错误低，但验证集/测试集错误率高且不稳定。",
+                  "options": [],
+                  "shared_materials": [],
+                  "source_blocks": [],
+                  "source_options": [],
+                  "content_warning": "",
+                  "is_scoring_revision": false,
+                  "original_question": null,
+                  "chapter_id": "",
+                  "chapter": {
+                    "title": "未映射章节"
+                  },
+                  "knowledge_point": {
+                    "kp_id": "kp.eval.bias_var",
+                    "name": "偏差-方差均衡"
+                  },
+                  "response_status": "answered",
+                  "response": {
+                    "value": false
+                  },
+                  "evidence_status": "scored",
+                  "correct": false,
+                  "awarded_score": 0.0,
+                  "max_score": 50.0,
+                  "answer_reference": {
+                    "available": true,
+                    "payload": {
+                      "value": true
+                    },
+                    "explanation": "2019-2020(A) 是非题第5题；预测分析标注为『对』",
+                    "rubric": {}
+                  },
+                  "error_analysis": {
+                    "label": "判断与参考结论相反"
+                  },
+                  "class_comparison": {
+                    "denominator": 2,
+                    "correct_count": 0,
+                    "correct_rate": 0.0
+                  }
+                }
+              ],
+              "hypotheses": [],
+              "evidence_limit": "当前证据只能确认作答差异，具体错因需专项复测进一步确认。",
+              "corrections": [
+                {
+                  "text": "训练误差和测试误差都高，常提示欠拟合或高偏差；训练误差低而测试误差明显较高，常提示过拟合或高方差。应同时比较两种误差，不能仅凭测试误差判断。",
+                  "source": "课程概念对照"
+                }
+              ],
+              "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+              "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+              "resources": [
+                {
+                  "resource_id": "course.kp.eval.bias_var",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "偏差-方差均衡 · 课程精读",
+                  "url": "/learn/kp.eval.bias_var",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                  "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 11,
+                      "chunk_id": "doc_62cc358de7c7fc_u0011"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 19,
+                      "chunk_id": "doc_62cc358de7c7fc_u0019"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 20,
+                      "chunk_id": "doc_62cc358de7c7fc_u0020"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res.douyin.regularization.7676487498093614235",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "video",
+                  "platform": "douyin",
+                  "title": "第11集 过拟合与 L1 L2 正则化",
+                  "url": "https://www.douyin.com/video/7676487498093614235",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-16",
+                  "verified_scope": "partial",
+                  "content_status": "intro_checked"
+                }
+              ],
+              "retests": [
+                {
+                  "question_count": 3,
+                  "scored_count": 3,
+                  "ungraded_count": 0,
+                  "wrong_count": 1,
+                  "correct_count": 2,
+                  "error_rate": 0.3333333333333333,
+                  "accuracy": 0.6666666666666666,
+                  "round": 1,
+                  "state": "needs_review",
+                  "label": "本轮仍有错题",
+                  "wrong_items": [
+                    {
+                      "paper_item_id": "item_6e0c96f9d7494b89",
+                      "question_id": "aiq_7ffbc38ab4614c54",
+                      "kp_ids": [
+                        "kp.eval.bias_var"
+                      ],
+                      "position": 1,
+                      "question_type": "multi_choice",
+                      "stem": "下列情形中，属于偏差—方差理论中高方差表现的有：",
+                      "options": [
+                        {
+                          "key": "A",
+                          "text": "模型在训练集上误差很低，在测试集上误差明显偏高"
+                        },
+                        {
+                          "key": "B",
+                          "text": "用不同批次的训练数据训练同一模型，得到的预测结果差异很大"
+                        },
+                        {
+                          "key": "C",
+                          "text": "模型在训练集和测试集上误差都居高不下"
+                        },
+                        {
+                          "key": "D",
+                          "text": "模型对训练样本中的随机噪声非常敏感"
+                        }
+                      ],
+                      "shared_materials": [],
+                      "source_blocks": [],
+                      "source_options": [],
+                      "content_warning": "",
+                      "is_scoring_revision": false,
+                      "original_question": null,
+                      "chapter_id": "",
+                      "chapter": {
+                        "title": "针对性复测"
+                      },
+                      "knowledge_point": {
+                        "kp_id": "kp.eval.bias_var",
+                        "name": "本题对应概念"
+                      },
+                      "response_status": "",
+                      "response": {
+                        "keys": [
+                          "C"
+                        ]
+                      },
+                      "evidence_status": "scored",
+                      "correct": false,
+                      "awarded_score": 0.0,
+                      "max_score": 2.0,
+                      "answer_reference": {
+                        "available": true,
+                        "payload": {
+                          "keys": [
+                            "A",
+                            "B",
+                            "D"
+                          ],
+                          "partial_rule": "proportional_no_wrong"
+                        },
+                        "explanation": "高方差表现为模型对训练数据波动敏感、泛化误差大而训练误差小。A 训练误差低而测试误差高是过拟合（高方差）的典型表现；B 不同训练批次导致预测差异大直接体现方差大；D 对随机噪声敏感也是高方差特征。C 训练和测试误差都高属于高偏差（欠拟合），不属于高方差。",
+                        "rubric": {}
+                      },
+                      "error_analysis": {
+                        "label": ""
+                      },
+                      "class_comparison": {
+                        "denominator": null,
+                        "correct_count": null,
+                        "correct_rate": null
+                      }
+                    }
+                  ],
+                  "accuracy_change": 0.6666666666666666,
+                  "release_id": "release_d3d22142b98246b0",
+                  "release_title": "班级针对性复测",
+                  "attempt_id": "attempt_b2c33f0d57b24fc1",
+                  "submitted_at": "2026-11-18T02:30:58+00:00",
+                  "published_at": "2026-11-18T02:27:30+00:00"
+                }
+              ],
+              "retest_state": "本轮仍有错题",
+              "needs_review": true,
+              "priority": 1
+            },
+            {
+              "id": "kp.regularization.l1l2",
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化",
+              "statistics": {
+                "question_count": 1,
+                "scored_count": 1,
+                "ungraded_count": 0,
+                "wrong_count": 0,
+                "correct_count": 1,
+                "error_rate": 0.0,
+                "accuracy": 1.0
+              },
+              "chapter": "未映射章节",
+              "question_positions": [
+                1
+              ],
+              "errors": [],
+              "hypotheses": [],
+              "evidence_limit": "当前证据只能确认作答差异，具体错因需专项复测进一步确认。",
+              "corrections": [
+                {
+                  "text": "L1 惩罚是权重绝对值之和，常使部分权重变为零；L2 惩罚是权重平方和，通常连续收缩权重。LASSO 使用 L1，Ridge 使用 L2。",
+                  "source": "课程概念对照"
+                }
+              ],
+              "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+              "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+              "resources": [],
+              "retests": [
+                {
+                  "question_count": 2,
+                  "scored_count": 2,
+                  "ungraded_count": 0,
+                  "wrong_count": 1,
+                  "correct_count": 1,
+                  "error_rate": 0.5,
+                  "accuracy": 0.5,
+                  "round": 1,
+                  "state": "needs_review",
+                  "label": "本轮仍有错题",
+                  "wrong_items": [
+                    {
+                      "paper_item_id": "item_2d12263b144b40ec",
+                      "question_id": "aiq_e7d6c471f2b340a6",
+                      "kp_ids": [
+                        "kp.regularization.l1l2"
+                      ],
+                      "position": 2,
+                      "question_type": "true_false",
+                      "stem": "在训练目标中加入 L1 或 L2 正则项，一定能够提升模型在测试集上的性能。",
+                      "options": [
+                        {
+                          "key": "A",
+                          "text": "正确"
+                        },
+                        {
+                          "key": "B",
+                          "text": "错误"
+                        }
+                      ],
+                      "shared_materials": [],
+                      "source_blocks": [],
+                      "source_options": [],
+                      "content_warning": "",
+                      "is_scoring_revision": false,
+                      "original_question": null,
+                      "chapter_id": "",
+                      "chapter": {
+                        "title": "针对性复测"
+                      },
+                      "knowledge_point": {
+                        "kp_id": "kp.regularization.l1l2",
+                        "name": "本题对应概念"
+                      },
+                      "response_status": "",
+                      "response": {
+                        "value": true
+                      },
+                      "evidence_status": "scored",
+                      "correct": false,
+                      "awarded_score": 0.0,
+                      "max_score": 2.0,
+                      "answer_reference": {
+                        "available": true,
+                        "payload": {
+                          "value": false
+                        },
+                        "explanation": "加入 L1 或 L2 正则项会引入对模型复杂度的惩罚，通常用于抑制过拟合，但并不能保证一定提升测试集性能。正则化强度需要合适：过强会导致欠拟合，过弱可能无效；此外若模型本身未过拟合或数据分布不匹配，正则化甚至可能降低测试性能。因此“一定能够提升”是错误的。",
+                        "rubric": {}
+                      },
+                      "error_analysis": {
+                        "label": ""
+                      },
+                      "class_comparison": {
+                        "denominator": null,
+                        "correct_count": null,
+                        "correct_rate": null
+                      }
+                    }
+                  ],
+                  "accuracy_change": -0.5,
+                  "release_id": "release_d3d22142b98246b0",
+                  "release_title": "班级针对性复测",
+                  "attempt_id": "attempt_b2c33f0d57b24fc1",
+                  "submitted_at": "2026-11-18T02:30:58+00:00",
+                  "published_at": "2026-11-18T02:27:30+00:00"
+                }
+              ],
+              "retest_state": "本轮仍有错题",
+              "needs_review": true,
+              "priority": 2
+            }
+          ],
+          "scope_note": "仅当前学生、当前原卷；同题可涉及多个概念，总错题数按题去重。复测正确率反映本轮题目表现，不等于完全掌握。"
+        },
+        "attempt_id": "attempt_7bc74a1a495e4925",
+        "assessment": {
+          "title": "工作台验收20261118-双知识点双学生",
+          "quiz_code": "paper_8d6f24ce3c3249f4",
+          "topic": "工作台验收20261118-双知识点双学生",
+          "scheduled_at": ""
+        },
+        "submitted_at": "2026-11-18T02:26:01+00:00",
+        "score_summary": {
+          "nominal_max_score": 100.0,
+          "ungraded_item_count": 0,
+          "ungraded_max_score": 0.0,
+          "grading_status": "graded",
+          "scored_items": 2,
+          "correct_items": 1,
+          "wrong_items": 1,
+          "partial_items": 0,
+          "awarded_score": 50.0,
+          "max_score": 100.0,
+          "score_rate": 0.5
+        },
+        "class_comparison": {
+          "status": "available",
+          "rank": 1,
+          "participant_count": 2,
+          "reason": "同一固定试卷版本、全部题目可靠评分且满分一致。"
+        },
+        "items": [
+          {
+            "paper_item_id": "item_ee3d3e6699024439",
+            "question_id": "seed_human_tf_lasso_l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "position": 1,
+            "question_type": "true_false",
+            "stem": "LASSO 使用的是 L2 正则化。",
+            "options": [],
+            "shared_materials": [],
+            "source_blocks": [],
+            "source_options": [],
+            "content_warning": "",
+            "is_scoring_revision": false,
+            "original_question": null,
+            "chapter_id": "",
+            "chapter": {
+              "title": "未映射章节"
+            },
+            "knowledge_point": {
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化"
+            },
+            "response_status": "answered",
+            "response": {
+              "value": false
+            },
+            "evidence_status": "scored",
+            "correct": true,
+            "awarded_score": 50.0,
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": false
+              },
+              "explanation": "复习整合版 p203 题11：LASSO 使用 L1 正则化",
+              "rubric": {}
+            },
+            "error_analysis": {
+              "label": ""
+            },
+            "class_comparison": {
+              "denominator": 2,
+              "correct_count": 1,
+              "correct_rate": 0.5
+            }
+          },
+          {
+            "paper_item_id": "item_3df2a7c93102400e",
+            "question_id": "seed_human_tf_overfit",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "position": 2,
+            "question_type": "true_false",
+            "stem": "过拟合的典型表现是训练错误低，但验证集/测试集错误率高且不稳定。",
+            "options": [],
+            "shared_materials": [],
+            "source_blocks": [],
+            "source_options": [],
+            "content_warning": "",
+            "is_scoring_revision": false,
+            "original_question": null,
+            "chapter_id": "",
+            "chapter": {
+              "title": "未映射章节"
+            },
+            "knowledge_point": {
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡"
+            },
+            "response_status": "answered",
+            "response": {
+              "value": false
+            },
+            "evidence_status": "scored",
+            "correct": false,
+            "awarded_score": 0.0,
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": true
+              },
+              "explanation": "2019-2020(A) 是非题第5题；预测分析标注为『对』",
+              "rubric": {}
+            },
+            "error_analysis": {
+              "label": "判断与参考结论相反"
+            },
+            "class_comparison": {
+              "denominator": 2,
+              "correct_count": 0,
+              "correct_rate": 0.0
+            }
+          }
+        ],
+        "analysis": {
+          "analysis_version": 3,
+          "context": {
+            "label": "2026-11-18 · 工作台验收20261118-双知识点双学生",
+            "generated_at": "2026-11-18T02:26:01+00:00",
+            "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
+          },
+          "learning_plan": [
+            {
+              "priority": 1,
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "question_refs": [
+                "第2题"
+              ],
+              "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+              "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+              "resource_ids": [
+                "course.kp.eval.bias_var",
+                "res.douyin.regularization.7676487498093614235"
+              ],
+              "resources": [
+                {
+                  "resource_id": "course.kp.eval.bias_var",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "偏差-方差均衡 · 课程精读",
+                  "url": "/learn/kp.eval.bias_var",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                  "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 11,
+                      "chunk_id": "doc_62cc358de7c7fc_u0011"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 19,
+                      "chunk_id": "doc_62cc358de7c7fc_u0019"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 20,
+                      "chunk_id": "doc_62cc358de7c7fc_u0020"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res.douyin.regularization.7676487498093614235",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "video",
+                  "platform": "douyin",
+                  "title": "第11集 过拟合与 L1 L2 正则化",
+                  "url": "https://www.douyin.com/video/7676487498093614235",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-16",
+                  "verified_scope": "partial",
+                  "content_status": "intro_checked"
+                }
+              ]
+            }
+          ],
+          "source": "evidence_rules",
+          "status": "evidence_grounded_fallback",
+          "model_status": null,
+          "summary": "本卷已评分2题，答错1题。优先处理偏差-方差均衡。",
+          "concepts": [
+            {
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "chapter": "未映射章节",
+              "question_positions": [
+                2
+              ],
+              "question_refs": [
+                "第2题"
+              ],
+              "observation": "第2题作答为错误，参考答案为正确。",
+              "analysis": "需要核对的重点：能区分高偏差和高方差，并说明相应调整方向。",
+              "priority": 1,
+              "priority_reason": "涉及1道错题，失分50分",
+              "analysis_source": "evidence_rules"
+            }
+          ],
+          "recommendations": [
+            "第2题：画出训练和测试误差，分别判断欠拟合与过拟合。"
+          ],
+          "retest_summary": {
+            "status": "not_passed",
+            "round": 1,
+            "accuracy": 0.6,
+            "text": "第1轮复测答对3/5题，正确率60%，尚未达到80%目标。继续练习本轮第1、2题对应概念。"
+          },
+          "evidence_details": [
+            {
+              "ref": "第2题",
+              "observation": "作答为错误，参考答案为正确。"
+            }
+          ]
+        },
+        "resources": [
+          {
+            "resource_id": "course.kp.eval.bias_var",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+            "suggested_minutes": null,
+            "platform": "课程原页",
+            "content_type": "course_pages",
+            "source_type": "local",
+            "checked_date": null,
+            "title": "偏差-方差均衡 · 课程精读",
+            "type": "课程原页",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "url": "/learn/kp.eval.bias_var"
+          },
+          {
+            "resource_id": "res.douyin.regularization.7676487498093614235",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": null,
+            "suggested_minutes": null,
+            "platform": "douyin",
+            "content_type": "video",
+            "source_type": "external",
+            "checked_date": "2026-11-16",
+            "title": "第11集 过拟合与 L1 L2 正则化",
+            "type": "douyin",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "url": "https://www.douyin.com/video/7676487498093614235"
+          }
+        ],
+        "retest_history": [
+          {
+            "cycle_id": "retestcycle_3cdc5a3111e84cc2",
+            "kp_ids": [
+              "kp.eval.bias_var",
+              "kp.regularization.l1l2"
+            ],
+            "remaining_kp_ids": [
+              "kp.eval.bias_var",
+              "kp.regularization.l1l2"
+            ],
+            "untested_kp_ids": [],
+            "release_id": "release_d3d22142b98246b0",
+            "release_title": "班级针对性复测",
+            "retest_attempt_id": "attempt_b2c33f0d57b24fc1",
+            "result_determinable": true,
+            "round": 1,
+            "status": "not_passed",
+            "threshold": 0.8,
+            "question_count": 5,
+            "correct_count": 3,
+            "accuracy": 0.6,
+            "published_at": "2026-11-18T02:27:30+00:00",
+            "submitted_at": "2026-11-18T02:30:58+00:00",
+            "wrong_items": [
+              {
+                "paper_item_id": "item_6e0c96f9d7494b89",
+                "question_id": "aiq_7ffbc38ab4614c54",
+                "kp_ids": [
+                  "kp.eval.bias_var"
+                ],
+                "position": 1,
+                "question_type": "multi_choice",
+                "stem": "下列情形中，属于偏差—方差理论中高方差表现的有：",
+                "options": [
+                  {
+                    "key": "A",
+                    "text": "模型在训练集上误差很低，在测试集上误差明显偏高"
+                  },
+                  {
+                    "key": "B",
+                    "text": "用不同批次的训练数据训练同一模型，得到的预测结果差异很大"
+                  },
+                  {
+                    "key": "C",
+                    "text": "模型在训练集和测试集上误差都居高不下"
+                  },
+                  {
+                    "key": "D",
+                    "text": "模型对训练样本中的随机噪声非常敏感"
+                  }
+                ],
+                "shared_materials": [],
+                "source_blocks": [],
+                "source_options": [],
+                "content_warning": "",
+                "is_scoring_revision": false,
+                "original_question": null,
+                "chapter_id": "",
+                "chapter": {
+                  "title": "针对性复测"
+                },
+                "knowledge_point": {
+                  "kp_id": "kp.eval.bias_var",
+                  "name": "本题对应概念"
+                },
+                "response_status": "",
+                "response": {
+                  "keys": [
+                    "C"
+                  ]
+                },
+                "evidence_status": "scored",
+                "correct": false,
+                "awarded_score": 0.0,
+                "max_score": 2.0,
+                "answer_reference": {
+                  "available": true,
+                  "payload": {
+                    "keys": [
+                      "A",
+                      "B",
+                      "D"
+                    ],
+                    "partial_rule": "proportional_no_wrong"
+                  },
+                  "explanation": "高方差表现为模型对训练数据波动敏感、泛化误差大而训练误差小。A 训练误差低而测试误差高是过拟合（高方差）的典型表现；B 不同训练批次导致预测差异大直接体现方差大；D 对随机噪声敏感也是高方差特征。C 训练和测试误差都高属于高偏差（欠拟合），不属于高方差。",
+                  "rubric": {}
+                },
+                "error_analysis": {
+                  "label": ""
+                },
+                "class_comparison": {
+                  "denominator": null,
+                  "correct_count": null,
+                  "correct_rate": null
+                }
+              },
+              {
+                "paper_item_id": "item_2d12263b144b40ec",
+                "question_id": "aiq_e7d6c471f2b340a6",
+                "kp_ids": [
+                  "kp.regularization.l1l2"
+                ],
+                "position": 2,
+                "question_type": "true_false",
+                "stem": "在训练目标中加入 L1 或 L2 正则项，一定能够提升模型在测试集上的性能。",
+                "options": [
+                  {
+                    "key": "A",
+                    "text": "正确"
+                  },
+                  {
+                    "key": "B",
+                    "text": "错误"
+                  }
+                ],
+                "shared_materials": [],
+                "source_blocks": [],
+                "source_options": [],
+                "content_warning": "",
+                "is_scoring_revision": false,
+                "original_question": null,
+                "chapter_id": "",
+                "chapter": {
+                  "title": "针对性复测"
+                },
+                "knowledge_point": {
+                  "kp_id": "kp.regularization.l1l2",
+                  "name": "本题对应概念"
+                },
+                "response_status": "",
+                "response": {
+                  "value": true
+                },
+                "evidence_status": "scored",
+                "correct": false,
+                "awarded_score": 0.0,
+                "max_score": 2.0,
+                "answer_reference": {
+                  "available": true,
+                  "payload": {
+                    "value": false
+                  },
+                  "explanation": "加入 L1 或 L2 正则项会引入对模型复杂度的惩罚，通常用于抑制过拟合，但并不能保证一定提升测试集性能。正则化强度需要合适：过强会导致欠拟合，过弱可能无效；此外若模型本身未过拟合或数据分布不匹配，正则化甚至可能降低测试性能。因此“一定能够提升”是错误的。",
+                  "rubric": {}
+                },
+                "error_analysis": {
+                  "label": ""
+                },
+                "class_comparison": {
+                  "denominator": null,
+                  "correct_count": null,
+                  "correct_rate": null
+                }
+              }
+            ]
+          }
+        ],
+        "retest_threshold": 0.8
+      },
+      "metrics": "本次成绩\n50 / 100\n班级第 1 / 2 名\n错题数量\n1 / 2 已评分题\n按题去重统计\n薄弱知识点\n2\n原卷 1 个 · 结合已测概念更新\n复测状态\n本轮未达标\n第 1 轮 · 60%",
+      "drawer_keyboard": {
+        "tab_focus_contained": true,
+        "escape_closes": true
+      }
+    }
+  },
+  "layout": [
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "overview workbench-scroll",
+          "client": 494,
+          "scroll": 528,
+          "top": 34,
+          "reaches_end": true,
+          "visible_height": 496.109375,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 494,
+          "scroll": 1525,
+          "top": 1031,
+          "reaches_end": true,
+          "visible_height": 496.109375,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "overview workbench-scroll",
+          "client": 446,
+          "scroll": 571,
+          "top": 125,
+          "reaches_end": true,
+          "visible_height": 448.109375,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 446,
+          "scroll": 1525,
+          "top": 1079,
+          "reaches_end": true,
+          "visible_height": 448.109375,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 626,
+          "scroll": 1525,
+          "top": 899,
+          "reaches_end": true,
+          "visible_height": 628.109375,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 806,
+          "scroll": 1502,
+          "top": 696,
+          "reaches_end": true,
+          "visible_height": 808.109375,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 375,
+          "scroll": 382,
+          "top": 7,
+          "reaches_end": true,
+          "visible_height": 375.09375,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 108,
+          "scroll": 468,
+          "top": 360,
+          "reaches_end": true,
+          "visible_height": 110,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 175,
+          "scroll": 1593,
+          "top": 1418,
+          "reaches_end": true,
+          "visible_height": 176.90625,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 224,
+          "top": 57,
+          "reaches_end": true,
+          "visible_height": 166.59375,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 295,
+          "scroll": 777,
+          "top": 482,
+          "reaches_end": true,
+          "visible_height": 297.40625,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 295,
+          "scroll": 1621,
+          "top": 1326,
+          "reaches_end": true,
+          "visible_height": 297.40625,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "recent-list",
+          "client": 234,
+          "scroll": 281,
+          "top": 47,
+          "reaches_end": true,
+          "visible_height": 233.921875,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 232,
+          "scroll": 391,
+          "top": 159,
+          "reaches_end": true,
+          "visible_height": 233.921875,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "task-grid",
+          "client": 152,
+          "scroll": 168,
+          "top": 16,
+          "reaches_end": true,
+          "visible_height": 151.9375,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 208,
+          "scroll": 319,
+          "top": 111,
+          "reaches_end": true,
+          "visible_height": 207.53125,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 206,
+          "scroll": 391,
+          "top": 185,
+          "reaches_end": true,
+          "visible_height": 207.53125,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "recent-list",
+          "client": 307,
+          "scroll": 378,
+          "top": 71,
+          "reaches_end": true,
+          "visible_height": 306.53125,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 305,
+          "scroll": 440,
+          "top": 135,
+          "reaches_end": true,
+          "visible_height": 306.53125,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "recent-list",
+          "client": 406,
+          "scroll": 474,
+          "top": 68,
+          "reaches_end": true,
+          "visible_height": 405.53125,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 404,
+          "scroll": 422,
+          "top": 18,
+          "reaches_end": true,
+          "visible_height": 405.53125,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "student-task-panels",
+          "client": 314,
+          "scroll": 834,
+          "top": 520,
+          "reaches_end": true,
+          "visible_height": 314,
+          "within_viewport": true
+        },
+        {
+          "class": "task-grid",
+          "client": 155,
+          "scroll": 168,
+          "top": 13,
+          "reaches_end": true,
+          "visible_height": 154.609375,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 213,
+          "scroll": 281,
+          "top": 68,
+          "reaches_end": true,
+          "visible_height": 213.46875,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 211,
+          "scroll": 391,
+          "top": 180,
+          "reaches_end": true,
+          "visible_height": 213.46875,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "student-task-panels",
+          "client": 323,
+          "scroll": 554,
+          "top": 231,
+          "reaches_end": true,
+          "visible_height": 323,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 240,
+          "scroll": 319,
+          "top": 79,
+          "reaches_end": true,
+          "visible_height": 240.46875,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 238,
+          "scroll": 729,
+          "top": 491,
+          "reaches_end": true,
+          "visible_height": 240.46875,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 593,
+          "scroll": 3750,
+          "top": 3157,
+          "reaches_end": true,
+          "visible_height": 593,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 545,
+          "scroll": 3982,
+          "top": 3437,
+          "reaches_end": true,
+          "visible_height": 545,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 725,
+          "scroll": 3564,
+          "top": 2839,
+          "reaches_end": true,
+          "visible_height": 725,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 905,
+          "scroll": 3438,
+          "top": 2533,
+          "reaches_end": true,
+          "visible_height": 905,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 495,
+          "scroll": 7282,
+          "top": 6787,
+          "reaches_end": true,
+          "visible_height": 495,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 310,
+          "scroll": 6583,
+          "top": 6273,
+          "reaches_end": true,
+          "visible_height": 310,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 601,
+          "scroll": 1707,
+          "top": 1106,
+          "reaches_end": true,
+          "visible_height": 601.21875,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 553,
+          "scroll": 1707,
+          "top": 1154,
+          "reaches_end": true,
+          "visible_height": 553.21875,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 733,
+          "scroll": 1707,
+          "top": 974,
+          "reaches_end": true,
+          "visible_height": 733.21875,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 913,
+          "scroll": 1707,
+          "top": 794,
+          "reaches_end": true,
+          "visible_height": 913.21875,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 549,
+          "scroll": 1117,
+          "top": 568,
+          "reaches_end": true,
+          "visible_height": 549.21875,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 345,
+          "scroll": 1381,
+          "top": 1036,
+          "reaches_end": true,
+          "visible_height": 345.21875,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "result",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "result",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "result",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "result",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "result",
+      "account": "stu001"
+    },
+    {
+      "viewport": [
+        910,
+        512
+      ],
+      "document": [
+        910,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 225,
+          "top": 58,
+          "reaches_end": true,
+          "visible_height": 166.59375,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 244,
+          "scroll": 252,
+          "top": 8,
+          "reaches_end": true,
+          "visible_height": 244.40625,
+          "within_viewport": true
+        }
+      ],
+      "page": "result",
+      "account": "stu001"
+    }
+  ],
+  "page_errors": [],
+  "failures": []
+}

@@ -259,11 +259,15 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateVisibleCapaciti
 <style scoped src="../styles/studentPortal.css"></style>
 
 <style scoped>
-.student-tasks-page.workbench-page{display:flex;gap:12px;overflow:hidden}.student-task-panels{display:grid;grid-template-rows:minmax(130px,45%) minmax(0,1fr);height:100%;min-height:0;gap:14px}.pending-section{grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}.task-grid{max-height:none;min-height:0;overflow:auto}.expired-tasks{max-height:80px;overflow:auto}.records-layout{min-height:0}.records-panel{min-height:0;max-height:none;overflow:hidden}.recent-list,.history-table-wrap{min-height:0;overflow:auto}.overview-stat{min-height:84px}.stat-copy>span,.stat-copy>small,.stat-copy strong small{font-size:14px}.section-heading{flex-wrap:wrap}.overview-strip{grid-template-columns:repeat(5,minmax(0,260px))}
+.student-tasks-page.workbench-page{display:flex;gap:12px;overflow:hidden}.student-task-panels{display:grid;grid-template-rows:minmax(130px,45%) minmax(0,1fr);height:100%;min-height:0;gap:14px}.pending-section{display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}.task-grid{max-height:none;min-height:0;overflow:auto}.expired-tasks{max-height:80px;overflow:auto}.records-layout{min-height:0}.records-panel{min-height:0;max-height:none;overflow:hidden}.recent-list,.history-table-wrap{min-height:0;overflow:auto}.overview-stat{min-height:84px}.stat-copy>span,.stat-copy>small,.stat-copy strong small{font-size:14px}.section-heading{flex-wrap:wrap}.overview-strip{grid-template-columns:repeat(5,minmax(0,260px))}
 @media(max-width:1120px){.student-tasks-page.workbench-page{height:100%;min-height:0}.records-layout{grid-template-columns:1fr 1fr}.records-panel{min-height:0;max-height:none}.task-grid{max-height:none}.student-task-panels{grid-template-rows:minmax(120px,45%) minmax(0,1fr)}}
-@media(max-width:700px){.overview-strip{grid-template-columns:repeat(2,minmax(0,260px))}.records-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr;overflow:hidden}.records-panel{min-height:0}.task-tools{flex-wrap:wrap}.student-task-panels{grid-template-rows:minmax(120px,45%) minmax(0,1fr)}}
+@media(max-width:700px){.overview-strip{grid-template-columns:repeat(2,minmax(0,260px))}.records-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr;overflow:hidden}.records-panel{min-height:0}.task-tools{flex-wrap:wrap}.student-task-panels{overflow:auto;grid-template-rows:260px 560px;padding-right:4px}}
 </style>
 
 <style scoped>
 .overview-stat{height:86px;min-height:86px;padding:9px 12px}.stat-copy>small{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* At high browser zoom the remaining body can be shorter than one panel.
+   Keep useful panel heights and let this body scroll to reach each section. */
+@media(max-height:600px){.student-task-panels{overflow:auto;grid-template-rows:240px 300px;padding-right:4px}.records-layout{grid-template-rows:1fr;grid-template-columns:1fr 1fr}}
+@media(max-height:600px) and (max-width:700px){.student-task-panels{grid-template-rows:260px 560px}.records-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
 </style>

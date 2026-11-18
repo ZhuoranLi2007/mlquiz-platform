@@ -1,0 +1,1189 @@
+{
+  "checks": [
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "overview workbench-scroll",
+          "client": 341,
+          "scroll": 662,
+          "top": 320,
+          "reaches_end": true,
+          "visible_height": 343.0874938964844,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 341,
+          "scroll": 1522,
+          "top": 1180.800048828125,
+          "reaches_end": true,
+          "visible_height": 343.0874938964844,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 223,
+          "top": 56,
+          "reaches_end": true,
+          "visible_height": 166.59375,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 296,
+          "scroll": 776,
+          "top": 480,
+          "reaches_end": true,
+          "visible_height": 297.40625,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 296,
+          "scroll": 1615,
+          "top": 1319.3333740234375,
+          "reaches_end": true,
+          "visible_height": 297.40625,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 121,
+          "scroll": 374,
+          "top": 253,
+          "reaches_end": true,
+          "visible_height": 121.09375,
+          "within_viewport": true
+        },
+        {
+          "class": "overview workbench-scroll",
+          "client": 211,
+          "scroll": 686,
+          "top": 475,
+          "reaches_end": true,
+          "visible_height": 212.90625,
+          "within_viewport": true
+        },
+        {
+          "class": "concept-detail workbench-scroll",
+          "client": 211,
+          "scroll": 1696,
+          "top": 1485,
+          "reaches_end": true,
+          "visible_height": 212.90625,
+          "within_viewport": true
+        }
+      ],
+      "page": "feedback",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "task-grid",
+          "client": 112,
+          "scroll": 168,
+          "top": 55.20000076293945,
+          "reaches_end": true,
+          "visible_height": 112.42500305175781,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 150,
+          "scroll": 279,
+          "top": 129.60000610351562,
+          "reaches_end": true,
+          "visible_height": 149.83750915527344,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 148,
+          "scroll": 492,
+          "top": 343.20001220703125,
+          "reaches_end": true,
+          "visible_height": 149.83750915527344,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "student-task-panels",
+          "client": 323,
+          "scroll": 554,
+          "top": 230.6666717529297,
+          "reaches_end": true,
+          "visible_height": 323,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 241,
+          "scroll": 315,
+          "top": 74,
+          "reaches_end": true,
+          "visible_height": 241.13540649414062,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 240,
+          "scroll": 693,
+          "top": 453.3333435058594,
+          "reaches_end": true,
+          "visible_height": 241.13540649414062,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 101,
+          "scroll": 278,
+          "top": 177,
+          "reaches_end": true,
+          "visible_height": 100.796875,
+          "within_viewport": true
+        },
+        {
+          "class": "student-task-panels",
+          "client": 175,
+          "scroll": 834,
+          "top": 659,
+          "reaches_end": true,
+          "visible_height": 175.203125,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 213,
+          "scroll": 281,
+          "top": 68,
+          "reaches_end": true,
+          "visible_height": 175,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 211,
+          "scroll": 391,
+          "top": 180,
+          "reaches_end": true,
+          "visible_height": 175,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "result",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 223,
+          "top": 56,
+          "reaches_end": true,
+          "visible_height": 166.59375,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 246,
+          "scroll": 251,
+          "top": 4.666666507720947,
+          "reaches_end": true,
+          "visible_height": 246.0729217529297,
+          "within_viewport": true
+        }
+      ],
+      "page": "result",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 122,
+          "scroll": 225,
+          "top": 103,
+          "reaches_end": true,
+          "visible_height": 121.796875,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 162,
+          "scroll": 252,
+          "top": 91,
+          "reaches_end": true,
+          "visible_height": 161.703125,
+          "within_viewport": true
+        }
+      ],
+      "page": "result",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 448,
+          "scroll": 1589,
+          "top": 1141.5999755859375,
+          "reaches_end": true,
+          "visible_height": 447.6000061035156,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 345,
+          "scroll": 1385,
+          "top": 1040,
+          "reaches_end": true,
+          "visible_height": 345.2083435058594,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 217,
+          "scroll": 1133,
+          "top": 916.5,
+          "reaches_end": true,
+          "visible_height": 217.2109375,
+          "within_viewport": true
+        }
+      ],
+      "page": "course",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 439,
+          "scroll": 4331,
+          "top": 3892,
+          "reaches_end": true,
+          "visible_height": 439.3999938964844,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 310,
+          "scroll": 6564,
+          "top": 6253.33349609375,
+          "reaches_end": true,
+          "visible_height": 310,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 178,
+          "scroll": 7144,
+          "top": 6966,
+          "reaches_end": true,
+          "visible_height": 178,
+          "within_viewport": true
+        }
+      ],
+      "page": "resources",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "release-table",
+          "client": 312,
+          "scroll": 418,
+          "top": 106.4000015258789,
+          "reaches_end": true,
+          "visible_height": 312.3000183105469,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-home",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 168,
+          "scroll": 212,
+          "top": 44,
+          "reaches_end": true,
+          "visible_height": 168,
+          "within_viewport": true
+        },
+        {
+          "class": "release-table",
+          "client": 231,
+          "scroll": 418,
+          "top": 187.3333282470703,
+          "reaches_end": true,
+          "visible_height": 230.6666717529297,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-home",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99.5,
+          "reaches_end": true,
+          "visible_height": 154.5078125,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 104,
+          "scroll": 352,
+          "top": 247.5,
+          "reaches_end": true,
+          "visible_height": 104.296875,
+          "within_viewport": true
+        },
+        {
+          "class": "release-table",
+          "client": 112,
+          "scroll": 735,
+          "top": 624,
+          "reaches_end": true,
+          "visible_height": 111.703125,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-home",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 323,
+          "scroll": 6115,
+          "top": 5792,
+          "reaches_end": true,
+          "visible_height": 323.3000183105469,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-bank",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 167,
+          "scroll": 245,
+          "top": 77.33333587646484,
+          "reaches_end": true,
+          "visible_height": 167.2916717529297,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 299,
+          "scroll": 13378,
+          "top": 13079.3330078125,
+          "reaches_end": true,
+          "visible_height": 298.7083282470703,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-bank",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99.5,
+          "reaches_end": true,
+          "visible_height": 154.5078125,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 104,
+          "scroll": 346,
+          "top": 241,
+          "reaches_end": true,
+          "visible_height": 104.296875,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 182,
+          "scroll": 22997,
+          "top": 22815.5,
+          "reaches_end": true,
+          "visible_height": 181.703125,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-bank",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "evidence-column",
+          "client": 150,
+          "scroll": 328,
+          "top": 178.39999389648438,
+          "reaches_end": true,
+          "visible_height": 149.6875,
+          "within_viewport": true
+        },
+        {
+          "class": "insight-sidebar",
+          "client": 150,
+          "scroll": 602,
+          "top": 452.79998779296875,
+          "reaches_end": true,
+          "visible_height": 149.6875,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-single",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 148,
+          "scroll": 171,
+          "top": 22.66666603088379,
+          "reaches_end": true,
+          "visible_height": 147.6979217529297,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 92,
+          "scroll": 160,
+          "top": 68,
+          "reaches_end": true,
+          "visible_height": 91.80208587646484,
+          "within_viewport": true
+        },
+        {
+          "class": "evidence-column",
+          "client": 159,
+          "scroll": 327,
+          "top": 168,
+          "reaches_end": true,
+          "visible_height": 158.5,
+          "within_viewport": true
+        },
+        {
+          "class": "insight-sidebar",
+          "client": 159,
+          "scroll": 624,
+          "top": 465.3333435058594,
+          "reaches_end": true,
+          "visible_height": 158.5,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-single",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99.5,
+          "reaches_end": true,
+          "visible_height": 154.5078125,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 102,
+          "scroll": 224,
+          "top": 122.5,
+          "reaches_end": true,
+          "visible_height": 101.5,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 62,
+          "scroll": 292,
+          "top": 229.5,
+          "reaches_end": true,
+          "visible_height": 61.7734375,
+          "within_viewport": true
+        },
+        {
+          "class": "evidence-column",
+          "client": 43,
+          "scroll": 329,
+          "top": 286,
+          "reaches_end": true,
+          "visible_height": 43.359375,
+          "within_viewport": true
+        },
+        {
+          "class": "insight-sidebar",
+          "client": 43,
+          "scroll": 537,
+          "top": 493.5,
+          "reaches_end": true,
+          "visible_height": 43.3671875,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-single",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "history-primary",
+          "client": 147,
+          "scroll": 779,
+          "top": 631.2000122070312,
+          "reaches_end": true,
+          "visible_height": 147.375,
+          "within_viewport": true
+        },
+        {
+          "class": "history-side history-surface",
+          "client": 146,
+          "scroll": 1787,
+          "top": 1641.5999755859375,
+          "reaches_end": true,
+          "visible_height": 147.375,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-history",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 148,
+          "scroll": 171,
+          "top": 22.66666603088379,
+          "reaches_end": true,
+          "visible_height": 147.6979217529297,
+          "within_viewport": true
+        },
+        {
+          "class": "history-primary",
+          "client": 53,
+          "scroll": 766,
+          "top": 712.6666870117188,
+          "reaches_end": true,
+          "visible_height": 52.583335876464844,
+          "within_viewport": true
+        },
+        {
+          "class": "history-side history-surface",
+          "client": 85,
+          "scroll": 1460,
+          "top": 1375.3333740234375,
+          "reaches_end": true,
+          "visible_height": 85.91665649414062,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-history",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99.5,
+          "reaches_end": true,
+          "visible_height": 154.5078125,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 102,
+          "scroll": 224,
+          "top": 122.5,
+          "reaches_end": true,
+          "visible_height": 101.5,
+          "within_viewport": true
+        },
+        {
+          "class": "history-primary",
+          "client": 41,
+          "scroll": 770,
+          "top": 728,
+          "reaches_end": true,
+          "visible_height": 41.359375,
+          "within_viewport": true
+        },
+        {
+          "class": "history-side history-surface",
+          "client": 39,
+          "scroll": 1466,
+          "top": 1426,
+          "reaches_end": true,
+          "visible_height": 41.3671875,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-history",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "errors-column",
+          "client": 217,
+          "scroll": 1449,
+          "top": 1231.199951171875,
+          "reaches_end": true,
+          "visible_height": 217.25,
+          "within_viewport": true
+        },
+        {
+          "class": "ai-column",
+          "client": 217,
+          "scroll": 1541,
+          "top": 1323.199951171875,
+          "reaches_end": true,
+          "visible_height": 217.25,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-class",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 148,
+          "scroll": 171,
+          "top": 22.66666603088379,
+          "reaches_end": true,
+          "visible_height": 147.6979217529297,
+          "within_viewport": true
+        },
+        {
+          "class": "errors-column",
+          "client": 72,
+          "scroll": 1612,
+          "top": 1539.3333740234375,
+          "reaches_end": true,
+          "visible_height": 71.75,
+          "within_viewport": true
+        },
+        {
+          "class": "ai-column",
+          "client": 72,
+          "scroll": 1250,
+          "top": 1178,
+          "reaches_end": true,
+          "visible_height": 71.75,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-class",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99.5,
+          "reaches_end": true,
+          "visible_height": 154.5078125,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 102,
+          "scroll": 172,
+          "top": 70.5,
+          "reaches_end": true,
+          "visible_height": 101.5,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-header",
+          "client": 62,
+          "scroll": 199,
+          "top": 136.5,
+          "reaches_end": true,
+          "visible_height": 61.7734375,
+          "within_viewport": true
+        },
+        {
+          "class": "errors-column",
+          "client": 44,
+          "scroll": 1618,
+          "top": 1574,
+          "reaches_end": true,
+          "visible_height": 43.859375,
+          "within_viewport": true
+        },
+        {
+          "class": "ai-column",
+          "client": 44,
+          "scroll": 1252,
+          "top": 1208.5,
+          "reaches_end": true,
+          "visible_height": 43.8671875,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-class",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [],
+      "page": "teacher-materials",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 324,
+          "scroll": 770,
+          "top": 446,
+          "reaches_end": true,
+          "visible_height": 324,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-materials",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99.5,
+          "reaches_end": true,
+          "visible_height": 154.5078125,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 192,
+          "scroll": 666,
+          "top": 474,
+          "reaches_end": true,
+          "visible_height": 192,
+          "within_viewport": true
+        }
+      ],
+      "page": "teacher-materials",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    }
+  ],
+  "page_errors": [],
+  "failures": []
+}

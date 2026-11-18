@@ -108,7 +108,7 @@ function resourceType(resource: any) {
 
           <div class="retest-section">
             <h3>复测建议</h3>
-            <p>优先从题库选择符合薄弱知识点的新题，缺题时由 AI 补充，校验后发布。</p>
+            <p>依据当前薄弱知识点，由 AI 生成新题，独立验答通过后发布。</p>
             <div v-if="plan.ready" class="plan-summary"><span>{{ plan.chapters?.map((item: any) => item.title).join('、') || '当前错题章节' }}</span><span>{{ plan.item_count }} 题 · {{ plan.suggested_types?.map(typeLabel).join('、') || '自动匹配题型' }}</span></div>
             <p v-else>{{ plan.reason || '当前没有适合生成复测的错题。' }}</p>
             <div v-if="generatedCandidates.length" class="candidate-note">已生成 {{ generatedCandidates.length }} 道候选题，校验通过后发布。</div>

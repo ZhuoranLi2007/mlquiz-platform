@@ -141,4 +141,5 @@ onMounted(() => void auth.ensure())
 
 <style scoped>
 .role-content,.question-bank-shell .role-content{overflow:hidden;padding-bottom:16px}.student-task-shell .role-side{width:220px}.student-task-shell .role-main{margin-left:220px}@media(max-width:820px){.student-task-shell .role-main{margin-left:0}.student-task-shell .role-side{width:min(82vw,300px)}}
+@media(max-height:600px){.role-topbar,.student-task-shell .role-topbar{height:58px}}
 </style>

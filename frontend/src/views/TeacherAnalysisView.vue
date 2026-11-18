@@ -8,6 +8,7 @@ import SingleAttemptWorkbench from '../components/SingleAttemptWorkbench.vue'
 import MultiAttemptWorkbench from '../components/MultiAttemptWorkbench.vue'
 import ClassAssessmentWorkbench from '../components/ClassAssessmentWorkbench.vue'
 import { friendlyError, friendlyQuizCode } from '../utils/presentation'
+import { canReuseDiagnosis } from '../utils/savedDiagnosis'
 
 type Scope = 'student_attempt' | 'student_history' | 'class_assessment'
 const route = useRoute()
@@ -213,9 +214,9 @@ async function loadHistorySelection() {
     if (baseline.status === 'rejected') throw baseline.reason
     const baselineResult: any = baseline.value
     if (latest.status === 'fulfilled'
-      && (latest.value as any)?.skill_version === 'classroom-chapter-diagnosis-v5') {
+      && canReuseDiagnosis((latest.value as any)?.result, baselineResult)) {
       const saved: any = latest.value
-      result.value = saved.result
+      result.value = { ...baselineResult, ai_analysis: saved.result.ai_analysis }
       diagnosisMeta.value = {
         diagnosis_id: saved.diagnosis_id,
         created_at: saved.created_at,
@@ -257,10 +258,9 @@ async function loadClassAssessmentSelection() {
     if (baseline.status === 'rejected') throw baseline.reason
     const baselineResult: any = baseline.value
     if (latest.status === 'fulfilled'
-      && (latest.value as any)?.skill_version === 'classroom-chapter-diagnosis-v5'
-      && (latest.value as any)?.result?.class_view_version === 2) {
+      && canReuseDiagnosis((latest.value as any)?.result, baselineResult)) {
       const saved: any = latest.value
-      result.value = saved.result
+      result.value = { ...baselineResult, ai_analysis: saved.result.ai_analysis }
       diagnosisMeta.value = {
         diagnosis_id: saved.diagnosis_id,
         created_at: saved.created_at,

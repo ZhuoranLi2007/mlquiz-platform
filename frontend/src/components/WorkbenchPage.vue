@@ -19,4 +19,5 @@ withDefaults(defineProps<{ scroll?: boolean; label?: string }>(), { scroll: true
 .workbench-page-body{flex:1;min-width:0;min-height:0;overflow:hidden}
 .workbench-page-body.owns-scroll{overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
 .workbench-page-body:focus-visible{outline:2px solid var(--app-primary);outline-offset:-2px}
+@media(max-height:600px){.workbench-page-header{max-height:35%}}
 </style>

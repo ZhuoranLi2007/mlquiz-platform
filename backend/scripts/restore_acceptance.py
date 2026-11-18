@@ -8,12 +8,13 @@ from pathlib import Path
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output', required=True, type=Path)
-    ap.add_argument('--snapshot', choices=['baseline','ai-review','diagnosis-review'], default='baseline',
-                    help='baseline: first complete acceptance; ai-review: AI retest; diagnosis-review: diagnosis and resources')
+    ap.add_argument('--snapshot', choices=['baseline','ai-review','diagnosis-review','workbench-review'], default='baseline',
+                    help='baseline: first complete acceptance; ai-review: AI retest; diagnosis-review: diagnosis and resources; workbench-review: desktop workbench and updated feedback')
     args=ap.parse_args()
     root=Path(__file__).resolve().parents[2]
     filename = {'baseline':'mlquiz-verified.sqlite3.gz', 'ai-review':'mlquiz-ai-retest-reviewed.sqlite3.gz',
-                'diagnosis-review':'mlquiz-diagnosis-resources-reviewed.sqlite3.gz'}[args.snapshot]
+                'diagnosis-review':'mlquiz-diagnosis-resources-reviewed.sqlite3.gz',
+                'workbench-review':'mlquiz-workbench-reviewed.sqlite3.gz'}[args.snapshot]
     source=root/'data/acceptance'/filename
     target=args.output.resolve()/'db/mlquiz.sqlite3'
     if target.exists():
