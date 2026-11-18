@@ -3122,12 +3122,15 @@ def _model_analysis_v2(db: Session, scope: str, payload: dict[str, Any], run_id:
         f"你是机器学习课程教师，依据{focus}给出具体、易读的诊断。"
         "只使用提供的题干、选项、答案、评分和资料，不重复统计数字、不编造题号、日期或学习期限。"
         "不要写加强基础、多做练习、认真听讲、继续努力这类没有具体对象的占位话。"
-        "输出严格JSON，只有concept_hypotheses数组，最多3项；一项真实证据也可以分析，不强凑数量。"
-        "evidence_ids只填写在专用字段，analysis/action/success_check不得出现h1、q1、c1等内部证据编号。"
+        "输出严格JSON，只有concept_hypotheses数组，最多6项；一项真实证据也可以分析，不强凑数量。"
+        "evidence_ids只填写在专用字段，analysis/correction/action/success_check不得出现h1、q1、c1等内部证据编号。"
         "题目来源、选了什么、漏了什么、错误次数由页面按数据库展示，分析中不要复述这些作答统计，避免把最近一次差异套到历次。"
-        "analysis应解释关键概念的区别与成立条件；action和success_check写具体学习产出。"
+        "analysis解释作答可能反映的概念混淆，correction单独解释正确概念、条件和简短例子；action和success_check写具体学习产出。"
+        "同知识点多道错题应对比共同原因，只有证据支持同一问题时才合并evidence_ids，否则分别分析。"
+        "查准率分母是预测为正，召回率分母是实际为正；学生互选两个公式时可提出混淆假设，但不能断言完全不懂。"
         "反向传播输出层误差依赖损失和激活函数，delta=a-y仅在相应组合下成立，不能当作通用公式。"
         "每项包含evidence_ids（原id数组）、analysis（解释作答差异及关键概念，50至130字）、"
+        "correction（正确概念的简短解释或公式对照，30至200字）、"
         "action（指出要比较、计算或画出的具体内容，20至100字）、"
         "success_check（可检查的学习产出，20至100字）。不要把整段分析写成一句泛泛建议。"
         "可观察的错误与推测原因分开；推测用可能，不能断言粗心、审题失误或心理原因。"
@@ -3142,8 +3145,8 @@ def _model_analysis_v2(db: Session, scope: str, payload: dict[str, Any], run_id:
                           {"role":"user", "content":json.dumps({
                               "scope":scope, "selection_context":context(scope,payload),
                                 "wrong_evidence":model_evidence, "study_targets":learning}, ensure_ascii=False)}],
-            skill_name="diagnose_classroom", prompt_version=f"{scope}-coaching-v3",
-            run_id=run_id, temperature=.1, max_tokens=2200, timeout=90.)
+            skill_name="diagnose_classroom", prompt_version=f"{scope}-coaching-v4",
+            run_id=run_id, temperature=.1, max_tokens=3200, timeout=90.)
         if response.get("finish_reason") == "length":
             raise model_provider.ModelUnavailable("truncated", "模型输出被截断")
         parsed, repaired = parse_model_output(response.get("content") or "")

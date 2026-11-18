@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -560,9 +561,9 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
 </script>
 
 <template>
-  <main v-loading="loading" class="exam-page">
+  <WorkbenchPage v-loading="loading" :scroll="false" class="exam-page">
     <StudentAttemptResult v-if="submitted" :attempt-id="attemptId" :targeted-retest="targetedRetest" />
-    <template v-else>
+    <template v-if="!submitted" #header>
     <header class="exam-toolbar">
       <div class="exam-title">
           <button class="back-button" aria-label="返回" @click="router.push(assignedStudentMode ? '/student' : '/teacher/questions')">←</button>
@@ -589,6 +590,8 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
       <button @click="error = ''">关闭</button>
     </div>
 
+    </template>
+    <template v-if="!submitted">
     <section v-if="submitted" class="result-hero">
       <div>
         <p class="eyebrow">本次成绩</p>
@@ -636,6 +639,7 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
       </aside>
 
       <section v-if="q" class="question-column">
+        <div class="question-content workbench-scroll" tabindex="0" aria-label="当前题目内容">
         <article class="question-card">
           <div class="question-topline">
             <div class="question-tags">
@@ -840,6 +844,7 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
           <el-button text @click="openDispute">对参考答案有疑问？</el-button>
         </article>
 
+        </div>
         <nav class="question-footer" aria-label="题目翻页">
           <el-button :disabled="current === 0" @click="goto(current - 1)">上一题</el-button>
           <button class="mobile-nav-button" @click="navDrawer = true">题号 {{ current + 1 }}/{{ questions.length }}</button>
@@ -890,7 +895,7 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
       </div>
     </el-dialog>
     </template>
-  </main>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
@@ -1045,4 +1050,13 @@ pre { max-width: 100%; overflow: auto; padding: 12px; border-radius: 8px; backgr
 .question-stem{font-size:17px;line-height:var(--reading-line);font-weight:500}
 .learning-note{border-left-color:var(--text-accent)}
 .learning-note strong{color:var(--text-accent)}
+</style>
+
+<style scoped>
+.exam-page.workbench-page{height:100dvh;min-height:0;max-width:none;padding:16px 22px;gap:12px}.exam-page:has(.student-result){padding:0}.exam-toolbar{margin:0;min-height:64px;gap:16px}.exam-layout{height:100%;min-height:0;align-items:stretch}.question-sidebar{position:static;display:flex;flex-direction:column;min-height:0;max-height:none;overflow:hidden;padding:14px}.question-sidebar>.question-grid{flex:1;min-height:0;overflow:auto;align-content:start}.question-sidebar>.sidebar-head,.question-sidebar>.submit-button{flex:none}.question-column{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden}.question-content{flex:1;padding-right:6px}.question-footer{position:static;flex:none;margin:0;padding:10px 0;background:#f5f8fe}.question-card,.feedback-card{padding:20px 24px;border-radius:12px;box-shadow:none}.exam-page :deep(.workbench-page-body){min-height:0}.error-banner{margin:0}.result-hero{background:#f3f7ff}
+@media(max-width:760px){.exam-page.workbench-page{padding:12px}.exam-toolbar{grid-template-columns:1fr auto;gap:10px}.exam-progress{grid-column:1/-1;grid-row:2}.exam-layout{grid-template-columns:1fr}.question-sidebar{display:none}.question-card,.feedback-card{padding:16px}.question-footer{display:flex;flex-wrap:wrap;gap:8px}.mobile-nav-button{display:block}}
+</style>
+
+<style scoped>
+.exam-page.workbench-page:has(.student-result){padding:0;gap:0}
 </style>

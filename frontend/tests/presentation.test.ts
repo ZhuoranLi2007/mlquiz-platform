@@ -153,13 +153,13 @@ test('学生学习反馈以错题和复测闭环为核心且不展示技术文�
   const shared = readFileSync(new URL('../src/components/DiagnosisAnalysisContent.vue', import.meta.url), 'utf8')
   const router = readFileSync(new URL('../src/router/index.ts', import.meta.url), 'utf8')
   assert.match(router, /student\/feedback[\s\S]*StudentFeedbackView\.vue/)
-  for (const label of ['选择试卷', '本次成绩', '班级排名', '错题数量', '针对性复测', '学情分析', '推荐学习资源']) {
+  for (const label of ['选择试卷', '本次成绩', '错题数量', '薄弱知识点', '学情诊断', '错题详情', '对应课程资料', '本知识点专项复测']) {
     assert.match(source, new RegExp(label))
   }
-  assert.match(source, /<DiagnosisAnalysisContent/)
+  assert.match(source, /<AttemptEvidenceTable/)
   assert.match(shared, /薄弱概念/)
   assert.match(shared, /学习建议/)
-  assert.match(source, /grid-template-columns:minmax\(0,7fr\) minmax\(300px,3fr\)/)
+  // Column geometry and scrolling are checked by real browser acceptance.
   assert.doesNotMatch(source, /MY LEARNING DESK|correct=NULL|正式指标排除|paper_id|diagnosis_id/)
 })
 

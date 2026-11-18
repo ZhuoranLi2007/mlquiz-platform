@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute } from 'vue-router'
@@ -376,6 +377,7 @@ async function analyze() {
 }
 
 async function runIntervention() {
+  if (runningAi.value) return
   if (!['student_attempt', 'student_history', 'class_assessment'].includes(scope.value)
     || !result.value?.retest_plan?.ready) return
   runningAi.value = true
@@ -434,7 +436,8 @@ onMounted(loadContext)
 </script>
 
 <template>
-  <div class="analysis-page">
+  <WorkbenchPage :scroll="false" class="analysis-page" label="所选范围诊断报告">
+    <template #header>
     <div class="diagnosis-controls">
     <section class="scope-tabs" aria-label="诊断模式">
       <button type="button" :class="{ active: scope === 'student_attempt' }" :aria-pressed="scope === 'student_attempt'"
@@ -493,6 +496,7 @@ onMounted(loadContext)
     </section>
     </div>
 
+    </template>
     <div v-if="selectionLoading" class="loading-panel">
       <el-skeleton :rows="6" animated />
     </div>
@@ -526,7 +530,11 @@ onMounted(loadContext)
     <div v-else-if="scope === 'class_assessment'" class="empty-selection">
       当前试卷暂无班级作答。
     </div>
-  </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped src="../styles/teacherAnalysis.css"></style>
+
+<style scoped>
+.analysis-page.workbench-page{display:flex;gap:12px}.diagnosis-controls{position:static;margin:0}.scope-tabs,.filters-panel{margin:0}.filters-panel{padding:12px}
+</style>

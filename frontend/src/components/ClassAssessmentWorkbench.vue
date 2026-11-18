@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "./WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import * as echarts from 'echarts'
@@ -149,7 +150,8 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
 </script>
 
 <template>
-  <div class="class-workbench">
+  <WorkbenchPage :scroll="false" class="class-workbench">
+    <template #header>
     <section class="class-overview">
       <div class="class-metrics">
         <article class="metric primary"><span>平均分</span><b>{{ numberText(overview.average_score) }}<small>分</small></b></article>
@@ -157,14 +159,16 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
         <article class="metric bad"><span>最低分</span><b>{{ numberText(overview.lowest_score) }}<small>分</small></b></article>
         <article class="metric people"><span>参考人数</span><b>{{ overview.comparable_student_count ?? participation.scored ?? 0 }}<small>/{{ participation.enrolled || 0 }} 人</small></b></article>
       </div>
+
+    </section>
+
+    </template>
+    <section class="class-body">
+      <main class="errors-column">
       <div class="class-charts">
         <article class="chart-card"><header><b>成绩分布</b><span>{{ numberText(overview.max_score) }} 分 · {{ overview.question_count || 0 }} 题</span></header><div ref="distributionHost" class="chart"></div></article>
         <article class="chart-card"><header><b>各题正确率</b><span>低于 60% 重点标记</span></header><div ref="accuracyHost" class="chart"></div></article>
       </div>
-    </section>
-
-    <section class="class-body">
-      <main class="errors-column">
         <header class="section-title"><div><el-icon><WarningFilled /></el-icon><h2>高频错题（Top 5）</h2></div></header>
         <div v-if="topErrors.length" class="error-grid">
           <article v-for="item in topErrors" :id="`class-question-${item.position}`" :key="item.paper_item_id" class="error-card">
@@ -190,11 +194,11 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
           <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
           <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><LearningResourceList :resources="resources" /></section>
 
-          <section class="retest-section"><h3>班级复测</h3><p>AI 依据班级薄弱知识点生成新题，独立验答后发布。</p><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
+          <section class="retest-section"><h3>班级复测</h3><p>优先从题库选择符合班级薄弱知识点的新题，缺题时由 AI 补充，校验后发布。</p><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
         </section>
       </aside>
     </section>
-  </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
@@ -209,4 +213,8 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
 .stem{font-size:var(--reading-size);font-weight:500;line-height:var(--reading-line)}
 .ai-panel>header{background:#fff}
 .ai-panel h2{font-size:var(--font-size-section);font-weight:600}
+</style>
+
+<style scoped>
+.class-workbench.workbench-page{display:flex;gap:12px}.class-metrics{grid-template-columns:repeat(4,minmax(0,260px))}.class-metrics .metric{min-height:84px;padding:10px 14px}.class-body{height:100%;min-height:0;align-items:stretch}.errors-column,.ai-column{min-height:0;overflow:auto}.ai-panel{position:static}.class-charts{margin-bottom:14px}.chart{height:180px}@media(max-width:700px){.class-metrics{grid-template-columns:1fr 1fr}.class-body{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
 </style>

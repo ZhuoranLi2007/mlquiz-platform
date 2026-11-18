@@ -12,7 +12,7 @@ function type(row:any) {
 </script>
 <template>
   <div v-if="rows.length" class="learning-resource-list">
-    <a v-for="row in rows" :key="row.url" :href="row.url" target="_blank" rel="noopener noreferrer" class="diagnosis-resource-link">
+    <a v-for="row in rows" :key="row.url" :href="row.url" :target="row.source_type === 'local' ? undefined : '_blank'" rel="noopener noreferrer" class="diagnosis-resource-link">
       <small>{{ row.kp_name ? `${row.kp_name} · ` : '' }}{{ type(row) }}</small>
       <b class="resource-title">{{ row.title }}</b>
       <span v-if="row.location" class="resource-location">看这里：{{ row.location }}</span>
@@ -25,6 +25,6 @@ function type(row:any) {
 </template>
 <style scoped>
 .learning-resource-list{display:grid;gap:10px;min-width:0}.diagnosis-resource-link{display:grid;gap:5px;min-width:0;padding:10px;border:1px solid #e1e7ef;border-radius:6px;color:#43546c;text-decoration:none;line-height:1.55}
-.diagnosis-resource-link:hover{border-color:#91a7c6}.resource-title{font-size:14px;color:#263950;overflow-wrap:anywhere}.diagnosis-resource-link small,.diagnosis-resource-link span{font-size:12px;overflow-wrap:anywhere}
-.diagnosis-resource-link small{color:#64748b}.resource-location{color:#44618b}.open-resource{color:#315fc0;font-size:12px;font-weight:500}.no-target-resource{color:#64748b;font-size:13px;line-height:1.6}.learning-resource-list button{border:0;background:none;color:#315fc0;text-align:left;cursor:pointer}
+.diagnosis-resource-link:hover{border-color:#91a7c6}.resource-title{font-size:14px;color:#263950;overflow-wrap:anywhere}.diagnosis-resource-link small,.diagnosis-resource-link span{font-size:14px;overflow-wrap:anywhere}
+.diagnosis-resource-link small{color:#64748b}.resource-location{color:#44618b}.open-resource{color:#315fc0;font-size:14px;font-weight:500}.no-target-resource{color:#64748b;font-size:14px;line-height:1.6}.learning-resource-list button{border:0;background:none;color:#315fc0;text-align:left;cursor:pointer}
 </style>

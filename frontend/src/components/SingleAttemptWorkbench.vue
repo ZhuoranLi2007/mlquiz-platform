@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "./WorkbenchPage.vue"
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Collection, DocumentChecked, Position, Trophy, TrendCharts, WarningFilled } from '@element-plus/icons-vue'
@@ -57,7 +58,8 @@ function resourceType(resource: any) {
 </script>
 
 <template>
-  <div v-if="result" class="single-workbench">
+  <WorkbenchPage :scroll="false" v-if="result" class="single-workbench">
+    <template #header>
     <section class="result-overview" aria-label="本次诊断结果">
       <header class="result-heading">
         <h2>{{ studentLabel || '当前学生' }} · {{ assessmentLabel || '当前试卷' }}</h2>
@@ -82,6 +84,7 @@ function resourceType(resource: any) {
       </div>
     </section>
 
+    </template>
     <section class="diagnosis-body">
       <div class="evidence-column">
         <section class="answers-panel" aria-label="作答诊断">
@@ -105,7 +108,7 @@ function resourceType(resource: any) {
 
           <div class="retest-section">
             <h3>复测建议</h3>
-            <p>AI 依据薄弱知识点生成新题，独立验答后发布。</p>
+            <p>优先从题库选择符合薄弱知识点的新题，缺题时由 AI 补充，校验后发布。</p>
             <div v-if="plan.ready" class="plan-summary"><span>{{ plan.chapters?.map((item: any) => item.title).join('、') || '当前错题章节' }}</span><span>{{ plan.item_count }} 题 · {{ plan.suggested_types?.map(typeLabel).join('、') || '自动匹配题型' }}</span></div>
             <p v-else>{{ plan.reason || '当前没有适合生成复测的错题。' }}</p>
             <div v-if="generatedCandidates.length" class="candidate-note">已生成 {{ generatedCandidates.length }} 道候选题，校验通过后发布。</div>
@@ -116,7 +119,11 @@ function resourceType(resource: any) {
         </section>
       </aside>
     </section>
-  </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped src="../styles/singleAttemptWorkbench.css"></style>
+
+<style scoped>
+.single-workbench.workbench-page{display:flex;gap:12px}.result-overview{gap:10px}.diagnosis-stats{grid-template-columns:repeat(4,minmax(0,260px));background:transparent;border:0;gap:10px;padding:0}.diagnosis-stat{min-height:86px;padding:10px 12px;border:1px solid #dce5f2;border-radius:12px;background:white}.diagnosis-stat strong{font-size:24px}.diagnosis-stat>div>small{font-size:14px}.diagnosis-body{height:100%;min-height:0;align-items:stretch;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.evidence-column,.insight-sidebar{min-height:0;overflow:auto;display:block}.evidence-column>*+*{margin-top:12px}.ai-panel{position:static}.answers-panel{padding:14px}@media(max-width:700px){.diagnosis-stats{grid-template-columns:1fr 1fr}.diagnosis-body{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
+</style>

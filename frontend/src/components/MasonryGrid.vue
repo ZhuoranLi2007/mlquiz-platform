@@ -203,7 +203,7 @@ const debugHeights = computed(() => columnHeights.value.join(','))
   transform: none !important;
 }
 .masonry.is-ready .masonry-item {
-  transition: transform 0.22s ease;
+  transition: none;
 }
 @media (max-width: 680px) {
   .masonry:not(.is-ready) { grid-template-columns: 1fr; }

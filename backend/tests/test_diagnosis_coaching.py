@@ -39,7 +39,7 @@ def test_vague_action_is_replaced_by_a_concrete_study_target():
     plan=result['learning_plan'][0]
     assert 'L1' in plan['action'] and 'L2' in plan['action']
     assert '零权重' in plan['success_check']
-    assert 0 < plan['suggested_minutes'] <= 15
+    assert 'suggested_minutes' not in plan
 
 
 def test_math_json_escaping_is_repaired_without_inventing_content():

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -183,7 +184,8 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateVisibleCapaciti
 </script>
 
 <template>
-  <div v-loading="loading" class="student-tasks-page" :class="{ 'has-notices': testIdentity || loadError }">
+  <WorkbenchPage :scroll="false" v-loading="loading" class="student-tasks-page" :class="{ 'has-notices': testIdentity || loadError }">
+    <template #header>
     <div v-if="testIdentity || loadError" class="task-notices">
       <el-alert v-if="testIdentity" type="warning" :closable="false" title="当前为旧测试账号，不属于正式班。" />
       <el-alert v-if="loadError" type="error" :closable="false">
@@ -200,6 +202,8 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateVisibleCapaciti
       <div class="overview-stat retest-stat"><el-icon class="stat-icon"><Aim /></el-icon><div class="stat-copy"><span>最近复测</span><strong>{{ retestText(latestRetest) }}</strong><small :title="latestRetest ? taskTitle(latestRetest) : undefined">{{ latestRetest ? taskTitle(latestRetest) : '暂无复测任务' }}</small></div></div>
     </section>
 
+    </template>
+    <div class="student-task-panels">
     <section id="pending-section" tabindex="-1" class="pending-section" aria-labelledby="pending-heading">
       <div class="section-heading">
         <div class="heading-copy"><h2 id="pending-heading">待完成任务</h2><span class="section-count">共 {{ visiblePending.length }} 项</span></div>
@@ -248,7 +252,18 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateVisibleCapaciti
       </section>
     </div>
 
-  </div>
+    </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped src="../styles/studentPortal.css"></style>
+
+<style scoped>
+.student-tasks-page.workbench-page{display:flex;gap:12px;overflow:hidden}.student-task-panels{display:grid;grid-template-rows:minmax(130px,45%) minmax(0,1fr);height:100%;min-height:0;gap:14px}.pending-section{grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}.task-grid{max-height:none;min-height:0;overflow:auto}.expired-tasks{max-height:80px;overflow:auto}.records-layout{min-height:0}.records-panel{min-height:0;max-height:none;overflow:hidden}.recent-list,.history-table-wrap{min-height:0;overflow:auto}.overview-stat{min-height:84px}.stat-copy>span,.stat-copy>small,.stat-copy strong small{font-size:14px}.section-heading{flex-wrap:wrap}.overview-strip{grid-template-columns:repeat(5,minmax(0,260px))}
+@media(max-width:1120px){.student-tasks-page.workbench-page{height:100%;min-height:0}.records-layout{grid-template-columns:1fr 1fr}.records-panel{min-height:0;max-height:none}.task-grid{max-height:none}.student-task-panels{grid-template-rows:minmax(120px,45%) minmax(0,1fr)}}
+@media(max-width:700px){.overview-strip{grid-template-columns:repeat(2,minmax(0,260px))}.records-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr;overflow:hidden}.records-panel{min-height:0}.task-tools{flex-wrap:wrap}.student-task-panels{grid-template-rows:minmax(120px,45%) minmax(0,1fr)}}
+</style>
+
+<style scoped>
+.overview-stat{height:86px;min-height:86px;padding:9px 12px}.stat-copy>small{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+</style>

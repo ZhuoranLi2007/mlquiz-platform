@@ -1,0 +1,77 @@
+{
+  "title": "工作台验收20261118-双知识点双学生",
+  "paper_id": "paper_8d6f24ce3c3249f4",
+  "release_id": "release_a8e07f1f0cb94900",
+  "assessment_version_id": "av_7367b55548402028827c56c3",
+  "recipients": [
+    {
+      "recipient_id": "recipient_1b5f9a8f5b904115",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "student_code": "STU001",
+      "linked_account": "stu001",
+      "linked_display_name": "STU001",
+      "online_receivable": true,
+      "status": "assigned",
+      "attempt_id": null,
+      "score": null,
+      "max_score": null,
+      "grading_status": "not_started",
+      "submitted_at": ""
+    },
+    {
+      "recipient_id": "recipient_ef3d650148d244b7",
+      "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+      "student_code": "STU002",
+      "linked_account": "stu002",
+      "linked_display_name": "STU002",
+      "online_receivable": true,
+      "status": "assigned",
+      "attempt_id": null,
+      "score": null,
+      "max_score": null,
+      "grading_status": "not_started",
+      "submitted_at": ""
+    }
+  ],
+  "stu001": {
+    "source_attempt_id": "attempt_d660ce810c684cfd",
+    "source_result": "本次成绩\n0 / 100 分\n得分率\n0%\n错题\n2 题\n已答对\n0 题",
+    "source_submitted": true,
+    "source_feedback": "本卷诊断\n\n本卷已评分2题，答错2题，涉及2个需复习概念。\n\n仅当前学生、当前原卷；同题可涉及多个概念，总错题数按题去重。复测正确率反映本轮题目表现，不等于完全掌握。\n\nL1/L2 正则化\n1 道错题 / 1 道已评分题 · 错误比例 100%\n未映射章节\n复习顺序 1 · 本卷此概念尚未复测\n偏差-方差均衡\n1 道错题 / 1 道已评分题 · 错误比例 100%\n未映射章节\n复习顺序 2 · 本卷此概念尚未复测",
+    "retest_attempt_id": "attempt_edc64a9bc77b4fbc",
+    "retest_result": "本次成绩\n10 / 10 分\n得分率\n100%\n错题\n0 题\n已答对\n5 题",
+    "retest_submitted": true,
+    "updated_feedback": "本卷诊断\n\n本卷已评分2题，答错2题，涉及2个需复习概念。\n\n仅当前学生、当前原卷；同题可涉及多个概念，总错题数按题去重。复测正确率反映本轮题目表现，不等于完全掌握。\n\nL1/L2 正则化\n1 道错题 / 1 道已评分题 · 错误比例 100%\n未映射章节\n复习顺序 1 · 本轮相关题全部答对\n偏差-方差均衡\n1 道错题 / 1 道已评分题 · 错误比例 100%\n未映射章节\n复习顺序 2 · 本轮相关题全部答对",
+    "updated_metrics": "本次成绩\n0 / 100\n班级第 2 / 2 名\n错题数量\n2 / 2 已评分题\n按题去重统计\n薄弱知识点\n2\n依据原卷错题定位\n复测状态\n本轮达标\n第 1 轮 · 100%"
+  },
+  "submit_escape_checked": true,
+  "stu002": {
+    "source_attempt_id": "attempt_7bc74a1a495e4925",
+    "source_result": "本次成绩\n50 / 100 分\n得分率\n50%\n错题\n1 题\n已答对\n1 题",
+    "source_submitted": true,
+    "source_feedback": "本卷诊断\n\n本卷已评分2题，答错1题，涉及1个需复习概念。\n\n仅当前学生、当前原卷；同题可涉及多个概念，总错题数按题去重。复测正确率反映本轮题目表现，不等于完全掌握。\n\n偏差-方差均衡\n1 道错题 / 1 道已评分题 · 错误比例 100%\n未映射章节\n复习顺序 1 · 本卷此概念尚未复测\nL1/L2 正则化\n0 道错题 / 1 道已评分题 · 错误比例 0%\n未映射章节\n原卷相关题已答对 · 本卷此概念尚未复测",
+    "retest_attempt_id": "attempt_b2c33f0d57b24fc1",
+    "retest_result": "本次成绩\n6 / 10 分\n得分率\n60%\n错题\n2 题\n已答对\n3 题",
+    "retest_submitted": true,
+    "updated_feedback": "本卷诊断\n\n本卷已评分2题，答错1题，涉及1个需复习概念。\n\n仅当前学生、当前原卷；同题可涉及多个概念，总错题数按题去重。复测正确率反映本轮题目表现，不等于完全掌握。\n\n偏差-方差均衡\n1 道错题 / 1 道已评分题 · 错误比例 100%\n未映射章节\n复习顺序 1 · 本轮仍有错题\nL1/L2 正则化\n0 道错题 / 1 道已评分题 · 错误比例 0%\n未映射章节\n原卷相关题已答对 · 本轮仍有错题",
+    "updated_metrics": "本次成绩\n50 / 100\n班级第 1 / 2 名\n错题数量\n1 / 2 已评分题\n按题去重统计\n薄弱知识点\n1\n依据原卷错题定位\n复测状态\n本轮未达标\n第 1 轮 · 60%"
+  },
+  "retest_job_id": "job_bb8032dfde1541e8",
+  "class_retest_ui": "班级学情分析\n综合结论\n\n2026-11-18 · 工作台验收20261118-双知识点双学生\n\n本卷有2名学生完成有效评分。优先处理偏差-方差均衡、L1/L2 正则化。\n\n共性问题\n1偏差-方差均衡\n第2题\n涉及1道题，累计2人次错答\n\n作答依据：第2题2/2人答错，常见错误作答为错误（2人）。\n\n复习重点：需要核对的重点：能区分高偏差和高方差，并说明相应调整方向。\n\n2L1/L2 正则化\n第1题\n涉及1道题，累计1人次错答\n\n作答依据：第1题1/2人答错。\n\n复习重点：已有有效作答，但尚未形成至少两人的相同错误模式，暂不能归纳共同错因。\n\n按优先级安排讲评\n偏差-方差均衡\n\n画出训练和测试误差，分别判断欠拟合与过拟合。\n\n完成标准：能区分高偏差和高方差，并说明相应调整方向。\n\nL1/L2 正则化\n\n对照L1、L2惩罚项，比较稀疏解与权重收缩。\n\n完成标准：能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。\n\n查看题目依据\n推荐学习资源\n偏差-方差均衡 · 课程原页 · 可离线阅读\n偏差-方差均衡 · 课程精读\n看这里：12.机器学习的相关理论.pdf · 第11、19、20页\n画出训练和测试误差，分别判断欠拟合与过拟合。\n打开课程精读 →\nL1/L2 正则化 · 课程原页 · 可离线阅读\nL1/L2 正则化 · 课程精读\n看这里：12.机器学习的相关理论.pdf · 第15、16页\n对照L1、L2惩罚项，比较稀疏解与权重收缩。\n打开课程精读 →\n偏差-方差均衡 · 抖音\n第11集 过拟合与 L1 L2 正则化\n看这里：03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）\n画出训练和测试误差，分别判断欠拟合与过拟合。\n打开对应内容 →\nL1/L2 正则化 · docs\nscikit-learn: Logistic Regression\n看这里：scikit-learn: Logistic Regression\n对照L1、L2惩罚项，比较稀疏解与权重收缩。\n打开对应内容 →\n班级复测\n\n优先从题库选择符合班级薄弱知识点的新题，缺题时由 AI 补充，校验后发布。\n\n已生成 11 道候选题，自动筛选并核验后发布。\n班级复测已发布。\n生成并发布班级复测",
+  "retest_release_id": "release_d3d22142b98246b0",
+  "retest_paper_id": "paper_fa221e34bb1f4575",
+  "retest_source_counts": {
+    "ai_generated": 5,
+    "bank_selected": 0,
+    "original_reused": 0
+  },
+  "course_page_jump": "第 20 页 · 12.机器学习的相关理论.pdf",
+  "feedback_interactions": [
+    "知识点切换",
+    "定位第2题",
+    "切换视图保留知识点",
+    "打开真实原页图片",
+    "页码跳转",
+    "返回资源列表保留登录"
+  ]
+}

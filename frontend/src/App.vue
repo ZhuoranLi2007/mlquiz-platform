@@ -62,7 +62,7 @@ onMounted(() => void auth.ensure())
       </div>
     </aside>
     <div class="role-main">
-      <header v-if="!questionBankPage && !teacherDashboardPage" class="role-topbar">
+      <header v-if="!questionBankPage && !teacherDashboardPage && !studentFeedbackPage" class="role-topbar">
         <button class="mobile-menu" @click="mobileOpen=true">☰</button>
         <div><span>{{ studentTaskPage ? '学生端 › 我的任务' : roleLabel }}</span><h1><el-icon v-if="studentTaskPage" class="task-title-icon"><Tickets /></el-icon>{{ title }}<small v-if="studentTaskPage" class="task-title-note">查看与完成学习任务，掌握学习进度</small><small v-if="teacherAnalysisPage" class="analysis-title-note">从答卷表现到教学行动</small></h1></div>
         <div class="identity"><span v-if="studentTaskPage" class="task-avatar"><el-icon><UserFilled /></el-icon></span><b>{{ auth.principal.value?.display_name }}</b></div>
@@ -132,4 +132,13 @@ onMounted(() => void auth.ensure())
 @media(max-width:820px){.student-task-shell .role-side{width:min(82vw,300px)}.student-task-shell .role-main{margin-left:0}.student-task-shell .role-topbar{padding:0 16px}}
 @media(max-width:820px){.student-task-shell .task-title-note{display:none}.student-task-shell .role-topbar h1{font-size:21px}}
 @media(max-width:820px){.analysis-title-note{display:none}}
+</style>
+
+<style scoped>
+.student-feedback-shell .role-content{overflow:hidden;padding-top:18px;padding-bottom:18px}
+@media(max-width:820px){.role-shell.student-feedback-shell .role-content{padding-top:64px}}
+</style>
+
+<style scoped>
+.role-content,.question-bank-shell .role-content{overflow:hidden;padding-bottom:16px}.student-task-shell .role-side{width:220px}.student-task-shell .role-main{margin-left:220px}@media(max-width:820px){.student-task-shell .role-main{margin-left:0}.student-task-shell .role-side{width:min(82vw,300px)}}
 </style>

@@ -52,11 +52,11 @@ function refs(row: any) {
     <section v-if="plan.length" class="analysis-section">
       <h3>{{ classMode ? '按优先级安排讲评' : '按顺序复习与自测' }}</h3>
       <ol class="analysis-advice study-plan"><li v-for="row in plan" :key="row.kp_id || row.name">
-        <b>{{ row.name }}</b><small>建议安排 {{ row.suggested_minutes }} 分钟</small>
+        <b>{{ row.name }}</b>
         <p><AnalysisRichText :text="row.action" /></p>
         <p class="success-check"><strong>完成标准：</strong><AnalysisRichText :text="row.success_check" /></p>
       </li></ol>
-      <p class="study-time-note">用时是复习安排建议；是否掌握仍以新题作答为依据。</p>
+
     </section>
     <section v-else-if="recommendations.length" class="analysis-section">
       <h3>{{ classMode ? '教学建议' : '学习建议' }}</h3>

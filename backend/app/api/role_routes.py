@@ -727,11 +727,15 @@ def _feedback_options(item: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def _student_question_view(item: dict[str, Any]) -> dict[str, Any]:
+    from backend.app.services.feedback_workbench import kp_ids
     reference = item.get("answer_reference") or {}
     comparison = item.get("class_comparison") or {}
     revised = bool(item.get("is_scoring_revision"))
     original = item.get("original_question") or {}
     return {
+        "paper_item_id": item.get("paper_item_id") or item.get("item_id"),
+        "question_id": item.get("question_id"),
+        "kp_ids": kp_ids(item),
         "position": item.get("position"),
         "question_type": item.get("question_type") or item.get("type") or "",
         "stem": item.get("stem") or "",
@@ -750,6 +754,7 @@ def _student_question_view(item: dict[str, Any]) -> dict[str, Any]:
             "title": (item.get("chapter") or {}).get("title") or "未映射章节",
         },
         "knowledge_point": {
+            "kp_id": (kp_ids(item) or [""])[0],
             "name": (item.get("knowledge_point") or {}).get("name")
                     or item.get("concept_name") or "本题对应概念",
         },
@@ -788,6 +793,7 @@ def _student_analysis_view(payload: dict[str, Any]) -> dict[str, Any]:
             "model_status": analysis.get("model_status"),
             "summary": analysis.get("summary") or "",
             "concepts": [{
+                "kp_id": row.get("kp_id") or "",
                 "name": row.get("name") or "",
                 "chapter": row.get("chapter") or "",
                 "question_positions": row.get("question_positions") or [],
@@ -1013,6 +1019,9 @@ def student_feedback_detail(
     retest_history = []
     for round_row in payload.get("retest_history") or []:
         retest_history.append({
+            **{key: round_row.get(key) for key in (
+                "cycle_id", "kp_ids", "remaining_kp_ids", "untested_kp_ids",
+                "release_id", "release_title", "retest_attempt_id", "result_determinable")},
             "round": round_row.get("round"),
             "status": round_row.get("status"),
             "threshold": round_row.get("threshold"),
@@ -1024,7 +1033,9 @@ def student_feedback_detail(
             "wrong_items": [_student_question_view(row)
                             for row in round_row.get("wrong_items") or []],
         })
+    from backend.app.services.feedback_workbench import build as feedback_workbench
     return {
+        "diagnosis_workbench": feedback_workbench(payload, _student_question_view),
         "attempt_id": attempt.attempt_id,
         "assessment": {
             "title": (payload.get("assessment") or {}).get("title") or "课堂测验",

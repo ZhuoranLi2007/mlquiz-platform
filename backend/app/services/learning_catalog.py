@@ -45,8 +45,7 @@ _ROWS = {
 }
 
 CATALOG = {f'kp.{key}': {'terms': terms.split('|'), 'document_prefix': prefix,
-                       'action': action, 'success_check': check,
-                       'suggested_minutes': 10 if any(w in key for w in ('gradient','kkt','objective','bp')) else 8}
+                       'action': action, 'success_check': check}
            for key,(terms,prefix,action,check) in _ROWS.items()}
 
 def target(kp_id: str, name: str = '') -> dict:
@@ -54,5 +53,4 @@ def target(kp_id: str, name: str = '') -> dict:
         'terms': [name] if name else [], 'document_prefix': '',
         'action': f'对照{name or "本题"}的原题与解析，逐项写明正确与错误判断的依据。',
         'success_check': '不看答案复述判断依据，再完成一道不同条件的新题。',
-        'suggested_minutes': 8,
     }

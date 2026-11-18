@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Calendar, Clock, Document, Plus, Promotion, Upload, User } from '@element-plus/icons-vue'
@@ -92,6 +93,7 @@ function toggleWholeClass() {
 }
 
 async function publish() {
+  if (publishing.value) return
   if (!paperId.value || !selectedStudents.value.length) {
     ElMessage.warning('请选择试卷和接收学生')
     return
@@ -205,7 +207,8 @@ onMounted(load)
 </script>
 
 <template>
-  <div v-loading="loading" class="teacher-dashboard">
+  <WorkbenchPage v-loading="loading" :scroll="false" class="teacher-dashboard">
+    <template #header>
     <section class="dashboard-head">
       <div>
         <span class="page-kicker">教师端</span>
@@ -230,6 +233,7 @@ onMounted(load)
       </article>
     </section>
 
+    </template>
     <section class="release-panel">
       <header class="panel-head">
         <div><el-icon><Calendar /></el-icon><h3>最近发布</h3></div>
@@ -321,7 +325,7 @@ onMounted(load)
         </el-table>
       </template>
     </el-drawer>
-  </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
@@ -329,4 +333,8 @@ onMounted(load)
 @media(max-width:1180px){.metric-grid article{padding:16px;gap:12px}.metric-icon{width:45px;height:45px}.release-table-head,.release-row{grid-template-columns:minmax(210px,1.5fr) 120px minmax(165px,1fr) 100px}.release-table-head>span:nth-child(4),.release-time{display:none}}
 @media(max-width:900px){.dashboard-head{align-items:flex-start;flex-direction:column}.metric-grid{grid-template-columns:repeat(2,1fr)}.release-table-head{display:none}.release-row{grid-template-columns:1fr auto;gap:10px;padding:15px 8px}.release-audience{grid-column:1}.release-progress{grid-column:1}.feedback-button{grid-column:2;grid-row:1/4}.head-actions{width:100%}.head-actions .el-button{flex:1}}
 @media(max-width:560px){.dashboard-head h2{font-size:26px}.head-actions{display:grid;grid-template-columns:1fr}.metric-grid{gap:10px}.metric-grid article{min-height:92px}.metric-icon{display:none}.metric-grid b{font-size:27px}.panel-head{align-items:flex-start;flex-direction:column;padding:15px}.panel-actions{width:100%;justify-content:space-between}.release-table{padding:0 12px 8px}.feedback-summary{gap:8px}.feedback-summary article{padding:12px}.feedback-table{font-size:14px}}
+</style>
+
+<style scoped>
+.teacher-dashboard.workbench-page{display:flex;gap:12px}.teacher-dashboard .metric-grid{grid-template-columns:repeat(4,minmax(0,260px));gap:12px}.metric-grid article{min-height:84px;padding:12px 16px}.release-panel{height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden}.release-panel .panel-head{flex:none}.release-table{flex:1;min-height:0;overflow:auto}.release-table-head{position:sticky;top:0;z-index:1;background:#f4f7fc}.dashboard-head{margin:0}.dashboard-head h2{font-size:26px}@media(max-width:700px){.teacher-dashboard .metric-grid{grid-template-columns:repeat(2,minmax(0,260px))}.release-table{overflow:auto}}
 </style>

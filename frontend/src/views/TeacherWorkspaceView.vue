@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
@@ -334,6 +335,7 @@ function openCompose(mode: 'manual' | 'ai' | 'mixed' = 'ai') {
 }
 
 async function createDraft() {
+  if (composing.value) return
   if (composeErrors.value.length) {
     ElMessage.warning(composeErrors.value[0])
     return
@@ -401,7 +403,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="workspace-page" :aria-busy="loading">
+  <WorkbenchPage class="workspace-page" :aria-busy="loading" label="题库题目列表">
+    <template #header>
     <header class="page-head">
       <div>
         <h2>题库与组卷</h2>
@@ -469,6 +472,7 @@ onBeforeUnmount(() => {
       <div><el-button @click="selectedIds = []">清空</el-button><el-button type="primary" @click="openCompose('manual')">用已选题目组卷</el-button></div>
     </section>
 
+    </template>
     <section v-if="loading" class="list-state loading-state" aria-live="polite">
       <el-skeleton :rows="8" animated />
       <p>正在加载题库…</p>
@@ -624,7 +628,7 @@ onBeforeUnmount(() => {
       </div>
       <el-empty v-else description="暂无教师组卷草稿" />
     </el-drawer>
-  </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
@@ -1369,4 +1373,8 @@ onBeforeUnmount(() => {
     grid-template-columns: 1fr;
   }
 }
+</style>
+
+<style scoped>
+.workspace-page.workbench-page{display:flex;gap:12px}.page-head,.filter-panel,.bank-summary,.selection-bar{margin-top:0;margin-bottom:0}.filter-panel{padding:12px 16px}.page-head h1,.page-head h2{font-size:26px}
 </style>

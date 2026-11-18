@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -90,13 +91,17 @@ function showQuiz(item: any) {
     && activeCategory.value !== 'ai_answer'
 }
 
+const previewItem = ref<any>(null)
+const previewPage = ref(1)
+
 function openPreview(item: any) {
   const url = item.preview?.file_url
   if (!url) {
     ElMessage.info(item.preview?.note || '该文件暂不支持在线预览')
     return
   }
-  window.open(url, '_blank', 'noopener')
+  previewPage.value = 1
+  previewItem.value = item
 }
 
 function download(item: any) {
@@ -169,7 +174,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="materials-page" :class="{ embedded }">
+  <WorkbenchPage class="materials-page" :class="{ embedded }" label="教学资料列表">
+    <template #header>
     <div class="toolbar">
       <div class="category-filter" aria-label="资料类型筛选">
         <button v-for="category in CATEGORIES" :key="category.key" type="button"
@@ -187,6 +193,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
+    </template>
     <div v-loading="loadingUploads" class="material-grid">
       <article v-for="item in rows" :key="item.upload_id" class="material-card">
         <button type="button" class="fav-btn" :class="{ on: item.favorited }"
@@ -240,7 +247,12 @@ onBeforeUnmount(() => {
       class="code-dialog">
       <pre class="code-view"><code>{{ codeText }}</code></pre>
     </el-dialog>
-  </section>
+    <el-dialog :model-value="Boolean(previewItem)" :title="previewItem?.card_title || '资料阅读'" width="min(1160px, 96vw)" @close="previewItem=null" class="material-reader-dialog">
+      <div class="workbench-toolbar"><span>页码</span><el-input-number v-model="previewPage" :min="1" :precision="0" aria-label="PDF页码" /><a :href="previewItem?.preview?.file_url" target="_blank" rel="noopener">在新标签打开原文件</a></div>
+      <iframe v-if="previewItem" :key="`${previewItem.upload_id}-${previewPage}`" :src="`${previewItem.preview.file_url}#page=${previewPage}`" title="课程资料阅读区" class="material-reader" />
+      <template #footer><el-button @click="previewItem=null">返回资源列表</el-button></template>
+    </el-dialog>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
@@ -358,4 +370,12 @@ onBeforeUnmount(() => {
 <style>
 .code-dialog { border-radius: 14px; max-width: 94vw; }
 .code-dialog .el-dialog__body { padding-top: 8px; }
+</style>
+
+<style scoped>
+.materials-page.workbench-page{display:flex;gap:12px}.toolbar{margin:0;flex-wrap:wrap}
+</style>
+
+<style scoped>
+.material-reader{display:block;width:100%;height:calc(100dvh - 230px);min-height:150px;margin-top:12px;border:1px solid #dce5f2}
 </style>

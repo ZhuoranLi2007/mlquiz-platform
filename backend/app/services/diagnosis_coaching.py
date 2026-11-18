@@ -94,6 +94,7 @@ def coaching(scope, evidence, payload, model_output=None, model_meta=None):
         analysis = concrete_text(item.get('analysis'), 150)
         action = concrete_text(item.get('action'), 140)
         check = concrete_text(item.get('success_check'), 140)
+        correction = concrete_text(item.get('correction'), 240)
         if not analysis:
             rejected += 1; continue
         for identifier in ids:
@@ -104,7 +105,9 @@ def coaching(scope, evidence, payload, model_output=None, model_meta=None):
                 (not row.get('common_missed_keys') and re.search('漏选|少选', analysis)) or
                 (not row.get('common_extra_keys') and re.search('错选|误选|多选', analysis))):
                 rejected += 1; continue
-            accepted[str(identifier)] = {'analysis': analysis, 'action': action, 'success_check': check}
+            accepted[str(identifier)] = {'analysis': analysis, 'correction': correction,
+                                         'action': action, 'success_check': check,
+                                         'evidence_ids': list(map(str, ids))}
     groups = {}
     for row in sorted(rows, key=lambda r: -_priority(r, scope)):
         key = row.get('kp_id') or f'unmapped:{row.get("chapter", "")}:{row["id"]}'
@@ -145,10 +148,14 @@ def coaching(scope, evidence, payload, model_output=None, model_meta=None):
                          'priority': priority, 'priority_reason': reason,
                          'question_positions': positions, 'question_refs': refs,
                          'observation': observation, 'analysis': analysis,
-                         'analysis_source': 'model' if model else 'evidence_rules'})
+                         'analysis_source': 'model' if model else 'evidence_rules',
+                         'interpretations': list({tuple(accepted[r['id']]['evidence_ids']): {
+                             **accepted[r['id']], 'analysis_source': 'model',
+                             'question_positions': list(dict.fromkeys(p for identifier in accepted[r['id']]['evidence_ids']
+                                 for p in allowed[identifier].get('positions') or []))}
+                             for r in related if r['id'] in accepted}.values())})
         plan.append({'priority': priority, 'kp_id': kp, 'name': name, 'question_refs': refs,
                      'action': action, 'success_check': check,
-                     'suggested_minutes': guide['suggested_minutes'],
                      'resource_ids': [r.get('resource_id') for r in links],
                      'resources': links[:2]})
     has_scores = bool((payload.get('score_summary') or {}).get('scored_items') or

@@ -54,8 +54,6 @@ def material_detail(kp_id: str) -> dict | None:
     } for page in item['pages']]
     return {'kp_id': kp_id, 'name': item['name'], 'pages': pages,
             'action': item['action'], 'success_check': item['success_check'],
-            'suggested_minutes': item['suggested_minutes'],
-            'duration_basis': '建议复习用时，不是原视频时长或掌握承诺',
             'reading_note': ('P(c|x) 是后验概率，P(x|c) 是类条件概率（在固定样本下视作似然）。'
                 '课件第7页的乘积省略了分母 P(x)，应理解为与后验成比例的分类得分；'
                 '比较类别大小可省略共同分母，计算后验概率时仍需归一化。'
@@ -88,7 +86,6 @@ def recommend(db, kp_ids, limit: int = 12) -> list[dict]:
                 'kp_id': kp_id, 'kp_ids': [kp_id], 'kp_name': name,
                 'reason': guide['action'], 'study_focus': guide['action'],
                 'success_check': guide['success_check'],
-                'suggested_minutes': guide['suggested_minutes'],
                 'location': f'{local["pages"][0]["title"]} · 第{numbers}页',
                 'source_refs': [{'document_id':p['document_id'],'page':p['page'],
                                  'chunk_id':p['chunk_id']} for p in local['pages']],

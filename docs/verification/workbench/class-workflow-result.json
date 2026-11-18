@@ -1,0 +1,2433 @@
+{
+  "thread_id": "teacher-job:job_bb8032dfde1541e8",
+  "graph": "teacher_intervention_graph",
+  "status": "succeeded",
+  "stages": [
+    {
+      "node": "diagnose",
+      "detail": {
+        "diagnosis_id": "diag_9ca507eda0c741ef",
+        "status": "succeeded",
+        "evidence_count": 4,
+        "weak_kp_ids": [
+          "kp.eval.bias_var",
+          "kp.regularization.l1l2"
+        ],
+        "weak_chapter_ids": []
+      }
+    },
+    {
+      "node": "recommend_resources",
+      "detail": {
+        "status": "succeeded",
+        "count": 4
+      }
+    },
+    {
+      "node": "generate_retest_candidates",
+      "detail": {
+        "status": "succeeded",
+        "candidate_count": 11
+      }
+    },
+    {
+      "node": "validate_and_publish_retest",
+      "detail": {
+        "status": "published",
+        "paper_id": "paper_fa221e34bb1f4575",
+        "release": {
+          "release_id": "release_d3d22142b98246b0",
+          "title": "班级针对性复测",
+          "instructions": "",
+          "release_type": "retest",
+          "status": "published",
+          "due_at": "",
+          "published_at": "2026-11-18T02:27:30+00:00",
+          "assessment_version_id": "av_b3b98e9b37f995c31518fac8",
+          "assessment_id": "assessment_85fa3fa5d50f46eda1801bee",
+          "paper_id": "paper_fa221e34bb1f4575",
+          "paper_title": "当前错题概念 · 针对性复测（第1轮）",
+          "item_count": 5,
+          "estimated_minutes": 9,
+          "recipient_count": 16,
+          "submitted_count": 0,
+          "pending_count": 16,
+          "expired_count": 0,
+          "recipients": [
+            {
+              "recipient_id": "recipient_cab72b19cc374ce4",
+              "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+              "student_code": "STU001",
+              "linked_account": "stu001",
+              "linked_display_name": "STU001",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_2c3f0d3176c446c4",
+              "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+              "student_code": "STU002",
+              "linked_account": "stu002",
+              "linked_display_name": "STU002",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_33ac29df49f64e09",
+              "student_id": "student_59481ef3a5c2d7175b1a29c9ab6769f74033d916",
+              "student_code": "STU003",
+              "linked_account": "stu003",
+              "linked_display_name": "STU003",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_2aa3b893ffa04828",
+              "student_id": "student_8dd81e1e47c50442fa067070e617c2c278f31088",
+              "student_code": "STU004",
+              "linked_account": "stu004",
+              "linked_display_name": "STU004",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_c08e8a2e2aa94313",
+              "student_id": "student_ecc54b571c745ef761efbe3c0c427d986f364ffd",
+              "student_code": "STU005",
+              "linked_account": "stu005",
+              "linked_display_name": "STU005",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_97185d13ecf9499c",
+              "student_id": "student_e941e8a441774687a9b679d68dbfeebfbb6ad3c0",
+              "student_code": "STU006",
+              "linked_account": "stu006",
+              "linked_display_name": "STU006",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_f0db0649075e49c5",
+              "student_id": "student_eb4b728b03acd11352d3d00f3d352886bff7c54d",
+              "student_code": "STU007",
+              "linked_account": "stu007",
+              "linked_display_name": "STU007",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_83e218ad3fe942c1",
+              "student_id": "student_95638f520fced3811a7c766cc1bef4c52f8f859e",
+              "student_code": "STU008",
+              "linked_account": "stu008",
+              "linked_display_name": "STU008",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_b59fdd4478614c69",
+              "student_id": "student_fed67b43fdcf04968e87ba29765847fef43c63b6",
+              "student_code": "STU009",
+              "linked_account": "stu009",
+              "linked_display_name": "STU009",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_70171c017ea34808",
+              "student_id": "student_bcade85c1ca5c710a6fe064f93a7415aa2aaa3ac",
+              "student_code": "STU010",
+              "linked_account": "stu010",
+              "linked_display_name": "STU010",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_19723050f27f44c5",
+              "student_id": "student_3446947f9cd4aef13992916d714822eb5e28e730",
+              "student_code": "STU011",
+              "linked_account": "stu011",
+              "linked_display_name": "STU011",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_129d58bc12c64b73",
+              "student_id": "student_ad83241471db7c55bb0edd81abdc804259323b64",
+              "student_code": "STU012",
+              "linked_account": "stu012",
+              "linked_display_name": "STU012",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_c521915c9a054385",
+              "student_id": "student_becb1690c7e788ad4292bc8e1b7b16bc82d7f375",
+              "student_code": "STU013",
+              "linked_account": "stu013",
+              "linked_display_name": "STU013",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_8a02c44f1fe94540",
+              "student_id": "student_bf59a3f15082274dd92ab3cfc4b535bb4f533617",
+              "student_code": "STU014",
+              "linked_account": "stu014",
+              "linked_display_name": "STU014",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_b91ce63de48343cf",
+              "student_id": "student_71b74dce070388d4143489dbb1358e275975839e",
+              "student_code": "STU015",
+              "linked_account": "stu015",
+              "linked_display_name": "STU015",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            },
+            {
+              "recipient_id": "recipient_07c29d09bb454187",
+              "student_id": "student_a8f643c6da563a35c3bfa308cfc8153f7e480e15",
+              "student_code": "STU016",
+              "linked_account": "stu016",
+              "linked_display_name": "STU016",
+              "online_receivable": true,
+              "status": "assigned",
+              "attempt_id": null,
+              "score": null,
+              "max_score": null,
+              "grading_status": "not_started",
+              "submitted_at": ""
+            }
+          ],
+          "source_diagnosis_id": "diag_9ca507eda0c741ef",
+          "source_attempt_id": "",
+          "workflow_run_id": "teacher-job:job_bb8032dfde1541e8",
+          "targeted_retest": null
+        },
+        "question_source": "ai_generated",
+        "source_counts": {
+          "ai_generated": 5,
+          "bank_selected": 0,
+          "original_reused": 0
+        },
+        "candidate_question_ids": [
+          "aiq_7ffbc38ab4614c54",
+          "aiq_e7d6c471f2b340a6",
+          "aiq_4edb202fd43e4243",
+          "aiq_1930c82113ed40a2",
+          "aiq_cff23c96d84e4cd8"
+        ],
+        "rejected_candidates": [
+          {
+            "question_id": "aiq_0baa2e4e0b1c469e",
+            "reason": "复测题与题库已有题目过于相似"
+          },
+          {
+            "question_id": "aiq_f22a1e19b5b34856",
+            "reason": "复测题与题库已有题目过于相似"
+          },
+          {
+            "question_id": "aiq_3289d0c13ea84357",
+            "reason": "复测题与题库已有题目过于相似"
+          },
+          {
+            "question_id": "aiq_00e875d4359044ec",
+            "reason": "复测题与题库已有题目过于相似"
+          }
+        ],
+        "chapter_ids": [],
+        "round": 1,
+        "cycle_id": "retestcycle_3cdc5a3111e84cc2",
+        "cycle_ids": [
+          "retestcycle_0275845651a74ffa",
+          "retestcycle_3cdc5a3111e84cc2"
+        ],
+        "threshold": 0.8,
+        "validation": "automatic_retest_v2_chapter",
+        "target_kp_ids": [
+          "kp.eval.bias_var",
+          "kp.regularization.l1l2"
+        ],
+        "remaining_kp_ids": []
+      }
+    }
+  ],
+  "outputs": {
+    "diagnosis": {
+      "skill": "diagnose_classroom",
+      "result": {
+        "class_view_version": 2,
+        "classroom": {
+          "classroom_id": "class_783dbb1fb6d9cc66e4221a0744c6753a90b4fb78",
+          "name": "2025秋机器学习"
+        },
+        "assessment": {
+          "assessment_id": "assessment_d201219f85a517711404aa6a",
+          "assessment_version_id": "av_7367b55548402028827c56c3",
+          "quiz_code": "paper_8d6f24ce3c3249f4",
+          "title": "工作台验收20261118-双知识点双学生",
+          "scheduled_at": "",
+          "version_no": 1
+        },
+        "scored_submission_dates": [
+          "2026-11-18"
+        ],
+        "participation": {
+          "enrolled": 16,
+          "scored": 2,
+          "absent": 0,
+          "pending_key": 0,
+          "ungraded": 0,
+          "no_submission": 14
+        },
+        "score_overview": {
+          "average_score": 25.0,
+          "highest_score": 50.0,
+          "lowest_score": 0.0,
+          "max_score": 100.0,
+          "question_count": 2,
+          "comparable_student_count": 2,
+          "basis": "仅统计同一固定试卷版本中全部题目均有可靠评分的答卷；缺考、未完成与部分评分不混入平均分。"
+        },
+        "score_distribution": {
+          "basis": "每名学生有效题项得分率，不比较不同满分的原始总分",
+          "mean": 0.25,
+          "median": 0.25,
+          "bins": [
+            {
+              "label": "0-49",
+              "count": 1
+            },
+            {
+              "label": "50-59",
+              "count": 1
+            },
+            {
+              "label": "60-69",
+              "count": 0
+            },
+            {
+              "label": "70-79",
+              "count": 0
+            },
+            {
+              "label": "80-89",
+              "count": 0
+            },
+            {
+              "label": "90-100",
+              "count": 0
+            }
+          ],
+          "comparable_bins": [
+            {
+              "label": "0-49",
+              "count": 1
+            },
+            {
+              "label": "50-59",
+              "count": 1
+            },
+            {
+              "label": "60-69",
+              "count": 0
+            },
+            {
+              "label": "70-79",
+              "count": 0
+            },
+            {
+              "label": "80-89",
+              "count": 0
+            },
+            {
+              "label": "90-100",
+              "count": 0
+            }
+          ]
+        },
+        "question_analysis": [
+          {
+            "paper_item_id": "item_ee3d3e6699024439",
+            "position": 1,
+            "question_id": "seed_human_tf_lasso_l2",
+            "question_version": 1,
+            "options": [],
+            "stem": "LASSO 使用的是 L2 正则化。",
+            "question_type": "true_false",
+            "chapter_id": "",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "aux_kp_ids": [],
+            "difficulty": "基础",
+            "cognitive_level": "理解",
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": false
+              },
+              "explanation": "复习整合版 p203 题11：LASSO 使用 L1 正则化",
+              "rubric": {},
+              "authority_status": "snapshot_rule",
+              "authority_label": "固定试卷答案键",
+              "source": "paper_snapshot"
+            },
+            "is_scoring_revision": false,
+            "scoring_reference_status": "available",
+            "knowledge_point": {
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化"
+            },
+            "chapter": {
+              "chapter_id": "",
+              "title": ""
+            },
+            "denominator": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "zero_score_count": 1,
+            "correct_rate": 0.5,
+            "excluded": {
+              "no_submission": 14
+            },
+            "wrong_answer_distribution": [
+              {
+                "answer": "正确",
+                "count": 1
+              }
+            ],
+            "answer_mapping_counts": {
+              "reliable": 1
+            },
+            "common_wrong_answers": [],
+            "high_frequency_wrong_answer": "错误作答分散",
+            "high_frequency_wrong_count": 0
+          },
+          {
+            "paper_item_id": "item_3df2a7c93102400e",
+            "position": 2,
+            "question_id": "seed_human_tf_overfit",
+            "question_version": 1,
+            "options": [],
+            "stem": "过拟合的典型表现是训练错误低，但验证集/测试集错误率高且不稳定。",
+            "question_type": "true_false",
+            "chapter_id": "",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "aux_kp_ids": [],
+            "difficulty": "基础",
+            "cognitive_level": "理解",
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": true
+              },
+              "explanation": "2019-2020(A) 是非题第5题；预测分析标注为『对』",
+              "rubric": {},
+              "authority_status": "snapshot_rule",
+              "authority_label": "固定试卷答案键",
+              "source": "paper_snapshot"
+            },
+            "is_scoring_revision": false,
+            "scoring_reference_status": "available",
+            "knowledge_point": {
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡"
+            },
+            "chapter": {
+              "chapter_id": "",
+              "title": ""
+            },
+            "denominator": 2,
+            "correct_count": 0,
+            "incorrect_count": 2,
+            "zero_score_count": 2,
+            "correct_rate": 0.0,
+            "excluded": {
+              "no_submission": 14
+            },
+            "wrong_answer_distribution": [
+              {
+                "answer": "错误",
+                "count": 2
+              }
+            ],
+            "answer_mapping_counts": {
+              "reliable": 2
+            },
+            "common_wrong_answers": [
+              {
+                "answer": "错误",
+                "count": 2
+              }
+            ],
+            "high_frequency_wrong_answer": "错误",
+            "high_frequency_wrong_count": 2
+          }
+        ],
+        "high_frequency_errors": [
+          {
+            "paper_item_id": "item_3df2a7c93102400e",
+            "position": 2,
+            "question_id": "seed_human_tf_overfit",
+            "question_version": 1,
+            "options": [],
+            "stem": "过拟合的典型表现是训练错误低，但验证集/测试集错误率高且不稳定。",
+            "question_type": "true_false",
+            "chapter_id": "",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "aux_kp_ids": [],
+            "difficulty": "基础",
+            "cognitive_level": "理解",
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": true
+              },
+              "explanation": "2019-2020(A) 是非题第5题；预测分析标注为『对』",
+              "rubric": {},
+              "authority_status": "snapshot_rule",
+              "authority_label": "固定试卷答案键",
+              "source": "paper_snapshot"
+            },
+            "is_scoring_revision": false,
+            "scoring_reference_status": "available",
+            "knowledge_point": {
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡"
+            },
+            "chapter": {
+              "chapter_id": "",
+              "title": ""
+            },
+            "denominator": 2,
+            "correct_count": 0,
+            "incorrect_count": 2,
+            "zero_score_count": 2,
+            "correct_rate": 0.0,
+            "excluded": {
+              "no_submission": 14
+            },
+            "wrong_answer_distribution": [
+              {
+                "answer": "错误",
+                "count": 2
+              }
+            ],
+            "answer_mapping_counts": {
+              "reliable": 2
+            },
+            "common_wrong_answers": [
+              {
+                "answer": "错误",
+                "count": 2
+              }
+            ],
+            "high_frequency_wrong_answer": "错误",
+            "high_frequency_wrong_count": 2
+          },
+          {
+            "paper_item_id": "item_ee3d3e6699024439",
+            "position": 1,
+            "question_id": "seed_human_tf_lasso_l2",
+            "question_version": 1,
+            "options": [],
+            "stem": "LASSO 使用的是 L2 正则化。",
+            "question_type": "true_false",
+            "chapter_id": "",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "aux_kp_ids": [],
+            "difficulty": "基础",
+            "cognitive_level": "理解",
+            "max_score": 50.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "value": false
+              },
+              "explanation": "复习整合版 p203 题11：LASSO 使用 L1 正则化",
+              "rubric": {},
+              "authority_status": "snapshot_rule",
+              "authority_label": "固定试卷答案键",
+              "source": "paper_snapshot"
+            },
+            "is_scoring_revision": false,
+            "scoring_reference_status": "available",
+            "knowledge_point": {
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化"
+            },
+            "chapter": {
+              "chapter_id": "",
+              "title": ""
+            },
+            "denominator": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "zero_score_count": 1,
+            "correct_rate": 0.5,
+            "excluded": {
+              "no_submission": 14
+            },
+            "wrong_answer_distribution": [
+              {
+                "answer": "正确",
+                "count": 1
+              }
+            ],
+            "answer_mapping_counts": {
+              "reliable": 1
+            },
+            "common_wrong_answers": [],
+            "high_frequency_wrong_answer": "错误作答分散",
+            "high_frequency_wrong_count": 0
+          }
+        ],
+        "chapters": [],
+        "common_chapter_weaknesses": [],
+        "knowledge_points": [
+          {
+            "kp_id": "kp.eval.bias_var",
+            "name": "偏差-方差均衡",
+            "denominator": 2,
+            "correct_count": 0,
+            "correct_rate": 0.0,
+            "student_count": 2,
+            "evidence_refs": [
+              {
+                "score_id": "score_4a2130e4c4a74847",
+                "attempt_id": "attempt_d660ce810c684cfd",
+                "paper_item_id": "item_3df2a7c93102400e",
+                "authority_status": "paper_snapshot"
+              },
+              {
+                "score_id": "score_6809c684aaef4146",
+                "attempt_id": "attempt_7bc74a1a495e4925",
+                "paper_item_id": "item_3df2a7c93102400e",
+                "authority_status": "paper_snapshot"
+              }
+            ]
+          },
+          {
+            "kp_id": "kp.regularization.l1l2",
+            "name": "L1/L2 正则化",
+            "denominator": 2,
+            "correct_count": 1,
+            "correct_rate": 0.5,
+            "student_count": 2,
+            "evidence_refs": [
+              {
+                "score_id": "score_5829f6b2278e443b",
+                "attempt_id": "attempt_d660ce810c684cfd",
+                "paper_item_id": "item_ee3d3e6699024439",
+                "authority_status": "paper_snapshot"
+              },
+              {
+                "score_id": "score_5ce2409cb3b64f1f",
+                "attempt_id": "attempt_7bc74a1a495e4925",
+                "paper_item_id": "item_ee3d3e6699024439",
+                "authority_status": "paper_snapshot"
+              }
+            ]
+          }
+        ],
+        "common_weaknesses": [
+          {
+            "kp_id": "kp.eval.bias_var",
+            "name": "偏差-方差均衡",
+            "denominator": 2,
+            "correct_count": 0,
+            "correct_rate": 0.0,
+            "student_count": 2,
+            "evidence_refs": [
+              {
+                "score_id": "score_4a2130e4c4a74847",
+                "attempt_id": "attempt_d660ce810c684cfd",
+                "paper_item_id": "item_3df2a7c93102400e",
+                "authority_status": "paper_snapshot"
+              },
+              {
+                "score_id": "score_6809c684aaef4146",
+                "attempt_id": "attempt_7bc74a1a495e4925",
+                "paper_item_id": "item_3df2a7c93102400e",
+                "authority_status": "paper_snapshot"
+              }
+            ]
+          },
+          {
+            "kp_id": "kp.regularization.l1l2",
+            "name": "L1/L2 正则化",
+            "denominator": 2,
+            "correct_count": 1,
+            "correct_rate": 0.5,
+            "student_count": 2,
+            "evidence_refs": [
+              {
+                "score_id": "score_5829f6b2278e443b",
+                "attempt_id": "attempt_d660ce810c684cfd",
+                "paper_item_id": "item_ee3d3e6699024439",
+                "authority_status": "paper_snapshot"
+              },
+              {
+                "score_id": "score_5ce2409cb3b64f1f",
+                "attempt_id": "attempt_7bc74a1a495e4925",
+                "paper_item_id": "item_ee3d3e6699024439",
+                "authority_status": "paper_snapshot"
+              }
+            ]
+          }
+        ],
+        "anonymous_comparison": [
+          {
+            "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+            "display_code": "STU001",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "submitted",
+            "scored_items": 2,
+            "correct_items": 0,
+            "awarded_score": 0.0,
+            "max_score": 100.0,
+            "accuracy": 0.0,
+            "score_rate": 0.0,
+            "fully_comparable": true
+          },
+          {
+            "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+            "display_code": "STU002",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "submitted",
+            "scored_items": 2,
+            "correct_items": 1,
+            "awarded_score": 50.0,
+            "max_score": 100.0,
+            "accuracy": 0.5,
+            "score_rate": 0.5,
+            "fully_comparable": true
+          },
+          {
+            "student_id": "student_59481ef3a5c2d7175b1a29c9ab6769f74033d916",
+            "display_code": "STU003",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_8dd81e1e47c50442fa067070e617c2c278f31088",
+            "display_code": "STU004",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_ecc54b571c745ef761efbe3c0c427d986f364ffd",
+            "display_code": "STU005",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_e941e8a441774687a9b679d68dbfeebfbb6ad3c0",
+            "display_code": "STU006",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_eb4b728b03acd11352d3d00f3d352886bff7c54d",
+            "display_code": "STU007",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_95638f520fced3811a7c766cc1bef4c52f8f859e",
+            "display_code": "STU008",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_fed67b43fdcf04968e87ba29765847fef43c63b6",
+            "display_code": "STU009",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_bcade85c1ca5c710a6fe064f93a7415aa2aaa3ac",
+            "display_code": "STU010",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_3446947f9cd4aef13992916d714822eb5e28e730",
+            "display_code": "STU011",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_ad83241471db7c55bb0edd81abdc804259323b64",
+            "display_code": "STU012",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_becb1690c7e788ad4292bc8e1b7b16bc82d7f375",
+            "display_code": "STU013",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_bf59a3f15082274dd92ab3cfc4b535bb4f533617",
+            "display_code": "STU014",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_71b74dce070388d4143489dbb1358e275975839e",
+            "display_code": "STU015",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          },
+          {
+            "student_id": "student_a8f643c6da563a35c3bfa308cfc8153f7e480e15",
+            "display_code": "STU016",
+            "inferred_summary": {
+              "basis": "未核验推断评分，仅供参考，不计入正式掌握率",
+              "scored_items": 0,
+              "correct_items": 0,
+              "awarded_score": 0,
+              "max_score": 0,
+              "evidence_refs": [],
+              "reference_diagnosis": {
+                "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+                "evidence_count": 0,
+                "unmapped_evidence_count": 0,
+                "knowledge_points": [],
+                "assumptions": [
+                  "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+                  "推导一致不等于教师标准答案",
+                  "缺考与未评分不按答错计算"
+                ],
+                "formal_mastery": false
+              }
+            },
+            "participation_status": "no_submission",
+            "scored_items": 0,
+            "correct_items": 0,
+            "awarded_score": null,
+            "max_score": null,
+            "accuracy": null,
+            "score_rate": null,
+            "fully_comparable": false
+          }
+        ],
+        "reference_diagnosis": {
+          "basis": "历史反推评分参考层，不进入正式掌握率/知识状态",
+          "evidence_count": 0,
+          "unmapped_evidence_count": 0,
+          "knowledge_points": [],
+          "assumptions": [
+            "依赖历史总分及每题分值正确、答卷选择唯一的假设",
+            "推导一致不等于教师标准答案",
+            "缺考与未评分不按答错计算"
+          ],
+          "formal_mastery": false
+        },
+        "selected_student": null,
+        "evidence_refs": [
+          {
+            "score_id": "score_4a2130e4c4a74847",
+            "attempt_id": "attempt_d660ce810c684cfd",
+            "paper_item_id": "item_3df2a7c93102400e",
+            "authority_status": "paper_snapshot"
+          },
+          {
+            "score_id": "score_6809c684aaef4146",
+            "attempt_id": "attempt_7bc74a1a495e4925",
+            "paper_item_id": "item_3df2a7c93102400e",
+            "authority_status": "paper_snapshot"
+          },
+          {
+            "score_id": "score_5829f6b2278e443b",
+            "attempt_id": "attempt_d660ce810c684cfd",
+            "paper_item_id": "item_ee3d3e6699024439",
+            "authority_status": "paper_snapshot"
+          },
+          {
+            "score_id": "score_5ce2409cb3b64f1f",
+            "attempt_id": "attempt_7bc74a1a495e4925",
+            "paper_item_id": "item_ee3d3e6699024439",
+            "authority_status": "paper_snapshot"
+          }
+        ],
+        "score_sources": {
+          "evidence_count": 4,
+          "by_authority": {
+            "paper_snapshot": 4
+          },
+          "ai_auto_checked_count": 0,
+          "teacher_key_count": 0,
+          "snapshot_rule_count": 4,
+          "note": "AI 自动校验评分可按当前策略计入统计，但不是教师权威标准答案；保留来源与证据数量。历史快照不自动视为教师核验。"
+        },
+        "resources": [
+          {
+            "resource_id": "course.kp.eval.bias_var",
+            "type": "local_course",
+            "source_type": "local",
+            "content_type": "course_pages",
+            "platform": "课程原页",
+            "title": "偏差-方差均衡 · 课程精读",
+            "url": "/learn/kp.eval.bias_var",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+            "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+            "source_refs": [
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 11,
+                "chunk_id": "doc_62cc358de7c7fc_u0011"
+              },
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 19,
+                "chunk_id": "doc_62cc358de7c7fc_u0019"
+              },
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 20,
+                "chunk_id": "doc_62cc358de7c7fc_u0020"
+              }
+            ],
+            "verified": true,
+            "access_status": "offline_available"
+          },
+          {
+            "resource_id": "course.kp.regularization.l1l2",
+            "type": "local_course",
+            "source_type": "local",
+            "content_type": "course_pages",
+            "platform": "课程原页",
+            "title": "L1/L2 正则化 · 课程精读",
+            "url": "/learn/kp.regularization.l1l2",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "kp_name": "L1/L2 正则化",
+            "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+            "location": "12.机器学习的相关理论.pdf · 第15、16页",
+            "source_refs": [
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 15,
+                "chunk_id": "doc_62cc358de7c7fc_u0015"
+              },
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 16,
+                "chunk_id": "doc_62cc358de7c7fc_u0016"
+              }
+            ],
+            "verified": true,
+            "access_status": "offline_available"
+          },
+          {
+            "resource_id": "res.douyin.regularization.7676487498093614235",
+            "type": "external",
+            "source_type": "external",
+            "content_type": "video",
+            "platform": "douyin",
+            "title": "第11集 过拟合与 L1 L2 正则化",
+            "url": "https://www.douyin.com/video/7676487498093614235",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+            "verified": true,
+            "access_status": "ok",
+            "checked_date": "2026-11-16",
+            "verified_scope": "partial",
+            "content_status": "intro_checked"
+          },
+          {
+            "resource_id": "res_es_linear_model_html_logistic_regression",
+            "type": "external",
+            "source_type": "external",
+            "content_type": "article",
+            "platform": "docs",
+            "title": "scikit-learn: Logistic Regression",
+            "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "kp_name": "L1/L2 正则化",
+            "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "location": "scikit-learn: Logistic Regression",
+            "verified": true,
+            "access_status": "ok",
+            "checked_date": "2026-11-05",
+            "verified_scope": "title_only",
+            "content_status": "intro_checked"
+          }
+        ],
+        "weak_kp_ids": [
+          "kp.eval.bias_var",
+          "kp.regularization.l1l2"
+        ],
+        "weak_chapter_ids": [],
+        "retest_plan": {
+          "ready": true,
+          "reason": "将根据本卷高频错题生成同类新题，并自动完成题目检查。",
+          "kp_ids": [
+            "kp.eval.bias_var",
+            "kp.regularization.l1l2"
+          ],
+          "chapter_ids": [],
+          "item_count": 5,
+          "evidence_positions": [
+            2,
+            1
+          ]
+        },
+        "privacy": "课堂聚合仅含匿名代码、状态和评分事实；不返回任何学生原始答案、身份档案、外部身份键或导入原始内容。",
+        "uncertainties": [
+          "共同薄弱仅是聚合表现，不推断学生的心理错因。",
+          "答案键待确认、缺考及 correct=NULL 已排除，真实零分保留。"
+        ],
+        "ai_analysis": {
+          "analysis_version": 3,
+          "status": "evidence_grounded_fallback",
+          "source": "evidence_rules",
+          "summary": "本卷有2名学生完成有效评分。优先处理偏差-方差均衡、L1/L2 正则化。",
+          "context": {
+            "label": "2026-11-18 · 工作台验收20261118-双知识点双学生",
+            "generated_at": "2026-11-18T02:27:01+00:00",
+            "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
+          },
+          "concept_hypotheses": [
+            {
+              "name": "偏差-方差均衡",
+              "kp_id": "kp.eval.bias_var",
+              "chapter": "",
+              "priority": 1,
+              "priority_reason": "涉及1道题，累计2人次错答",
+              "question_positions": [
+                2
+              ],
+              "question_refs": [
+                "第2题"
+              ],
+              "observation": "第2题2/2人答错，常见错误作答为错误（2人）。",
+              "analysis": "需要核对的重点：能区分高偏差和高方差，并说明相应调整方向。",
+              "analysis_source": "evidence_rules",
+              "interpretations": []
+            },
+            {
+              "name": "L1/L2 正则化",
+              "kp_id": "kp.regularization.l1l2",
+              "chapter": "",
+              "priority": 2,
+              "priority_reason": "涉及1道题，累计1人次错答",
+              "question_positions": [
+                1
+              ],
+              "question_refs": [
+                "第1题"
+              ],
+              "observation": "第1题1/2人答错。",
+              "analysis": "已有有效作答，但尚未形成至少两人的相同错误模式，暂不能归纳共同错因。",
+              "analysis_source": "evidence_rules",
+              "interpretations": []
+            }
+          ],
+          "learning_plan": [
+            {
+              "priority": 1,
+              "kp_id": "kp.eval.bias_var",
+              "name": "偏差-方差均衡",
+              "question_refs": [
+                "第2题"
+              ],
+              "action": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+              "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+              "resource_ids": [
+                "course.kp.eval.bias_var",
+                "res.douyin.regularization.7676487498093614235"
+              ],
+              "resources": [
+                {
+                  "resource_id": "course.kp.eval.bias_var",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "偏差-方差均衡 · 课程精读",
+                  "url": "/learn/kp.eval.bias_var",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+                  "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 11,
+                      "chunk_id": "doc_62cc358de7c7fc_u0011"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 19,
+                      "chunk_id": "doc_62cc358de7c7fc_u0019"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 20,
+                      "chunk_id": "doc_62cc358de7c7fc_u0020"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res.douyin.regularization.7676487498093614235",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "video",
+                  "platform": "douyin",
+                  "title": "第11集 过拟合与 L1 L2 正则化",
+                  "url": "https://www.douyin.com/video/7676487498093614235",
+                  "kp_id": "kp.eval.bias_var",
+                  "kp_ids": [
+                    "kp.eval.bias_var"
+                  ],
+                  "kp_name": "偏差-方差均衡",
+                  "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+                  "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-16",
+                  "verified_scope": "partial",
+                  "content_status": "intro_checked"
+                }
+              ]
+            },
+            {
+              "priority": 2,
+              "kp_id": "kp.regularization.l1l2",
+              "name": "L1/L2 正则化",
+              "question_refs": [
+                "第1题"
+              ],
+              "action": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+              "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+              "resource_ids": [
+                "course.kp.regularization.l1l2",
+                "res_es_linear_model_html_logistic_regression"
+              ],
+              "resources": [
+                {
+                  "resource_id": "course.kp.regularization.l1l2",
+                  "type": "local_course",
+                  "source_type": "local",
+                  "content_type": "course_pages",
+                  "platform": "课程原页",
+                  "title": "L1/L2 正则化 · 课程精读",
+                  "url": "/learn/kp.regularization.l1l2",
+                  "kp_id": "kp.regularization.l1l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "kp_name": "L1/L2 正则化",
+                  "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+                  "location": "12.机器学习的相关理论.pdf · 第15、16页",
+                  "source_refs": [
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 15,
+                      "chunk_id": "doc_62cc358de7c7fc_u0015"
+                    },
+                    {
+                      "document_id": "doc_62cc358de7c7fc",
+                      "page": 16,
+                      "chunk_id": "doc_62cc358de7c7fc_u0016"
+                    }
+                  ],
+                  "verified": true,
+                  "access_status": "offline_available"
+                },
+                {
+                  "resource_id": "res_es_linear_model_html_logistic_regression",
+                  "type": "external",
+                  "source_type": "external",
+                  "content_type": "article",
+                  "platform": "docs",
+                  "title": "scikit-learn: Logistic Regression",
+                  "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+                  "kp_id": "kp.regularization.l1l2",
+                  "kp_ids": [
+                    "kp.regularization.l1l2"
+                  ],
+                  "kp_name": "L1/L2 正则化",
+                  "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+                  "location": "scikit-learn: Logistic Regression",
+                  "verified": true,
+                  "access_status": "ok",
+                  "checked_date": "2026-11-05",
+                  "verified_scope": "title_only",
+                  "content_status": "intro_checked"
+                }
+              ]
+            }
+          ],
+          "recommendations": [
+            "第2题：画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "第1题：对照L1、L2惩罚项，比较稀疏解与权重收缩。"
+          ],
+          "evidence_details": [
+            {
+              "ref": "第2题",
+              "observation": "2/2人答错，常见错误作答为错误（2人）。"
+            },
+            {
+              "ref": "第1题",
+              "observation": "1/2人答错。"
+            }
+          ],
+          "retest_summary": null,
+          "validation": {
+            "accepted_count": 0,
+            "rejected_count": 0
+          },
+          "more_focus_count": 0,
+          "common_errors": [
+            {
+              "question_positions": [
+                2
+              ],
+              "observation": "2/2人答错，常见错误作答为错误（2人）。"
+            },
+            {
+              "question_positions": [
+                1
+              ],
+              "observation": "1/2人答错。"
+            }
+          ]
+        }
+      },
+      "evidence_refs": [
+        {
+          "score_id": "score_4a2130e4c4a74847",
+          "attempt_id": "attempt_d660ce810c684cfd",
+          "paper_item_id": "item_3df2a7c93102400e",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "score_id": "score_6809c684aaef4146",
+          "attempt_id": "attempt_7bc74a1a495e4925",
+          "paper_item_id": "item_3df2a7c93102400e",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "score_id": "score_5829f6b2278e443b",
+          "attempt_id": "attempt_d660ce810c684cfd",
+          "paper_item_id": "item_ee3d3e6699024439",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "score_id": "score_5ce2409cb3b64f1f",
+          "attempt_id": "attempt_7bc74a1a495e4925",
+          "paper_item_id": "item_ee3d3e6699024439",
+          "authority_status": "paper_snapshot"
+        }
+      ],
+      "uncertainties": [
+        "共同薄弱仅是聚合表现，不推断学生的心理错因。",
+        "答案键待确认、缺考及 correct=NULL 已排除，真实零分保留。"
+      ],
+      "next_actions": [],
+      "skill_version": "skills-1.0/diagnose_classroom-1.0",
+      "run_id": "run_fab02bdbdb2d4260",
+      "status": "succeeded",
+      "engine": "deterministic",
+      "model": "",
+      "prompt_version": "prompt-1.0",
+      "thread_id": "teacher-job:job_bb8032dfde1541e8",
+      "job_id": "",
+      "error": "",
+      "extra": {
+        "diagnosis_id": "diag_9ca507eda0c741ef",
+        "diagnosis_run_id": "run_fab02bdbdb2d4260",
+        "scope_type": "class_assessment",
+        "level": "class",
+        "target_id": "class_assessment:a0c4e9c5c9d6ab487048dc79"
+      }
+    },
+    "recommendations": {
+      "skill": "recommend_resources",
+      "result": {
+        "kp_ids": [
+          "kp.eval.bias_var",
+          "kp.regularization.l1l2"
+        ],
+        "recommendations": [
+          {
+            "resource_id": "course.kp.eval.bias_var",
+            "type": "local_course",
+            "source_type": "local",
+            "content_type": "course_pages",
+            "platform": "课程原页",
+            "title": "偏差-方差均衡 · 课程精读",
+            "url": "/learn/kp.eval.bias_var",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "success_check": "能区分高偏差和高方差，并说明相应调整方向。",
+            "location": "12.机器学习的相关理论.pdf · 第11、19、20页",
+            "source_refs": [
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 11,
+                "chunk_id": "doc_62cc358de7c7fc_u0011"
+              },
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 19,
+                "chunk_id": "doc_62cc358de7c7fc_u0019"
+              },
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 20,
+                "chunk_id": "doc_62cc358de7c7fc_u0020"
+              }
+            ],
+            "verified": true,
+            "access_status": "offline_available"
+          },
+          {
+            "resource_id": "course.kp.regularization.l1l2",
+            "type": "local_course",
+            "source_type": "local",
+            "content_type": "course_pages",
+            "platform": "课程原页",
+            "title": "L1/L2 正则化 · 课程精读",
+            "url": "/learn/kp.regularization.l1l2",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "kp_name": "L1/L2 正则化",
+            "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "success_check": "能判断L1为何常用于特征选择，且不把L2说成必然产生零权重。",
+            "location": "12.机器学习的相关理论.pdf · 第15、16页",
+            "source_refs": [
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 15,
+                "chunk_id": "doc_62cc358de7c7fc_u0015"
+              },
+              {
+                "document_id": "doc_62cc358de7c7fc",
+                "page": 16,
+                "chunk_id": "doc_62cc358de7c7fc_u0016"
+              }
+            ],
+            "verified": true,
+            "access_status": "offline_available"
+          },
+          {
+            "resource_id": "res.douyin.regularization.7676487498093614235",
+            "type": "external",
+            "source_type": "external",
+            "content_type": "video",
+            "platform": "douyin",
+            "title": "第11集 过拟合与 L1 L2 正则化",
+            "url": "https://www.douyin.com/video/7676487498093614235",
+            "kp_id": "kp.eval.bias_var",
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "kp_name": "偏差-方差均衡",
+            "reason": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "study_focus": "画出训练和测试误差，分别判断欠拟合与过拟合。",
+            "location": "03:38 L1；07:10 L2；08:49 两者区别（页面章节导航）",
+            "verified": true,
+            "access_status": "ok",
+            "checked_date": "2026-11-16",
+            "verified_scope": "partial",
+            "content_status": "intro_checked"
+          },
+          {
+            "resource_id": "res_es_linear_model_html_logistic_regression",
+            "type": "external",
+            "source_type": "external",
+            "content_type": "article",
+            "platform": "docs",
+            "title": "scikit-learn: Logistic Regression",
+            "url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+            "kp_id": "kp.regularization.l1l2",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "kp_name": "L1/L2 正则化",
+            "reason": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "study_focus": "对照L1、L2惩罚项，比较稀疏解与权重收缩。",
+            "location": "scikit-learn: Logistic Regression",
+            "verified": true,
+            "access_status": "ok",
+            "checked_date": "2026-11-05",
+            "verified_scope": "title_only",
+            "content_status": "intro_checked"
+          }
+        ],
+        "uncovered_kp_ids": [],
+        "search_summary": [
+          {
+            "kp_id": "kp.eval.bias_var",
+            "hits": 2
+          },
+          {
+            "kp_id": "kp.regularization.l1l2",
+            "hits": 2
+          }
+        ],
+        "retrieval_mode": "curated_course_pages+verified_resources"
+      },
+      "evidence_refs": [
+        [
+          {
+            "document_id": "doc_62cc358de7c7fc",
+            "page": 11,
+            "chunk_id": "doc_62cc358de7c7fc_u0011"
+          },
+          {
+            "document_id": "doc_62cc358de7c7fc",
+            "page": 19,
+            "chunk_id": "doc_62cc358de7c7fc_u0019"
+          },
+          {
+            "document_id": "doc_62cc358de7c7fc",
+            "page": 20,
+            "chunk_id": "doc_62cc358de7c7fc_u0020"
+          }
+        ],
+        [
+          {
+            "document_id": "doc_62cc358de7c7fc",
+            "page": 15,
+            "chunk_id": "doc_62cc358de7c7fc_u0015"
+          },
+          {
+            "document_id": "doc_62cc358de7c7fc",
+            "page": 16,
+            "chunk_id": "doc_62cc358de7c7fc_u0016"
+          }
+        ]
+      ],
+      "uncertainties": [],
+      "next_actions": [
+        "按推荐位置阅读，再按自测标准解释原错题并参加复测"
+      ],
+      "skill_version": "skills-1.0/recommend_resources-1.0",
+      "run_id": "run_23a97f784474490a",
+      "status": "succeeded",
+      "engine": "deterministic+curated_retrieval",
+      "model": "",
+      "prompt_version": "prompt-1.0",
+      "thread_id": "teacher-job:job_bb8032dfde1541e8",
+      "job_id": "",
+      "error": "",
+      "extra": {}
+    },
+    "generation": {
+      "status": "succeeded",
+      "engine": "model+deterministic_validation",
+      "result": {
+        "candidates": [
+          {
+            "question_id": "aiq_0baa2e4e0b1c469e",
+            "stem": "某团队训练了一个非常复杂的集成模型，其在训练集上误差接近零，但换用不同的训练数据子集重新训练时，模型在固定测试集上的预测结果波动很大。按照偏差—方差理论，该现象",
+            "question_type": "single_choice",
+            "answer_payload": {
+              "key": "B"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_f22a1e19b5b34856",
+            "stem": "关于 Ridge 回归（L2 正则化）的特点，下列说法正确的有哪些？",
+            "question_type": "multi_choice",
+            "answer_payload": {
+              "keys": [
+                "A",
+                "B",
+                "D"
+              ],
+              "partial_rule": "proportional_no_wrong"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=理解，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_7ffbc38ab4614c54",
+            "stem": "下列情形中，属于偏差—方差理论中高方差表现的有：",
+            "question_type": "multi_choice",
+            "answer_payload": {
+              "keys": [
+                "A",
+                "B",
+                "D"
+              ],
+              "partial_rule": "proportional_no_wrong"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_e7d6c471f2b340a6",
+            "stem": "在训练目标中加入 L1 或 L2 正则项，一定能够提升模型在测试集上的性能。",
+            "question_type": "true_false",
+            "answer_payload": {
+              "value": false
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=理解，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_3289d0c13ea84357",
+            "stem": "在偏差—方差分解框架下，若一个模型在训练集和测试集上的误差都很大，且两者差距很小，则该模型最可能处于：",
+            "question_type": "single_choice",
+            "answer_payload": {
+              "key": "A"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_4edb202fd43e4243",
+            "stem": "某模型在训练集上误差很低，但在验证集上误差明显偏高，表现出高方差。若在训练目标中加入正则项，从偏差-方差权衡的角度看，最合理的描述是：",
+            "question_type": "single_choice",
+            "answer_payload": {
+              "key": "A"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=理解，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_1930c82113ed40a2",
+            "stem": "某团队训练了一个非常复杂的深度网络，在训练集上误差接近零，但在验证集上误差显著偏高。按照偏差—方差理论，该现象主要反映：",
+            "question_type": "single_choice",
+            "answer_payload": {
+              "key": "B"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_00e875d4359044ec",
+            "stem": "若模型本身处于欠拟合（高偏差）状态，此时加大 L2 正则化的惩罚强度通常会使模型表现进一步变差。",
+            "question_type": "true_false",
+            "answer_payload": {
+              "value": true
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=理解，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_cff23c96d84e4cd8",
+            "stem": "在偏差—方差理论中，模型复杂度提高时方差通常会增大，因此存在一个使泛化误差较小的复杂度折中点。",
+            "question_type": "true_false",
+            "answer_payload": {
+              "value": true
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_20240f7ea3204808",
+            "stem": "对比 Ridge 与 LASSO 两种正则化方法，下列哪项描述最符合二者在参数解上的典型差异？",
+            "question_type": "single_choice",
+            "answer_payload": {
+              "key": "A"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=理解，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          },
+          {
+            "question_id": "aiq_fd7a647bda914d3e",
+            "stem": "在偏差—方差分解框架下，若一个模型在训练集和测试集上的误差都明显偏高，且增加训练数据量后测试误差几乎不下降，则该模型最可能处于哪种状态？",
+            "question_type": "single_choice",
+            "answer_payload": {
+              "key": "B"
+            },
+            "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+            "scope_class": "in_scope",
+            "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+            "review_status": "pending",
+            "active": false
+          }
+        ],
+        "generation_attempts": [
+          {
+            "round": 1,
+            "kp_id": "kp.eval.bias_var",
+            "status": "succeeded",
+            "engine": "model+deterministic_validation",
+            "candidate_count": 2
+          },
+          {
+            "round": 2,
+            "kp_id": "kp.eval.bias_var",
+            "status": "succeeded",
+            "engine": "model+deterministic_validation",
+            "candidate_count": 3
+          },
+          {
+            "round": 3,
+            "kp_id": "kp.eval.bias_var",
+            "status": "succeeded",
+            "engine": "model+deterministic_validation",
+            "candidate_count": 1
+          },
+          {
+            "round": 4,
+            "kp_id": "kp.regularization.l1l2",
+            "status": "succeeded",
+            "engine": "model+deterministic_validation",
+            "candidate_count": 5
+          },
+          {
+            "round": 5,
+            "kp_id": "kp.regularization.l1l2",
+            "status": "no_valid_candidates",
+            "engine": "model+deterministic_validation",
+            "candidate_count": 0
+          }
+        ],
+        "message": "已生成11道候选题，发布时自动筛选5道。"
+      }
+    },
+    "retest": {
+      "status": "published",
+      "paper_id": "paper_fa221e34bb1f4575",
+      "release": {
+        "release_id": "release_d3d22142b98246b0",
+        "title": "班级针对性复测",
+        "instructions": "",
+        "release_type": "retest",
+        "status": "published",
+        "due_at": "",
+        "published_at": "2026-11-18T02:27:30+00:00",
+        "assessment_version_id": "av_b3b98e9b37f995c31518fac8",
+        "assessment_id": "assessment_85fa3fa5d50f46eda1801bee",
+        "paper_id": "paper_fa221e34bb1f4575",
+        "paper_title": "当前错题概念 · 针对性复测（第1轮）",
+        "item_count": 5,
+        "estimated_minutes": 9,
+        "recipient_count": 16,
+        "submitted_count": 0,
+        "pending_count": 16,
+        "expired_count": 0,
+        "recipients": [
+          {
+            "recipient_id": "recipient_cab72b19cc374ce4",
+            "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+            "student_code": "STU001",
+            "linked_account": "stu001",
+            "linked_display_name": "STU001",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_2c3f0d3176c446c4",
+            "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+            "student_code": "STU002",
+            "linked_account": "stu002",
+            "linked_display_name": "STU002",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_33ac29df49f64e09",
+            "student_id": "student_59481ef3a5c2d7175b1a29c9ab6769f74033d916",
+            "student_code": "STU003",
+            "linked_account": "stu003",
+            "linked_display_name": "STU003",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_2aa3b893ffa04828",
+            "student_id": "student_8dd81e1e47c50442fa067070e617c2c278f31088",
+            "student_code": "STU004",
+            "linked_account": "stu004",
+            "linked_display_name": "STU004",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_c08e8a2e2aa94313",
+            "student_id": "student_ecc54b571c745ef761efbe3c0c427d986f364ffd",
+            "student_code": "STU005",
+            "linked_account": "stu005",
+            "linked_display_name": "STU005",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_97185d13ecf9499c",
+            "student_id": "student_e941e8a441774687a9b679d68dbfeebfbb6ad3c0",
+            "student_code": "STU006",
+            "linked_account": "stu006",
+            "linked_display_name": "STU006",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_f0db0649075e49c5",
+            "student_id": "student_eb4b728b03acd11352d3d00f3d352886bff7c54d",
+            "student_code": "STU007",
+            "linked_account": "stu007",
+            "linked_display_name": "STU007",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_83e218ad3fe942c1",
+            "student_id": "student_95638f520fced3811a7c766cc1bef4c52f8f859e",
+            "student_code": "STU008",
+            "linked_account": "stu008",
+            "linked_display_name": "STU008",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_b59fdd4478614c69",
+            "student_id": "student_fed67b43fdcf04968e87ba29765847fef43c63b6",
+            "student_code": "STU009",
+            "linked_account": "stu009",
+            "linked_display_name": "STU009",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_70171c017ea34808",
+            "student_id": "student_bcade85c1ca5c710a6fe064f93a7415aa2aaa3ac",
+            "student_code": "STU010",
+            "linked_account": "stu010",
+            "linked_display_name": "STU010",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_19723050f27f44c5",
+            "student_id": "student_3446947f9cd4aef13992916d714822eb5e28e730",
+            "student_code": "STU011",
+            "linked_account": "stu011",
+            "linked_display_name": "STU011",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_129d58bc12c64b73",
+            "student_id": "student_ad83241471db7c55bb0edd81abdc804259323b64",
+            "student_code": "STU012",
+            "linked_account": "stu012",
+            "linked_display_name": "STU012",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_c521915c9a054385",
+            "student_id": "student_becb1690c7e788ad4292bc8e1b7b16bc82d7f375",
+            "student_code": "STU013",
+            "linked_account": "stu013",
+            "linked_display_name": "STU013",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_8a02c44f1fe94540",
+            "student_id": "student_bf59a3f15082274dd92ab3cfc4b535bb4f533617",
+            "student_code": "STU014",
+            "linked_account": "stu014",
+            "linked_display_name": "STU014",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_b91ce63de48343cf",
+            "student_id": "student_71b74dce070388d4143489dbb1358e275975839e",
+            "student_code": "STU015",
+            "linked_account": "stu015",
+            "linked_display_name": "STU015",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          },
+          {
+            "recipient_id": "recipient_07c29d09bb454187",
+            "student_id": "student_a8f643c6da563a35c3bfa308cfc8153f7e480e15",
+            "student_code": "STU016",
+            "linked_account": "stu016",
+            "linked_display_name": "STU016",
+            "online_receivable": true,
+            "status": "assigned",
+            "attempt_id": null,
+            "score": null,
+            "max_score": null,
+            "grading_status": "not_started",
+            "submitted_at": ""
+          }
+        ],
+        "source_diagnosis_id": "diag_9ca507eda0c741ef",
+        "source_attempt_id": "",
+        "workflow_run_id": "teacher-job:job_bb8032dfde1541e8",
+        "targeted_retest": null
+      },
+      "question_source": "ai_generated",
+      "source_counts": {
+        "ai_generated": 5,
+        "bank_selected": 0,
+        "original_reused": 0
+      },
+      "candidate_question_ids": [
+        "aiq_7ffbc38ab4614c54",
+        "aiq_e7d6c471f2b340a6",
+        "aiq_4edb202fd43e4243",
+        "aiq_1930c82113ed40a2",
+        "aiq_cff23c96d84e4cd8"
+      ],
+      "rejected_candidates": [
+        {
+          "question_id": "aiq_0baa2e4e0b1c469e",
+          "reason": "复测题与题库已有题目过于相似"
+        },
+        {
+          "question_id": "aiq_f22a1e19b5b34856",
+          "reason": "复测题与题库已有题目过于相似"
+        },
+        {
+          "question_id": "aiq_3289d0c13ea84357",
+          "reason": "复测题与题库已有题目过于相似"
+        },
+        {
+          "question_id": "aiq_00e875d4359044ec",
+          "reason": "复测题与题库已有题目过于相似"
+        }
+      ],
+      "chapter_ids": [],
+      "round": 1,
+      "cycle_id": "retestcycle_3cdc5a3111e84cc2",
+      "cycle_ids": [
+        "retestcycle_0275845651a74ffa",
+        "retestcycle_3cdc5a3111e84cc2"
+      ],
+      "threshold": 0.8,
+      "validation": "automatic_retest_v2_chapter",
+      "target_kp_ids": [
+        "kp.eval.bias_var",
+        "kp.regularization.l1l2"
+      ],
+      "remaining_kp_ids": []
+    }
+  },
+  "errors": [],
+  "checkpoint_available": true
+}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "./WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import * as echarts from 'echarts'
@@ -317,9 +318,11 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
 </script>
 
 <template>
-  <div class="history-workbench">
+  <WorkbenchPage :scroll="false" class="history-workbench">
+    <template #header>
     <HistorySummaryTabs :stats="stats" :active-tab="activeTab" @update:active-tab="activeTab = $event" />
 
+    </template>
     <div v-if="activeTab === 'overview'" class="history-content-grid">
       <div class="history-primary">
         <section class="history-surface overview-conclusion">
@@ -364,7 +367,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
       <aside class="history-side history-surface">
         <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 2)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看相关错题 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
         <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div><LearningResourceList :resources="resources" /></section>
-        <section class="side-retest"><h2>针对性复测</h2><p>AI 依据薄弱知识点生成新题，独立验答后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="generatedCount" class="workflow-state">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+        <section class="side-retest"><h2>针对性复测</h2><p>优先从题库选择符合薄弱知识点的新题，缺题时由 AI 补充，校验后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="generatedCount" class="workflow-state">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
       </aside>
     </div>
 
@@ -386,7 +389,7 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
       <aside class="history-side history-surface">
         <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 3)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看作答依据 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
         <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div></section>
-        <section class="side-retest"><h2>针对性复测</h2><p>AI 依据薄弱知识点生成新题，独立验答后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+        <section class="side-retest"><h2>针对性复测</h2><p>优先从题库选择符合薄弱知识点的新题，缺题时由 AI 补充，校验后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
       </aside>
     </div>
 
@@ -401,9 +404,13 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
     <el-dialog :model-value="Boolean(selectedWrong)" :title="selectedWrong ? `第 ${selectedWrong.position} 题 · ${wrongItemTitle(selectedWrong)}` : '错题详情'" width="min(960px, 94vw)" append-to-body class="history-question-dialog" @close="selectedWrong = null">
       <div v-if="selectedWrong" class="question-detail"><p class="question-origin">{{ wrongSources(selectedWrong) }} · {{ selectedWrong.chapter?.title || '未映射章节' }} · {{ TYPE_LABELS[selectedWrong.question_type] || selectedWrong.question_type }} · 当前筛选 {{ displayErrorCount(selectedWrong) }} 次出错</p><div class="question-stem"><SourceQuestionContent :question="selectedWrong" /></div><div v-if="optionsFor(selectedWrong).length" class="question-options"><div v-for="option in optionsFor(selectedWrong)" :key="option.key" class="question-option" :class="optionClass(selectedWrong, option.key)"><b>{{ option.key }}</b><MathText :text="option.text || option.value || ''" /><span v-if="correctOption(selectedWrong, option.key)">正确答案</span><span v-if="selected(selectedWrong, option.key) && !correctOption(selectedWrong, option.key)">学生选择</span></div></div><div class="question-answers"><div><small>学生作答</small><MathText :text="answerText(selectedWrong.response)" /></div><div><small>正确答案</small><MathText :text="answerText(correctPayload(selectedWrong))" /></div></div><p class="question-score">本题得分 {{ numberText(selectedWrong.awarded_score) }}/{{ numberText(selectedWrong.max_score) }} · 所属知识点 {{ selectedWrong.knowledge_point?.name || '未映射' }}</p><section class="question-explanation"><h3>参考解析</h3><MathText :text="selectedWrong.answer_reference?.explanation || '该题暂未提供独立解析。'" /></section><details v-if="selectedWrong.occurrences?.length" class="question-history"><summary>历史作答记录（{{ selectedWrong.occurrences.length }} 次）</summary><article v-for="(row, index) in selectedWrong.occurrences" :key="`${row.attempt_id}-${index}`"><div><b>{{ friendlyQuizCode(row.quiz_code) || row.assessment_title }} · 第 {{ row.position }} 题</b><small>{{ dateText(row.exam_time) }}</small></div><span>作答：{{ answerText(row.response) }}</span><strong>{{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</strong></article></details></div>
     </el-dialog>
-  </div>
+  </WorkbenchPage>
 </template>
 
 
 
 <style scoped src="../styles/multiAttemptWorkbench.css"></style>
+
+<style scoped>
+.history-workbench.workbench-page{display:flex;gap:12px}.history-content-grid{height:100%;min-height:0;align-items:stretch}.history-primary,.history-side{min-height:0;overflow:auto;display:block}.history-primary>*+*{margin-top:12px}.history-side{position:static;max-height:none}.records-head{position:sticky;top:0;background:#f5f8fc;z-index:1}@media(max-width:850px){.history-content-grid{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
+</style>

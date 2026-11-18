@@ -8,7 +8,8 @@ const props = withDefaults(defineProps<{
   result: any
   section?: 'problems' | 'correct'
   heading?: string
-}>(), { section: 'problems', heading: '错题详情' })
+  idPrefix?: string
+}>(), { section: 'problems', heading: '错题详情', idPrefix: 'single-question' })
 const correctOpen = ref(false)
 const allItems = computed(() => [...(props.result?.items || [])].sort((a: any, b: any) => Number(a.position) - Number(b.position)))
 const wrongItems = computed(() => allItems.value.filter((item: any) => item.evidence_status === 'scored' && item.correct === false))
@@ -109,7 +110,7 @@ function toleranceText(item: any) {
   <section v-if="section === 'problems'" class="evidence-section">
     <header v-if="wrongItems.length" class="section-title"><div><i></i><h2>{{ heading }}</h2><span>共 {{ wrongItems.length }} 题</span></div></header>
     <div v-if="wrongItems.length" class="question-list">
-      <article v-for="item in wrongItems" :id="`single-question-${item.position}`" :key="item.paper_item_id" :class="['question-card', `evidence-chapter-${String(item.chapter_id || 'unmapped').replace(/[^\w-]/g, '-')}`]">
+      <article v-for="item in wrongItems" :id="`${idPrefix}-${item.position}`" :key="item.paper_item_id || item.position" :class="['question-card', `evidence-chapter-${String(item.chapter_id || 'unmapped').replace(/[^\w-]/g, '-')}`]">
         <header class="question-head"><div class="question-tags"><b>第 {{ item.position }} 题</b><span>{{ TYPE_LABELS[item.question_type] || item.question_type || '题型未知' }}</span><span class="chapter-tag">{{ item.chapter?.title || '章节待确认' }}</span></div><strong>{{ scoreText(item) }}</strong></header>
         <div class="question-body">
           <div v-if="item.is_scoring_revision" class="revision-label">修订版（评分依据）</div>
@@ -144,7 +145,7 @@ function toleranceText(item: any) {
         </div>
       </article>
     </div>
-    <div v-else class="all-correct"><el-icon><CircleCheck /></el-icon><div><b>本次已评分题目全部答对</b><span>可在下方展开查看已答对题目。</span></div></div>
+    <div v-else-if="correctItems.length" class="all-correct"><el-icon><CircleCheck /></el-icon><div><b>本次已评分题目全部答对</b><span>可在下方展开查看已答对题目。</span></div></div>
     <section v-if="ungradedItems.length" class="ungraded-block">
       <header><b>未计入成绩的题目</b><span>{{ ungradedItems.length }} 题</span></header>
       <article v-for="item in ungradedItems" :key="item.paper_item_id"><b>第 {{ item.position }} 题 · {{ TYPE_LABELS[item.question_type] || item.question_type }}</b><small v-if="item.is_scoring_revision">修订版（评分依据）</small><MathText :text="item.stem" /><p>学生作答：{{ answerText(item.response) }}</p><details v-if="item.original_question" class="learning-detail"><summary>查看原始题目</summary><div class="detail-content"><MathText :text="item.original_question.stem" /></div></details></article>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
@@ -162,6 +163,7 @@ async function openPublish() {
   publishOpen.value = true
 }
 async function publish() {
+  if (publishing.value) return
   if (!classroomId.value || !selectedStudents.value.length) {
     ElMessage.warning('请选择课堂和接收学生')
     return
@@ -189,7 +191,8 @@ onMounted(load)
 </script>
 
 <template>
-  <div v-loading="loading" class="preview-page">
+  <WorkbenchPage v-loading="loading" class="preview-page" label="试卷题目列表">
+    <template #header>
     <header class="preview-head">
       <div>
         <el-button link @click="router.push('/teacher/questions')">← 返回题库</el-button>
@@ -206,6 +209,7 @@ onMounted(load)
       <div class="coverage-row"><span v-for="item in coverage" :key="item.name">{{ item.name }} {{ item.count }}题</span></div>
     </section>
 
+    </template>
     <section class="paper-list">
       <article v-for="(item, index) in items" :key="`${item.question_id}-${index}`" class="paper-item">
         <div class="position">{{ index + 1 }}</div>
@@ -243,7 +247,7 @@ onMounted(load)
       </div>
       <template #footer><el-button @click="publishOpen=false">取消</el-button><el-button type="primary" :loading="publishing" :disabled="!onlineStudents.length || Boolean(paper?.assessment_classroom_id && paper.assessment_classroom_id !== classroomId)" @click="publish">确认发布</el-button></template>
     </el-dialog>
-  </div>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
@@ -252,4 +256,8 @@ onMounted(load)
 .class-readonly{background:#f3f7f8;border:1px solid #dbe5e9;border-radius:8px;padding:10px 12px;color:#2a5558}.recipient-picker{display:grid;grid-template-columns:1fr auto;gap:8px}
 @media(max-width:860px){.preview-head{align-items:stretch;flex-direction:column}.paper-settings{grid-template-columns:1fr}.paper-settings>*{grid-column:1!important}.paper-item{grid-template-columns:38px 1fr}.paper-item aside{grid-column:2;border-left:0;border-top:1px solid #e8edf0;padding:12px 0 0}}
 @media(max-width:560px){.paper-item{grid-template-columns:1fr}.position,.paper-item aside{grid-column:1}.paper-metrics{grid-template-columns:1fr 1fr}.head-actions{width:100%}}
+</style>
+
+<style scoped>
+.preview-page.workbench-page{display:flex;gap:12px}.preview-head,.paper-settings{margin:0}.paper-settings{padding:12px 16px}.coverage-row{max-height:56px;overflow:auto}
 </style>

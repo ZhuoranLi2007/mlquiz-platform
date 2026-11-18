@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../api/client'
@@ -96,11 +97,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main v-loading="loading" class="review-page">
+  <WorkbenchPage v-loading="loading" class="review-page" label="学生答卷题目">
+    <template #header>
     <header class="review-header">
       <button type="button" class="back-button" @click="router.push('/teacher')">← 返回教师端</button>
       <div><p>教师阅卷</p><h1>查看答卷</h1></div>
     </header>
+    </template>
     <div v-if="error" class="error" role="alert">{{ error }}</div>
     <template v-if="review">
       <section class="overview" aria-label="答卷概览">
@@ -133,11 +136,15 @@ onMounted(async () => {
         </article>
       </section>
     </template>
-  </main>
+  </WorkbenchPage>
 </template>
 
 <style scoped>
 .review-page{max-width:1120px;margin:0 auto;padding:28px 24px 60px;color:#202938}.review-header{display:flex;align-items:center;gap:22px;margin-bottom:20px}.review-header p{margin:0;color:#596579;font-size:14px}.review-header h1{margin:3px 0 0;font-size:24px;font-weight:600}.back-button{padding:9px 12px;border:1px solid #dfe4eb;border-radius:8px;background:#fff;color:#3159c9;cursor:pointer}.overview{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:19px 22px;border:1px solid #e1e6ed;border-radius:12px;background:#fff}.overview>div{display:grid;align-content:start;gap:5px}.overview span{color:#596579;font-size:14px}.overview strong{font-size:25px;font-weight:600;font-variant-numeric:tabular-nums}.overview small{color:#8791a0;font-size:14px;font-weight:400}.review-intro{margin:15px 0 12px;color:#596579;font-size:14px}.question-list{display:grid;gap:14px}.review-question{overflow:hidden;border:1px solid #e1e6ed;border-radius:12px;background:#fff}.question-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid #edf0f4}.question-head>div{display:flex;align-items:center;flex-wrap:wrap;gap:12px}.question-head b{font-size:15px}.question-head span{color:#758195;font-size:14px}.question-head strong{font-size:15px;font-weight:600;white-space:nowrap}.question-body{padding:18px}.stem{margin-bottom:17px;font-size:16px;font-weight:600;line-height:1.6;overflow-wrap:anywhere}.options{display:grid;gap:8px}.option{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:start;gap:10px;min-height:46px;padding:11px 13px;border:1px solid #e6e8ec;border-radius:8px;font-size:14px;line-height:1.6}.option>b{color:#34445f}.option-text{min-width:0;overflow-wrap:anywhere}.option-note{color:#596579;font-size:14px;white-space:nowrap}.option.correct{border-color:#9cd9b5;background:#f1f8f3}.option.correct .option-note{color:#28855a}.option.wrong{border-color:#e8a7ad;background:#fff5f5}.option.wrong .option-note{color:#c94e56}.option.selected{border-color:#b9c9e8;background:#f5f7fc}.notice{margin:0 0 12px;color:#966a25;font-size:14px;line-height:1.5}.answer-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer-pair>div{min-width:0;padding:12px;border:1px solid #e6e8ec;border-radius:8px;line-height:1.6;overflow-wrap:anywhere}.answer-pair span{display:block;margin-bottom:5px;color:#596579;font-size:14px}.detail{margin-top:15px;padding-top:11px;border-top:1px solid #edf0f4;color:#48576b;font-size:14px;line-height:1.6}.detail summary{width:max-content;max-width:100%;color:#3159c9;cursor:pointer}.detail :deep(.katex-display){max-width:100%;overflow-x:auto}.original-stem{margin:11px 0 8px}.original-option{display:grid;grid-template-columns:22px 1fr;gap:8px;margin:5px 0}.error{padding:12px;border:1px solid #e8a7ad;border-radius:8px;color:#b33e47}@media(max-width:700px){.review-page{padding:18px 14px 40px}.overview{grid-template-columns:1fr 1fr;padding:15px}.question-body{padding:14px}.option{grid-template-columns:20px 1fr}.option-note{grid-column:2;white-space:normal}.answer-pair{grid-template-columns:1fr}}
 .option.missed{border-color:#e9c88f;background:#fff8eb}.option.missed .option-note{color:#9a5a11}
 .stem{font-weight:500;line-height:1.7}
+</style>
+
+<style scoped>
+.review-page.workbench-page{display:flex;max-width:none;padding:0}.review-header{margin:0}
 </style>
