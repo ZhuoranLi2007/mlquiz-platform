@@ -1,0 +1,776 @@
+{
+  "layout": [
+    {
+      "account": "stu002",
+      "viewport": [
+        1366,
+        768
+      ],
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 303.671875,
+      "pending_height": 241.328125,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          1366,
+          768
+        ],
+        "document": [
+          1366,
+          768
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "recent-list",
+            "client": 244,
+            "scroll": 300,
+            "top": 56,
+            "reaches_end": true,
+            "visible_height": 244.140625,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 242,
+            "scroll": 374,
+            "top": 132,
+            "reaches_end": true,
+            "visible_height": 244.140625,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        1280,
+        720
+      ],
+      "cards": 2,
+      "blank_gap": 7.9375,
+      "records_height": 267.0625,
+      "pending_height": 229.9375,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          1280,
+          720
+        ],
+        "document": [
+          1280,
+          720
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "task-grid",
+            "client": 162,
+            "scroll": 168,
+            "top": 6,
+            "reaches_end": true,
+            "visible_height": 161.9375,
+            "within_viewport": true
+          },
+          {
+            "class": "recent-list",
+            "client": 208,
+            "scroll": 319,
+            "top": 111,
+            "reaches_end": true,
+            "visible_height": 207.53125,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 206,
+            "scroll": 374,
+            "top": 168,
+            "reaches_end": true,
+            "visible_height": 207.53125,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        1440,
+        900
+      ],
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 435.671875,
+      "pending_height": 241.328125,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "document": [
+          1440,
+          900
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "recent-list",
+            "client": 376,
+            "scroll": 474,
+            "top": 98,
+            "reaches_end": true,
+            "visible_height": 376.140625,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 374,
+            "scroll": 488,
+            "top": 114,
+            "reaches_end": true,
+            "visible_height": 376.140625,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 615.671875,
+      "pending_height": 241.328125,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "document": [
+          1920,
+          1080
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "recent-list",
+            "client": 556,
+            "scroll": 571,
+            "top": 15,
+            "reaches_end": true,
+            "visible_height": 556.140625,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        2560,
+        1440
+      ],
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 975.671875,
+      "pending_height": 241.328125,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          2560,
+          1440
+        ],
+        "document": [
+          2560,
+          1440
+        ],
+        "headers_fixed": true,
+        "scrolls": []
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        640,
+        720
+      ],
+      "cards": 2,
+      "blank_gap": -171.390625,
+      "records_height": 560,
+      "pending_height": 260,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          640,
+          720
+        ],
+        "document": [
+          640,
+          720
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "student-task-panels",
+            "client": 314,
+            "scroll": 834,
+            "top": 520,
+            "reaches_end": true,
+            "visible_height": 314,
+            "within_viewport": true
+          },
+          {
+            "class": "task-grid",
+            "client": 165,
+            "scroll": 350,
+            "top": 185,
+            "reaches_end": true,
+            "visible_height": 164.609375,
+            "within_viewport": true
+          },
+          {
+            "class": "recent-list",
+            "client": 213,
+            "scroll": 281,
+            "top": 68,
+            "reaches_end": true,
+            "visible_height": 213.46875,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 211,
+            "scroll": 374,
+            "top": 163,
+            "reaches_end": true,
+            "visible_height": 213.46875,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        910,
+        512
+      ],
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 300,
+      "pending_height": 233.328125,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          910,
+          512
+        ],
+        "document": [
+          910,
+          512
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "student-task-panels",
+            "client": 323,
+            "scroll": 547,
+            "top": 224,
+            "reaches_end": true,
+            "visible_height": 323,
+            "within_viewport": true
+          },
+          {
+            "class": "recent-list",
+            "client": 240,
+            "scroll": 319,
+            "top": 79,
+            "reaches_end": true,
+            "visible_height": 240.140625,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 238,
+            "scroll": 729,
+            "top": 491,
+            "reaches_end": true,
+            "visible_height": 240.140625,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu002",
+      "viewport": [
+        683,
+        384
+      ],
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 560,
+      "pending_height": 233.328125,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          683,
+          384
+        ],
+        "document": [
+          683,
+          384
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "workbench-page-header",
+            "client": 101,
+            "scroll": 278,
+            "top": 177,
+            "reaches_end": true,
+            "visible_height": 100.796875,
+            "within_viewport": true
+          },
+          {
+            "class": "student-task-panels",
+            "client": 175,
+            "scroll": 807,
+            "top": 632,
+            "reaches_end": true,
+            "visible_height": 175.203125,
+            "within_viewport": true
+          },
+          {
+            "class": "recent-list",
+            "client": 213,
+            "scroll": 281,
+            "top": 68,
+            "reaches_end": true,
+            "visible_height": 175.203125,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 211,
+            "scroll": 374,
+            "top": 163,
+            "reaches_end": true,
+            "visible_height": 175.203125,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        1366,
+        768
+      ],
+      "cards": 4,
+      "blank_gap": -152.453125,
+      "records_height": 293.453125,
+      "pending_height": 251.546875,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          1366,
+          768
+        ],
+        "document": [
+          1366,
+          768
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "task-grid",
+            "client": 184,
+            "scroll": 350,
+            "top": 166,
+            "reaches_end": true,
+            "visible_height": 183.546875,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 232,
+            "scroll": 309,
+            "top": 77,
+            "reaches_end": true,
+            "visible_height": 233.921875,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        1280,
+        720
+      ],
+      "cards": 4,
+      "blank_gap": -174.0625,
+      "records_height": 267.0625,
+      "pending_height": 229.9375,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          1280,
+          720
+        ],
+        "document": [
+          1280,
+          720
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "task-grid",
+            "client": 162,
+            "scroll": 350,
+            "top": 188,
+            "reaches_end": true,
+            "visible_height": 161.9375,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 206,
+            "scroll": 343,
+            "top": 137,
+            "reaches_end": true,
+            "visible_height": 207.53125,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        1440,
+        900
+      ],
+      "cards": 4,
+      "blank_gap": -93.0625,
+      "records_height": 366.0625,
+      "pending_height": 310.9375,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "document": [
+          1440,
+          900
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "task-grid",
+            "client": 243,
+            "scroll": 350,
+            "top": 107,
+            "reaches_end": true,
+            "visible_height": 242.9375,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 305,
+            "scroll": 313,
+            "top": 8,
+            "reaches_end": true,
+            "visible_height": 306.53125,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "cards": 4,
+      "blank_gap": -12.0625,
+      "records_height": 465.0625,
+      "pending_height": 391.9375,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "document": [
+          1920,
+          1080
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "task-grid",
+            "client": 324,
+            "scroll": 350,
+            "top": 26,
+            "reaches_end": true,
+            "visible_height": 323.9375,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        2560,
+        1440
+      ],
+      "cards": 4,
+      "blank_gap": 14,
+      "records_height": 788.34375,
+      "pending_height": 428.65625,
+      "tasks_overflow": false,
+      "geometry": {
+        "viewport": [
+          2560,
+          1440
+        ],
+        "document": [
+          2560,
+          1440
+        ],
+        "headers_fixed": true,
+        "scrolls": []
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        640,
+        720
+      ],
+      "cards": 4,
+      "blank_gap": -535.390625,
+      "records_height": 560,
+      "pending_height": 260,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          640,
+          720
+        ],
+        "document": [
+          640,
+          720
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "student-task-panels",
+            "client": 314,
+            "scroll": 834,
+            "top": 520,
+            "reaches_end": true,
+            "visible_height": 314,
+            "within_viewport": true
+          },
+          {
+            "class": "task-grid",
+            "client": 165,
+            "scroll": 714,
+            "top": 549,
+            "reaches_end": true,
+            "visible_height": 164.609375,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 211,
+            "scroll": 343,
+            "top": 132,
+            "reaches_end": true,
+            "visible_height": 213.46875,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        910,
+        512
+      ],
+      "cards": 4,
+      "blank_gap": -156,
+      "records_height": 300,
+      "pending_height": 240,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          910,
+          512
+        ],
+        "document": [
+          910,
+          512
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "student-task-panels",
+            "client": 323,
+            "scroll": 554,
+            "top": 231,
+            "reaches_end": true,
+            "visible_height": 323,
+            "within_viewport": true
+          },
+          {
+            "class": "task-grid",
+            "client": 180,
+            "scroll": 350,
+            "top": 170,
+            "reaches_end": true,
+            "visible_height": 180,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 238,
+            "scroll": 883,
+            "top": 645,
+            "reaches_end": true,
+            "visible_height": 240.46875,
+            "within_viewport": true
+          }
+        ]
+      }
+    },
+    {
+      "account": "stu003",
+      "viewport": [
+        683,
+        384
+      ],
+      "cards": 4,
+      "blank_gap": -136,
+      "records_height": 560,
+      "pending_height": 260,
+      "tasks_overflow": true,
+      "geometry": {
+        "viewport": [
+          683,
+          384
+        ],
+        "document": [
+          683,
+          384
+        ],
+        "headers_fixed": true,
+        "scrolls": [
+          {
+            "class": "workbench-page-header",
+            "client": 101,
+            "scroll": 278,
+            "top": 177,
+            "reaches_end": true,
+            "visible_height": 100.796875,
+            "within_viewport": true
+          },
+          {
+            "class": "student-task-panels",
+            "client": 175,
+            "scroll": 834,
+            "top": 659,
+            "reaches_end": true,
+            "visible_height": 175.203125,
+            "within_viewport": true
+          },
+          {
+            "class": "task-grid",
+            "client": 200,
+            "scroll": 350,
+            "top": 150,
+            "reaches_end": true,
+            "visible_height": 175,
+            "within_viewport": true
+          },
+          {
+            "class": "history-table-wrap",
+            "client": 211,
+            "scroll": 343,
+            "top": 132,
+            "reaches_end": true,
+            "visible_height": 175,
+            "within_viewport": true
+          }
+        ]
+      }
+    }
+  ],
+  "filter_checks": [
+    {
+      "account": "stu002",
+      "case": "one_task",
+      "cards": 1,
+      "blank_gap": 14,
+      "records_height": 615.671875,
+      "pending_height": 241.328125,
+      "tasks_overflow": false
+    },
+    {
+      "account": "stu002",
+      "case": "no_tasks",
+      "cards": 0,
+      "blank_gap": null,
+      "records_height": 728.890625,
+      "pending_height": 128.109375,
+      "tasks_overflow": false
+    },
+    {
+      "account": "stu002",
+      "case": "restored",
+      "cards": 2,
+      "blank_gap": 14,
+      "records_height": 615.671875,
+      "pending_height": 241.328125,
+      "tasks_overflow": false
+    },
+    {
+      "account": "stu003",
+      "case": "no_tasks",
+      "cards": 0,
+      "blank_gap": null,
+      "records_height": 728.890625,
+      "pending_height": 128.109375,
+      "tasks_overflow": false
+    },
+    {
+      "account": "stu003",
+      "case": "restored",
+      "cards": 4,
+      "blank_gap": -12.0625,
+      "records_height": 465.0625,
+      "pending_height": 391.9375,
+      "tasks_overflow": true
+    }
+  ],
+  "zoom": [],
+  "errors": [],
+  "failures": []
+}

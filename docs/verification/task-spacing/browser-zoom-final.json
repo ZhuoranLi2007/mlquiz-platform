@@ -1,0 +1,273 @@
+{
+  "checks": [
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "task-grid",
+          "client": 122,
+          "scroll": 168,
+          "top": 45.599998474121094,
+          "reaches_end": true,
+          "visible_height": 122.42500305175781,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 150,
+          "scroll": 279,
+          "top": 129.60000610351562,
+          "reaches_end": true,
+          "visible_height": 149.83750915527344,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 148,
+          "scroll": 475,
+          "top": 326.3999938964844,
+          "reaches_end": true,
+          "visible_height": 149.83750915527344,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks-two",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "student-task-panels",
+          "client": 323,
+          "scroll": 546,
+          "top": 223.3333282470703,
+          "reaches_end": true,
+          "visible_height": 323,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 241,
+          "scroll": 315,
+          "top": 74,
+          "reaches_end": true,
+          "visible_height": 241.1354217529297,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 240,
+          "scroll": 676,
+          "top": 436.6666564941406,
+          "reaches_end": true,
+          "visible_height": 241.1354217529297,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks-two",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 101,
+          "scroll": 278,
+          "top": 177,
+          "reaches_end": true,
+          "visible_height": 100.796875,
+          "within_viewport": true
+        },
+        {
+          "class": "student-task-panels",
+          "client": 175,
+          "scroll": 807,
+          "top": 632.5,
+          "reaches_end": true,
+          "visible_height": 175.203125,
+          "within_viewport": true
+        },
+        {
+          "class": "recent-list",
+          "client": 213,
+          "scroll": 281,
+          "top": 68,
+          "reaches_end": true,
+          "visible_height": 175.203125,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 211,
+          "scroll": 374,
+          "top": 163,
+          "reaches_end": true,
+          "visible_height": 175.203125,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks-two",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    },
+    {
+      "viewport": [
+        1093,
+        614
+      ],
+      "document": [
+        1093,
+        614
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "task-grid",
+          "client": 122,
+          "scroll": 350,
+          "top": 228,
+          "reaches_end": true,
+          "visible_height": 122.42500305175781,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 148,
+          "scroll": 511,
+          "top": 362.3999938964844,
+          "reaches_end": true,
+          "visible_height": 149.83750915527344,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks-four",
+      "requested_zoom": 1.25,
+      "actual_zoom": 1.25
+    },
+    {
+      "viewport": [
+        911,
+        512
+      ],
+      "document": [
+        911,
+        512
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "student-task-panels",
+          "client": 323,
+          "scroll": 554,
+          "top": 230.6666717529297,
+          "reaches_end": true,
+          "visible_height": 323,
+          "within_viewport": true
+        },
+        {
+          "class": "task-grid",
+          "client": 180,
+          "scroll": 350,
+          "top": 170,
+          "reaches_end": true,
+          "visible_height": 180,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 240,
+          "scroll": 814,
+          "top": 574,
+          "reaches_end": true,
+          "visible_height": 241.13540649414062,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks-four",
+      "requested_zoom": 1.5,
+      "actual_zoom": 1.5
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-header",
+          "client": 101,
+          "scroll": 278,
+          "top": 177,
+          "reaches_end": true,
+          "visible_height": 100.796875,
+          "within_viewport": true
+        },
+        {
+          "class": "student-task-panels",
+          "client": 175,
+          "scroll": 834,
+          "top": 659,
+          "reaches_end": true,
+          "visible_height": 175.203125,
+          "within_viewport": true
+        },
+        {
+          "class": "task-grid",
+          "client": 200,
+          "scroll": 350,
+          "top": 150,
+          "reaches_end": true,
+          "visible_height": 175,
+          "within_viewport": true
+        },
+        {
+          "class": "history-table-wrap",
+          "client": 211,
+          "scroll": 343,
+          "top": 131.5,
+          "reaches_end": true,
+          "visible_height": 175,
+          "within_viewport": true
+        }
+      ],
+      "page": "tasks-four",
+      "requested_zoom": 2,
+      "actual_zoom": 2
+    }
+  ],
+  "page_errors": [],
+  "failures": []
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "cards": 2,
+    "blank_gap": 24.21875,
+    "records_height": 293.453125,
+    "pending_height": 251.546875,
+    "account": "stu002",
+    "viewport": [
+      1366,
+      768
+    ]
+  },
+  {
+    "cards": 2,
+    "blank_gap": 164.609375,
+    "records_height": 465.0625,
+    "pending_height": 391.9375,
+    "account": "stu002",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "cards": 2,
+    "blank_gap": 326.609375,
+    "records_height": 663.0625,
+    "pending_height": 553.9375,
+    "account": "stu002",
+    "viewport": [
+      2560,
+      1440
+    ]
+  },
+  {
+    "cards": 4,
+    "blank_gap": -152.453125,
+    "records_height": 293.453125,
+    "pending_height": 251.546875,
+    "account": "stu003",
+    "viewport": [
+      1366,
+      768
+    ]
+  },
+  {
+    "cards": 4,
+    "blank_gap": -12.0625,
+    "records_height": 465.0625,
+    "pending_height": 391.9375,
+    "account": "stu003",
+    "viewport": [
+      1920,
+      1080
+    ]
+  },
+  {
+    "cards": 4,
+    "blank_gap": 139.28125,
+    "records_height": 663.0625,
+    "pending_height": 553.9375,
+    "account": "stu003",
+    "viewport": [
+      2560,
+      1440
+    ]
+  }
+]
