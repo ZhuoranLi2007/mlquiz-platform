@@ -1,0 +1,23 @@
+{
+  "requirements": "docs/WORKBENCH_REQUIREMENTS.md",
+  "matrix": "docs/WORKBENCH_ACCEPTANCE.md",
+  "backend_tests": 189,
+  "frontend_tests": 33,
+  "typecheck": "passed",
+  "build": "passed",
+  "desktop_size_checks": 102,
+  "actual_zoom_checks": 33,
+  "additional_text_dialog_size_checks": 6,
+  "fresh_extraction": "passed",
+  "fresh_browser_size_checks": 96,
+  "verified_application_files_identical_to_tested_package": 278,
+  "original_demo_snapshot_unchanged": true,
+  "runtime_prompts": 116,
+  "known_software_blockers_in_verified_scope": [],
+  "unavailable_historical_material": [
+    "specified development platform original history",
+    "early development prompts",
+    "real member information"
+  ],
+  "not_fabricated": true
+}

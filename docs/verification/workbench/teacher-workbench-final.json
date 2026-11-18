@@ -613,7 +613,7 @@
           "summary": "本卷已评分2题，答错2题。优先处理L1/L2 正则化、偏差-方差均衡。",
           "context": {
             "label": "2026-11-18 · 工作台验收20261118-双知识点双学生",
-            "generated_at": "2026-11-18T03:02:17+00:00",
+            "generated_at": "2026-11-18T03:25:35+00:00",
             "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
           },
           "concept_hypotheses": [
@@ -36821,7 +36821,7 @@
           "summary": "所选19次考试中记录到29次错答。优先处理交叉验证与评估指标、L1/L2 正则化。",
           "context": {
             "label": "2025-09-22 至 2026-11-18 · 19次考试",
-            "generated_at": "2026-11-18T03:02:22+00:00",
+            "generated_at": "2026-11-18T03:25:39+00:00",
             "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
           },
           "concept_hypotheses": [
@@ -39191,7 +39191,7 @@
           "summary": "本卷有2名学生完成有效评分。优先处理偏差-方差均衡、L1/L2 正则化。",
           "context": {
             "label": "2026-11-18 · 工作台验收20261118-双知识点双学生",
-            "generated_at": "2026-11-18T03:02:34+00:00",
+            "generated_at": "2026-11-18T03:25:49+00:00",
             "basis": "仅依据所选范围内的有效评分；未评分和未覆盖知识点不判断掌握。"
           },
           "concept_hypotheses": [
@@ -40590,8 +40590,8 @@
         {
           "class": "workbench-page-body owns-scroll",
           "client": 839,
-          "scroll": 3534,
-          "top": 2695,
+          "scroll": 3674,
+          "top": 2835,
           "reaches_end": true,
           "visible_height": 838.5,
           "within_viewport": true
@@ -40622,8 +40622,8 @@
         {
           "class": "workbench-page-body owns-scroll",
           "client": 273,
-          "scroll": 23516,
-          "top": 23243,
+          "scroll": 23892,
+          "top": 23619,
           "reaches_end": true,
           "visible_height": 273.3125,
           "within_viewport": true
@@ -40654,8 +40654,8 @@
         {
           "class": "workbench-page-body owns-scroll",
           "client": 299,
-          "scroll": 24106,
-          "top": 23807,
+          "scroll": 24152,
+          "top": 23853,
           "reaches_end": true,
           "visible_height": 298.703125,
           "within_viewport": true
@@ -41192,5 +41192,9 @@
     "tab_focus_contained": true,
     "return_button": true,
     "escape": true
+  },
+  "text_preview": {
+    "status": "not_available",
+    "reason": "This runtime has no readable text upload; do not count as a text preview pass."
   }
 }

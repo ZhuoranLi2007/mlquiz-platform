@@ -1,4 +1,6 @@
-course_report.docx及course_report.pdf：5页，包含AI出题复测专项补充。
-course_demo.pptx：8页，可编辑并含讲解备注。
-当前自动化后端167项、前端29项；真实模型累计80条，专项新增19条。
-常规组卷保留题库优先、缺题AI补。完整说明见../AI_RETEST_REVIEW.md。
+2026-11-18当前版本
+course_report.docx及course_report.pdf：8页，含工作台布局、学习反馈、双学生闭环及历史专项。
+course_demo.pptx：8页，可编辑并含讲解备注，已逐页渲染检查。
+当前自动化：后端189项、前端33项；类型检查/构建通过。真实提示词累计116条；102组尺寸和33组真实缩放检查。
+普通组卷题库优先、缺题AI补；诊断专项复测沿用AI新题及独立验答。
+完整当前对照、启动与边界：../WORKBENCH_ACCEPTANCE.md。

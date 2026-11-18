@@ -121,7 +121,8 @@ with sync_playwright() as pw:
             geometry(page,name)
         page.goto(args.base_url+'/teacher/resources')
         settle(page)
-        page.get_by_role('button',name='在线预览',exact=True).first.click()
+        pdf_card=page.locator('.material-card').filter(has=page.locator('.kind-pdf')).first
+        pdf_card.get_by_role('button',name='在线预览',exact=True).click()
         dialog=page.get_by_role('dialog')
         expect(dialog).to_be_visible()
         iframe=page.get_by_title('课程资料阅读区')
@@ -140,10 +141,25 @@ with sync_playwright() as pw:
         page.screenshot(path=str(out/'teacher-pdf-final-1366.png'))
         page.get_by_role('button',name='返回资源列表',exact=True).click()
         expect(dialog).to_be_hidden()
-        page.get_by_role('button',name='在线预览',exact=True).first.click()
+        pdf_card.get_by_role('button',name='在线预览',exact=True).click()
         page.keyboard.press('Escape')
         expect(dialog).to_be_hidden()
         report['pdf']={'response_status':200,'pdf_signature_verified':True,'page_fragment':2,'native_viewer_rendered_page':2,'tab_focus_contained':True,'return_button':True,'escape':True}
+        text_card=page.locator('.material-card').filter(has=page.locator('.kind-text')).filter(has=page.get_by_role('button',name='在线预览',exact=True)).first
+        if text_card.count():
+            text_card.get_by_role('button',name='在线预览',exact=True).click()
+            expect(dialog).to_be_visible()
+            settle(page)
+            expect(page.get_by_role('spinbutton',name='PDF页码')).to_have_count(0)
+            text=page.locator('.material-text pre').inner_text()
+            assert len(text)>0
+            expect(page.locator('.material-text [role="alert"]')).to_have_count(0)
+            page.screenshot(path=str(out/'teacher-text-preview-final-1366.png'),animations='disabled')
+            page.get_by_role('button',name='返回资源列表',exact=True).click()
+            expect(dialog).to_be_hidden()
+            report['text_preview']={'actual_text_characters':len(text),'no_pdf_page_control':True,'return_button':True}
+        else:
+            report['text_preview']={'status':'not_available','reason':'This runtime has no readable text upload; do not count as a text preview pass.'}
         assert not report['page_errors'],report['page_errors']
     except Exception as exc:
         report['failures'].append(str(exc))

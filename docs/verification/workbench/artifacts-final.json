@@ -1,0 +1,13 @@
+{
+  "report_pages": 8,
+  "pptx_slides": 8,
+  "visual_review": "all 8 report pages and all 8 final slides inspected; no clipping or overlapping text",
+  "artifacts": {
+    "course_report.docx": "753bfc010105267947691b3fc637c3ad86cc7b2e2ca908f542ac48cf2034af7f",
+    "course_report.pdf": "6b4892950472b71106efa8be670ee09fb6b1e6c2ff428b7a6bbe9a4b76f2de3d",
+    "course_demo.pptx": "125a498e87e1c4b3815a0ec0f872132465143d4abab3deff1ab52d1c8443d656"
+  },
+  "pptx_integrity": "pass",
+  "pptx_layout_findings": 0,
+  "pptx_reimport_slides": 8
+}

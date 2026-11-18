@@ -1,5 +1,7 @@
 # 老师要求逐项验收
 
+> **2026-11-18最新交付**：当前结果以 [WORKBENCH_ACCEPTANCE.md](WORKBENCH_ACCEPTANCE.md) 为准，后端189项、前端33项，累计116条真实提示词，102组尺寸与33组真实缩放检查。8页报告/PDF和8页PPT已同步。本文件以下为此前阶段的实现与验证记录，旧测试数量和日期保留历史含义，不作为当前最终数量。
+
 日期：2026-11-16。以本轮真实源码、浏览器、模型、接口及数据库为依据。原包结论保存在 verification/previous-requirements-audit.md，仅供历史参考。
 
 核心软件闭环已通过：教师组卷发布、两名学生作答、评分保存、三种范围诊断、推荐、真实AI复测、前后对比和诊断更新。保留原Vue、FastAPI、SQLite和LangGraph及页面布局。仍缺真实成员信息、指定豆包Work或WorkBuddy项目使用历史和早期提示词原件；没有补造。完整启动方法与学习说明见 FINAL_DELIVERY.md。

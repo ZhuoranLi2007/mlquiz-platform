@@ -9,3 +9,9 @@
 请按照`docs/FINAL_DELIVERY.md`将它恢复到新的数据目录。恢复脚本拒绝覆盖已有数据库；bootstrap会生成本机演示登录信息。验收数据是教学演示证据，不代表真实学生已经学习掌握。
 
 老师可对照`docs/verification/current-persistence-and-api.json`及`browser-current`截图检查评分、原卷关联、复测轮次和诊断；也可运行`backend/scripts/verify_persisted_acceptance.py --url http://127.0.0.1:8002`重新核对（设置相同的MLQ_DATA_DIR）。
+
+## 最新工作台快照（2026-11-18）
+
+`mlquiz-workbench-reviewed.sqlite3.gz` 含843条题目版本、135份答卷（含1份未提交布局检查草稿）、761条作答、763条评分、7个复测周期、188条skill运行和116条真实提示词。登录会话为0、密码哈希为空。
+
+使用 `backend/scripts/restore_acceptance.py --snapshot workbench-review --output data/workbench-view` 恢复新目录，再设置MLQ_DATA_DIR并bootstrap。完整步骤及双学生数据标识见 `docs/WORKBENCH_ACCEPTANCE.md`。原始demo和此前验收快照均保留。

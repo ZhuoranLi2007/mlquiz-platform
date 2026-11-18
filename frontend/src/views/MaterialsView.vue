@@ -93,15 +93,34 @@ function showQuiz(item: any) {
 
 const previewItem = ref<any>(null)
 const previewPage = ref(1)
+const previewText = ref('')
+const previewLoading = ref(false)
+const previewError = ref('')
 
-function openPreview(item: any) {
+async function openPreview(item: any) {
   const url = item.preview?.file_url
   if (!url) {
     ElMessage.info(item.preview?.note || '该文件暂不支持在线预览')
     return
   }
   previewPage.value = 1
+  previewText.value = ''
+  previewError.value = ''
+  previewLoading.value = false
   previewItem.value = item
+  if (!['pdf', 'image'].includes(item.preview?.kind)) {
+    previewLoading.value = true
+    try {
+      const response = await fetch(url)
+      if (!response.ok) throw new Error(String(response.status))
+      const text = await response.text()
+      if (previewItem.value === item) previewText.value = text
+    } catch {
+      if (previewItem.value === item) previewError.value = '读取资料失败，请重试或下载原文件。'
+    } finally {
+      if (previewItem.value === item) previewLoading.value = false
+    }
+  }
 }
 
 function download(item: any) {
@@ -248,8 +267,10 @@ onBeforeUnmount(() => {
       <pre class="code-view"><code>{{ codeText }}</code></pre>
     </el-dialog>
     <el-dialog :model-value="Boolean(previewItem)" :title="previewItem?.card_title || '资料阅读'" width="min(1160px, 96vw)" @close="previewItem=null" class="material-reader-dialog">
-      <div class="workbench-toolbar"><span>页码</span><el-input-number v-model="previewPage" :min="1" :precision="0" aria-label="PDF页码" /><a :href="previewItem?.preview?.file_url" target="_blank" rel="noopener">在新标签打开原文件</a></div>
-      <iframe v-if="previewItem" :key="`${previewItem.upload_id}-${previewPage}`" :src="`${previewItem.preview.file_url}#page=${previewPage}`" title="课程资料阅读区" class="material-reader" />
+      <div class="workbench-toolbar"><template v-if="previewItem?.preview?.kind === 'pdf'"><span>页码</span><el-input-number v-model="previewPage" :min="1" :precision="0" aria-label="PDF页码" /></template><a :href="previewItem?.preview?.file_url" target="_blank" rel="noopener">在新标签打开原文件</a></div>
+      <iframe v-if="previewItem?.preview?.kind === 'pdf'" :key="`${previewItem.upload_id}-${previewPage}`" :src="`${previewItem.preview.file_url}#page=${previewPage}`" title="课程资料阅读区" class="material-reader" />
+      <div v-else-if="previewItem?.preview?.kind === 'image'" class="material-reader material-image"><img :src="previewItem.preview.file_url" :alt="previewItem.card_title" /></div>
+      <div v-else v-loading="previewLoading" class="material-reader material-text"><p v-if="previewError" role="alert">{{ previewError }}</p><pre v-else>{{ previewText }}</pre></div>
       <template #footer><el-button @click="previewItem=null">返回资源列表</el-button></template>
     </el-dialog>
   </WorkbenchPage>
@@ -378,4 +399,5 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .material-reader{display:block;width:100%;height:calc(100dvh - 230px);min-height:150px;margin-top:12px;border:1px solid #dce5f2}
+.material-text,.material-image{overflow:auto;padding:14px;box-sizing:border-box}.material-text pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:14px;line-height:1.7}.material-image img{max-width:100%;height:auto;display:block;margin:auto}
 </style>

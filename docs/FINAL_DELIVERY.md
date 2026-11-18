@@ -1,5 +1,7 @@
 # 本轮交付与使用说明
 
+> **2026-11-18最新交付**：当前结果以 [WORKBENCH_ACCEPTANCE.md](WORKBENCH_ACCEPTANCE.md) 为准，后端189项、前端33项，累计116条真实提示词，102组尺寸与33组真实缩放检查。8页报告/PDF和8页PPT已同步。本文件以下为此前阶段的实现与验证记录，旧测试数量和日期保留历史含义，不作为当前最终数量。
+
 首轮验收日期：2026-11-16；AI出题复测专项交付：2026-11-17。保留原Vue、FastAPI、SQLite与LangGraph架构及页面布局。本轮所有新考试、作答和真实模型验证在从原包恢复的独立副本中完成，未连接或修改桌面上的旧平台数据库。
 
 新增AI出题复测专项说明见`AI_RETEST_REVIEW.md`。常规组卷保留题库优先、缺题AI补的原有策略；最终后端182项、前端30项通过，真实模型累计85次调用。新增诊断与资源专项说明见`DIAGNOSIS_RESOURCE_REVIEW.md`，35个课程知识点对应80张唯一原课件页，支持离线精读。
@@ -94,3 +96,7 @@ $env:MLQ_DATA_DIR=(Resolve-Path data/acceptance-view).Path
 三范围诊断和学生课程阅读已重新做真实浏览器验证。恢复本次结果请使用`restore_acceptance.py --snapshot diagnosis-review --output data/diagnosis-view`，其余环境和启动步骤与上文相同。详细证据、已知边界、学习说明见`DIAGNOSIS_RESOURCE_REVIEW.md`。最终包的独立解压启动结果记录在`verification/diagnosis-package-smoke.json`。
 
 最终包已完成该独立解压检查：恢复354个素材文件，后端、worker、前端、演示登录及本次诊断快照复查均通过，35个知识点材料与80张唯一图片可用。
+
+## 2026-11-18完整工作台交付
+
+最新ZIP为mlquiz-platform-workbench-verified-20261118.zip；报告和PDF均8页，PPT8页。独立解压检查通过，恢复354个素材，实际启动API/worker/前端，并在新目录再次通过学生30组和教师66组浏览器检查。文本预览与PDF按类型显示，文本追加六尺寸验证。当前完整说明、所有截图和实际结果见WORKBENCH_ACCEPTANCE.md，压缩包检查见verification/workbench/package-smoke-final.json。

@@ -1,0 +1,114 @@
+{
+  "kind": "text",
+  "checks": [
+    {
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ],
+      "headers_fixed": true,
+      "scrolls": []
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "document": [
+        1280,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": []
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "document": [
+        1440,
+        900
+      ],
+      "headers_fixed": true,
+      "scrolls": []
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "document": [
+        1920,
+        1080
+      ],
+      "headers_fixed": true,
+      "scrolls": []
+    },
+    {
+      "viewport": [
+        640,
+        720
+      ],
+      "document": [
+        640,
+        720
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 509,
+          "scroll": 666,
+          "top": 157,
+          "reaches_end": true,
+          "visible_height": 509,
+          "within_viewport": true
+        }
+      ]
+    },
+    {
+      "viewport": [
+        683,
+        384
+      ],
+      "document": [
+        683,
+        384
+      ],
+      "headers_fixed": true,
+      "scrolls": [
+        {
+          "class": "",
+          "client": 155,
+          "scroll": 254,
+          "top": 99,
+          "reaches_end": true,
+          "visible_height": 154.515625,
+          "within_viewport": true
+        },
+        {
+          "class": "workbench-page-body owns-scroll",
+          "client": 192,
+          "scroll": 666,
+          "top": 474,
+          "reaches_end": true,
+          "visible_height": 192,
+          "within_viewport": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "missing_asset_restored_from_bundle": true,
+  "database_modified": false,
+  "actual_text_characters": 55,
+  "content_matches_bundled_original": true,
+  "no_pdf_page_control": true,
+  "tab_focus_contained": true,
+  "escape": true
+}
