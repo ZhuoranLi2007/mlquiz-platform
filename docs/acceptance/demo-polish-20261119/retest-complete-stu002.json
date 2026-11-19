@@ -1,0 +1,429 @@
+{
+  "account": "stu002",
+  "source_attempt_id": "attempt_1da4e3b4d5754de2",
+  "attempt_id": "attempt_393a14e38d6e42e9",
+  "answers": [
+    {
+      "question_id": "aiq_a9498cbee8704fe5",
+      "selected": false,
+      "reference": false
+    },
+    {
+      "question_id": "aiq_d7c9fce2b78747f5",
+      "selected": "A",
+      "reference": "B"
+    },
+    {
+      "question_id": "aiq_d42b627b4acc49f2",
+      "selected": false,
+      "reference": false
+    },
+    {
+      "question_id": "aiq_eff6788ecdfa4a51",
+      "selected": [
+        "A",
+        "B",
+        "C"
+      ],
+      "reference": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "question_id": "aiq_f2205800d9974672",
+      "selected": "B",
+      "reference": "B"
+    }
+  ],
+  "attempt_database": {
+    "attempt_id": "attempt_393a14e38d6e42e9",
+    "mode": "retest",
+    "status": "submitted",
+    "score": 8.0,
+    "max_score": 10.0,
+    "grading_status": "graded",
+    "manual_pending_count": 0,
+    "retest_of_attempt_id": "attempt_1da4e3b4d5754de2"
+  },
+  "state": {
+    "rule_version": "learning-loop-v3",
+    "task_state": "ready",
+    "round_result": {
+      "cycle_id": "retestcycle_34fb0754a49f47d6",
+      "round": 1,
+      "status": "passed",
+      "release_id": "",
+      "retest_attempt_id": "attempt_393a14e38d6e42e9",
+      "accuracy": 0.8,
+      "correct_count": 4,
+      "question_count": 5,
+      "completed_at": "2026-11-19T13:40:50+00:00",
+      "published_at": "2026-11-19T13:40:09+00:00",
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "retest_kind": "formal"
+    },
+    "last_passed": {
+      "cycle_id": "retestcycle_34fb0754a49f47d6",
+      "round": 1,
+      "status": "passed",
+      "release_id": "",
+      "retest_attempt_id": "attempt_393a14e38d6e42e9",
+      "accuracy": 0.8,
+      "correct_count": 4,
+      "question_count": 5,
+      "completed_at": "2026-11-19T13:40:50+00:00",
+      "published_at": "2026-11-19T13:40:09+00:00",
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "retest_kind": "formal"
+    },
+    "latest_task": {
+      "cycle_id": "retestcycle_34fb0754a49f47d6",
+      "round": 1,
+      "status": "passed",
+      "release_id": "",
+      "retest_attempt_id": "attempt_393a14e38d6e42e9",
+      "accuracy": 0.8,
+      "correct_count": 4,
+      "question_count": 5,
+      "completed_at": "2026-11-19T13:40:50+00:00",
+      "published_at": "2026-11-19T13:40:09+00:00",
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "retest_kind": "formal"
+    },
+    "concept_results": [
+      {
+        "kp_id": "kp.regularization.l1l2",
+        "state": "needs_review",
+        "achieved_at": "",
+        "confirmed_at": "",
+        "due_at": "",
+        "history": [
+          {
+            "kp_id": "kp.regularization.l1l2",
+            "cycle_id": "retestcycle_34fb0754a49f47d6",
+            "round": 1,
+            "state": "needs_review",
+            "correct_count": 4,
+            "question_count": 5,
+            "scored_count": 5,
+            "independent": true,
+            "distinct_families": 5,
+            "distinct_angles": 5,
+            "evidence_question_ids": [
+              "aiq_a9498cbee8704fe5",
+              "aiq_d7c9fce2b78747f5",
+              "aiq_d42b627b4acc49f2",
+              "aiq_eff6788ecdfa4a51",
+              "aiq_f2205800d9974672"
+            ],
+            "submitted_at": "2026-11-19T13:40:50+00:00",
+            "started_at": "2026-11-19T13:40:09+00:00",
+            "completed_at": "2026-11-19T13:40:50+00:00",
+            "kind": "formal"
+          }
+        ],
+        "task_state": "needs_review",
+        "evidence": {
+          "kp_id": "kp.regularization.l1l2",
+          "cycle_id": "retestcycle_34fb0754a49f47d6",
+          "round": 1,
+          "state": "needs_review",
+          "correct_count": 4,
+          "question_count": 5,
+          "scored_count": 5,
+          "independent": true,
+          "distinct_families": 5,
+          "distinct_angles": 5,
+          "evidence_question_ids": [
+            "aiq_a9498cbee8704fe5",
+            "aiq_d7c9fce2b78747f5",
+            "aiq_d42b627b4acc49f2",
+            "aiq_eff6788ecdfa4a51",
+            "aiq_f2205800d9974672"
+          ],
+          "submitted_at": "2026-11-19T13:40:50+00:00",
+          "started_at": "2026-11-19T13:40:09+00:00",
+          "completed_at": "2026-11-19T13:40:50+00:00",
+          "kind": "formal"
+        },
+        "label": "需加强",
+        "needs_review": true
+      }
+    ],
+    "available_actions": [
+      "start"
+    ],
+    "remaining_kp_ids": [
+      "kp.regularization.l1l2"
+    ],
+    "active_job_id": ""
+  },
+  "feedback": {
+    "score_summary": {
+      "nominal_max_score": 100.0,
+      "ungraded_item_count": 0,
+      "ungraded_max_score": 0.0,
+      "grading_status": "graded",
+      "scored_items": 4,
+      "correct_items": 3,
+      "wrong_items": 1,
+      "partial_items": 0,
+      "awarded_score": 75.0,
+      "max_score": 100.0,
+      "score_rate": 0.75
+    },
+    "retest_history": [
+      {
+        "cycle_id": "retestcycle_34fb0754a49f47d6",
+        "kp_ids": [
+          "kp.regularization.l1l2"
+        ],
+        "remaining_kp_ids": [
+          "kp.regularization.l1l2"
+        ],
+        "untested_kp_ids": [],
+        "release_id": "",
+        "release_title": "针对性复测",
+        "retest_attempt_id": "attempt_393a14e38d6e42e9",
+        "result_determinable": true,
+        "round": 1,
+        "status": "passed",
+        "threshold": 0.8,
+        "question_count": 5,
+        "correct_count": 4,
+        "accuracy": 0.8,
+        "published_at": "2026-11-19T13:40:09+00:00",
+        "submitted_at": "2026-11-19T13:40:50+00:00",
+        "wrong_items": [
+          {
+            "paper_item_id": "item_405897e422824586",
+            "question_id": "aiq_d7c9fce2b78747f5",
+            "kp_ids": [
+              "kp.regularization.l1l2"
+            ],
+            "position": 2,
+            "question_type": "single_choice",
+            "stem": "某团队在训练集上已出现明显过拟合，计划在训练目标中加入正则项以降低方差。关于该做法，下列理解最恰当的是：",
+            "options": [
+              {
+                "key": "A",
+                "text": "加入正则项一定能提升模型在所有数据上的性能"
+              },
+              {
+                "key": "B",
+                "text": "正则化通过压低模型复杂度、减小方差来缓解过拟合，但会引入偏差，且惩罚过强可能导致欠拟合"
+              },
+              {
+                "key": "C",
+                "text": "正则项直接加在测试阶段，因此不会影响训练集上的表现"
+              },
+              {
+                "key": "D",
+                "text": "若模型本身处于欠拟合状态，加大正则强度仍会改善效果"
+              }
+            ],
+            "shared_materials": [],
+            "source_blocks": [],
+            "source_options": [],
+            "content_warning": "",
+            "is_scoring_revision": false,
+            "original_question": null,
+            "chapter_id": "ch02",
+            "chapter": {
+              "title": "ch02"
+            },
+            "knowledge_point": {
+              "kp_id": "kp.regularization.l1l2",
+              "name": "本题对应概念"
+            },
+            "response_status": "",
+            "response": {
+              "key": "A"
+            },
+            "evidence_status": "scored",
+            "correct": false,
+            "awarded_score": 0.0,
+            "max_score": 2.0,
+            "answer_reference": {
+              "available": true,
+              "payload": {
+                "key": "B"
+              },
+              "explanation": "正则化通过在训练目标中加入惩罚项来限制模型复杂度，从而降低方差、缓解过拟合；但惩罚会引入偏差，强度过大时可能导致欠拟合。A的“一定提升所有数据性能”过于绝对；C错误，正则项作用于训练目标而非测试阶段；D错误，欠拟合时加大正则强度会进一步恶化效果。",
+              "rubric": {
+                "points": [
+                  {
+                    "point": "选出体现偏差-方差权衡的选项",
+                    "score": 2
+                  }
+                ]
+              }
+            },
+            "error_analysis": {
+              "label": ""
+            },
+            "class_comparison": {
+              "denominator": null,
+              "correct_count": null,
+              "correct_rate": null
+            }
+          }
+        ]
+      }
+    ],
+    "learning_loop": {
+      "rule_version": "learning-loop-v3",
+      "task_state": "ready",
+      "round_result": {
+        "cycle_id": "retestcycle_34fb0754a49f47d6",
+        "round": 1,
+        "status": "passed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_393a14e38d6e42e9",
+        "accuracy": 0.8,
+        "correct_count": 4,
+        "question_count": 5,
+        "completed_at": "2026-11-19T13:40:50+00:00",
+        "published_at": "2026-11-19T13:40:09+00:00",
+        "source_counts": {
+          "ai_generated": 2,
+          "bank_selected": 3,
+          "original_reused": 0
+        },
+        "retest_kind": "formal"
+      },
+      "last_passed": {
+        "cycle_id": "retestcycle_34fb0754a49f47d6",
+        "round": 1,
+        "status": "passed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_393a14e38d6e42e9",
+        "accuracy": 0.8,
+        "correct_count": 4,
+        "question_count": 5,
+        "completed_at": "2026-11-19T13:40:50+00:00",
+        "published_at": "2026-11-19T13:40:09+00:00",
+        "source_counts": {
+          "ai_generated": 2,
+          "bank_selected": 3,
+          "original_reused": 0
+        },
+        "retest_kind": "formal"
+      },
+      "latest_task": {
+        "cycle_id": "retestcycle_34fb0754a49f47d6",
+        "round": 1,
+        "status": "passed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_393a14e38d6e42e9",
+        "accuracy": 0.8,
+        "correct_count": 4,
+        "question_count": 5,
+        "completed_at": "2026-11-19T13:40:50+00:00",
+        "published_at": "2026-11-19T13:40:09+00:00",
+        "source_counts": {
+          "ai_generated": 2,
+          "bank_selected": 3,
+          "original_reused": 0
+        },
+        "retest_kind": "formal"
+      },
+      "concept_results": [
+        {
+          "kp_id": "kp.eval.bias_var",
+          "state": "insufficient",
+          "achieved_at": "",
+          "confirmed_at": "",
+          "due_at": "",
+          "history": [],
+          "label": "证据不足",
+          "needs_review": false,
+          "name": "偏差-方差均衡"
+        },
+        {
+          "kp_id": "kp.regularization.l1l2",
+          "state": "needs_review",
+          "achieved_at": "",
+          "confirmed_at": "",
+          "due_at": "",
+          "history": [
+            {
+              "kp_id": "kp.regularization.l1l2",
+              "cycle_id": "retestcycle_34fb0754a49f47d6",
+              "round": 1,
+              "state": "needs_review",
+              "correct_count": 4,
+              "question_count": 5,
+              "scored_count": 5,
+              "independent": true,
+              "distinct_families": 5,
+              "distinct_angles": 5,
+              "evidence_question_ids": [
+                "aiq_a9498cbee8704fe5",
+                "aiq_d7c9fce2b78747f5",
+                "aiq_d42b627b4acc49f2",
+                "aiq_eff6788ecdfa4a51",
+                "aiq_f2205800d9974672"
+              ],
+              "submitted_at": "2026-11-19T13:40:50+00:00",
+              "started_at": "2026-11-19T13:40:09+00:00",
+              "completed_at": "2026-11-19T13:40:50+00:00",
+              "kind": "formal"
+            }
+          ],
+          "task_state": "needs_review",
+          "evidence": {
+            "kp_id": "kp.regularization.l1l2",
+            "cycle_id": "retestcycle_34fb0754a49f47d6",
+            "round": 1,
+            "state": "needs_review",
+            "correct_count": 4,
+            "question_count": 5,
+            "scored_count": 5,
+            "independent": true,
+            "distinct_families": 5,
+            "distinct_angles": 5,
+            "evidence_question_ids": [
+              "aiq_a9498cbee8704fe5",
+              "aiq_d7c9fce2b78747f5",
+              "aiq_d42b627b4acc49f2",
+              "aiq_eff6788ecdfa4a51",
+              "aiq_f2205800d9974672"
+            ],
+            "submitted_at": "2026-11-19T13:40:50+00:00",
+            "started_at": "2026-11-19T13:40:09+00:00",
+            "completed_at": "2026-11-19T13:40:50+00:00",
+            "kind": "formal"
+          },
+          "label": "需加强",
+          "needs_review": true,
+          "name": "L1/L2 正则化"
+        }
+      ],
+      "available_actions": [
+        "start"
+      ],
+      "remaining_kp_ids": [
+        "kp.eval.bias_var",
+        "kp.regularization.l1l2"
+      ]
+    },
+    "current_weak_concept_count": 1
+  },
+  "visible_control": "本轮复测通过\n第 1 轮 · 80% · 11/19 21:40\n第 1 轮题源：AI 新题 2 · 题库 3\n查看结果\n再次复测",
+  "page_errors": []
+}

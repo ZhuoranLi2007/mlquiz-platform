@@ -1,0 +1,378 @@
+{
+  "date": "2026-11-19",
+  "source_commit": "21c58b09b980b0898b4d10a468ea2281e8e22417",
+  "report_pages": 45,
+  "matrix_pages": 2,
+  "chapters": 9,
+  "screenshots_unique": 15,
+  "diagrams": 6,
+  "tables": 13,
+  "toc_entries": 50,
+  "toc_page_mismatches": [],
+  "chapter_4_5_share_of_body_prose_cjk": 0.4564,
+  "code_excerpts": [
+    {
+      "number": "4-1",
+      "path": "backend/app/services/learning_loop.py",
+      "start": 258,
+      "end": 269,
+      "matches_source": true
+    },
+    {
+      "number": "4-2",
+      "path": "backend/app/services/score_policy.py",
+      "start": 6,
+      "end": 18,
+      "matches_source": true
+    }
+  ],
+  "figures": [
+    {
+      "number": "2-1",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\architecture.png",
+      "sha256": "cee3b94ec0156395bf53125e2b001ecf1a5e2fa84e2ec172bda3f008f72011cf"
+    },
+    {
+      "number": "2-2",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\business.png",
+      "sha256": "86f37695b3355a895d6038ce0964f95aee52569e724edaa38732f10ebce03000"
+    },
+    {
+      "number": "3-1",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\er.png",
+      "sha256": "0dd3feaec3c91ab3b427344ee53faa5bbafe05d69f4ebe8f72e984c9e5deab49"
+    },
+    {
+      "number": "4-1",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\13_imported_exam.png",
+      "sha256": "40865fb601c1185a257ce873b2055038bbe4253a2d9969c09a6cd4a3aea84ace"
+    },
+    {
+      "number": "4-2",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\02_question_bank.png",
+      "sha256": "823a3fa1a7d540bb97ed8aff759b4cbed9083e93ff54ab667a67dafc742a8436"
+    },
+    {
+      "number": "4-3",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\04_student_exam.png",
+      "sha256": "687c8d5ee4cca9f3113596fa67bbc63c725ad7ffabe8f57fed6adac52607e429"
+    },
+    {
+      "number": "4-4",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\05_exam_result.png",
+      "sha256": "2f51d0161a98075d897e9d56de8d91e6a0df0dad26adb833839ed2cc159a7155"
+    },
+    {
+      "number": "4-5",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\06_single_diagnosis.png",
+      "sha256": "3f38104d726c5cd6aaa9f635586efba91c8d09c90b1dd1b6eec2e7949282fb24"
+    },
+    {
+      "number": "4-6",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\07_history_diagnosis.png",
+      "sha256": "3c817181322539018b6ee2e149a3b5a7a2173d1d53cc3ac74fe28cb032fd3245"
+    },
+    {
+      "number": "4-7",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\08_group_diagnosis.png",
+      "sha256": "1241364d1473340ff83c6d0cd95379332185d628e186ccad2b33640b91337be8"
+    },
+    {
+      "number": "4-8",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\09_resource_recommendation.png",
+      "sha256": "1f71ca9cc382b84e9165ebc38c1c76c83066ac28133b186aa9297c25da778f6a"
+    },
+    {
+      "number": "4-9",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\10_retest.png",
+      "sha256": "53dfc85de23255012067f8886f915ac06dea737ae00d978d8e2d0c8690833c2c"
+    },
+    {
+      "number": "5-1",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\diagnosis_graph.png",
+      "sha256": "bafa2db2063bd2d3675ef305175f128233810ed95f5b873735e50192e89b0a86"
+    },
+    {
+      "number": "5-2",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\retest_graph.png",
+      "sha256": "d7104e5cc39a90bde0a939dfce296aa64ddf1988d3e4a79fd435f4acfb326ccd"
+    },
+    {
+      "number": "5-3",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\post_graph.png",
+      "sha256": "452bef2e9ba9aa012c8fa8146c2506e57e3c2a6d580affd465c54db2012ff578"
+    },
+    {
+      "number": "6-1",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\01_teacher_home.png",
+      "sha256": "f913c9741b92951198618826b0d7c0c9e304aeb9c4d1621178b30b398e675038"
+    },
+    {
+      "number": "6-2",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\03_exam_publish.png",
+      "sha256": "cd2b192825195e2fe3ce79542cb3d7b9d081862f26cd8c0abcd2d7c536175671"
+    },
+    {
+      "number": "6-3",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\14_course_resource.png",
+      "sha256": "543beb144f77b3635534442606b637ae0c876ddcefdf2b01a6dc8c4ab04393e0"
+    },
+    {
+      "number": "7-1",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\11_progress_comparison.png",
+      "sha256": "3335a535a9ae40d7cc20d11f64c23ecfe73dd0ee1f6b586c3664c036b5a43f24"
+    },
+    {
+      "number": "7-2",
+      "type": "figure",
+      "source": "docs\\evidence\\learning-loop-v3\\student1-passed-1366.jpg",
+      "sha256": "582f9691a59c7da1dd46d3ffef8f524a0d846744747b46f86f73abeb26fdc546"
+    },
+    {
+      "number": "7-3",
+      "type": "figure",
+      "source": "docs\\evidence\\learning-loop-v3\\student2-four-of-five.jpg",
+      "sha256": "bba985f02fed57af48c99d98d1e2fc1ea5fe98dfd499d15252bb4ad3325cca17"
+    }
+  ],
+  "backup_hashes_verified": [
+    {
+      "name": "course_report_detailed.docx",
+      "sha256": "E51FAEEE80F2F7E8BF4E86E1185F78A7EF5280F1599DA4F9AC9C2728295A9F27"
+    },
+    {
+      "name": "build_detailed_report.py",
+      "sha256": "4027191FE3E47333E8E62DD674B162DFE05E7A7E5D9978F35DC9B90251AF1FCD"
+    },
+    {
+      "name": "README.txt",
+      "sha256": "20717A783E6EA3B1E728E3358D71FB5E67231A11B188797B7CD02D0A3AF7D045"
+    }
+  ],
+  "readonly_database_hash_verified": "29e04ae21567f37a8dba18bc26bb0f06eaffcb23cf4f10a2e1ba7ac7d87de0b9",
+  "application_code_unchanged": true,
+  "old_ppt_matches_git_head": true,
+  "new_application_tests_or_model_calls_for_report": false,
+  "visual_review": {
+    "method": "Every report and matrix page rendered and viewed; modified pages reviewed again. Final unchanged pages matched reviewed PNG bytes.",
+    "report": [
+      {
+        "page": 1,
+        "sha256": "16029048fbb4b5083f0db68379525aaa71fbe1cfda6d81bbd17f3ada967d59d6"
+      },
+      {
+        "page": 2,
+        "sha256": "0a5bb87ebac420bb250d6c451c9283de4b00bc47fc9dedf8bcdb84e2e55b5256"
+      },
+      {
+        "page": 3,
+        "sha256": "a360732c6e78553f8234251a90d061af951327bc773c7dd5f7f30e24ef338ebe"
+      },
+      {
+        "page": 4,
+        "sha256": "3aafc517aa636ac6ffffb1b526320466bc8380f17d3a1b1087698b3e68b80331"
+      },
+      {
+        "page": 5,
+        "sha256": "02d1a8ddf02768e84cf90514be6720fc0bfe96487fa17394c74a45e999fc29a0"
+      },
+      {
+        "page": 6,
+        "sha256": "c76318f20c12b99f45b3de00a57c9fc66a86ab8b5e84b738a0bcd3ee1646fb66"
+      },
+      {
+        "page": 7,
+        "sha256": "ed7859d281b18793f1bcddb623fda37dd4a622a8c99b148ac2a679ed62badabd"
+      },
+      {
+        "page": 8,
+        "sha256": "3166810cf53e5e712303f03b09e36c9071cb6dca6ffc4bbb9f99a7a934ae4141"
+      },
+      {
+        "page": 9,
+        "sha256": "320432f686a95776a685de2d02bcb2f0d279ea4d54fb6cbde3273fa130bd35b1"
+      },
+      {
+        "page": 10,
+        "sha256": "60f709606f7659d5bc63f15fd23ac6454e8a2ed100f5cf6518cdc1084a29ccbe"
+      },
+      {
+        "page": 11,
+        "sha256": "2a508a9bfe8f27c62e56120bdc96a7d6406496a5eecee0472797febba5ba6266"
+      },
+      {
+        "page": 12,
+        "sha256": "35fce43430d95a9a2bac64e9417cd2ce23ae4b4987454742092c8e44c89d5132"
+      },
+      {
+        "page": 13,
+        "sha256": "f08bf5d76ba3f45e2dbe46310a6200501ef234571f62ded3036e88406afe12f2"
+      },
+      {
+        "page": 14,
+        "sha256": "03ae2a3a2917c6bce97777988314f1cd830b64cade070762751d6bb008a7afed"
+      },
+      {
+        "page": 15,
+        "sha256": "1f9b2b239d6deb01f2fa9d1b0bd16699a7eb0765b9337f351967d5eede55e368"
+      },
+      {
+        "page": 16,
+        "sha256": "85309508e18160aee0e5f64e9cec06d1c4c4c999056cd32d615b7bc1040ed173"
+      },
+      {
+        "page": 17,
+        "sha256": "0aadb8b3b80a9c6fc5892b288f12c4ac306628dc1cc161a0b55e678118ab1423"
+      },
+      {
+        "page": 18,
+        "sha256": "fc1442856fd049e66a746c9ecb35cd8d6652a62df2371c510b36f7838cf894d0"
+      },
+      {
+        "page": 19,
+        "sha256": "97ad00c152db4a83e41d3cd1638361b22c4572e4ca313db8d607229ae85f9e5f"
+      },
+      {
+        "page": 20,
+        "sha256": "ca91236f4b02a0c0772de4543e90ac9bae100a2a5133d95392e4c49eb10b94eb"
+      },
+      {
+        "page": 21,
+        "sha256": "0ba42c0827979257704703fb0dfff5514d7b789af7f3e516dcb49e2b66d008a8"
+      },
+      {
+        "page": 22,
+        "sha256": "cc20a381be725dbf05aa675b65ef8b407e4dac7475009560e771926f28ac7e1b"
+      },
+      {
+        "page": 23,
+        "sha256": "c73b5e9a03aff48a00f1b23831fa356f491eaae9d1a7b9f988ed7bbea999b9b7"
+      },
+      {
+        "page": 24,
+        "sha256": "593818e7092600211373925e770014fa2b3df6b51787a5c643b0a2de28be8cdd"
+      },
+      {
+        "page": 25,
+        "sha256": "387c32958c31e78abab10831cfffc623548619b844f4bef4e251e3b6b510385c"
+      },
+      {
+        "page": 26,
+        "sha256": "8b44d49ef940ab760b08a8da1098b79189e0f5479aa04e72df30057975c7a81d"
+      },
+      {
+        "page": 27,
+        "sha256": "c0e2bed5a9b5e8aae573047ad91831a37f88ca1995e306c73a834b1d1011b508"
+      },
+      {
+        "page": 28,
+        "sha256": "f4c58697a8ac15bcfc797307b1b6cb3db89f180ce7f78c81fc950219a54728b6"
+      },
+      {
+        "page": 29,
+        "sha256": "8712d0347687b4f5d61d872f51e7c641eaf95cbfa08df22fb5bc8d2247a2eba6"
+      },
+      {
+        "page": 30,
+        "sha256": "077d46d5305116fcbb7e0d6c63a6800e82b63bfaed6a577845dc12851e197122"
+      },
+      {
+        "page": 31,
+        "sha256": "8db69eed49d230dd89603e78fa975e0633894d2f23bf5bdd307f7135d2ef8f29"
+      },
+      {
+        "page": 32,
+        "sha256": "926bc2b4debcd016f982f2dfefb3371df89de847848ba27bff613c581be0a0d3"
+      },
+      {
+        "page": 33,
+        "sha256": "33de9196bb345f923d358101532a93865984f2c7f0272989731cb8c05db94413"
+      },
+      {
+        "page": 34,
+        "sha256": "71c493492d67b19609f699a84b107fb3dda0054250e7a7bc6ffd7c34482b0100"
+      },
+      {
+        "page": 35,
+        "sha256": "3a0a4b83f8eb4e143e765612af3ec4cef1f3f3dc3720ac02c3899b7b7d4efa74"
+      },
+      {
+        "page": 36,
+        "sha256": "dc0164bb76d65728c5d8999d794c3b4ba77a7ed4646b6ef16c5642471190fbe8"
+      },
+      {
+        "page": 37,
+        "sha256": "f0aca2ac8893fe21353018d69a563feb4d6bbb9d60f2e4c6e1465267cb23e04d"
+      },
+      {
+        "page": 38,
+        "sha256": "e2705dabddf81d07c60a8d47a6689a0dab5a6a98310e5fd2ad9de64833138039"
+      },
+      {
+        "page": 39,
+        "sha256": "41594bc85a13c612501357b3879dab45ec141af25cb9b0fe152fbd76499bcdf0"
+      },
+      {
+        "page": 40,
+        "sha256": "593eaf4a8724a009cb1baad2e3b392049b458e02279e010d173a401a656e48ed"
+      },
+      {
+        "page": 41,
+        "sha256": "0b91f078e9a417aeb3f1cfdc891d54d5a9c4df405acb739e4654178177bddbbc"
+      },
+      {
+        "page": 42,
+        "sha256": "f15df248d33880896bb8745e24ca1d20ec31bc48f51214347289c5b8815cdec3"
+      },
+      {
+        "page": 43,
+        "sha256": "e1e7b2aa453183a0c02ed0df41defab9bfee25f95c2ab4a726a03e43d9767cd3"
+      },
+      {
+        "page": 44,
+        "sha256": "dfc7930fcb222618c7d131b18920e5d9c39f3dba9e8d862ca69d0d574bf70bf2"
+      },
+      {
+        "page": 45,
+        "sha256": "f999a5f7689889d5c11b8ab0cb883aa6fd8bcd51b4b5bff456540da2d7a5c3c6"
+      }
+    ],
+    "matrix": [
+      {
+        "page": 1,
+        "sha256": "c92a653a8569826753b772b2c12ef73d4af1cb7213924735064440db36453811"
+      },
+      {
+        "page": 2,
+        "sha256": "8d0cb71e33dbb6c2636a69d3178743ecdf72a1623b9c88a8b2db9fc52d96a18e"
+      }
+    ],
+    "findings": "No blank pages, clipped content or detached figure captions. Chapter endings retain some whitespace. Two historical JPEG screenshots retain their original lower image sharpness."
+  },
+  "deliverables": {
+    "course_report_detailed.docx": "8a881486dd294912eb0bbb52e370ee2857df3c27cb928780991057c825cadc43",
+    "course_report_detailed.pdf": "4a7bc2d53190bf0fe6b34d1fbaa539c386d467c9304b2903d3b9211877df87ad",
+    "课程要求与项目实现对照表.docx": "1dc6afdb47a928c0d68194f6c8bac9752a8625a65c966a3b3b07e094b9ab181b",
+    "报告重写说明.txt": "713955dcf23d60d29e0448fa82a648af7bdd631d416f62dfa7df46eea5d5d2c0",
+    "待本人补充事项.txt": "c72df3b852de6a9c664b6bb949697629f35bc6a80884aa25132da47ca80c02f1"
+  }
+}

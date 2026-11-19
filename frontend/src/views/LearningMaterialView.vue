@@ -1,56 +1,21 @@
 <script setup lang="ts">
-import WorkbenchPage from "../components/WorkbenchPage.vue"
-import { auth } from "../auth"
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import { useRoute,useRouter } from 'vue-router'
+import WorkbenchPage from '../components/WorkbenchPage.vue'
+import { auth } from '../auth'
 import { api } from '../api/client'
-const route = useRoute()
-const router = useRouter()
-const selectedPage = ref<number>()
-function jumpPage(page:number) { document.getElementById(`course-page-${page}`)?.scrollIntoView({ block: "start" }) }
-const material = ref<any>(null)
-const error = ref('')
-onMounted(async () => {
-  try { material.value = await api.get(`/learning-materials/${encodeURIComponent(String(route.params.kpId))}`) }
-  catch { error.value = '课程材料加载失败，请刷新重试。' }
-})
+const route=useRoute(),router=useRouter(),material=ref<any>(null),error=ref(''),selectedPage=ref(0)
+const page=computed(()=>material.value?.pages?.[selectedPage.value])
+watch(()=>route.params.kpId,async()=>{material.value=null;error.value='';selectedPage.value=0;try{material.value=await api.get('/learning-materials/'+encodeURIComponent(String(route.params.kpId)))}catch{error.value='课程材料加载失败，请刷新重试。'}},{immediate:true})
+function back(){if(window.history.state?.back)router.back();else router.push(auth.isTeacher.value?'/teacher/online':'/student/online')}
 </script>
 <template>
-  <WorkbenchPage class="learning-material" label="课程原页阅读区">
-    <template #header>
-    <header><span>课程精读</span><h1>{{ material?.name || '学习材料' }}</h1></header>
-    <div class="workbench-toolbar"><el-button @click="router.push(auth.isTeacher.value ? '/teacher/resources' : '/student/online')">返回资源列表</el-button><el-select v-if="material" v-model="selectedPage" aria-label="跳转课程页码" placeholder="跳转原文页码" @change="jumpPage"><el-option v-for="page in material.pages" :key="page.page" :label="`第 ${page.page} 页 · ${page.title}`" :value="page.page" /></el-select></div>
-    </template>
-    <p v-if="error" role="alert">{{ error }}</p>
-    <p v-else-if="!material">正在加载课程原页…</p>
-    <template v-else>
-      <section class="learning-task"><h2>这次重点看什么</h2><p>{{ material.action }}</p>
-        <p><b>自测标准：</b>{{ material.success_check }}</p>
-
-      </section>
-      <section v-if="material.reading_note" class="learning-task"><h2>阅读时核对这一点</h2>
-        <p>{{ material.reading_note }}</p><a v-if="material.note_source" :href="material.note_source" target="_blank" rel="noopener noreferrer">查看公式依据</a>
-      </section>
-      <article :id="`course-page-${page.page}`" v-for="page in material.pages" :key="page.page" class="source-page">
-        <h2>{{ page.title }} · 第 {{ page.page }} 页</h2>
-        <a v-if="page.image_url" :href="page.image_url" target="_blank" rel="noopener noreferrer" title="打开原图查看公式">
-          <img :src="page.image_url" :alt="`${page.title} 第${page.page}页`" loading="lazy" />
-        </a>
-        <p v-else>原页图暂不可用，以下保留已提取文字。</p>
-        <details><summary>查看可检索文字（公式以原页为准）</summary><pre>{{ page.excerpt }}</pre></details>
-      </article>
-      <footer>完成后回到原诊断页面，对照错题解释判断依据，随时发起下一轮复测。</footer>
-    </template>
-  </WorkbenchPage>
+ <WorkbenchPage class="learning-material" label="课程原页阅读区" :scroll="false">
+  <template #header><div class="reader-heading"><el-button @click="back">← 返回</el-button><h1>{{ material?.name || '课程精读' }}</h1><a v-if="page?.image_url" :href="page.image_url" target="_blank" rel="noopener noreferrer">打开原图 ↗</a></div></template>
+  <p v-if="error" role="alert">{{ error }}</p><p v-else-if="!material">正在加载课程原页…</p>
+  <div v-else class="reader-layout"><aside><h2>复习重点</h2><p>{{ material.action }}</p><details v-if="material.success_check"><summary>自测</summary><p>{{ material.success_check }}</p></details><details v-if="material.reading_note"><summary>阅读提示</summary><p>{{ material.reading_note }}</p><a v-if="material.note_source" :href="material.note_source" target="_blank" rel="noopener noreferrer">查看依据 ↗</a></details><nav aria-label="课程原页列表"><button v-for="(row,i) in material.pages" :key="row.page" :class="{active:selectedPage===i}" @click="selectedPage=i"><b>第 {{ row.page }} 页</b><span>{{ row.title }}</span></button></nav></aside><section v-if="page" class="reader-page"><header><span>{{ page.title }} · 第 {{ page.page }} 页</span><nav><el-button :disabled="selectedPage===0" @click="selectedPage--">上一页</el-button><span>{{ selectedPage+1 }}/{{ material.pages.length }}</span><el-button :disabled="selectedPage===material.pages.length-1" @click="selectedPage++">下一页</el-button></nav></header><div class="source-image"><img v-if="page.image_url" :src="page.image_url" :alt="`${page.title} 第${page.page}页`" /><p v-else>原页图片暂不可用</p></div><details><summary>查看原页文字</summary><pre>{{ page.excerpt }}</pre></details></section></div>
+ </WorkbenchPage>
 </template>
 <style scoped>
-.learning-material{max-width:1080px;margin:0 auto;padding:30px 22px;color:#263950;background:#fff;min-height:100vh}
-header span,small,footer{color:#64748b}h1{font-size:26px;margin:8px 0 22px}h2{font-size:18px;margin:0 0 12px}
-.learning-task{background:#f4f7fb;border:1px solid #e0e7ef;padding:18px;margin-bottom:24px;line-height:1.7}
-.learning-task p{margin:6px 0}.source-page{margin:25px 0}.source-page img{width:100%;height:auto;border:1px solid #dce3ed}
-details{margin-top:10px}summary{cursor:pointer}pre{font-family:inherit;white-space:pre-wrap;line-height:1.7}footer{padding:20px 0;line-height:1.6}
-</style>
-
-<style scoped>
-.learning-material.workbench-page{height:100dvh;min-height:0;max-width:1200px;padding:18px 22px;display:flex}.learning-material h1{margin:4px 0;font-size:26px}.source-page{scroll-margin-top:12px}.learning-task{margin-bottom:18px}.learning-material :deep(.workbench-page-body){padding-right:8px}
+.learning-material{height:100dvh;padding:20px 24px;color:#2c4668;background:#f4f7fc}.reader-heading{display:flex;align-items:center;gap:16px}.reader-heading h1{font-size:24px;margin:0}.reader-heading>a{margin-left:auto;font-size:14px;color:#315fc0;text-decoration:none}.reader-layout{height:100%;min-height:0;display:grid;grid-template-columns:265px minmax(0,1fr);gap:18px}.reader-layout>aside{padding:18px;background:#fff;border:1px solid #dce6f3;border-radius:12px;overflow:auto}.reader-layout h2{font-size:17px;margin:0 0 10px}.reader-layout p{font-size:15px;line-height:1.8;margin:8px 0 16px;color:#5a6e88}.reader-layout details{font-size:14px;line-height:1.65}.reader-layout summary{cursor:pointer;color:#426caa}.reader-layout aside>nav{display:grid;gap:8px;border-top:1px solid #e5edf7;padding-top:18px;margin-top:20px}.reader-layout aside button{display:grid;gap:5px;padding:12px;border:1px solid #e1e9f5;border-radius:8px;background:white;text-align:left;cursor:pointer}.reader-layout aside button.active{border-color:#9fbce7;background:#edf4ff}.reader-layout aside button b{font-size:15px;color:#375e96}.reader-layout aside button span{font-size:14px;color:#718198;overflow-wrap:anywhere}.reader-page{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;border:1px solid #dce6f3;border-radius:12px;background:white}.reader-page>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:#edf4fd;font-size:15px;flex:none}.reader-page>header>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.reader-page header nav{display:flex;align-items:center;gap:8px;flex:none}.reader-page .el-button{margin:0}.source-image{flex:1;min-height:0;display:flex;justify-content:center;align-items:center;padding:16px;overflow:auto}.source-image img{max-width:100%;max-height:100%;object-fit:contain}.reader-page>details{max-height:35%;overflow:auto;padding:10px 18px;border-top:1px solid #e8eef6;flex:none}.reader-page pre{font:inherit;white-space:pre-wrap;color:#61758b}@media(max-width:800px){.reader-layout{grid-template-columns:1fr;grid-template-rows:150px minmax(0,1fr)}.reader-layout aside{display:flex;gap:14px;align-items:start}.reader-layout aside>nav{display:flex;margin:0;padding:0;border:0}.reader-layout aside>details{display:none}.reader-heading h1{font-size:21px}.learning-material{padding:14px}.reader-page header{flex-wrap:wrap}}
 </style>

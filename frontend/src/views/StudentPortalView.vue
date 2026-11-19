@@ -275,3 +275,5 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateVisibleCapaciti
 @media(max-height:600px){.student-task-panels{overflow:auto;padding-right:4px}.pending-section{flex:none;max-height:240px}.records-layout{flex:none;height:300px;grid-template-rows:1fr;grid-template-columns:1fr 1fr}}
 @media(max-height:600px) and (max-width:700px){.pending-section{max-height:260px}.records-layout{height:560px;grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
 </style>
+
+<style scoped>.student-task-panels{gap:12px}.task-grid{gap:12px}.recent-row{align-items:center}.records-layout{gap:12px}</style>

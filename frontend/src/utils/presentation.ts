@@ -71,40 +71,7 @@ export function hasMeaningfulAnswer(response: Record<string, unknown> | null | u
 }
 
 export function formatAnswer(response: Record<string, unknown> | null | undefined) {
-  const value = answerPayload(response)
-  if ('keys' in value && Array.isArray(value.keys)) return value.keys.join('、') || '未作答'
-  if ('key' in value) return String(value.key || '未作答')
-  if ('parts' in value && Array.isArray(value.parts)) {
-    const parts = value.parts.map((item, index) => {
-      if (item && typeof item === 'object') {
-        const part = item as Record<string, unknown>
-        const label = String(part.label || `第 ${index + 1} 项`)
-        const unit = part.unit ? ` ${String(part.unit)}` : ''
-        return `${label}：${String(part.value ?? '未作答')}${unit}`
-      }
-      return String(item ?? '未作答')
-    })
-    return parts.join('；') || '未作答'
-  }
-  if ('values' in value && Array.isArray(value.values)) {
-    const blanks = value.values.map((item) => {
-      if (item && typeof item === 'object') {
-        const accepted = (item as Record<string, unknown>).accepted
-        return Array.isArray(accepted) ? String(accepted[0] ?? '未作答') : '未作答'
-      }
-      return String(item ?? '未作答')
-    })
-    return blanks.join('；') || '未作答'
-  }
-  if ('value' in value) {
-    if (typeof value.value === 'boolean') return value.value ? '正确' : '错误'
-    const unit = value.unit ? ` ${String(value.unit)}` : ''
-    return `${String(value.value ?? '未作答')}${unit}`
-  }
-  if ('reference_answer' in value) return String(value.reference_answer || '未作答')
-  if ('text' in value) return String(value.text || '未作答')
-  if (!Object.keys(value).length) return '未作答'
-  return Object.entries(value).map(([key, item]) => `${key}：${String(item)}`).join('；')
+  return readableAnswerContent(answerPayload(response))
 }
 
 /**
@@ -269,4 +236,89 @@ export function noTaskDescription(identity: StudentIdentity | null | undefined) 
   const account = identity?.user_id || '当前账号'
   const student = identity?.student_code || '未绑定档案'
   return `${account}（档案 ${student}）当前没有待完成任务`
+}
+
+/** Display known answer content only. Never stringify response metadata. */
+function content(value: unknown, depth = 0): string {
+  if (depth > 12 || value == null) return ''
+  if (typeof value === 'boolean') return value ? '正确' : '错误'
+  if (typeof value === 'number') return Number.isFinite(value) ? String(value) : ''
+  if (typeof value === 'string') return value.trim() === '[object Object]' ? '' : value.trim()
+  if (Array.isArray(value)) return value.map(v => content(v, depth + 1)).filter(Boolean).join('；')
+  if (typeof value !== 'object') return ''
+  const row = value as Record<string, unknown>
+  if (row.answered === false) return ''
+  for (const key of ['reference_answer', 'selected_keys', 'keys', 'key', 'numeric',
+    'value', 'text', 'reference', 'raw_text', 'answer', 'content', 'formula', 'result',
+    'parts', 'values', 'texts', 'accepted']) {
+    const text = ['selected_keys', 'keys'].includes(key) && Array.isArray(row[key])
+      ? (row[key] as unknown[]).map(v => content(v, depth + 1)).filter(Boolean).join('、')
+      : content(row[key], depth + 1)
+    if (!text) continue
+    const unit = content(row.unit, depth + 1)
+    const label = content(row.label, depth + 1)
+    return `${label ? `${label}：` : ''}${text}${unit ? ` ${unit}` : ''}`
+  }
+  return ''
+}
+
+export function readableAnswerContent(value: unknown, fallback = '未作答'): string {
+  return content(value) || fallback
+}
+
+type QuestionDisplay = {
+  answer_payload?: unknown; rubric?: unknown
+  question_type?: string; question_type_effective?: string
+}
+
+export function questionAnswerText(question: QuestionDisplay | null): string {
+  const answer = content(question?.answer_payload)
+  const type = question?.question_type_effective || question?.question_type
+  if (answer) return ['single_choice', 'multi_choice', 'multiple_choice'].includes(type || '')
+    ? `选项 ${answer.replace(/；/g, '、')}` : answer
+  const rubric = question?.rubric
+  const reference = rubric && typeof rubric === 'object' && !Array.isArray(rubric)
+    ? content((rubric as Record<string, unknown>).reference_answer) : ''
+  return reference || '参考答案待补充'
+}
+
+export type RubricRow = { text: string; score?: number }
+
+export function rubricRows(value: unknown): RubricRow[] {
+  if (typeof value === 'string') {
+    const text = content(value)
+    return text ? [{ text }] : []
+  }
+  if (Array.isArray(value)) return value.flatMap(rubricRows)
+  if (!value || typeof value !== 'object') return []
+  const row = value as Record<string, unknown>
+  for (const key of ['points', 'items', 'criteria', 'key_points']) {
+    if (Array.isArray(row[key])) {
+      const rows = rubricRows(row[key])
+      if (rows.length) return rows
+    }
+  }
+  for (const key of ['point', 'text', 'description', 'criterion', 'note']) {
+    const text = content(row[key])
+    if (text) {
+      // Weight is a proportion, not a score; don't label it as points.
+      const score = typeof row.score === 'number' && Number.isFinite(row.score) ? row.score : undefined
+      return [{ text, ...(score !== undefined ? { score } : {}) }]
+    }
+  }
+  return []
+}
+
+export function rubricDisplayText(value: unknown): string {
+  return rubricRows(value).map(row => `${row.text}${row.score !== undefined ? `（${row.score}分）` : ''}`).join('；')
+}
+
+export function questionRubricText(question: QuestionDisplay | null): string {
+  const text = rubricDisplayText(question?.rubric)
+  if (text) return text
+  const type = question?.question_type_effective || question?.question_type || ''
+  const objective = ['single_choice', 'multi_choice', 'multiple_choice', 'true_false', 'numeric',
+    'fill_blank', 'fill_in', 'blank', 'formula_fill'].includes(type)
+  return objective && questionAnswerText(question) !== '参考答案待补充'
+    ? '按参考答案及题目评分设置评分' : '评分要点待补充'
 }

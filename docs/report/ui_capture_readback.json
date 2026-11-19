@@ -1,0 +1,23 @@
+{
+  "isolated_data": "data/report-ui-20261119",
+  "paper": {
+    "paper_id": "paper_3c693c434b2a430f",
+    "title": "报告截图验收-自动组卷-20261119"
+  },
+  "attempts": [
+    {
+      "attempt_id": "attempt_b1bd71e983a648c2",
+      "status": "submitted",
+      "score": 75.0,
+      "max_score": 100.0
+    }
+  ],
+  "release": [
+    {
+      "release_id": "release_f31299ae662844be",
+      "title": "报告截图验收-自动组卷-20261119",
+      "status": "published"
+    }
+  ],
+  "original_db_sha256": "29e04ae21567f37a8dba18bc26bb0f06eaffcb23cf4f10a2e1ba7ac7d87de0b9"
+}

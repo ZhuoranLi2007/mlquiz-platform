@@ -1,0 +1,41 @@
+{
+  "source_attempt_id": "attempt_fe1348e54d8543a6",
+  "job_id": "job_a8c0877a0951418a",
+  "job": {
+    "job_id": "job_a8c0877a0951418a",
+    "status": "succeeded",
+    "stage": "succeeded",
+    "result": {
+      "status": "published",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "cycle_id": "retestcycle_806c76c81e87410e",
+      "round": 2,
+      "source_attempt_id": "attempt_fe1348e54d8543a6",
+      "attempt_id": "attempt_bb7f13bb13cd4ece",
+      "release": null,
+      "candidate_question_ids": [
+        "aiq_1d467c73eb514327",
+        "aiq_7f802d7c07044a72",
+        "slq_62cc358de7_p12_4",
+        "aiq_24e7ba252064405e",
+        "aiq_e3596c3939074035"
+      ],
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "question_source": "mixed",
+      "retest_kind": "formal",
+      "target_kp_ids": [
+        "kp.eval.bias_var"
+      ],
+      "remaining_kp_ids": [],
+      "rejected_candidates": []
+    },
+    "error": ""
+  },
+  "page_errors": [],
+  "attempt_id": "attempt_bb7f13bb13cd4ece",
+  "student_exam_text": "←\n\n专项复测\n\n专注答题\n0/5 已作答\n00:01\n作答中\n题目\n1 / 5\n1\n2\n3\n4\n5\n交卷\n（5 题未答）\n第 1 题\n单选题\n2 分\n自动保存\n在偏差—方差理论中，若一个模型在训练集上误差很低，但在测试集上误差明显偏高，最符合下列哪种描述？\nA.\n高偏差，低方差\nB.\n高方差，低偏差\nC.\n低偏差，低方差\nD.\n高偏差，高方差\n立即保存\n上一题\n下一题\n\n复测已准备好"
+}

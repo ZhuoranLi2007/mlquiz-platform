@@ -53,6 +53,7 @@ materials/
 # Editors / operating system
 .vscode/
 .idea/
+~$*
 .DS_Store
 Thumbs.db
 desktop.ini

@@ -1,0 +1,84 @@
+{
+  "report_pages": 64,
+  "figures": {
+    "6-5": {
+      "source": "docs\\report\\screenshots_full\\teacher\\T05_online_resources.png",
+      "sha256": "adf2d33782b4fe882a22cc8ac1481bc326925d9a70aaf09623a0173485214b48",
+      "pdf_pages": [
+        33
+      ]
+    },
+    "6-6": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\R02_teacher_resource_preview.png",
+      "sha256": "d0b9bd48ea392eb301f31f9cdcdb3b15fd9929a01d9a5f0c9eee2a1f44f42e84",
+      "pdf_pages": [
+        34
+      ]
+    },
+    "6-25": {
+      "source": "docs\\report\\screenshots_full\\student\\S16_student_online.png",
+      "sha256": "2340cb7fd6da97079814ee2fd56fe2ed9bf1373531228e97d2a2da818c027953",
+      "pdf_pages": [
+        44
+      ]
+    },
+    "6-31": {
+      "source": "docs\\acceptance\\cover-restore-20261119\\R01_teacher_online_video_preview.png",
+      "sha256": "365fa60c1ca057ee184c18996911e54c86f4021e317b1bf61d935bd0d558954a",
+      "pdf_pages": [
+        48
+      ]
+    },
+    "6-32": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\R04_recommended_resource_preview.png",
+      "sha256": "13f236b4bb0eae1a370012cd0cdd6da766be03fe1c673bcbe8785d30c79b85ef",
+      "pdf_pages": [
+        48
+      ]
+    },
+    "6-33": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A01_ai_configuration.png",
+      "sha256": "ce7248aaa64bbda52c94aa616efe5107e745cf186b359c33fefba7c4f041b954",
+      "pdf_pages": [
+        49
+      ]
+    },
+    "6-34": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A03_ai_candidates.png",
+      "sha256": "b813d375f8f323abc69626925ef60913ee4cd044a95b625c98c581460610ff2e",
+      "pdf_pages": [
+        50
+      ]
+    },
+    "6-35": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A08_approved_question_detail.png",
+      "sha256": "3b3983d032f40952ed2dc5bf50a42e81052440a229049d696a95a68ed18e0233",
+      "pdf_pages": [
+        50
+      ]
+    },
+    "6-36": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A07_ai_paper_preview.png",
+      "sha256": "1784823ea4e747ec5e21ebb55d7bc74a8bf8120e9aa5b2e9ab5df829a1908cec",
+      "pdf_pages": [
+        51
+      ]
+    },
+    "6-37": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\B_stu001_07_feedback_updated.png",
+      "sha256": "19a775027c1175465a8859be0c83cfb7630f0a524f3f933a6a40d4bfe26f2f38",
+      "pdf_pages": [
+        52
+      ]
+    },
+    "6-38": {
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\T24_class_retest_progress.png",
+      "sha256": "4182469ff91f2a5266490b483d6956779b828bcf08ba44e782cd0d14db95dc15",
+      "pdf_pages": [
+        52
+      ]
+    }
+  },
+  "rendered_pages": 64,
+  "pdf_matches_rendered_copy": true
+}

@@ -1,0 +1,20 @@
+{
+  "question_detail": {
+    "stem": "rgb(29, 43, 64)",
+    "body": "rgb(51, 65, 85)",
+    "scrollHeight": 839,
+    "clientHeight": 536,
+    "bottom": 608.515625,
+    "document": [
+      1366,
+      768
+    ]
+  },
+  "retest_drawer": {
+    "width": 520,
+    "right": 1366,
+    "cards": 2,
+    "scrollHeight": 768,
+    "clientHeight": 768
+  }
+}

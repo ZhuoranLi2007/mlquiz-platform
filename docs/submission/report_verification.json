@@ -1,0 +1,696 @@
+{
+  "date": "2026-11-19",
+  "source_commit": "21c58b09b980b0898b4d10a468ea2281e8e22417",
+  "report_pages": 64,
+  "matrix_pages": 2,
+  "chapters": 9,
+  "screenshots_unique": 50,
+  "diagrams": 6,
+  "tables": 13,
+  "toc_entries": 59,
+  "toc_page_mismatches": [],
+  "chapter_4_5_share_of_body_prose_cjk": 0.435,
+  "code_excerpts": [
+    {
+      "number": "4-1",
+      "path": "backend/app/services/learning_loop.py",
+      "start": 258,
+      "end": 269,
+      "matches_source": true
+    },
+    {
+      "number": "4-2",
+      "path": "backend/app/services/score_policy.py",
+      "start": 6,
+      "end": 18,
+      "matches_source": true
+    }
+  ],
+  "figures": [
+    {
+      "number": "2-1",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\architecture.png",
+      "sha256": "cee3b94ec0156395bf53125e2b001ecf1a5e2fa84e2ec172bda3f008f72011cf"
+    },
+    {
+      "number": "2-2",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\business.png",
+      "sha256": "86f37695b3355a895d6038ce0964f95aee52569e724edaa38732f10ebce03000"
+    },
+    {
+      "number": "3-1",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\er.png",
+      "sha256": "0dd3feaec3c91ab3b427344ee53faa5bbafe05d69f4ebe8f72e984c9e5deab49"
+    },
+    {
+      "number": "4-1",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\13_imported_exam.png",
+      "sha256": "40865fb601c1185a257ce873b2055038bbe4253a2d9969c09a6cd4a3aea84ace"
+    },
+    {
+      "number": "4-2",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\02_question_bank.png",
+      "sha256": "823a3fa1a7d540bb97ed8aff759b4cbed9083e93ff54ab667a67dafc742a8436"
+    },
+    {
+      "number": "4-3",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\04_student_exam.png",
+      "sha256": "687c8d5ee4cca9f3113596fa67bbc63c725ad7ffabe8f57fed6adac52607e429"
+    },
+    {
+      "number": "4-4",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\05_exam_result.png",
+      "sha256": "2f51d0161a98075d897e9d56de8d91e6a0df0dad26adb833839ed2cc159a7155"
+    },
+    {
+      "number": "4-5",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\06_single_diagnosis.png",
+      "sha256": "3f38104d726c5cd6aaa9f635586efba91c8d09c90b1dd1b6eec2e7949282fb24"
+    },
+    {
+      "number": "4-6",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\07_history_diagnosis.png",
+      "sha256": "3c817181322539018b6ee2e149a3b5a7a2173d1d53cc3ac74fe28cb032fd3245"
+    },
+    {
+      "number": "4-7",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\08_group_diagnosis.png",
+      "sha256": "1241364d1473340ff83c6d0cd95379332185d628e186ccad2b33640b91337be8"
+    },
+    {
+      "number": "4-8",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\09_resource_recommendation.png",
+      "sha256": "1f71ca9cc382b84e9165ebc38c1c76c83066ac28133b186aa9297c25da778f6a"
+    },
+    {
+      "number": "4-9",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\10_retest.png",
+      "sha256": "53dfc85de23255012067f8886f915ac06dea737ae00d978d8e2d0c8690833c2c"
+    },
+    {
+      "number": "5-1",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\diagnosis_graph.png",
+      "sha256": "bafa2db2063bd2d3675ef305175f128233810ed95f5b873735e50192e89b0a86"
+    },
+    {
+      "number": "5-2",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\retest_graph.png",
+      "sha256": "d7104e5cc39a90bde0a939dfce296aa64ddf1988d3e4a79fd435f4acfb326ccd"
+    },
+    {
+      "number": "5-3",
+      "type": "diagram",
+      "source": ".artifact-output\\report-rewrite\\post_graph.png",
+      "sha256": "452bef2e9ba9aa012c8fa8146c2506e57e3c2a6d580affd465c54db2012ff578"
+    },
+    {
+      "number": "6-1",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T01_teacher_home.png",
+      "sha256": "f913c9741b92951198618826b0d7c0c9e304aeb9c4d1621178b30b398e675038"
+    },
+    {
+      "number": "6-2",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T02_materials.png",
+      "sha256": "8a5504f2b92a240399ed76f51a251b7440b3f932dbbf2b71a9d1f8b05b094a2d"
+    },
+    {
+      "number": "6-3",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T03_import_dialog.png",
+      "sha256": "593738dd26d5b2d25a11836b3415f9153839fe1dee2517081479a8e7b7535790"
+    },
+    {
+      "number": "6-4",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T04_english_import.png",
+      "sha256": "60b5b3b8133eb4e2b0ff336e69f9e3959ceb67344d546e126334fe63a9110f5f"
+    },
+    {
+      "number": "6-5",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T05_online_resources.png",
+      "sha256": "adf2d33782b4fe882a22cc8ac1481bc326925d9a70aaf09623a0173485214b48"
+    },
+    {
+      "number": "6-6",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\R02_teacher_resource_preview.png",
+      "sha256": "d0b9bd48ea392eb301f31f9cdcdb3b15fd9929a01d9a5f0c9eee2a1f44f42e84"
+    },
+    {
+      "number": "6-7",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T07_question_bank.png",
+      "sha256": "cff3bf191c49fd6d1c1dce88c22e0f697d3a45e4bd46fd4be97f1dfcf0e8f33a"
+    },
+    {
+      "number": "6-8",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T08_question_detail.png",
+      "sha256": "981105d20e1d13113e80fd7604f5a1e127e743c5d62cb1f76622143cf8656212"
+    },
+    {
+      "number": "6-9",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T10_ai_bank_results.png",
+      "sha256": "833c558a45d3b2197de17d65b0cb5e270e9fddfb94adf0122287a1c8b024d574"
+    },
+    {
+      "number": "6-10",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T20_ai_question_review.png",
+      "sha256": "08596e22a02ef93af98a14f9af8a3eb32fffa31a39cdd719e2e3d6d6e30a034e"
+    },
+    {
+      "number": "6-11",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T23_l2_formula_options.png",
+      "sha256": "1d602e9b7a061316768d2fa8665a62bbbe4c079269b5a716c674c2af6083baf5"
+    },
+    {
+      "number": "6-12",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T11_ai_paper_config.png",
+      "sha256": "03d1cad0b2a28b213ace0fb190903028f7ea453afe211f7aaad9c45a61ca2faf"
+    },
+    {
+      "number": "6-13",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T12_ai_paper_preview.png",
+      "sha256": "1b950d28c6ac05501a38eaf272d7f7a0f17fce023e97da1da9f3c7e2e5045813"
+    },
+    {
+      "number": "6-14",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T13_publish_students.png",
+      "sha256": "fd573b9d2f767f8126c1dbd773fd9db14cb9a45e21a086f3f5bac926f4236259"
+    },
+    {
+      "number": "6-15",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T14_published.png",
+      "sha256": "b719cb6ebafa4d6d7fcac58da2cbfb851380c1e14fe63d982036f7b52d8878ef"
+    },
+    {
+      "number": "6-16",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S02_my_tasks.png",
+      "sha256": "50e1a0436ccd8fb1cb6636308a672d7bff84a95c7b75dedbfccf45731fed5d75"
+    },
+    {
+      "number": "6-17",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S03_task_submitted.png",
+      "sha256": "4f5f3752f7443c4e36b11ffcf5891b64fc8705ff7955568024789a3405782cdf"
+    },
+    {
+      "number": "6-18",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S15_history_records.png",
+      "sha256": "016e7df16891d56a4107d6f8e4b94ffef37129395f4dd1ed61844ee89ad181a3"
+    },
+    {
+      "number": "6-19",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S06_submit_confirmation.png",
+      "sha256": "d2e040ccd6ecb4dcdd4fec305254e50f9275f65105d9b66b47d135264971face"
+    },
+    {
+      "number": "6-20",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S07_exam_score.png",
+      "sha256": "9e3c48b29425241557d40461219f2f1a739fb7181a9f682ad0f3f0d7d058914c"
+    },
+    {
+      "number": "6-21",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S08_wrong_answers.png",
+      "sha256": "a69415736118152aacd430789debd3da21f40a291f0680defdad6643afe83e1e"
+    },
+    {
+      "number": "6-22",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T16_student_history.png",
+      "sha256": "89c51e772834dac1d843c4347c665cf4de236284cca5b044bb8a3bbec7fef08d"
+    },
+    {
+      "number": "6-23",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T19_attempt_review.png",
+      "sha256": "5a49e805ba7f719fcc50dc547698ab8182704d6e42089bbaee8d0bad62c89b20"
+    },
+    {
+      "number": "6-24",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S11_course_reading.png",
+      "sha256": "543beb144f77b3635534442606b637ae0c876ddcefdf2b01a6dc8c4ab04393e0"
+    },
+    {
+      "number": "6-25",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S16_student_online.png",
+      "sha256": "2340cb7fd6da97079814ee2fd56fe2ed9bf1373531228e97d2a2da818c027953"
+    },
+    {
+      "number": "6-26",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S17_retest_answering.png",
+      "sha256": "d1f8ec526c147bed440cc0c847d7ffa729f5f29c6a2a5088121cf9d7a9078ab9"
+    },
+    {
+      "number": "6-27",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S12_retest_history.png",
+      "sha256": "a08e968dafda320f265703460a87ae2d760d3fbf941ead4897ea6ff7eed82c25"
+    },
+    {
+      "number": "6-28",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S13_retest_answer_review.png",
+      "sha256": "b04aeff9e544bb1416e2d1df26b36f6e3677ef503073b64cb6f69effd65a977e"
+    },
+    {
+      "number": "6-29",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\student\\S14_retest_feedback.png",
+      "sha256": "abd6a9cf8bf1d20465bb908771161b59cb5572a0d993d2e6b190c21398f818e8"
+    },
+    {
+      "number": "6-30",
+      "type": "figure",
+      "source": "docs\\report\\screenshots_full\\teacher\\T18_retest_management.png",
+      "sha256": "8c73d80b809f83ed4e08b94c20ab7a18dda1354164ae7fb1345543786e549d1f"
+    },
+    {
+      "number": "6-31",
+      "type": "figure",
+      "source": "docs\\acceptance\\cover-restore-20261119\\R01_teacher_online_video_preview.png",
+      "sha256": "365fa60c1ca057ee184c18996911e54c86f4021e317b1bf61d935bd0d558954a"
+    },
+    {
+      "number": "6-32",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\R04_recommended_resource_preview.png",
+      "sha256": "13f236b4bb0eae1a370012cd0cdd6da766be03fe1c673bcbe8785d30c79b85ef"
+    },
+    {
+      "number": "6-33",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A01_ai_configuration.png",
+      "sha256": "ce7248aaa64bbda52c94aa616efe5107e745cf186b359c33fefba7c4f041b954"
+    },
+    {
+      "number": "6-34",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A03_ai_candidates.png",
+      "sha256": "b813d375f8f323abc69626925ef60913ee4cd044a95b625c98c581460610ff2e"
+    },
+    {
+      "number": "6-35",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A08_approved_question_detail.png",
+      "sha256": "3b3983d032f40952ed2dc5bf50a42e81052440a229049d696a95a68ed18e0233"
+    },
+    {
+      "number": "6-36",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\A07_ai_paper_preview.png",
+      "sha256": "1784823ea4e747ec5e21ebb55d7bc74a8bf8120e9aa5b2e9ab5df829a1908cec"
+    },
+    {
+      "number": "6-37",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\B_stu001_07_feedback_updated.png",
+      "sha256": "19a775027c1175465a8859be0c83cfb7630f0a524f3f933a6a40d4bfe26f2f38"
+    },
+    {
+      "number": "6-38",
+      "type": "figure",
+      "source": "docs\\acceptance\\demo-polish-20261119\\screenshots\\T24_class_retest_progress.png",
+      "sha256": "4182469ff91f2a5266490b483d6956779b828bcf08ba44e782cd0d14db95dc15"
+    },
+    {
+      "number": "7-1",
+      "type": "figure",
+      "source": "docs\\acceptance\\screenshots\\11_progress_comparison.png",
+      "sha256": "3335a535a9ae40d7cc20d11f64c23ecfe73dd0ee1f6b586c3664c036b5a43f24"
+    },
+    {
+      "number": "7-2",
+      "type": "figure",
+      "source": "docs\\evidence\\learning-loop-v3\\student1-passed-1366.jpg",
+      "sha256": "582f9691a59c7da1dd46d3ffef8f524a0d846744747b46f86f73abeb26fdc546"
+    },
+    {
+      "number": "7-3",
+      "type": "figure",
+      "source": "docs\\evidence\\learning-loop-v3\\student2-four-of-five.jpg",
+      "sha256": "bba985f02fed57af48c99d98d1e2fc1ea5fe98dfd499d15252bb4ad3325cca17"
+    }
+  ],
+  "backup_hashes_verified": [
+    {
+      "name": "course_report_detailed.docx",
+      "sha256": "E51FAEEE80F2F7E8BF4E86E1185F78A7EF5280F1599DA4F9AC9C2728295A9F27"
+    },
+    {
+      "name": "build_detailed_report.py",
+      "sha256": "4027191FE3E47333E8E62DD674B162DFE05E7A7E5D9978F35DC9B90251AF1FCD"
+    },
+    {
+      "name": "README.txt",
+      "sha256": "20717A783E6EA3B1E728E3358D71FB5E67231A11B188797B7CD02D0A3AF7D045"
+    }
+  ],
+  "readonly_database_hash_verified": "29e04ae21567f37a8dba18bc26bb0f06eaffcb23cf4f10a2e1ba7ac7d87de0b9",
+  "application_code_unchanged": false,
+  "backend_code_unchanged": false,
+  "frontend_display_fixed": true,
+  "frontend_display_sources": {
+    "frontend\\src\\utils\\presentation.ts": "40b93fd5c85057c646d2c6eedfe7e1d4c2210d2fb133665cdb1fbaf90828dc31",
+    "frontend\\src\\views\\TeacherWorkspaceView.vue": "2f1bf2723e7dc1e3818ab352d18fd16d73f5aff841760bc18347b5114dff63f7",
+    "frontend\\src\\views\\PaperBuilderView.vue": "8b196b2d58a80d4249a7f34f7f893948339591cabc32d25351ed9229edb09b3f",
+    "frontend\\src\\views\\TeacherAttemptReviewView.vue": "53108655614416c0ad12122d2d8b35e181b5ed9c45e92f6ab9bc9da2d19cb311",
+    "frontend\\src\\components\\StudentReviewQuestion.vue": "86d9bd0180daf6d6a5b647a7b56a229293513e99ac391a14ff2f488569f56d34"
+  },
+  "old_ppt_matches_git_head": true,
+  "frontend_tests_passed": 45,
+  "new_model_calls_for_display_fix": false,
+  "new_isolated_ui_exam": true,
+  "content_revision": {
+    "scope": "data\\report-ui-20261119",
+    "revisions": 4,
+    "old_history_unchanged": true,
+    "original_acceptance_database_unchanged": true,
+    "browser_checks": {
+      "latest_versions_and_content": true,
+      "bias_answer_explanation_and_formula": true,
+      "l2_options_and_no_answer_images": true,
+      "unpublished_preview_ok": true,
+      "refresh_persistence": true,
+      "unfinished_exam_no_reference": true,
+      "old_score_feedback_ok": true,
+      "existing_history_unchanged": true,
+      "adjacent_question_content_preserved": true,
+      "corrected_question_student_payload_safe": true,
+      "teacher_student_boolean_labels_single_line": true
+    },
+    "new_model_calls": 0,
+    "new_exam_releases": 0
+  },
+  "visual_review": {
+    "method": "All pages rendered. New figure pages and both matrix pages reviewed at full resolution; figure hashes and PDF captions checked separately.",
+    "report": [
+      {
+        "page": 1,
+        "sha256": "16029048fbb4b5083f0db68379525aaa71fbe1cfda6d81bbd17f3ada967d59d6"
+      },
+      {
+        "page": 2,
+        "sha256": "6a981851d641b0a3633d9d4dfd1bc1ed784df803d3ee37b77a427b3d21d124f2"
+      },
+      {
+        "page": 3,
+        "sha256": "2d092e3b4883853d44c6997caf467532bec9fefe7c6e335e3911b1faa562178f"
+      },
+      {
+        "page": 4,
+        "sha256": "fd5bbdd3ed6ef43230ab226ffd1d6858ac6022060aa69f7b132a4e873a51b708"
+      },
+      {
+        "page": 5,
+        "sha256": "02d1a8ddf02768e84cf90514be6720fc0bfe96487fa17394c74a45e999fc29a0"
+      },
+      {
+        "page": 6,
+        "sha256": "c76318f20c12b99f45b3de00a57c9fc66a86ab8b5e84b738a0bcd3ee1646fb66"
+      },
+      {
+        "page": 7,
+        "sha256": "ed7859d281b18793f1bcddb623fda37dd4a622a8c99b148ac2a679ed62badabd"
+      },
+      {
+        "page": 8,
+        "sha256": "3166810cf53e5e712303f03b09e36c9071cb6dca6ffc4bbb9f99a7a934ae4141"
+      },
+      {
+        "page": 9,
+        "sha256": "320432f686a95776a685de2d02bcb2f0d279ea4d54fb6cbde3273fa130bd35b1"
+      },
+      {
+        "page": 10,
+        "sha256": "60f709606f7659d5bc63f15fd23ac6454e8a2ed100f5cf6518cdc1084a29ccbe"
+      },
+      {
+        "page": 11,
+        "sha256": "2a508a9bfe8f27c62e56120bdc96a7d6406496a5eecee0472797febba5ba6266"
+      },
+      {
+        "page": 12,
+        "sha256": "35fce43430d95a9a2bac64e9417cd2ce23ae4b4987454742092c8e44c89d5132"
+      },
+      {
+        "page": 13,
+        "sha256": "f08bf5d76ba3f45e2dbe46310a6200501ef234571f62ded3036e88406afe12f2"
+      },
+      {
+        "page": 14,
+        "sha256": "03ae2a3a2917c6bce97777988314f1cd830b64cade070762751d6bb008a7afed"
+      },
+      {
+        "page": 15,
+        "sha256": "1f9b2b239d6deb01f2fa9d1b0bd16699a7eb0765b9337f351967d5eede55e368"
+      },
+      {
+        "page": 16,
+        "sha256": "24a4efeb4382258cbcf9ff0c6016631c001d4ff8d7ee8b8386d207cf10371327"
+      },
+      {
+        "page": 17,
+        "sha256": "ce8933f12a5fb446d544a254736f14be72dee6364373f48a1996ef163c24f311"
+      },
+      {
+        "page": 18,
+        "sha256": "fc1442856fd049e66a746c9ecb35cd8d6652a62df2371c510b36f7838cf894d0"
+      },
+      {
+        "page": 19,
+        "sha256": "97ad00c152db4a83e41d3cd1638361b22c4572e4ca313db8d607229ae85f9e5f"
+      },
+      {
+        "page": 20,
+        "sha256": "ca91236f4b02a0c0772de4543e90ac9bae100a2a5133d95392e4c49eb10b94eb"
+      },
+      {
+        "page": 21,
+        "sha256": "0ba42c0827979257704703fb0dfff5514d7b789af7f3e516dcb49e2b66d008a8"
+      },
+      {
+        "page": 22,
+        "sha256": "cc20a381be725dbf05aa675b65ef8b407e4dac7475009560e771926f28ac7e1b"
+      },
+      {
+        "page": 23,
+        "sha256": "6a29166a06bba0103ada469aa7139bfdba8b1637dcf63ad2f7096f065ca0fc27"
+      },
+      {
+        "page": 24,
+        "sha256": "593818e7092600211373925e770014fa2b3df6b51787a5c643b0a2de28be8cdd"
+      },
+      {
+        "page": 25,
+        "sha256": "992cae05aa70ab6c63e00d8be8d1e4d95ed8362794fca5428507aca49a28ebc3"
+      },
+      {
+        "page": 26,
+        "sha256": "8b44d49ef940ab760b08a8da1098b79189e0f5479aa04e72df30057975c7a81d"
+      },
+      {
+        "page": 27,
+        "sha256": "3f735626265eb7fdc2677920d1bd3a38e9687f359824301fa866eedff7e815e3"
+      },
+      {
+        "page": 28,
+        "sha256": "f7abf322351e7045fc8f5cc09d2aef844702046f99168184caae57ee965effca"
+      },
+      {
+        "page": 29,
+        "sha256": "8712d0347687b4f5d61d872f51e7c641eaf95cbfa08df22fb5bc8d2247a2eba6"
+      },
+      {
+        "page": 30,
+        "sha256": "077d46d5305116fcbb7e0d6c63a6800e82b63bfaed6a577845dc12851e197122"
+      },
+      {
+        "page": 31,
+        "sha256": "201fae19f0406be5f5e35d17baa46db92072497c010021cd218f230c96230ac0"
+      },
+      {
+        "page": 32,
+        "sha256": "9e0886a558a15f4857ae9057a06f7a4d0e9799ad73e4a9e70099ea3ed7dfde79"
+      },
+      {
+        "page": 33,
+        "sha256": "a7da97999dc507bb9d281cc1212026f9b2c8618ec84364f0c4c6c63f9bfb58e7"
+      },
+      {
+        "page": 34,
+        "sha256": "41ca4679d095ee9fd490c1539f0425168db9247abd173aa33cdcf4a1864fddf1"
+      },
+      {
+        "page": 35,
+        "sha256": "54c261c220a8db2f9021ca29cc82e6104e4f5678492c7e162eaf89527b35cb64"
+      },
+      {
+        "page": 36,
+        "sha256": "696d8d041bbb3263c627f48aab9f543d7657c17918b96350169fda4b7931f026"
+      },
+      {
+        "page": 37,
+        "sha256": "d44d4953b0b1de7791ac24e0354ad3f2fa8a7c8159787675cde02087da0d7cfa"
+      },
+      {
+        "page": 38,
+        "sha256": "e81e6e8127a1d8aad5eed1631e5c595829b7ca00258f714ddd2b38df78405423"
+      },
+      {
+        "page": 39,
+        "sha256": "1d830328920341bf99f59c11928e8bf0e70a5dd00f7d47a88ee8f9b22f628816"
+      },
+      {
+        "page": 40,
+        "sha256": "02b627cd36bc7548c0eadb040d9ba0b623a7060cb0d78bd34370ca7fe35fa162"
+      },
+      {
+        "page": 41,
+        "sha256": "8a3a3c370ac909da5066b7cea03e7275b8a2b622d09948357e58052fc2a13f51"
+      },
+      {
+        "page": 42,
+        "sha256": "72ff6e01588ff0dfd36dd9651596280735165900dd1ab0554c5d8b0ead942975"
+      },
+      {
+        "page": 43,
+        "sha256": "a74bfc1ab85a5f341b24e77f66cf2e879fda7881bab2f0a4ee72b6d4691f4d68"
+      },
+      {
+        "page": 44,
+        "sha256": "39ca94e3683eb9c947d4e0ca1ba4fc096026a503afc0aec5ec967a8ac76b22ac"
+      },
+      {
+        "page": 45,
+        "sha256": "eb7c2c01d11f4f7f282663757e71b4fb93e693d3d037d7dd81bb228bdfc9db4b"
+      },
+      {
+        "page": 46,
+        "sha256": "2cfc5224d9e816c7a346df16829afe1e8e8e9d378cc2b39fdfb01861bd6f479b"
+      },
+      {
+        "page": 47,
+        "sha256": "c9aa9f8210496a048eff16130468360dd3c3d6d672ad9d4018b23270d5395fc5"
+      },
+      {
+        "page": 48,
+        "sha256": "92f341a52b1ee94d299a3494dc4cad174ee41876a46b5e61443bb373bb6844e1"
+      },
+      {
+        "page": 49,
+        "sha256": "4a1976252bbfe9e6042aaeaa876c39c4155c94b1b0e4990fa5de37e18fabd657"
+      },
+      {
+        "page": 50,
+        "sha256": "c06ae3f4f2184ece0a48b4c0fc5f5f588eadb9bb3c0ab2574c177e3f807d8f87"
+      },
+      {
+        "page": 51,
+        "sha256": "97ce1a12f62e79bae94cde084779848385481bff084637ac6dc93605ee07b9c5"
+      },
+      {
+        "page": 52,
+        "sha256": "2e779eeadc17b15b4db9ed2c3d2ef97173e52bcbaca239207bbc2edc64121890"
+      },
+      {
+        "page": 53,
+        "sha256": "a8903bc3ed00db02910643b150313910ce9e49837fbe0280dfc353de5b1befec"
+      },
+      {
+        "page": 54,
+        "sha256": "eaa80d5ede2d26a03eb294df3304b87f3a8e96fd663dd84329f26085347de043"
+      },
+      {
+        "page": 55,
+        "sha256": "2bd5923a995d5c38999819027e364d9cea248e351dc436404cea626ee77f328b"
+      },
+      {
+        "page": 56,
+        "sha256": "e03fd9f99eabd189bd2fe1e5ea97b5aa95672b8b9be5371e05cbfc7706a9ca27"
+      },
+      {
+        "page": 57,
+        "sha256": "8d96450b33c6924dac54d49d58e9c02b91bf2ece6fc03d923d689ac42c443cf7"
+      },
+      {
+        "page": 58,
+        "sha256": "3a0f3a728d788731be625eac252015faa9d0830d9c635c8009676066e2365ba0"
+      },
+      {
+        "page": 59,
+        "sha256": "768c60723bee22278edc12888f77e7ce616c5cb1d409760971af0ef990f9018b"
+      },
+      {
+        "page": 60,
+        "sha256": "a00e3bca2a2a5718756837f99535f1b442c1366eaf5bd9278d2ac085c286ec2e"
+      },
+      {
+        "page": 61,
+        "sha256": "14d6ae8dab00c73676127d16b16911a15c4cb5e8de9f6b0debf83715437a9c59"
+      },
+      {
+        "page": 62,
+        "sha256": "e4137e618c7d2ec3909fd28efaa2d6da4b0b1c15c57b6c9169d33d1bce7ad864"
+      },
+      {
+        "page": 63,
+        "sha256": "972dc6ee41560986525d88831ef8a4fbb017cfc6d18a00939b172603ebc4175b"
+      },
+      {
+        "page": 64,
+        "sha256": "01f76d052a4649944974d05ef4051566236b61f87ff088919c4caa216f657026"
+      }
+    ],
+    "matrix": [
+      {
+        "page": 1,
+        "sha256": "b7724c47c4553c7f9d73a296ab97bb967c8c46ae5832d4d626aaac0190490b00"
+      },
+      {
+        "page": 2,
+        "sha256": "8d0cb71e33dbb6c2636a69d3178743ecdf72a1623b9c88a8b2db9fc52d96a18e"
+      }
+    ],
+    "findings": "New figure pages and matrix pages visually reviewed; existing lower-resolution historical JPEGs remain unchanged."
+  },
+  "deliverables": {
+    "course_report_detailed.docx": "c8206c9dcaa975f8a97232f02b72ad0a62d7ff324d3b8bd5f959a767eb62ea17",
+    "course_report_detailed.pdf": "0fbd2bdf07bbabdc2c46807e579c912e2ecb301bb0f4b5e055f00cb2580839b9",
+    "课程要求与项目实现对照表_全界面版.docx": "5e17fb55483bb52b2d90718002a4ad270daedc6658498635da68e4158150284a",
+    "报告界面截图补充说明.txt": "aec749d2510bc57a95c312bf3f91f1057ea6c91fc901c6b5e6d3987e933193b8",
+    "待本人补充事项.txt": "c72df3b852de6a9c664b6bb949697629f35bc6a80884aa25132da47ca80c02f1"
+  }
+}

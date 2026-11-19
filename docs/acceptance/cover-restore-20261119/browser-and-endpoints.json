@@ -1,0 +1,161 @@
+{
+  "endpoints": [
+    {
+      "resource_id": "res.bilibili.BV154411Q7mG",
+      "status": 200,
+      "bytes": 68106
+    },
+    {
+      "resource_id": "res.bilibili.BV164411b7dx",
+      "status": 200,
+      "bytes": 59003
+    },
+    {
+      "resource_id": "res.bilibili.BV16jyuBBEom",
+      "status": 200,
+      "bytes": 152548
+    },
+    {
+      "resource_id": "res.bilibili.BV1Bt411j7KH",
+      "status": 200,
+      "bytes": 142302
+    },
+    {
+      "resource_id": "res.bilibili.BV1H5411e73F",
+      "status": 200,
+      "bytes": 204682
+    },
+    {
+      "resource_id": "res.bilibili.BV1Mh411e7VU",
+      "status": 200,
+      "bytes": 61240
+    },
+    {
+      "resource_id": "res.bilibili.BV1R64y187yt",
+      "status": 200,
+      "bytes": 294261
+    },
+    {
+      "resource_id": "res.bilibili.BV1T84y167U9",
+      "status": 200,
+      "bytes": 374945
+    },
+    {
+      "resource_id": "res.bilibili.BV1aE411o7qd",
+      "status": 200,
+      "bytes": 148834
+    }
+  ],
+  "missing_status": 404,
+  "roles": {
+    "teacher_demo": {
+      "route": "/teacher/online",
+      "geometry": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "documentHeight": 768
+      },
+      "loaded_cover_images": [
+        {
+          "src": "/api/resources/res.bilibili.BV1T84y167U9/cover",
+          "width": 1146,
+          "height": 717
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1Mh411e7VU/cover",
+          "width": 1146,
+          "height": 716
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV16jyuBBEom/cover",
+          "width": 1440,
+          "height": 810
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV164411b7dx/cover",
+          "width": 1555,
+          "height": 972
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1aE411o7qd/cover",
+          "width": 1355,
+          "height": 847
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1R64y187yt/cover",
+          "width": 2904,
+          "height": 1815
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1H5411e73F/cover",
+          "width": 1503,
+          "height": 939
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1Bt411j7KH/cover",
+          "width": 1294,
+          "height": 808
+        }
+      ],
+      "original_video_url": "https://www.bilibili.com/video/BV1T84y167U9/",
+      "opened_video_url": "https://www.bilibili.com/video/BV1T84y167U9/",
+      "blue_fallback_visible": true
+    },
+    "stu002": {
+      "route": "/student/online",
+      "geometry": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "documentHeight": 768
+      },
+      "loaded_cover_images": [
+        {
+          "src": "/api/resources/res.bilibili.BV1T84y167U9/cover",
+          "width": 1146,
+          "height": 717
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1Mh411e7VU/cover",
+          "width": 1146,
+          "height": 716
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV16jyuBBEom/cover",
+          "width": 1440,
+          "height": 810
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV164411b7dx/cover",
+          "width": 1555,
+          "height": 972
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1aE411o7qd/cover",
+          "width": 1355,
+          "height": 847
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1R64y187yt/cover",
+          "width": 2904,
+          "height": 1815
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1H5411e73F/cover",
+          "width": 1503,
+          "height": 939
+        },
+        {
+          "src": "/api/resources/res.bilibili.BV1Bt411j7KH/cover",
+          "width": 1294,
+          "height": 808
+        }
+      ],
+      "original_video_url": "https://www.bilibili.com/video/BV1T84y167U9/",
+      "opened_video_url": "https://www.bilibili.com/video/BV1T84y167U9/",
+      "blue_fallback_visible": true
+    }
+  },
+  "page_errors": []
+}

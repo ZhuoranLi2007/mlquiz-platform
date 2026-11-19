@@ -1,0 +1,818 @@
+[
+  {
+    "file": "docs/report/screenshots_full/history/20261119-180455/T08_question_detail.png",
+    "title": "T08_question_detail",
+    "requirement": "题库与AI生成/组卷",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "ae239c4a48edde546014357a10609d43c3e12e42bc2c32454b3a369e363d639b",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-180455/T20_ai_question_review.png",
+    "title": "T20_ai_question_review",
+    "requirement": "题库与AI生成/组卷",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "5b5f5421f724ffe19da54aff093a23992aa5ae2eb9197ecda4b332c9519eb3af",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/S19_fixed_score_feedback.png",
+    "title": "S19_fixed_score_feedback",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "db4a13ee3193b6a23dcc9c91e61c5a4f04be799b7182d3ba8a785d36071d79bd",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T08_question_detail.png",
+    "title": "T08_question_detail",
+    "requirement": "题库与AI生成/组卷",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "5d71c20101197a2ce93c92d68ea8fcb94aa7095aea3b191d8664efe407c8f5ab",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T08b_question_rubric.png",
+    "title": "T08b_question_rubric",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "a6366215313540b5a3c6002ef7393a2cc4c471ec31fdc6a2fce1c90dbd525897",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T10_ai_bank_results.png",
+    "title": "T10_ai_bank_results",
+    "requirement": "题库与AI生成/组卷",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "e0295ff05dcb2695fc6ec938516284e93a2c9b28d86172db27c50f0f3caec992",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T12_ai_paper_preview.png",
+    "title": "T12_ai_paper_preview",
+    "requirement": "题库与AI生成/组卷",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "a21f2afa17d97aa1ccba63be2716cd2da3bc701d4f0fd66e8da944a706fc860d",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T19_attempt_review.png",
+    "title": "T19_attempt_review",
+    "requirement": "多层次诊断与新题验证",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "a1dc292d63cc0b0c8fa1759667010dab81342a3c3f26c603904cee1b60e4e127",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T20_ai_question_review.png",
+    "title": "T20_ai_question_review",
+    "requirement": "题库与AI生成/组卷",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "279644a9314c54f516f9f099b9eee5b9c5fbda669718398462c9e267a5fa67d3",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/history/20261119-184030/T21_fixed_paper_answer.png",
+    "title": "T21_fixed_paper_answer",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "c7b7c66256a4bc85d1b61bc61e30bd63d5fcef2f2539783d2b15427718240c4f",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_01_teacher_home.png",
+    "title": "previous_01_teacher_home",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "f913c9741b92951198618826b0d7c0c9e304aeb9c4d1621178b30b398e675038",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_02_question_bank.png",
+    "title": "previous_02_question_bank",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "823a3fa1a7d540bb97ed8aff759b4cbed9083e93ff54ab667a67dafc742a8436",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_03_exam_publish.png",
+    "title": "previous_03_exam_publish",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "cd2b192825195e2fe3ce79542cb3d7b9d081862f26cd8c0abcd2d7c536175671",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_04_student_exam.png",
+    "title": "previous_04_student_exam",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "687c8d5ee4cca9f3113596fa67bbc63c725ad7ffabe8f57fed6adac52607e429",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_05_exam_result.png",
+    "title": "previous_05_exam_result",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "2f51d0161a98075d897e9d56de8d91e6a0df0dad26adb833839ed2cc159a7155",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_06_single_diagnosis.png",
+    "title": "previous_06_single_diagnosis",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "3f38104d726c5cd6aaa9f635586efba91c8d09c90b1dd1b6eec2e7949282fb24",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_07_history_diagnosis.png",
+    "title": "previous_07_history_diagnosis",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "3c817181322539018b6ee2e149a3b5a7a2173d1d53cc3ac74fe28cb032fd3245",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_08_group_diagnosis.png",
+    "title": "previous_08_group_diagnosis",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "1241364d1473340ff83c6d0cd95379332185d628e186ccad2b33640b91337be8",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_09_resource_recommendation.png",
+    "title": "previous_09_resource_recommendation",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "1f71ca9cc382b84e9165ebc38c1c76c83066ac28133b186aa9297c25da778f6a",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_10_retest.png",
+    "title": "previous_10_retest",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "53dfc85de23255012067f8886f915ac06dea737ae00d978d8e2d0c8690833c2c",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_11_progress_comparison.png",
+    "title": "previous_11_progress_comparison",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "3335a535a9ae40d7cc20d11f64c23ecfe73dd0ee1f6b586c3664c036b5a43f24",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_13_imported_exam.png",
+    "title": "previous_13_imported_exam",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "40865fb601c1185a257ce873b2055038bbe4253a2d9969c09a6cd4a3aea84ace",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_14_course_resource.png",
+    "title": "previous_14_course_resource",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "543beb144f77b3635534442606b637ae0c876ddcefdf2b01a6dc8c4ab04393e0",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_student1-passed-1366.jpg",
+    "title": "previous_student1-passed-1366",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "582f9691a59c7da1dd46d3ffef8f524a0d846744747b46f86f73abeb26fdc546",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/other/previous_student2-four-of-five.jpg",
+    "title": "previous_student2-four-of-five",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "历史原图归档；history目录为显示修复前问题截图",
+    "sha256": "bba985f02fed57af48c99d98d1e2fc1ea5fe98dfd499d15252bb4ad3325cca17",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S02_my_tasks.png",
+    "title": "学生我的任务接收考试",
+    "requirement": "考试作答及闭环",
+    "report": "图6-16",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "50e1a0436ccd8fb1cb6636308a672d7bff84a95c7b75dedbfccf45731fed5d75",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S03_task_submitted.png",
+    "title": "交卷后任务状态更新",
+    "requirement": "考试作答及闭环",
+    "report": "图6-17",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "4f5f3752f7443c4e36b11ffcf5891b64fc8705ff7955568024789a3405782cdf",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S04_exam_details.png",
+    "title": "S04_exam_details",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "过渡状态，未用于正文；考试信息由任务卡展示，无独立详情页",
+    "sha256": "2ff5a0fef56beb1a349903696136c456c2770497b77fbae89a4bfd568918001c",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S05_exam_answering.png",
+    "title": "S05_exam_answering",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "专项复测答题，与S17相同画面；普通考试作答见原图4-3",
+    "sha256": "a1e8c811c10a154a5033c3e01601ec9e46e7c01cc97261331a288067fa7a10ba",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S06_submit_confirmation.png",
+    "title": "交卷前确认窗口",
+    "requirement": "考试作答及闭环",
+    "report": "图6-19",
+    "status": "真实专项复测交卷确认，本次未确认交卷；普通考试实际交卷另有75/100结果",
+    "sha256": "d2e040ccd6ecb4dcdd4fec305254e50f9275f65105d9b66b47d135264971face",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S07_exam_score.png",
+    "title": "新增考试成绩与错题",
+    "requirement": "考试作答及闭环",
+    "report": "图6-20",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "9e3c48b29425241557d40461219f2f1a739fb7181a9f682ad0f3f0d7d058914c",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S08_wrong_answers.png",
+    "title": "学生错题分析",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-21",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "a69415736118152aacd430789debd3da21f40a291f0680defdad6643afe83e1e",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S09_diagnosis.png",
+    "title": "S09_diagnosis",
+    "requirement": "多层次诊断与新题验证",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "3335a535a9ae40d7cc20d11f64c23ecfe73dd0ee1f6b586c3664c036b5a43f24",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S10_resource_recommendation.png",
+    "title": "S10_resource_recommendation",
+    "requirement": "学习资源与推荐",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "1f71ca9cc382b84e9165ebc38c1c76c83066ac28133b186aa9297c25da778f6a",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S11_course_reading.png",
+    "title": "课程原页定位阅读",
+    "requirement": "学习资源与推荐",
+    "report": "图6-24",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "543beb144f77b3635534442606b637ae0c876ddcefdf2b01a6dc8c4ab04393e0",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S12_retest_history.png",
+    "title": "学生复测记录抽屉",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-27",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "a08e968dafda320f265703460a87ae2d760d3fbf941ead4897ea6ff7eed82c25",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S13_retest_answer_review.png",
+    "title": "已提交复测评分结果",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-28",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "b04aeff9e544bb1416e2d1df26b36f6e3677ef503073b64cb6f69effd65a977e",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S14_retest_feedback.png",
+    "title": "知识点复测反馈",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-29",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "abd6a9cf8bf1d20465bb908771161b59cb5572a0d993d2e6b190c21398f818e8",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S15_history_records.png",
+    "title": "学生考试历史记录",
+    "requirement": "考试作答及闭环",
+    "report": "图6-18",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "016e7df16891d56a4107d6f8e4b94ffef37129395f4dd1ed61844ee89ad181a3",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S16_student_online.png",
+    "title": "学生在线资源列表与视频封面",
+    "requirement": "学习资源与推荐",
+    "report": "图6-25",
+    "status": "封面恢复后在隔离实例重新实拍；真实视频封面已加载，无封面资源保留蓝色占位",
+    "sha256": "2340cb7fd6da97079814ee2fd56fe2ed9bf1373531228e97d2a2da818c027953",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S17_retest_answering.png",
+    "title": "专项复测实际答题",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-26",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "d1f8ec526c147bed440cc0c847d7ffa729f5f29c6a2a5088121cf9d7a9078ab9",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S18_reference_hidden.png",
+    "title": "S18_reference_hidden",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "a804335f77e9284efa03d8ebfbaf7f95dc87e65439eca37f462251f7edbef185",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/student/S19_fixed_score_feedback.png",
+    "title": "S19_fixed_score_feedback",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "cb0c138605a81adb2be807116608471c681e9023b99649f7da6d938ffd392759",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T01_teacher_home.png",
+    "title": "教师教学总览",
+    "requirement": "考试作答及闭环",
+    "report": "图6-1",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "f913c9741b92951198618826b0d7c0c9e304aeb9c4d1621178b30b398e675038",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T02_materials.png",
+    "title": "课程资料管理",
+    "requirement": "学习资源与推荐",
+    "report": "图6-2",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "8a5504f2b92a240399ed76f51a251b7440b3f932dbbf2b71a9d1f8b05b094a2d",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T03_import_dialog.png",
+    "title": "资料导入设置",
+    "requirement": "学习资源与推荐",
+    "report": "图6-3",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "593738dd26d5b2d25a11836b3415f9153839fe1dee2517081479a8e7b7535790",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T04_english_import.png",
+    "title": "英文试卷资料检索",
+    "requirement": "学习资源与推荐",
+    "report": "图6-4",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "60b5b3b8133eb4e2b0ff336e69f9e3959ceb67344d546e126334fe63a9110f5f",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T05_online_resources.png",
+    "title": "教师在线资源列表与视频封面",
+    "requirement": "学习资源与推荐",
+    "report": "图6-5",
+    "status": "封面恢复后在隔离实例重新实拍；真实视频封面已加载，无封面资源保留蓝色占位",
+    "sha256": "adf2d33782b4fe882a22cc8ac1481bc326925d9a70aaf09623a0173485214b48",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T06_material_preview.png",
+    "title": "T06_material_preview",
+    "requirement": "学习资源与推荐",
+    "report": "归档；未重复插入",
+    "status": "此前课程原页预览，原图保留；报告图6-6现采用新拍的R02",
+    "sha256": "22deee52a38f2c689d16ee232d22064a32410af89053c36c5ac17e5f528eea72",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T07_question_bank.png",
+    "title": "正式题库与筛选",
+    "requirement": "题库与AI生成/组卷",
+    "report": "图6-7",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "cff3bf191c49fd6d1c1dce88c22e0f697d3a45e4bd46fd4be97f1dfcf0e8f33a",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T08_question_detail.png",
+    "title": "题目详情与章节调整",
+    "requirement": "题库与AI生成/组卷",
+    "report": "图6-8",
+    "status": "展示修复后重新实拍；参考答案与评分规则正常；偏差—方差内容已按规范定义核对修订",
+    "sha256": "981105d20e1d13113e80fd7604f5a1e127e743c5d62cb1f76622143cf8656212",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T08b_question_rubric.png",
+    "title": "T08b_question_rubric",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "0982dbaa75c7c8fe4846b9d2d81f9a8e5d8830fe1e94f471e2900fd2701f6e06",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T10_ai_bank_results.png",
+    "title": "已有AI题筛选结果",
+    "requirement": "题库与AI生成/组卷",
+    "report": "图6-9",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "833c558a45d3b2197de17d65b0cb5e270e9fddfb94adf0122287a1c8b024d574",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T11_ai_paper_config.png",
+    "title": "AI自动组卷条件设置",
+    "requirement": "题库与AI生成/组卷",
+    "report": "图6-12",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "03d1cad0b2a28b213ace0fb190903028f7ea453afe211f7aaad9c45a61ca2faf",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T12_ai_paper_preview.png",
+    "title": "自动组卷结果与预览",
+    "requirement": "题库与AI生成/组卷",
+    "report": "图6-13",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "1b950d28c6ac05501a38eaf272d7f7a0f17fce023e97da1da9f3c7e2e5045813",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T13_publish_students.png",
+    "title": "选择学生并发布考试",
+    "requirement": "考试作答及闭环",
+    "report": "图6-14",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "fd573b9d2f767f8126c1dbd773fd9db14cb9a45e21a086f3f5bac926f4236259",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T14_published.png",
+    "title": "发布后的考试记录",
+    "requirement": "考试作答及闭环",
+    "report": "图6-15",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "b719cb6ebafa4d6d7fcac58da2cbfb851380c1e14fe63d982036f7b52d8878ef",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T15_student_attempt.png",
+    "title": "T15_student_attempt",
+    "requirement": "多层次诊断与新题验证",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "3f38104d726c5cd6aaa9f635586efba91c8d09c90b1dd1b6eec2e7949282fb24",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T16_student_history.png",
+    "title": "教师单人多卷诊断",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-22",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "89c51e772834dac1d843c4347c665cf4de236284cca5b044bb8a3bbec7fef08d",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T17_class_assessment.png",
+    "title": "T17_class_assessment",
+    "requirement": "多层次诊断与新题验证",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "1241364d1473340ff83c6d0cd95379332185d628e186ccad2b33640b91337be8",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T18_retest_management.png",
+    "title": "教师复测进度与结果",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-30",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "8c73d80b809f83ed4e08b94c20ab7a18dda1354164ae7fb1345543786e549d1f",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T19_attempt_review.png",
+    "title": "教师查看学生答卷",
+    "requirement": "多层次诊断与新题验证",
+    "report": "图6-23",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "5a49e805ba7f719fcc50dc547698ab8182704d6e42089bbaee8d0bad62c89b20",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T20_ai_question_review.png",
+    "title": "偏差—方差规范定义题修订结果",
+    "requirement": "题库与AI生成/组卷",
+    "report": "图6-10",
+    "status": "展示修复后重新实拍；参考答案与评分规则正常；偏差—方差内容已按规范定义核对修订",
+    "sha256": "08596e22a02ef93af98a14f9af8a3eb32fffa31a39cdd719e2e3d6d6e30a034e",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T20b_bias_explanation.png",
+    "title": "T20b_bias_explanation",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "08596e22a02ef93af98a14f9af8a3eb32fffa31a39cdd719e2e3d6d6e30a034e",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T21_fixed_paper_answer.png",
+    "title": "T21_fixed_paper_answer",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "c7b7c66256a4bc85d1b61bc61e30bd63d5fcef2f2539783d2b15427718240c4f",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T22_corrected_paper_preview.png",
+    "title": "T22_corrected_paper_preview",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "3c9cc468f67499b900bcc2ff40251c2c48343306f32c3d16250da4681cb0e6ee",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T23_l2_formula_options.png",
+    "title": "L2正则化公式选项修复结果",
+    "requirement": "考试作答及闭环",
+    "report": "图6-11",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "1d602e9b7a061316768d2fa8665a62bbbe4c079269b5a716c674c2af6083baf5",
+    "size": [
+      1366,
+      768
+    ]
+  },
+  {
+    "file": "docs/report/screenshots_full/teacher/T24_l2_formula_options.png",
+    "title": "T24_l2_formula_options",
+    "requirement": "考试作答及闭环",
+    "report": "归档；未重复插入",
+    "status": "本轮浏览器实拍，页面数据真实",
+    "sha256": "1d602e9b7a061316768d2fa8665a62bbbe4c079269b5a716c674c2af6083baf5",
+    "size": [
+      1366,
+      768
+    ]
+  }
+]

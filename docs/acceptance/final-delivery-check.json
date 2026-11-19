@@ -1,0 +1,15 @@
+{
+  "all_demo_checks": true,
+  "catalog_44_files": true,
+  "catalog_42_unique_images": true,
+  "catalog_sources_intact": true,
+  "nine_jpeg_endpoints": true,
+  "missing_cover_404": true,
+  "both_roles_and_layout": true,
+  "report_64_pages_50_screenshots": true,
+  "report_toc_matches_pdf": true,
+  "report_figure_sources": true,
+  "report_pdf_matches_render": true,
+  "source_database_unchanged": true,
+  "acceptance_database_unchanged": true
+}

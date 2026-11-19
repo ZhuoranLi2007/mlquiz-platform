@@ -1,0 +1,15 @@
+from pathlib import Path
+p=Path('frontend/src/views/TeacherWorkspaceView.vue');s=p.read_text(encoding='utf-8-sig')
+s=s.replace('<script setup lang="ts">','<script setup lang="ts">\nimport AiQuestionWorkbench from "../components/AiQuestionWorkbench.vue"',1)
+s=s.replace('const detailOpen = ref(false)','const detailOpen = ref(false)\nconst aiOpen = ref(false)',1)
+s=s.replace('<el-button class="compose-button"','<el-button plain @click="aiOpen=true">AI出新题</el-button><el-button class="compose-button"',1)
+s=s.replace('<el-dialog v-model="detailOpen" title="完整题目" width="min(820px, 94vw)" top="5vh">','<AiQuestionWorkbench v-model="aiOpen" :metadata="metadata" @changed="load" />\n    <el-dialog v-model="detailOpen" title="题目详情" width="min(860px, 94vw)" top="4vh">')
+s=s.replace('<b>解析</b><div><MathText :text="detail.explanation || \'暂无解析\'" /></div><b>评分规则</b><div><MathText :text="rubricText(detail)" /></div>','<details open><summary>解析</summary><MathText :text="detail.explanation || \'解析待补充\'" /></details><details><summary>评分要点</summary><MathText :text="rubricText(detail)" /></details><details><summary>来源</summary><p>{{ sourceText(detail) }}</p></details>')
+s+='\n<style scoped>\n.detail-view{max-height:calc(88dvh - 140px);overflow:auto;padding-right:8px;display:grid;gap:14px}.detail-view .detail-stem{font-size:18px;line-height:1.7;font-weight:600;margin:0;color:#203d63}.detail-view .detail-options{background:#f4f8fe;border:1px solid #e1eaf7;border-radius:10px;padding:14px;gap:12px}.detail-view .answer-box{display:grid;gap:10px;border-left:0;background:#f1f6fd;padding:14px}.answer-box details{border-top:1px solid #dce7f4;padding-top:10px;line-height:1.75;font-size:15px}.answer-box summary{cursor:pointer;font-weight:600;color:#365f91}.answer-box details[open] summary{margin-bottom:8px}.detail-view .workbench-toolbar{padding-top:4px}.detail-view .duplicate-note{font-size:14px;margin:0;padding:8px 10px}\n</style>\n'
+p.write_text(s,encoding='utf-8')
+p=Path('frontend/src/components/LearningResourceList.vue');s=p.read_text(encoding='utf-8-sig').replace("import { computed, ref } from 'vue'","import { computed, ref } from 'vue'\nimport ResourcePreview from './ResourcePreview.vue'")
+s=s.replace('const expanded = ref(false)','const expanded = ref(false)\nconst previewOpen=ref(false), preview=ref<any>(null)\nfunction showPreview(row:any){preview.value=row;previewOpen.value=true}')
+s=s.replace(':href="row.url"',':href="row.url" @click.prevent="showPreview(row)"')
+s=s.replace('打开 ↗','预览 →').replace("return '课程原页 · 可离线阅读'","return '课程原页'")
+s=s.replace('  <p v-else class="no-target-resource">','  <ResourcePreview v-model="previewOpen" :resource="preview" />\n  <p v-if="!rows.length" class="no-target-resource">')
+p.write_text(s,encoding='utf-8')
