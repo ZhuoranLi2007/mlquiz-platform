@@ -11,9 +11,9 @@ const emit = defineEmits<{ locate: [row: any] }>()
 
 const expanded = ref(false)
 const allConcepts = computed(() => props.analysis?.concepts || props.analysis?.concept_hypotheses || [])
-const concepts = computed(() => expanded.value ? allConcepts.value : allConcepts.value.slice(0, 3))
-const plan = computed(() => (props.analysis?.learning_plan || []).slice(0, expanded.value ? undefined : 3))
-const recommendations = computed(() => (props.analysis?.recommendations || []).slice(0, 3))
+const concepts = computed(() => expanded.value ? allConcepts.value : allConcepts.value.slice(0, 1))
+const plan = computed(() => (props.analysis?.learning_plan || []).slice(0, expanded.value ? undefined : 1))
+const recommendations = computed(() => (props.analysis?.recommendations || []).slice(0, 1))
 const evidence = computed(() => (props.analysis?.evidence_details || []).slice(0, 6))
 const retestText = computed(() => String(props.analysis?.retest_summary?.text || ''))
 const classMode = computed(() => props.scope === 'class_assessment')
@@ -32,7 +32,8 @@ function refs(row: any) {
       <p class="analysis-summary"><AnalysisRichText :text="analysis?.summary || '当前作答信息不足，暂时无法形成分析。'" /></p>
     </section>
 
-    <section class="analysis-section">
+    <button v-if="allConcepts.length" type="button" class="show-more" style="margin-left:14px" @click="expanded=!expanded">{{ expanded ? '收起分析依据' : '查看分析依据' }}</button>
+    <section v-if="expanded" class="analysis-section">
       <h3>{{ classMode ? '共性问题' : '薄弱概念' }}</h3>
       <div v-if="concepts.length" class="analysis-concepts">
         <component :is="locatable ? 'button' : 'div'" v-for="(row, index) in concepts"
@@ -46,7 +47,7 @@ function refs(row: any) {
         </component>
       </div>
       <p v-else class="analysis-empty">{{ classMode ? '本次没有可归纳的班级共性错题。' : '当前没有明确的薄弱概念。' }}</p>
-      <button v-if="allConcepts.length > 3" type="button" class="show-more" @click="expanded=!expanded">{{ expanded ? '收起其他重点' : `查看其余 ${allConcepts.length - 3} 个重点` }}</button>
+      <button v-if="allConcepts.length > 1" type="button" class="show-more" @click="expanded=!expanded">{{ expanded ? '收起其他重点' : `查看其余 ${allConcepts.length - 1} 个重点` }}</button>
     </section>
 
     <section v-if="plan.length" class="analysis-section">
@@ -54,7 +55,7 @@ function refs(row: any) {
       <ol class="analysis-advice study-plan"><li v-for="row in plan" :key="row.kp_id || row.name">
         <b>{{ row.name }}</b>
         <p><AnalysisRichText :text="row.action" /></p>
-        <p class="success-check"><strong>完成标准：</strong><AnalysisRichText :text="row.success_check" /></p>
+        <p v-if="expanded" class="success-check"><strong>完成标准：</strong><AnalysisRichText :text="row.success_check" /></p>
       </li></ol>
 
     </section>
@@ -65,12 +66,12 @@ function refs(row: any) {
       </ol>
     </section>
 
-    <section v-if="retestText" class="analysis-section">
+    <section v-if="retestText && expanded" class="analysis-section">
       <h3>复测结论</h3>
       <p class="analysis-retest"><AnalysisRichText :text="retestText" /></p>
     </section>
 
-    <details v-if="evidence.length" class="analysis-evidence">
+    <details v-if="evidence.length && expanded" class="analysis-evidence">
       <summary>查看题目依据</summary>
       <ul><li v-for="(row, index) in evidence" :key="index"><b>{{ row.ref }}</b> {{ row.observation }}</li></ul>
     </details>

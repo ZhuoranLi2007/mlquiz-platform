@@ -1,14 +1,11 @@
 // Presentation labels only: scoring, coverage and diagnosis remain API-owned.
 export function conceptGroup(concept: any): 'review' | 'secure' | 'unknown' {
   if (concept.needs_review) return 'review'
-  const round = concept.retests?.at(-1)
-  const evidence = round || concept.statistics || {}
-  if (round && round.state !== 'correct_this_round') return 'unknown'
-  return evidence.scored_count > 0 && evidence.ungraded_count === 0 && evidence.wrong_count === 0
-    ? 'secure' : 'unknown'
+  return ['achieved','delayed_confirmed'].includes(concept.learning_result?.state) ? 'secure' : 'unknown'
 }
 
 export function conceptStatus(concept: any): string {
+  if (concept.learning_result) return concept.learning_result.label
   const round = concept.retests?.at(-1)
   if (round) return ({
     correct_this_round: '本轮全对', needs_review: '本轮仍有错题',

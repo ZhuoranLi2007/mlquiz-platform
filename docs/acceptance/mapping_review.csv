@@ -1,0 +1,53 @@
+﻿row_id,question_id,version,active,scope,main_kp_id,stem
+qrow_d71bc50e331a4204,upq_6428a417b9_s3_q2,1,0,in_scope,,"（  ）根据下面的代价函数J (θ0, θ1)的等高线图和三维图像，选择正确的答案"
+qrow_06292da95917495a,upq_6428a417b9_s4_q1,1,0,in_scope,,u 和v 为三维向量，其中，u =[ −2 2 1 ] v = .问uTv，u .* v 分别得多少？
+qrow_e66e884aeb61409f,q_30c3198f9d8f49ae,1,0,unconfirmed,,Show that the Woodbury indentity is true: $$(A + BCD)^{-1} = A^{-1} - A^{-1}B(C^{-1} + DA^{-1}B)^{-1}DA^{-1}$$
+qrow_e9a21f57f1394f1b,q_7839a996916c44cf,1,0,unconfirmed,,"Show that if a matrix A is positive definite, its eigenvalues must be positive also."
+qrow_4cedddc35c704d54,q_fa117af59dfa4c53,1,0,unconfirmed,,"Show that where M is the number of states of $\{x_i\}$, the entropy of $p(x_i)$ is maximized by $p(x_i) = \frac{1}{M}$ and $H = \ln M$. Use the Lagrange multiplier technique."
+qrow_81bee8c02639413a,q_3a044e76e6a5415d,1,0,unconfirmed,,What is the Kullback-Liebler distance and why is it useful?
+qrow_398675e3522f453f,q_99008bae405d4f1f,1,0,unconfirmed,,The following graph represents probabilities for transiting from one state to another in stages. $P_{ijk}$ represents the probability of transiting from node i to node j at stage k. Specify a dynamic programing algorithm that calculates the most probable path through this graph from any node to the end. What is your recursion equation?
+qrow_40e4fab6a34840b1,q_0d1f89c2fa4e481c,1,0,unconfirmed,,"In general, when might the dynamic programming method be used over the Hamiltonian method?"
+qrow_cdad29b6a580485d,extq_utexas_mt2_q4a,2,0,unconfirmed,,The XOR problem is given by: x1 x2 desired output d -1 -1 -1 +1 -1 +1 -1 +1 +1 +1 +1 -1. Will the following $\psi(x)$ solve the XOR problem? Show all steps. $$\psi(x) = \begin{bmatrix} x_1^2 - x_2^2 \\ x_1 x_2 \\ x_1^2 + x_2^2 \end{bmatrix}$$
+qrow_052c930ce9cd44c0,extq_utexas_mt2_q4b,2,0,unconfirmed,,What is the Perceptron limitation and how to SVMs deal with it?
+qrow_b7a03feacef149e6,q_30c3198f9d8f49ae,2,1,extension,,Show that the Woodbury indentity is true: $(A + BCD)^{-1} = A^{-1} - A^{-1}B(C^{-1} + DA^{-1}B)^{-1}DA^{-1}$
+qrow_6bb6c66b36b245bb,q_7839a996916c44cf,2,0,unconfirmed,,"Show that if a matrix A is positive definite, its eigenvalues must be positive also."
+qrow_51cdb6ab0b3841f7,q_fa117af59dfa4c53,2,1,extension,,"Show that where M is the number of states of $\{x_i\}$, the entropy of $p(x_i)$ is maximized by $p(x_i) = \frac{1}{M}$ and $H = \ln M$. Use the Lagrange multiplier technique."
+qrow_443cbfc23a914d08,q_3a044e76e6a5415d,2,1,extension,,What is the Kullback-Liebler distance and why is it useful?
+qrow_ebc79bb099174acb,q_99008bae405d4f1f,2,0,unconfirmed,,The following graph represents probabilities for transiting from one state to another in stages. Pijk represents the probability of transiting from node i to node j at stage k. Specify a dynamic programing algorithm that calculates the most probable path through this graph from any node to the end. What is your recursion equation?
+qrow_1f15b6c67e8a4905,q_0d1f89c2fa4e481c,2,0,unconfirmed,,"In general, when might the dynamic programming method be used over the Hamiltonian method?"
+qrow_20cd3bbae61a4ea7,extq_utexas_mt2_q4a,3,0,unconfirmed,,"Will the following ψ(x) solve the XOR problem? Show all steps. ψ(x) = [x1^2 − x2^2, x1x2, x1^2 + x2^2]^T"
+qrow_028a7d9424894a82,q_99008bae405d4f1f,3,1,extension,,The following graph represents probabilities for transiting from one state to another in stages. $P_{ijk}$ represents the probability of transiting from node i to node j at stage k. Specify a dynamic programing algorithm that calculates the most probable path through this graph from any node to the end. What is your recursion equation?
+qrow_3451fa26171a401a,q_0d1f89c2fa4e481c,3,1,extension,,"In general, when might the dynamic programming method be used over the Hamiltonian method?"
+qrow_d9f6534b289e4b92,q_76d1620a17994a3a,1,0,unconfirmed,,What are the basic assumptions to be made for linear regression?
+qrow_c672f178ae1e4cd9,lq_20261013_130535_004,1,1,unconfirmed,,机器学习分成训练（线下）和预测（线上）两部分，其中，在现实应用场景中，线上的预测部分需要很大的计算量，因此，需要在终端和云端为其分配大量的计算资源和存储资源
+qrow_6f873dd36f604432,lq_20261013_130539_003,1,1,unconfirmed,,[?]
+qrow_a7982f2e36a748a5,lq_20261013_130542_006,1,1,unconfirmed,,第二选项为：
+qrow_9e69387ea1544d08,lq_20261013_130542_008,1,1,unconfirmed,,第三选项为：
+qrow_aa080c92e8a642a5,lq_20261013_130542_009,1,1,unconfirmed,,第四选项为：
+qrow_db3139e247284ab3,lq_20261013_130542_010,1,1,unconfirmed,,第五选项为：
+qrow_0cb6216b2b074f4d,lq_20261013_130548_001,1,1,unconfirmed,,判决型模型需要估计生成数据的分布，然后再用分布去做预测
+qrow_0486ed06d2de411a,lq_20261013_130548_004,1,1,unconfirmed,,在使用最大似然估计法时，基于各样本是从同一个分布中独立采样得来的这一假设，获得分布生成一组数据的概率可以使用生成每条数据的概率的乘积
+qrow_2d6fc42685094d7c,lq_20261013_130554_001,1,1,unconfirmed,,集成学习（Ensemble Learning）对个体分类器的要求是
+qrow_a2e08696dcfa4304,lq_20261013_130554_002,1,1,unconfirmed,,最典型的集成策略就是委员会投票法——当前样本被多个分类器进行预测，按预测结果进行排序，被投票最多的那个类别就是集成分类器的预测结果。
+qrow_f8aac301626c4f6b,lq_20261013_130554_010,1,1,unconfirmed,,关于Stacking方法描述正确的有：
+qrow_ac2dd81c7b85498a,lq_20261013_130557_016,1,1,unconfirmed,,层次聚类（hierarchical clustering）分成自底向上和自顶向下两类，此类算法对于距离的定义应包括样本间距离、样本和簇之间的距离、簇和簇之间的距离，基于这三类距离，便可以将大簇分成小簇，或者小簇逐渐凝结为大簇。
+qrow_bd3c4b03c12f4d0a,lq_20261013_130557_017,1,1,unconfirmed,,如果样本没有特征描述，但样本间是否相似（或有相似程度），我们可以使用相似度矩阵或邻接矩阵来表征。这类图或网络数据，可以使用mincut等算法通过去掉边来使原图化为相互不连通的多个子图，进而实现聚类。
+qrow_bfe5e181146e4648,lq_20261013_130557_018,1,1,unconfirmed,,聚类结果其实就是分类。由于聚类不需要类别标签，因此，聚类方法可以取代分类方法，从而降低模型对人工标注的依
+qrow_e5a11672c8884cd2,lq_20261013_130600_001,1,1,unconfirmed,,以下哪些是LeNet5的组成部分
+qrow_fed613d5049f4c23,q_7839a996916c44cf,3,1,extension,,"Show that if a matrix $A$ is positive definite, its eigenvalues must be positive also."
+cqrow_503a626a7b00e33b91e00ef9de5833788d64648c,cq_0c4d4be623dc4558febdb7580fb02f9a5f10759d,1,0,in_scope,,回归（regression）是区别于分类（classification）的一种机器学习算法，其中，回归输出的是某值域内的连续值，分类输出的是有限集合内的某个元素。
+cqrow_e753f7cc61c50fbc66ff75cdde5692bd6cb16d0d,cq_0970a15f807607b9f539fee4b8bc60b370acfe9b,1,0,in_scope,,机器学习分成训练（线下）和预测（线上）两部分，其中，在现实应用场景中，线上的预测部分需要很大的计算量，因此，需要在终端和云端为其分配大量的计算资源和存储资源
+cqrow_4f970a16eed4b920d1c4eece2fb5d544af4b362c,cq_485ac5c649c7dd00e11e961e853f2affe80e4667,1,0,in_scope,,回归（regression）是区别于分类（classification）的一种机器学习算法，其中，回归输出的是某值域内的连续值，分类输出的是有限集合内的某个元素。
+cqrow_027732cc78ad89daae9de7a7d081ba17364bc095,cq_353108f0d2d164f6bbdaba6f48838b6ea74f20dd,1,0,in_scope,,机器学习分成训练（线下）和预测（线上）两部分，其中，在现实应用场景中，线上的预测部分需要很大的计算量，因此，需要在终端和云端为其分配大量的计算资源和存储资源
+cqrow_aac8f9a0346fd09e282fde6ad25992ec43bef9a9,cq_8c0848a467d587a4ac9e85e4419f44416a8945bf,1,0,in_scope,,一个三层的全连接神经网络的输入层，隐藏层，输出层分别有400，25，10个神经元，那么需要学习的权重矩阵W^{(2)}中有多少个连接权重
+cqrow_7aaf27c73e7d93fc07a875ef216dc9c02f18c56c,cq_77ad446e59334b26087c81c4216f0e1497c8746b,1,0,in_scope,,在使用最大似然估计法时，基于各样本是从同一个分布中独立采样得来的这一假设，获得分布生成一组数据的概率可以使用生成每条数据的概率的乘积
+cqrow_a47e2b69bb75884e47681ff21d0853b1b6721ae0,cq_ebb3dddd0d82e84cd5d3f0db0b05d2fc948a7b62,1,0,in_scope,,机器学习在训练数据集上学习到的预测模型可以用于测试数据集，这需要遵从一个“独立同分布”的假设，该假设指的是：训练数据和测试数据是各自独立从同一个分布生成的
+cqrow_69c839ffdca60e31eafa18f2e261ee32cebdaa59,cq_60ebf1379eeaf88d69a2a4e4b5af9e296f1bcb5b,1,0,in_scope,,相比于特征样本数据，典型的网络数据没有特征去描述对象（节点），只有对象间的链接关系，因此，传统机器学习方法无法直接应用。此外，网络方法预测新增对象（节点）也面临网络结构扩增，重新训练的问题。
+cqrow_1ce67d049419aa0442b873d8e420b2c5b8964f7f,cq_0851771143b20d59cda4d6d7439948919ca8d772,1,0,in_scope,,网络机器学习是在网络数据上进行预测的一类模型和优化方法。在图上可以开展三类机器学习任务，一类是节点分类，将节点看作样本，为节点进行分类预测，如“learning with local and global consistency”;第二类是**排序学习**（Ranking or Prioritizing），如PageRank、PRINCE等;第三类是**链接预测**（link prediction）任务，如各类推荐（PRINCE为疾病推荐，商品或朋友推荐）。
+cqrow_23fc411d5071a7b4adff5ff28868047e49174728,cq_9c8002e83a9c11db8cf269d8b51a27cba38535d2,1,0,in_scope,,其实网络（或图）的邻接矩阵（Affinity Matrix）也可以作为特征样本数据进行训练和预测，但对于稀疏的或不完全的邻接矩阵，预测性能很难保证，因为相似对象的邻居集合可能很不相似。
+cqrow_0c2851559c0b701c8f9c83fac8dc01688e43c91c,cq_ef8008f9193f90923780800f6da970c6e81ff6a4,1,0,in_scope,,图卷积神经网络便是使用类似于随机游走的方法，基于邻接关系使用邻居们为每个节点构建特征，之后，便可归使用传统的机器学习模型进行训练和预测。
+cqrow_d5bf0f212e4ab4f32df50e44806ea6ab47bfda7d,cq_39f0fd4bb77cffcf2fb2506a139fe9498d3353bb,1,0,in_scope,,最典型的集成策略就是委员会投票法——当前样本被多个分类器进行预测，按预测结果进行排序，被投票最多的那个类别就是集成分类器的预测结果。
+cqrow_880ac9a3b294d0a9ea6bb0b64d98f5c8cd322ee0,cq_53f40f10ad404f400441eb473e969dbe9f778d5f,1,0,in_scope,,关于信息熵描述正确的有：
+cqrow_967d0a06f99e8ad0ef06fbc2039901dba1797f57,cq_f0adf79e5cee2904d47df7feded38663c8aa8485,1,0,in_scope,,关于Stacking方法描述正确的有：
+cqrow_8a8e7660960abcb6073f9429599479cf4b4121ff,cq_1a2f10670bd8ac6dbff8686772d7cf14772bbafb,1,0,in_scope,,关于聚类下列表述正确的有
+cqrow_74a87725b262c07ea284954d654d43fa06c83287,cq_b831a1fd965f1eef9fabd95b26355978f66407d7,1,0,in_scope,,关于距离度量描述正确的有

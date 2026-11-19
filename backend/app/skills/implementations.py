@@ -767,6 +767,9 @@ def verify_learning(db: Session, payload: dict, *, run_id: str,
         from backend.app.services import targeted_retest
         targeted_retest.refresh_cycle(db, cycle, commit=True)
         result = targeted_retest.cycle_detail(db, cycle, include_items=False)
+        from backend.app.services.learning_loop import public_summary
+        result.update(public_summary(targeted_retest.list_cycles(db,
+            source_attempt_id=cycle.source_attempt_id, student_id=cycle.student_id)))
         return {"result": result, "status": "succeeded", "engine": "deterministic",
                 "evidence_refs": [{"attempt_id": aid, "cycle_id": cycle.cycle_id}],
                 "uncertainties": ["本轮达标只说明本次新题表现，不能证明长期稳定掌握。"],

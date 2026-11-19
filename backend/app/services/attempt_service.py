@@ -107,7 +107,7 @@ def _seen_ids(db: Session, user_id: str, exclude_attempt_id: str = "") -> set[st
 
 def create_attempt(db: Session, paper_id: str, user_id: str = "local_user",
                    mode: str | None = None, *, student_id: str = "",
-                   assessment_version_id: str = "") -> dict:
+                   assessment_version_id: str = "", commit: bool = True) -> dict:
     paper = db.get(E.Paper, paper_id)
     if not paper:
         raise KeyError(f"试卷不存在: {paper_id}")
@@ -127,7 +127,7 @@ def create_attempt(db: Session, paper_id: str, user_id: str = "local_user",
         target_id=a.attempt_id, payload={"paper_id": paper_id, "mode": a.mode,
                                          "item_count": len(items)},
     ))
-    db.commit()
+    db.commit() if commit else db.flush()
     return {"attempt_id": a.attempt_id, "paper_id": paper_id,
             "mode": a.mode, "status": a.status,
             "server_started_ms": a.server_started_ms,
@@ -506,12 +506,20 @@ def submit_attempt(db: Session, attempt_id: str,
         ))
         db.commit()
         # 客观成绩已保存；诊断交给后台补齐，模型/图失败不会丢失答卷。
+        cycle = db.execute(select(E.TargetedRetestCycle).where(
+            E.TargetedRetestCycle.retest_attempt_id == attempt_id)).scalars().first()
+        if cycle:
+            from backend.app.services import targeted_retest
+            targeted_retest.refresh_cycle(db, cycle, commit=True)
         try:
             from backend.app.workers.worker import create_job
             create_job(db, "diagnosis", {"attempt_id": attempt_id},
                        user_id=a.user_id,
                        idempotency_key=f"diag:{attempt_id}")
             if a.mode == "retest":
+                if cycle:
+                    create_job(db, 'verify_learning', {'attempt_id':attempt_id}, user_id=a.user_id,
+                               idempotency_key=f'verify:{attempt_id}')
                 task = db.execute(
                     select(E.RetestTask).where(
                         E.RetestTask.paper_id == a.paper_id,

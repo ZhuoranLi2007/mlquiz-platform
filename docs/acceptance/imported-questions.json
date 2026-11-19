@@ -1,0 +1,90 @@
+[
+  {
+    "question_id": "q_30c3198f9d8f49ae",
+    "question_type": "derivation",
+    "stem_zh": "证明 Woodbury 恒等式成立：$(A + BCD)^{-1} = A^{-1} - A^{-1}B(C^{-1} + DA^{-1}B)^{-1}DA^{-1}$",
+    "answer_payload": "{\"reference_answer\": \"Premultiply by $(A+BCD)$ and cancel identity matricies on both sides, then rearrange : $BCDA^{-1} = B(C^{-1}+DA^{-1}B)^{-1}DA^{-1}+BCDA^{-1}B(C^{-1}+DA^{-1}B)^{-1}DA^{-1}$ Cancel $DA^{-1}$, $BC = B(C^{-1} + DA^{-1}B)^{-1} + BCDA^{-1}B(C^{-1} + DA^{-1}B)^{-1}$ Postmultiply by $(C^{-1} + DA^{-1}B)^{-1}$, $BC(C^{-1} + DA^{-1}B) = B + BCDA^{-1}B$\"}",
+    "main_kp_id": "",
+    "scope_class": "extension"
+  },
+  {
+    "question_id": "q_fa117af59dfa4c53",
+    "question_type": "derivation",
+    "stem_zh": "证明：当 $\\{x_i\\}$ 的状态数为 M 时，$p(x_i)$ 的熵在 $p(x_i) = \\frac{1}{M}$ 且 $H = \\ln M$ 时达到最大。使用拉格朗日乘子法。",
+    "answer_payload": "{\"reference_answer\": \"$J = -\\\\sum_{i=1}^M p(x_i) \\\\log p(x_i) + \\\\lambda(\\\\sum_{i=1}^M p(x_i) - 1)$ (1) $\\\\frac{\\\\partial J}{\\\\partial p(x_i)} = \\\\log p(x_i) - 1 + \\\\lambda = 0$ (2) So $\\\\lambda = 1 - \\\\log p(x_i)$ and since this must work for all the $p(x_i)$ and there is only one $\\\\lambda$ then all the $p(x_i)$ must be equal.\"}",
+    "main_kp_id": "",
+    "scope_class": "extension"
+  },
+  {
+    "question_id": "q_3a044e76e6a5415d",
+    "question_type": "short_answer",
+    "stem_zh": "什么是 Kullback-Liebler 距离，它为什么有用？",
+    "answer_payload": "{\"reference_answer\": \"The K-L divergence, or relative entropy is a way of measuring the \\u2018distance\\u2019 between two distributions, since $\\\\sum_k p(x_k) \\\\log \\\\frac{p(x_k)}{q(x_k)} \\\\geq 0$ This is very useful since in a very large number of applications we want to approximate and ideal distribution $p(x_k)$ with a computable distribution $q(x_k)$.\"}",
+    "main_kp_id": "",
+    "scope_class": "extension"
+  },
+  {
+    "question_id": "extq_utexas_mt2_q4b",
+    "question_type": "short_answer",
+    "stem_zh": "感知机（Perceptron）的局限性是什么，支持向量机（SVM）如何处理它？",
+    "answer_payload": "{\"reference_answer\": \"The higher dimensional space of SVMs increases class separations.\"}",
+    "main_kp_id": "kp.svm.margin",
+    "scope_class": "in_scope"
+  },
+  {
+    "question_id": "q_99008bae405d4f1f",
+    "question_type": "comprehensive",
+    "stem_zh": "下图表示分阶段从一个状态转移到另一个状态的概率。$P_{ijk}$ 表示在第 k 阶段从节点 i 转移到节点 j 的概率。请指定一个动态规划算法，用于计算从任意节点到终点的最可能路径。你的递推方程是什么？",
+    "answer_payload": "{\"reference_answer\": \"Let $V(i, k)$ be the most probable path from the ith node in the kth stage until the end - lets call the last stage K. Then $V_{iK} = 0$ and $V(i, k-1) = \\\\max_j \\\\{P_{ijk} + V(j, k)\\\\}$ The most probable paths are given by $V(i, 1)$.\"}",
+    "main_kp_id": "",
+    "scope_class": "extension"
+  },
+  {
+    "question_id": "q_0d1f89c2fa4e481c",
+    "question_type": "short_answer",
+    "stem_zh": "一般来说，什么时候可能会使用动态规划方法而不是 Hamiltonian 方法？",
+    "answer_payload": "{\"reference_answer\": \"Use DP when it is feasible to represent the state space in discrete form.\"}",
+    "main_kp_id": "",
+    "scope_class": "extension"
+  },
+  {
+    "question_id": "extq_utexas_mt2_q4a",
+    "question_type": "derivation",
+    "stem_zh": "XOR 问题如下：$\\begin{array}{ccc} x_1 & x_2 & \\text{desired output } d \\\\ -1 & -1 & -1 \\\\ +1 & -1 & +1 \\\\ -1 & +1 & +1 \\\\ +1 & +1 & -1 \\end{array}$ 下面的 $\\psi(x)$ 能否解决 XOR 问题？展示所有步骤。$\\psi(x) = \\begin{bmatrix} x_1^2 - x_2^2 \\\\ x_1 x_2 \\\\ x_1^2 + x_2^2 \\end{bmatrix}$",
+    "answer_payload": "{\"reference_answer\": \"$\\\\psi(-1, -1) = \\\\begin{pmatrix}0\\\\\\\\1\\\\\\\\2\\\\end{pmatrix}$, $\\\\psi(-1, 1) = \\\\begin{pmatrix}0\\\\\\\\-1\\\\\\\\2\\\\end{pmatrix}$ $K = \\\\begin{bmatrix}5&3&3&3\\\\\\\\3&5&3&3\\\\\\\\3&3&5&3\\\\\\\\3&3&3&5\\\\end{bmatrix}$ $Q(\\\\lambda) = \\\\lambda_1 + \\\\lambda_2 + \\\\lambda_3 + \\\\lambda_4 - \\\\frac{1}{2}\\\\{5\\\\lambda_1^2 -6\\\\lambda_1\\\\lambda_2 -6\\\\lambda_1\\\\lambda_3 + 6\\\\lambda_1\\\\lambda_4 + \\\\cdots\\\\}$ $\\\\frac{\\\\partial Q}{\\\\partial \\\\lambda_1} = 0 = 1 -5\\\\lambda_1 + 3\\\\lambda_2 + 3\\\\lambda_3 + -3\\\\lambda_4$ From symmetry, $\\\\lambda_1 = \\\\lambda_2 = \\\\lambda_3 = \\\\lambda_4 = \\\\frac{1}{2}$ So plugging in, $Q(\\\\lambda) = \\\\frac{5}{2}$ and $\\\\|w_o\\\\| = \\\\sqrt{5}$. And $w_o = \\\\sqrt{5} \\\\begin{pmatrix}0\\\\\\\\4\\\\\\\\0\\\\end{pmatrix}$ and finally, $w_o^T \\\\psi(x) = 4\\\\sqrt{5} x_1 x_2$.\"}",
+    "main_kp_id": "kp.intro.hypothesis",
+    "scope_class": "in_scope_advanced"
+  },
+  {
+    "question_id": "q_7839a996916c44cf",
+    "question_type": "derivation",
+    "stem_zh": "证明：若矩阵 $A$ 是正定的，则其特征值也必定为正。",
+    "answer_payload": "{\"reference_answer\": \"Eigenvalue equation is: $Av = \\\\lambda v$ Premultiply by $v^T$ $v^TAv = \\\\lambda v^Tv$ Both $v^TAv$ and $v^Tv$ are positive, so $\\\\lambda$ must be positive also.\"}",
+    "main_kp_id": "",
+    "scope_class": "extension"
+  },
+  {
+    "question_id": "slq_56e61e7442_p1_1",
+    "question_type": "short_answer",
+    "stem_zh": "",
+    "answer_payload": "{\"reference_answer\": \"Premultiply by (A+BCD) and cancel identity matrices on both sides, then rearrange: BCDA^{-1} = B(C^{-1}+DA^{-1}B)^{-1}DA^{-1} + BCDA^{-1}B(C^{-1}+DA^{-1}B)^{-1}DA^{-1}. Cancel DA^{-1}: BC = B(C^{-1}+DA^{-1}B)^{-1} + BCDA^{-1}B(C^{-1}+DA^{-1}B)^{-1}. Postmultiply by (C^{-1}+DA^{-1}B)^{-1}: BC(C^{-1}+DA^{-1}B) = B + BCDA^{-1}B.\"}",
+    "main_kp_id": "kp.theory.pac",
+    "scope_class": "in_scope"
+  },
+  {
+    "question_id": "slq_56e61e7442_p2_2",
+    "question_type": "short_answer",
+    "stem_zh": "",
+    "answer_payload": "{\"reference_answer\": \"\\u6784\\u9020 J = -\\u03a3 p(x_i) log p(x_i) + \\u03bb(\\u03a3 p(x_i) - 1)\\u3002\\u5bf9 p(x_i) \\u6c42\\u504f\\u5bfc\\u5e76\\u4ee4\\u5176\\u4e3a 0\\uff1a\\u2202J/\\u2202p(x_i) = -log p(x_i) - 1 + \\u03bb = 0\\uff0c\\u6545 \\u03bb = 1 + log p(x_i)\\u3002\\u7531\\u4e8e\\u53ea\\u6709\\u4e00\\u4e2a \\u03bb \\u4e14\\u5bf9\\u6240\\u6709 p(x_i) \\u90fd\\u6210\\u7acb\\uff0c\\u6240\\u6709 p(x_i) \\u5fc5\\u987b\\u76f8\\u7b49\\uff0c\\u7ed3\\u5408 \\u03a3 p(x_i)=1 \\u5f97 p(x_i)=1/M\\uff0c\\u6b64\\u65f6 H = ln M\\u3002\"}",
+    "main_kp_id": "kp.theory.pac",
+    "scope_class": "in_scope"
+  },
+  {
+    "question_id": "slq_56e61e7442_p3_3",
+    "question_type": "short_answer",
+    "stem_zh": "",
+    "answer_payload": "{\"reference_answer\": \"\\u4ee4 V(i,k) \\u4e3a\\u4ece\\u7b2c k \\u9636\\u6bb5\\u7b2c i \\u4e2a\\u8282\\u70b9\\u5230\\u7ec8\\u70b9\\u7684\\u6700\\u53ef\\u80fd\\u8def\\u5f84\\uff0c\\u6700\\u540e\\u9636\\u6bb5\\u4e3a K\\uff0c\\u5219 V_iK = 0\\uff0c\\u9012\\u63a8\\u65b9\\u7a0b\\u4e3a V(i,k-1) = max_j {P_ijk + V(j,k)}\\u3002\\u6700\\u53ef\\u80fd\\u8def\\u5f84\\u7531 V(i,1) \\u7ed9\\u51fa\\u3002\"}",
+    "main_kp_id": "kp.theory.pac",
+    "scope_class": "in_scope"
+  }
+]

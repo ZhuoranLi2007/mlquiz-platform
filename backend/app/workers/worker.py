@@ -28,7 +28,7 @@ STALE_SECONDS = 900
 JOB_TYPES = {"diagnosis", "generate_questions", "retest", "study_plan",
              "tutor", "verify_learning", "answer_generation", "paper_ingest",
              "answer_booklet", "slides_questions", "external_paper_localize",
-             "unified_import", "teacher_intervention", "teacher_compose", "teacher_diagnosis"}
+             "unified_import", "teacher_intervention", "teacher_compose", "teacher_diagnosis", "learning_retest"}
 
 
 def create_job(db: Session, job_type: str, payload: dict,
@@ -70,7 +70,7 @@ def recover_stale(db: Session) -> int:
                 j.status, j.stage = "succeeded", "recovered_published_release"
                 j.result = {"status": "succeeded", "outputs": {"retest": {
                     "status": "published", "release": {"release_id": release.release_id}}}}
-            elif j.job_type in {"teacher_intervention", "teacher_compose", "teacher_diagnosis"} or j.attempts >= MAX_ATTEMPTS:
+            elif j.job_type in {"teacher_intervention", "teacher_compose", "teacher_diagnosis", "learning_retest"} or j.attempts >= MAX_ATTEMPTS:
                 j.status, j.stage = "failed", "interrupted"
                 j.error = ("诊断任务中断；请先查看已保存结果，再决定是否重新运行。未自动重复调用模型。"
                            if j.job_type == "teacher_diagnosis" else
@@ -118,12 +118,14 @@ def process_job(db: Session, job: E.Job) -> None:
     p = job.payload or {}
     _set_stage(db, job, "running")
     try:
-        if job.job_type == "teacher_intervention":
+        if job.job_type in {"teacher_intervention", "learning_retest"}:
             from backend.app.graphs import classroom_workflow
             _set_stage(db, job, "diagnose_generate_verify_publish")
             result = classroom_workflow.run_teacher_intervention(
                 db, actor_user_id=job.user_id, thread_id=f"teacher-job:{job.job_id}", **p)
             ok = result.get("status") == "succeeded"
+            if job.job_type == 'learning_retest' and (result.get('outputs') or {}).get('retest',{}).get('status') == 'published':
+                ok = True  # partial class success remains reviewable, with per-student errors
         elif job.job_type == "teacher_diagnosis":
             _set_stage(db, job, "analyze_answers_and_match_resources")
             out = run_skill(db, "diagnose_classroom", p,

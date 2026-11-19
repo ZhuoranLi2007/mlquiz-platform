@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ResponsivePaneTabs from "../components/ResponsivePaneTabs.vue"
+import { loopTime } from '../utils/learningLoop'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Trophy, CircleClose, Aim, RefreshRight } from '@element-plus/icons-vue'
@@ -8,11 +10,14 @@ import AttemptEvidenceTable from '../components/AttemptEvidenceTable.vue'
 import LearningResourceList from '../components/LearningResourceList.vue'
 import MathText from '../components/MathText.vue'
 import WorkbenchPage from '../components/WorkbenchPage.vue'
+import StudentRetestControl from '../components/StudentRetestControl.vue'
+import { roundLabel } from '../utils/learningLoop'
 import { friendlyError } from '../utils/presentation'
 import { conceptGroup, conceptStatus } from '../utils/feedbackDisplay'
 
 const route = useRoute()
 const router = useRouter()
+const mobilePane = ref('primary')
 const loading = ref(true)
 const detailLoading = ref(false)
 const loadError = ref('')
@@ -23,6 +28,7 @@ const view = ref<'diagnosis' | 'questions'>('diagnosis')
 const selectedConceptId = ref('')
 const rememberedConcepts = new Map<string, string>()
 const showRetests = ref(false)
+const detailTab = ref('study')
 const opening = ref('')
 const questionScroll = ref<HTMLElement>()
 const conceptScroll = ref<HTMLElement>()
@@ -37,7 +43,7 @@ const latestRetest = computed(() => retests.value.at(-1))
 const currentRetest = computed(() => current.value?.retests?.at(-1))
 const conceptGroups = computed(() => [
   { key: 'review', title: '需加强' },
-  { key: 'secure', title: '已掌握 · 已测题目' },
+  { key: 'secure', title: '已达标' },
   { key: 'unknown', title: '待确认' },
 ].map(group => ({ ...group, items: concepts.value.filter(c => conceptGroup(c) === group.key) })))
 const shortSummary = computed(() => {
@@ -46,11 +52,13 @@ const shortSummary = computed(() => {
   return `本卷 ${stats.value.scored_count ?? 0} 道已评分题中答错 ${stats.value.wrong_count ?? 0} 道${stats.value.ungraded_count ? `，另有 ${stats.value.ungraded_count} 题待评分` : ''}。${weak ? `当前 ${weak} 个知识点需加强。` : '当前已评分范围暂无薄弱点。'}`
 })
 const wrongItems = computed<any[]>(() => (detail.value?.items || []).filter((r:any) => r.evidence_status === 'scored' && r.correct === false))
+const displayedRetest = computed(() => detail.value?.learning_loop?.round_result || latestRetest.value)
 const retestState = computed(() => {
-  const row = latestRetest.value
+  const row = displayedRetest.value
   if (!row) return '尚未复测'
-  if (row.status === 'passed') return '本轮达标'
-  if (row.status === 'not_passed') return '本轮未达标'
+  if (row.status === 'passed') return '本轮通过'
+  if (row.status === 'not_passed') return '本轮未通过'
+  if (['practice_completed','baseline_completed'].includes(row.status)) return roundLabel(row)
   if (row.submitted_at) return '等待评分'
   return '等待作答'
 })
@@ -97,6 +105,7 @@ async function load() {
   finally { loading.value = false }
 }
 function selectConcept(id:string) {
+  mobilePane.value='secondary'
   selectedConceptId.value = id
   conceptScroll.value?.scrollTo({ top: 0 })
 }
@@ -108,6 +117,7 @@ async function locate(position:number) {
   if (card) { card.tabIndex = -1; card.focus({ preventScroll: true }) }
 }
 async function openRetest(row:any) {
+  if (!row.release_id && (row.attempt_id || row.retest_attempt_id)) { await router.push(`/exam/${row.attempt_id || row.retest_attempt_id}`); return }
   if (opening.value) return
   opening.value = row.release_id
   try {
@@ -127,7 +137,8 @@ onMounted(load)
 </script>
 
 <template>
-  <WorkbenchPage v-loading="loading || detailLoading" :scroll="false" class="student-feedback-page">
+  <WorkbenchPage v-loading="loading || detailLoading" :scroll="false" class="student-feedback-page" :class="{'mobile-secondary':mobilePane==='secondary'}">
+    <template v-if="view==='diagnosis' && detail" #navigation><ResponsivePaneTabs v-model="mobilePane" primary="知识点列表" secondary="学习详情" /></template>
     <template #header>
       <div class="feedback-heading">
         <div><p class="eyebrow">学生端</p><h1>学习反馈</h1></div>
@@ -143,7 +154,7 @@ onMounted(load)
         <article class="workbench-metric"><span class="metric-icon score-icon"><Trophy /></span><div><small>本次成绩</small><strong>{{ numberText(score.awarded_score) }} <em>/ {{ numberText(score.max_score) }}</em></strong><small>{{ detail.class_comparison?.rank ? `班级第 ${detail.class_comparison.rank} / ${detail.class_comparison.participant_count} 名` : '本卷暂无可比排名' }}</small></div></article>
         <article class="workbench-metric"><span class="metric-icon error-icon"><CircleClose /></span><div><small>错题数量</small><strong>{{ stats.wrong_count ?? '—' }} <em>/ {{ stats.scored_count ?? '—' }} 题</em></strong><small>{{ stats.ungraded_count ? `另有 ${stats.ungraded_count} 题待评分` : '本卷已评分题目' }}</small></div></article>
         <article class="workbench-metric"><span class="metric-icon concept-icon"><Aim /></span><div><small>薄弱知识点</small><strong>{{ workbench?.current_weak_concept_count ?? workbench?.weak_concept_count ?? '—' }} <em>个</em></strong><small>原卷 {{ workbench?.weak_concept_count ?? '—' }} 个 · 复测后更新</small></div></article>
-        <article class="workbench-metric"><span class="metric-icon retest-icon"><RefreshRight /></span><div><small>复测状态</small><strong class="status-text">{{ retestState }}</strong><small>{{ latestRetest ? `第 ${latestRetest.round} 轮 · ${percent(latestRetest.accuracy)}` : '等待教师发布' }}</small></div></article>
+        <article class="workbench-metric"><span class="metric-icon retest-icon"><RefreshRight /></span><div><small>复测状态</small><strong class="status-text">{{ retestState }}</strong><small>{{ displayedRetest ? `第 ${displayedRetest.round} 轮 · ${percent(displayedRetest.accuracy)}` : '随时开始复测' }}</small></div></article>
       </div>
       <div class="view-switch" role="tablist" aria-label="反馈视图">
         <button id="diagnosis-tab" type="button" role="tab" aria-controls="diagnosis-view" :aria-selected="view==='diagnosis'" @click="view='diagnosis'">学情诊断</button>
@@ -154,8 +165,8 @@ onMounted(load)
     <el-alert v-if="loadError" type="error" :closable="false" show-icon><template #title>{{ loadError }}</template><el-button @click="load">重新加载</el-button></el-alert>
     <el-empty v-else-if="!loading && !detailLoading && !detail" description="完成一份试卷后即可查看学习反馈" />
     <template v-if="detail">
-      <section v-show="view==='diagnosis'" id="diagnosis-view" role="tabpanel" aria-labelledby="diagnosis-tab" class="diagnosis-layout">
-        <aside class="overview workbench-scroll" tabindex="0" aria-label="诊断总览与知识点列表">
+      <section v-show="view==='diagnosis'" id="diagnosis-view" role="tabpanel" aria-labelledby="diagnosis-tab" class="diagnosis-layout mobile-pane-layout">
+        <aside class="overview workbench-scroll mobile-primary-panel" tabindex="0" aria-label="诊断总览与知识点列表">
           <h2>本卷诊断</h2><p class="diagnosis-summary">{{ shortSummary }}</p>
           <div class="concept-list">
             <template v-for="group in conceptGroups" :key="group.key">
@@ -170,19 +181,20 @@ onMounted(load)
           </div>
           <details class="diagnosis-basis"><summary>查看判定依据</summary><p>{{ workbench?.summary }}</p><p class="scope-note">{{ workbench?.scope_note }}</p></details>
         </aside>
-        <article class="concept-detail" aria-label="当前知识点详细诊断">
+        <article class="concept-detail mobile-secondary-panel" aria-label="当前知识点详细诊断">
           <template v-if="current">
-            <header><h2>学习与复测</h2><span>{{ current.name }}</span></header>
+            <header><h2>{{ current.name }}</h2><span :class="{ 'evidence-pass': ['achieved','delayed_confirmed'].includes(current.learning_result?.state) }">{{ current.learning_result?.label || '证据不足' }}</span></header>
+            <nav class="detail-tabs" aria-label="知识点详情"><button v-for="tab in [{key:'study',label:'学习建议'},{key:'errors',label:'错题依据'},{key:'concept',label:'概念自测'},{key:'history',label:'复测记录'}]" :key="tab.key" :aria-pressed="detailTab===tab.key" @click="detailTab=tab.key">{{ tab.label }}</button></nav>
             <div ref="conceptScroll" class="concept-content workbench-scroll" tabindex="0" aria-label="学习建议、资源与解析">
-            <section class="next-advice"><h3>本次建议</h3><p><MathText :text="current.action" /></p><p class="scope-note">{{ currentRetest ? (currentRetest.submitted_at ? '学完后核对复测答卷，确认薄弱点。' : '学完后完成下方专项复测。') : '学完后按自测标准检查，等待教师布置复测。' }}</p></section>
-            <section class="detail-section resource-section" aria-label="对应课程资料"><h3>推荐学习资源</h3><LearningResourceList :key="current.id" :resources="current.resources" compact /></section>
-            <details :key="`errors-${current.id}`" class="detail-fold"><summary>错题解析 <span>原卷 {{ current.errors.length }} 题<template v-if="currentRetest?.wrong_items?.length"> · 本轮复测 {{ currentRetest.wrong_items.length }} 题</template></span></summary>
+            <section v-if="detailTab==='study'" class="next-advice"><h3>本次建议</h3><p><MathText :text="current.action" /></p><p v-if="current.learning_result?.state==='achieved'" class="scope-note">{{ loopTime(current.learning_result.due_at) }} 起可做延后确认；现在仍可继续练习。</p></section>
+            <section v-if="detailTab==='study'" class="detail-section resource-section" aria-label="对应课程资料"><h3>推荐学习资源</h3><LearningResourceList :key="current.id" :resources="current.resources" compact /></section>
+            <section v-if="detailTab==='errors'" class="detail-fold">
               <div v-if="current.errors.length" class="question-links"><button v-for="item in current.errors" :key="item.position" type="button" @click="locate(item.position)">定位第 {{ item.position }} 题 ↗</button></div>
               <AttemptEvidenceTable v-if="current.errors.length" :result="{items: current.errors}" :id-prefix="`concept-${current.id}`" heading="原卷作答依据" />
               <p v-else>{{ current.statistics.ungraded_count ? '本概念有题目待评分，暂不判断掌握情况。' : '本卷该概念的已评分题目没有错答；不据此推断其他题目表现。' }}</p>
               <template v-if="currentRetest?.wrong_items?.length"><h4>本轮复测错题</h4><AttemptEvidenceTable :result="{items: currentRetest.wrong_items}" :id-prefix="`latest-retest-${current.id}`" heading="本轮复测作答依据" /></template>
-            </details>
-            <details :key="`corrections-${current.id}`" class="detail-fold"><summary>概念纠正与自测</summary>
+            </section>
+            <section v-if="detailTab==='concept'" class="detail-fold">
               <p class="scope-note">{{ current.chapter }} · 原卷第 {{ current.question_positions.join('、') }} 题</p>
               <h4>可能的错因</h4>
               <div v-for="(hypothesis,index) in current.hypotheses" :key="index" class="hypothesis"><small>推断 · 依据第 {{ hypothesis.question_positions.join('、') }} 题</small><p><MathText :text="hypothesis.text" /></p></div>
@@ -190,21 +202,21 @@ onMounted(load)
               <div v-for="(correction,index) in current.corrections" :key="index" class="correction"><small>{{ correction.source }}</small><p><MathText :text="correction.text" /></p></div>
               <p v-if="!current.corrections.length">现有记录缺少可核对的解释，请结合原题参考答案与下方课程资料复习，再通过新题确认。</p>
               <p><b>检查标准：</b><MathText :text="current.success_check" /></p>
-            </details>
-            <details :key="`history-${current.id}`" class="detail-fold"><summary>本知识点历次复测 <span>{{ current.retests.length }} 轮</span></summary>
+            </section>
+            <section v-if="detailTab==='history'" class="detail-fold">
               <p>原卷答对比例 {{ percent(current.statistics.accuracy) }}（{{ current.statistics.correct_count }}/{{ current.statistics.scored_count }} 题）。以下只比较本学生、本原卷和当前概念。</p>
-              <p v-if="!current.retests.length">当前原卷的此知识点尚未复测，等待教师布置。</p>
+              <p v-if="!current.retests.length">当前原卷的此知识点尚未复测，可直接开始新题复测。</p>
               <article v-for="round in current.retests" :key="round.round" class="concept-round">
                 <h4>第 {{ round.round }} 轮 · {{ round.label }}</h4>
                 <p v-if="round.scored_count">答对 {{ round.correct_count }}/{{ round.scored_count }} 题 · {{ percent(round.accuracy) }}<span v-if="round.ungraded_count"> · {{ round.ungraded_count }} 题待评分</span></p>
                 <p v-if="round.submitted_at">{{ changeText(round.accuracy_change) }}</p>
                 <p v-if="round.release_title">任务：{{ round.release_title }}</p>
                 <AttemptEvidenceTable v-if="round.wrong_items?.length" :result="{items: round.wrong_items}" :id-prefix="`concept-retest-${current.id}-${round.round}`" heading="本概念的复测错题" />
-                <el-button v-if="round.release_id" :loading="opening===round.release_id" @click="openRetest(round)">{{ round.submitted_at ? '查看本轮答卷' : '打开本轮复测' }}</el-button>
+                <el-button v-if="round.release_id || round.attempt_id || round.retest_attempt_id" :loading="opening===round.release_id" @click="openRetest(round)">{{ round.submitted_at ? '查看本轮答卷' : '打开本轮复测' }}</el-button>
               </article>
-            </details>
+            </section>
             </div>
-            <footer class="retest-action" aria-label="本知识点专项复测"><div><h3>专项复测</h3><p>{{ currentRetest ? `第 ${currentRetest.round} 轮 · ${currentRetest.label}` : '等待教师发布' }}<template v-if="currentRetest?.scored_count"> · 答对 {{ currentRetest.correct_count }}/{{ currentRetest.scored_count }} 题</template></p></div><el-button v-if="currentRetest?.release_id" type="primary" :loading="opening===currentRetest.release_id" @click="openRetest(currentRetest)">{{ currentRetest.submitted_at ? '查看复测答卷' : '开始复测' }}</el-button></footer>
+
           </template>
           <el-empty v-else description="暂无知识点证据，请先完成有效作答与评分" />
         </article>
@@ -220,18 +232,19 @@ onMounted(load)
     <el-drawer v-model="showRetests" title="当前原卷的复测记录" size="min(920px, 96vw)">
       <template v-if="detail">
         <p>{{ detail.assessment.title }} · 原卷答对比例 {{ percent(stats.accuracy) }}</p>
-        <p class="scope-note">整轮达标线 {{ percent(detail.retest_threshold) }}；知识点是否仍有错题，请查看知识点详情。未覆盖和待评分不算通过。</p>
-        <el-empty v-if="!retests.length" description="当前原卷尚未安排复测，等待教师布置" />
+        <p class="scope-note">整轮通过线 {{ percent(detail.retest_threshold) }}；知识点是否仍有错题，请查看知识点详情。未覆盖和待评分不算通过。</p>
+        <el-empty v-if="!retests.length" description="当前原卷尚未安排复测，可自主开始" />
         <details v-for="(round,index) in retests" :key="round.round" :open="index===retests.length-1" class="history-round">
           <summary>第 {{ round.round }} 轮 · {{ round.submitted_at ? (round.result_determinable ? `${round.correct_count}/${round.question_count} · ${percent(round.accuracy)}` : '等待评分') : '等待作答' }}</summary>
-          <p>{{ round.status==='passed' ? '本轮达到发布时设定的达标线。' : round.status==='not_passed' ? '本轮未达到设定的达标线。' : '完成作答并取得有效评分后更新结果。' }}</p>
+          <p>{{ round.status==='passed' ? '本轮达到发布时设定的通过线。' : round.status==='not_passed' ? '本轮未达到设定的通过线。' : '完成作答并取得有效评分后更新结果。' }}</p>
           <p v-if="round.untested_kp_ids?.length">本轮仍有未覆盖知识点，不能据此判断已掌握。</p>
           <AttemptEvidenceTable v-if="round.wrong_items?.length" :result="{items: round.wrong_items}" :id-prefix="`round-${round.round}`" heading="本轮错题" />
-          <el-button v-if="round.release_id" :loading="opening===round.release_id" @click="openRetest(round)">{{ round.submitted_at ? '查看本轮答卷' : '打开本轮复测' }}</el-button>
+          <el-button v-if="round.release_id || round.attempt_id || round.retest_attempt_id" :loading="opening===round.release_id" @click="openRetest(round)">{{ round.submitted_at ? '查看本轮答卷' : '打开本轮复测' }}</el-button>
         </details>
       </template>
       <template #footer><el-button @click="showRetests=false">关闭记录</el-button></template>
     </el-drawer>
+    <template #footer><StudentRetestControl :key="selectedAttemptId" :attempt-id="selectedAttemptId" :summary="detail?.learning_loop" @updated="load" /></template>
   </WorkbenchPage>
 </template>
 
@@ -245,5 +258,6 @@ onMounted(load)
 button:focus-visible,summary:focus-visible{outline:2px solid #315fc0;outline-offset:2px}
 @media(max-width:1100px){.metric-icon{width:32px;height:32px}.workbench-metric{gap:8px;padding:10px}.workbench-metric .status-text{font-size:20px}}
 @media(max-width:900px){.feedback-heading .workbench-toolbar{width:100%}.view-switch>span{display:none}.workbench-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.diagnosis-layout{grid-template-columns:minmax(230px,35fr) minmax(0,65fr)}}
-@media(max-width:650px){.diagnosis-layout{grid-template-columns:1fr;grid-template-rows:180px minmax(400px,1fr);overflow:auto;gap:8px}.overview,.concept-detail{padding:12px}.workbench-metric{height:auto;min-height:84px}.feedback-heading h1{font-size:24px}.retest-action{flex-wrap:wrap}}
+@media(max-width:650px){.diagnosis-layout{grid-template-columns:1fr;grid-template-rows:100px minmax(0,1fr);gap:8px}.overview,.concept-detail{padding:12px}.workbench-metric{height:auto;min-height:84px}.feedback-heading h1{font-size:24px}.retest-action{flex-wrap:wrap}}
+.detail-tabs{display:flex;gap:5px;padding-top:8px;flex-wrap:wrap;flex:none}.detail-tabs button{border:0;border-radius:6px;background:#f0f4fa;color:#4a6382;padding:6px 10px;cursor:pointer}.detail-tabs button[aria-pressed=true]{background:#e0ebff;color:#245db4}.evidence-pass{color:#148457!important}
 </style>

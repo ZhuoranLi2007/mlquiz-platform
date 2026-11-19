@@ -52,7 +52,7 @@ def _validate_candidate(db, *, qid: str, prior_stems, chapter_ids, kp_ids,
         raise ValueError("知识点不存在")
     chapter = db.get(E.Chapter, q.chapter_id) if q.chapter_id else None
     response = model_provider.chat(db, messages=[
-        {"role": "system", "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）。不要猜测，无法唯一解答时 unambiguous=false。"},
+        {"role": "system", "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"},
         {"role": "user", "content": json.dumps({"stem": q.stem, "options": q.options,
             "question_type": q.question_type, "knowledge_point": kp.name,
             "chapter": chapter.title if chapter else q.chapter_id}, ensure_ascii=False)}],

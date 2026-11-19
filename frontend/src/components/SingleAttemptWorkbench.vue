@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ResponsivePaneTabs from "./ResponsivePaneTabs.vue"
+import TeacherRetestControl from "./TeacherRetestControl.vue"
 import WorkbenchPage from "./WorkbenchPage.vue"
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -13,6 +15,8 @@ import { analysisNotice } from '../utils/analysisNotice'
 const props = defineProps<{ result: any; diagnosisReady: boolean; diagnosisMeta?: any; intervention?: any; loading?: boolean; runningAi?: boolean; studentLabel?: string; assessmentLabel?: string }>()
 const emit = defineEmits<{ run: []; retest: [] }>()
 const router = useRouter()
+const mobilePane = ref('primary')
+const evidenceTab = ref('questions')
 const showAudit = ref(false)
 const showCompare = ref(false)
 const summary = computed(() => props.result?.score_summary || {})
@@ -58,7 +62,8 @@ function resourceType(resource: any) {
 </script>
 
 <template>
-  <WorkbenchPage :scroll="false" v-if="result" class="single-workbench">
+  <WorkbenchPage :scroll="false" v-if="result" class="single-workbench" :class="{'mobile-secondary':mobilePane==='secondary'}">
+    <template #navigation><ResponsivePaneTabs v-model="mobilePane" primary="作答与复测" secondary="分析与资料" /></template>
     <template #header>
     <section class="result-overview" aria-label="本次诊断结果">
       <header class="result-heading">
@@ -85,17 +90,18 @@ function resourceType(resource: any) {
     </section>
 
     </template>
-    <section class="diagnosis-body">
-      <div class="evidence-column">
-        <section class="answers-panel" aria-label="作答诊断">
+    <section class="diagnosis-body mobile-pane-layout">
+      <div class="evidence-column mobile-primary-panel">
+        <el-radio-group v-model="evidenceTab" aria-label="作答与复测切换"><el-radio-button value="questions">原卷错题</el-radio-button><el-radio-button value="retests">历次复测</el-radio-button></el-radio-group>
+        <section v-if="evidenceTab==='questions'" class="answers-panel" aria-label="作答诊断">
           <header><h2>作答诊断</h2></header>
           <AttemptEvidenceTable :result="result" section="problems" />
           <AttemptEvidenceTable :result="result" section="correct" />
         </section>
-        <TargetedRetestHistory :history="retestHistory" :original-summary="summary" :empty-text="plan.ready ? '诊断确认复测目标后，可从右侧生成并发布针对性新题。' : (plan.reason || '当前没有适合生成复测的错题。')" />
+        <TargetedRetestHistory v-else :history="retestHistory" :original-summary="summary" :empty-text="plan.ready ? '诊断确认复测目标后，可从右侧生成并发布针对性新题。' : (plan.reason || '当前没有适合生成复测的错题。')" />
       </div>
 
-      <aside class="insight-sidebar">
+      <aside class="insight-sidebar mobile-secondary-panel">
         <section class="ai-panel">
           <header><h2>学情分析</h2></header>
           <DiagnosisAnalysisContent :analysis="analysis" scope="student_attempt" />
@@ -106,19 +112,11 @@ function resourceType(resource: any) {
             <LearningResourceList :resources="resources" />
           </div>
 
-          <div class="retest-section">
-            <h3>复测建议</h3>
-            <p>依据当前薄弱知识点，由 AI 生成新题，独立验答通过后发布。</p>
-            <div v-if="plan.ready" class="plan-summary"><span>{{ plan.chapters?.map((item: any) => item.title).join('、') || '当前错题章节' }}</span><span>{{ plan.item_count }} 题 · {{ plan.suggested_types?.map(typeLabel).join('、') || '自动匹配题型' }}</span></div>
-            <p v-else>{{ plan.reason || '当前没有适合生成复测的错题。' }}</p>
-            <div v-if="generatedCandidates.length" class="candidate-note">已生成 {{ generatedCandidates.length }} 道候选题，校验通过后发布。</div>
-            <div v-if="publishedRetest" class="published-note">复测已发布，提交后将回写章节表现。</div>
-            <div v-else-if="retestFailure" class="validation-note">{{ retestFailure }}</div>
-            <el-button class="retest-button" type="primary" :plain="latestRetest?.status === 'passed'" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">{{ retestButtonLabel }}</el-button>
-          </div>
+
         </section>
       </aside>
     </section>
+    <template #footer><TeacherRetestControl :result="result" :running="runningAi" @retest="emit('retest')" @open-attempt="id=>router.push(`/exam/${id}`)" /></template>
   </WorkbenchPage>
 </template>
 

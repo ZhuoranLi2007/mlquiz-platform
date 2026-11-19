@@ -245,284 +245,31 @@ def compare_attempts(db: Session, before_attempt_id: str,
 
 
 def build_teacher_intervention_graph(db: Session):
-    def diagnose(s: State) -> dict:
-        history_mode = s.get("scope_type") == "student_history"
-        class_mode = s.get("scope_type") == "class_assessment"
-        request = {
-            "scope_type": ("class_assessment" if class_mode else
-                           "student_history" if history_mode else "student_attempt"),
-        }
-        if class_mode:
-            request["classroom_id"] = s["classroom_id"]
-            request["assessment_version_id"] = s["assessment_version_id"]
-        elif history_mode:
-            request["student_id"] = s["student_id"]
-            request["classroom_id"] = s["classroom_id"]
-            request["date_from"] = s.get("date_from", "")
-            request["date_to"] = s.get("date_to", "")
-            request["assessment_version_id"] = s.get("assessment_version_id", "")
-        else:
-            request["student_id"] = s["student_id"]
-            request["assessment_version_id"] = s["assessment_version_id"]
-            request["attempt_id"] = s.get("attempt_id", "")
-        result = run_skill(
-            db, "diagnose_classroom", request,
-            thread_id=s["thread_id"], user_id=s["actor_user_id"])
-        payload = result.get("result") or {}
-        weak = list(payload.get("weak_kp_ids") or [])
-        weak_chapters = list(payload.get("weak_chapter_ids") or [])
-        errors = list(s.get("errors") or [])
-        if result.get("status") != "succeeded":
-            errors.append(
-                f"课堂作答诊断未完成：{result.get('status') or 'unknown'}")
-        resolved_attempt_id = (payload.get("attempt_id") or
-                               (payload.get("retest_plan") or {}).get("anchor_attempt_id") or
-                               s.get("attempt_id", ""))
-        round_no = int(s.get("round_no") or 1)
-        if not class_mode and resolved_attempt_id:
-            source_attempt = db.get(E.Attempt, resolved_attempt_id)
-            if source_attempt is not None:
-                round_no = targeted_retest.next_round(
-                    db, source_attempt_id=source_attempt.attempt_id,
-                    student_id=s.get("student_id", ""))
-        # A five-item round cannot cover arbitrarily many concepts. Keep the
-        # diagnosis priority order and disclose what this round leaves out.
-        weak = list(dict.fromkeys(weak))
-        targets = weak[:max(1, int(s.get("count") or 5))]
-        return {"stages": _stage(s, "diagnose", {
-                    "diagnosis_id": (result.get("extra") or {}).get(
-                        "diagnosis_id"),
-                    "status": result.get("status"),
-                    "evidence_count": len(result.get("evidence_refs") or []),
-                    "weak_kp_ids": weak,
-                    "weak_chapter_ids": weak_chapters}),
-                "outputs": _out(s, "diagnosis", result),
-                "weak_kp_ids": weak, "weak_chapter_ids": weak_chapters,
-                "target_kp_ids": targets, "remaining_kp_ids": weak[len(targets):],
-                "attempt_id": resolved_attempt_id, "round_no": round_no,
-                "errors": errors}
-
-    def recommend(s: State) -> dict:
-        result = run_skill(db, "recommend_resources",
-            {"kp_ids": s.get("weak_kp_ids") or [],
-             "attempt_id": s.get("attempt_id", "")},
-            thread_id=s["thread_id"], user_id=s["actor_user_id"])
-        count = len((result.get("result") or {}).get("recommendations") or [])
-        errors = list(s.get("errors") or [])
-        if result.get("status") != "succeeded":
-            errors.append(
-                f"资源推荐未完成：{result.get('status') or 'unknown'}")
-        return {"stages": _stage(s, "recommend_resources", {
-                    "status": result.get("status"), "count": count}),
-                "outputs": _out(s, "recommendations", result),
-                "errors": errors}
-
-    def generate(s: State) -> dict:
-        weak_chapters = s.get("weak_chapter_ids") or []
-        diagnosis = (s.get("outputs") or {}).get("diagnosis") or {}
-        diagnosed_payload = diagnosis.get("result") or {}
-        diagnosed_items = diagnosis_items(diagnosed_payload)
-        weak = s.get("target_kp_ids") or []
-        prior_stems = [
-            str(item.get("stem") or "").strip()
-            for item in diagnosed_items
-            if item.get("correct") is False and item.get("stem")
-        ][:3]
-        if not weak_chapters and not weak:
-            result = {"status": "skipped", "result": {"candidates": []},
-                      "message": "没有由可评分证据支持的低分章节。"}
-        elif not weak:
-            result = {"status": "skipped", "result": {"candidates": []},
-                      "message": "低分章节缺少可供生成器检索材料的内部主题映射。"}
-        else:
-            target = max(1, min(int(s.get("count") or
-                                    cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT), 5))
-            # Keep a meaningful candidate reserve.  Independent solving and
-            # similarity checks deliberately reject ambiguous or near-duplicate
-            # items; generation must replenish those candidates instead of
-            # silently publishing a short retest.  The published paper remains
-            # exactly ``target`` questions.
-            pool_target = min(12, target + 7)
-            by_kp: dict[str, list[dict]] = {kp_id: [] for kp_id in weak}
-            attempts: list[dict] = []
-            per_kp_target = max(2, (pool_target + len(by_kp) - 1) // len(by_kp))
-            generation_round = 0
-            for kp_id, kp_rows in by_kp.items():
-                for _ in range(3):
-                    missing = per_kp_target - len(kp_rows)
-                    if missing <= 0:
-                        break
-                    generation_round += 1
-                    one = workflows.run_generation(db, {
-                        "count": min(5, missing),
-                        "kp_ids": [kp_id],
-                        "question_types": ["single_choice", "multi_choice", "true_false"],
-                        "mode": "teacher_retest_candidate",
-                        "instruction": (
-                            f"生成用于第{s.get('round_no', 1)}轮复测的新题，共需{missing}道；"
-                            f"本批只考查知识点 {kp_id}，必须给出可核验答案、解析与来源引用。"
-                            "使用不同于原题的真实情境、数据或判断角度，不得只替换数字、主语或措辞。"
-                            "以下原错题只用于避重，不得复述：" + " | ".join(prior_stems)
-                        )}, user_id=s["actor_user_id"])
-                    rows = (one.get("result") or {}).get("candidates") or []
-                    known = {str(row.get("question_id")) for rows_ in by_kp.values() for row in rows_}
-                    kp_rows.extend(row for row in rows
-                                   if row.get("question_id") and
-                                   str(row.get("question_id")) not in known)
-                    attempts.append({"round": generation_round, "kp_id": kp_id,
-                                     "status": one.get("status"),
-                                     "engine": one.get("engine"),
-                                     "candidate_count": len(rows)})
-                    if one.get("status") != "succeeded" and not rows:
-                        break
-            # Round-robin ordering makes the independent validator encounter
-            # every weak concept before filling the five-question paper.
-            combined = []
-            for index in range(per_kp_target):
-                for kp_rows in by_kp.values():
-                    if index < len(kp_rows):
-                        combined.append(kp_rows[index])
-            engines = list(dict.fromkeys(
-                str(row.get("engine") or "") for row in attempts
-                if row.get("engine")))
-            result = {
-                "status": "succeeded" if len(combined) >= target else "insufficient_candidates",
-                "engine": "+".join(engines) if engines else "not_run",
-                "result": {
-                    "candidates": combined[:pool_target],
-                    "generation_attempts": attempts,
-                    "message": (f"已生成{len(combined[:pool_target])}道候选题，发布时自动筛选{target}道。" if len(combined) >= target
-                                else f"需要{target}道题，多次生成后仅有{len(combined)}道合格题。"),
-                },
-            }
-        candidates = (result.get("result") or {}).get("candidates") or []
-        return {"stages": _stage(s, "generate_retest_candidates", {
-                    "status": result.get("status"),
-                    "candidate_count": len(candidates)}),
-                "outputs": _out(s, "generation", result)}
-
-    def prepare(s: State) -> dict:
-        generation = (s.get("outputs") or {}).get("generation") or {}
-        candidates = (generation.get("result") or {}).get("candidates") or []
-        errors = list(s.get("errors") or [])
-        result = {"status": "no_candidate", "candidate_question_ids": []}
-        if generation.get("status") == "succeeded" and candidates:
-            try:
-                diagnosis = (s.get("outputs") or {}).get("diagnosis") or {}
-                payload = diagnosis.get("result") or {}
-                weak_chapters = list(s.get("weak_chapter_ids") or [])
-                chapter_by_kp = {}
-                for item in diagnosis_items(payload):
-                    if item.get("chapter_id") in weak_chapters and item.get("kp_id"):
-                        chapter_by_kp.setdefault(str(item["kp_id"]), set()).add(
-                            str(item["chapter_id"]))
-                # Generated questions are new candidate data.  Attach a chapter
-                # only when the diagnosis supplies one unambiguous mapping for
-                # the candidate's internal retrieval topic.
-                for candidate in candidates:
-                    q = answer_pipeline.latest_question(
-                        db, str(candidate.get("question_id") or ""))
-                    choices = chapter_by_kp.get(str(q.main_kp_id), set()) if q else set()
-                    if q is not None and not q.chapter_id and len(choices) == 1:
-                        q.chapter_id = next(iter(choices))
-                recipient_ids = None
-                if s.get("scope_type") == "class_assessment":
-                    member_rows = db.execute(
-                        select(E.Student)
-                        .join(E.ClassroomStudent,
-                              E.ClassroomStudent.student_id == E.Student.student_id)
-                        .where(E.ClassroomStudent.classroom_id == payload["classroom"]["classroom_id"],
-                               E.ClassroomStudent.status == "active",
-                               E.Student.active.is_(True))
-                    ).scalars().all()
-                    recipient_ids = []
-                    for student in member_rows:
-                        account = (db.get(E.User, student.linked_user_id)
-                                   if student.linked_user_id else None)
-                        if account and account.active and account.role == "student":
-                            recipient_ids.append(student.student_id)
-                    if not recipient_ids:
-                        raise ValueError("班级没有可接收在线试卷的学生账号")
-                result = validate_and_publish(db,
-                    candidate_ids=[c["question_id"] for c in candidates if c.get("question_id")],
-                    kp_ids=s.get("target_kp_ids") or [],
-                    untested_kp_ids=s.get("remaining_kp_ids") or [],
-                    chapter_ids=weak_chapters, actor_user_id=s["actor_user_id"],
-                    student_id=s.get("student_id", ""), student_ids=recipient_ids,
-                    classroom_id=(payload.get("classroom_id") or
-                                  (payload.get("classroom") or {}).get("classroom_id", "")),
-                    source_attempt_id=s.get("attempt_id", ""),
-                    source_assessment_version_id=s.get("assessment_version_id", ""),
-                    diagnosis_id=(diagnosis.get("extra") or {}).get("diagnosis_id", ""),
-                    thread_id=s["thread_id"], round_no=int(s.get("round_no") or 1),
-                    required_count=int(s.get("count") or
-                                       cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT))
-            except Exception as exc:
-                db.rollback()
-                reason = str(exc)
-                result = {"status": "validation_or_publication_failed",
-                          "candidate_question_ids": [], "reason": reason}
-                errors.append("自动复测未发布：" + reason)
-        elif generation.get("status") != "skipped":
-            errors.append("复测生成未产生可用新题：" + str(generation.get("status")))
-        result["target_kp_ids"] = s.get("target_kp_ids") or []
-        result["remaining_kp_ids"] = s.get("remaining_kp_ids") or []
-        return {"stages": _stage(s, "validate_and_publish_retest", result),
-                "outputs": _out(s, "retest", result), "errors": errors,
-                "status": "partial" if errors else "succeeded"}
-
-    graph = StateGraph(State)
-    for name, fn in (("diagnose", diagnose), ("recommend_resources", recommend),
-                     ("generate_retest_candidates", generate),
-                     ("validate_and_publish_retest", prepare)):
-        graph.add_node(name, fn)
-    graph.add_edge(START, "diagnose")
-    graph.add_edge("diagnose", "recommend_resources")
-    graph.add_edge("recommend_resources", "generate_retest_candidates")
-    graph.add_edge("generate_retest_candidates", "validate_and_publish_retest")
-    graph.add_edge("validate_and_publish_retest", END)
-    return graph.compile(checkpointer=CHECKPOINTER)
+    from backend.app.graphs.learning_loop import build
+    return build(db, CHECKPOINTER)
 
 
 def run_teacher_intervention(db: Session, *, actor_user_id: str,
-                             student_id: str = "",
-                             assessment_version_id: str = "",
-                             classroom_id: str = "",
-                             scope_type: str = "student_attempt",
-                             attempt_id: str = "",
-                             date_from: str = "", date_to: str = "",
-                             count: int = cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT,
-                             thread_id: str = "") -> dict:
+                             student_id: str = "", assessment_version_id: str = "",
+                             classroom_id: str = "", scope_type: str = "student_attempt",
+                             attempt_id: str = "", date_from: str = "", date_to: str = "",
+                             count: int = 5, thread_id: str = "", kp_ids=None,
+                             practice: bool = False, prefer_bank: bool = False, retry_generation: bool = False,
+                             _scopes=None, _scope_keys=None) -> dict:
     if scope_type not in {"student_attempt", "student_history", "class_assessment"}:
         raise ValueError("不支持的诊断范围")
-    if scope_type == "student_history" and (not classroom_id or not student_id):
-        raise ValueError("多卷复测需要 classroom_id")
-    if scope_type == "class_assessment" and (not classroom_id or not assessment_version_id):
-        raise ValueError("班级复测需要 classroom_id 与 assessment_version_id")
-    if scope_type == "student_attempt" and (not assessment_version_id or not student_id):
-        raise ValueError("单卷复测需要 assessment_version_id")
-    # The mastery threshold is defined on one fixed five-item round.  Keep the
-    # request field for backward compatibility, but do not let an old client
-    # silently publish a one- or two-item "targeted retest" with the same 80%
-    # semantics.
-    count = cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT
-    round_no = 1
     thread_id = thread_id or f"teacher-intervention:{uuid.uuid4().hex[:12]}"
-    initial: State = {"actor_user_id": actor_user_id, "student_id": student_id,
-        "assessment_version_id": assessment_version_id,
-        "classroom_id": classroom_id, "scope_type": scope_type, "count": count,
-        "attempt_id": attempt_id, "round_no": round_no,
-        "date_from": date_from, "date_to": date_to,
-        "thread_id": thread_id, "stages": [], "outputs": {},
-        "weak_kp_ids": [], "weak_chapter_ids": [],
-        "errors": [], "status": "queued"}
+    request = {"student_id":student_id,"assessment_version_id":assessment_version_id,
+        "classroom_id":classroom_id,"scope_type":scope_type,"attempt_id":attempt_id,
+        "date_from":date_from,"date_to":date_to,"count":5,"kp_ids":kp_ids or [],
+        "practice":practice,"prefer_bank":prefer_bank,"retry_generation":retry_generation,"_scopes":_scopes or []}
     final = build_teacher_intervention_graph(db).invoke(
-        initial, config={"configurable": {"thread_id": thread_id}})
-    return {"thread_id": thread_id, "graph": "teacher_intervention_graph",
-            "status": final.get("status"), "stages": final.get("stages", []),
-            "outputs": final.get("outputs", {}), "errors": final.get("errors", []),
-            "checkpoint_available": CHECKPOINTER.get_tuple(
-                {"configurable": {"thread_id": thread_id}}) is not None}
+        {"actor_user_id":actor_user_id,"thread_id":thread_id,"request":request,"count":5},
+        config={"configurable":{"thread_id":thread_id}})
+    return {"thread_id":thread_id,"graph":"teacher_intervention_graph",
+            "status":final.get("status"),"stages":final.get("stages",[]),
+            "outputs":final.get("outputs",{}),"errors":final.get("errors",[]),
+            "checkpoint_available":CHECKPOINTER.get_tuple({"configurable":{"thread_id":thread_id}}) is not None}
 
 
 def build_post_submission_graph(db: Session):

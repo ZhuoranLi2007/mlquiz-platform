@@ -65,6 +65,7 @@ function updateVisibleCapacities() {
 }
 
 async function openAssignment(item: any) {
+  if (item.self_service && item.attempt_id) { await router.push(`/exam/${item.attempt_id}`);return }
   if (item.status === 'submitted') {
     if (item.attempt_id) await router.push(`/exam/${item.attempt_id}?recipient=${item.recipient_id}`)
     return
@@ -153,7 +154,9 @@ function retestText(item: any) {
   if (!item) return '暂无记录'
   if (item.status !== 'submitted') return item.status === 'opened' ? '进行中' : '待完成'
   const status = item.targeted_retest?.status
-  if (status === 'passed') return '已达标'
+  if (status === 'passed') return '复测通过'
+  if (status === 'practice_completed') return '练习完成'
+  if (status === 'baseline_completed') return '基线已建立'
   if (status === 'not_passed') return '未达标'
   return scoreText(item.score, item.max_score)
 }
@@ -216,25 +219,25 @@ onBeforeUnmount(() => window.removeEventListener('resize', updateVisibleCapaciti
         </div>
       </div>
       <div v-if="visiblePending.length" class="task-grid">
-        <article v-for="item in visiblePending" :key="item.recipient_id" class="task-card">
+        <article v-for="item in visiblePending" :key="item.recipient_id || item.release_id" class="task-card">
           <div class="task-card-top"><span class="task-kind" :class="item.release_type === 'retest' ? 'retest' : 'exam'"><el-icon><component :is="item.release_type === 'retest' ? Aim : Reading" /></el-icon>{{ item.release_type === 'retest' ? '针对性复测' : '课堂测验' }}</span><span class="status-pill" :class="item.status === 'opened' ? 'in-progress' : 'new'">{{ item.status === 'opened' ? '进行中' : '新任务' }}</span></div>
           <h3>{{ taskTitle(item) }}</h3>
-          <p class="task-description">{{ taskDescription(item) }}</p>
+          <p v-if="item.instructions" class="task-description">{{ item.instructions }}</p>
           <div class="task-card-bottom">
             <div class="task-facts"><span><el-icon><Calendar /></el-icon>{{ item.due_at ? `截止 ${dateTime(item.due_at) || '时间未记录'}` : '不限截止时间' }}</span><span v-if="item.item_count"><el-icon><Collection /></el-icon>共 {{ item.item_count }} 题</span><span v-if="taskMinutes(item)"><el-icon><Clock /></el-icon>预计约 {{ taskMinutes(item) }} 分钟</span></div>
-            <el-button type="primary" :icon="VideoPlay" :loading="starting === item.recipient_id" @click="openAssignment(item)">{{ item.status === 'opened' ? '继续答题' : '开始答题' }}</el-button>
+            <el-button type="primary" :icon="VideoPlay" :loading="Boolean(starting) && starting === item.recipient_id" @click="openAssignment(item)">{{ item.status === 'opened' ? '继续答题' : '开始答题' }}</el-button>
           </div>
         </article>
       </div>
       <div v-else-if="!loading && !loadError" class="empty-state">{{ pending.length ? '没有符合筛选条件的任务' : noTaskDescription(auth.principal.value) }}</div>
-      <details v-if="unavailable.length" class="expired-tasks"><summary>已失效任务（{{ unavailable.length }}）</summary><div v-for="item in unavailable" :key="item.recipient_id">{{ taskTitle(item) }}<span>{{ item.due_at ? `截止 ${dateTime(item.due_at)}` : '已失效' }}</span></div></details>
+      <details v-if="unavailable.length" class="expired-tasks"><summary>已失效任务（{{ unavailable.length }}）</summary><div v-for="item in unavailable" :key="item.recipient_id || item.release_id">{{ taskTitle(item) }}<span>{{ item.due_at ? `截止 ${dateTime(item.due_at)}` : '已失效' }}</span></div></details>
     </section>
 
     <div class="records-layout">
       <section id="recent-panel" tabindex="-1" class="records-panel recent-panel" aria-labelledby="recent-heading">
         <div class="panel-heading"><div class="heading-copy"><el-icon class="panel-icon"><Document /></el-icon><h2 id="recent-heading">最近提交</h2></div><button type="button" class="text-action" @click="completed.length > recentLimit ? showAllCompleted = !showAllCompleted : scrollToRecords()">{{ completed.length > recentLimit ? (showAllCompleted ? '收起' : '查看更多') : '查看考试记录' }}</button></div>
         <div v-if="completed.length" class="recent-list" tabindex="0" aria-label="最近提交列表">
-          <article v-for="item in visibleCompleted" :key="item.recipient_id" class="recent-row">
+          <article v-for="item in visibleCompleted" :key="item.recipient_id || item.release_id" class="recent-row">
             <div class="recent-main"><strong>{{ taskTitle(item) }}</strong><small><span class="recent-type">{{ item.release_type === 'retest' ? '针对性复测' : '在线测验' }}</span><span v-if="item.release_type === 'retest' && item.targeted_retest">{{ retestText(item) }}</span></small></div>
             <b class="recent-score" :class="scoreTone(item.score, item.max_score)">{{ scoreText(item.score, item.max_score) }}</b>
             <div class="recent-meta"><time class="recent-time" :datetime="item.submitted_at || undefined"><el-icon><Calendar /></el-icon>{{ dateTime(item.submitted_at) || '提交时间未记录' }}</time><button type="button" class="record-link" :disabled="!item.attempt_id" :aria-label="`查看 ${taskTitle(item)} 的答卷`" @click="openAssignment(item)">查看答卷</button></div>

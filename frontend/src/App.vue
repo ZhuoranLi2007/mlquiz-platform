@@ -64,7 +64,7 @@ onMounted(() => void auth.ensure())
     <div class="role-main">
       <header v-if="!questionBankPage && !teacherDashboardPage && !studentFeedbackPage" class="role-topbar">
         <button class="mobile-menu" @click="mobileOpen=true">☰</button>
-        <div><span>{{ studentTaskPage ? '学生端 › 我的任务' : roleLabel }}</span><h1><el-icon v-if="studentTaskPage" class="task-title-icon"><Tickets /></el-icon>{{ title }}<small v-if="studentTaskPage" class="task-title-note">查看与完成学习任务，掌握学习进度</small><small v-if="teacherAnalysisPage" class="analysis-title-note">从答卷表现到教学行动</small></h1></div>
+        <div><span>{{ studentTaskPage ? '学生端 › 我的任务' : roleLabel }}</span><h1><el-icon v-if="studentTaskPage" class="task-title-icon"><Tickets /></el-icon>{{ title }}</h1></div>
         <div class="identity"><span v-if="studentTaskPage" class="task-avatar"><el-icon><UserFilled /></el-icon></span><b>{{ auth.principal.value?.display_name }}</b></div>
       </header>
       <button v-else-if="questionBankPage" class="mobile-menu bank-mobile-menu" aria-label="打开导航" @click="mobileOpen=true">☰</button>

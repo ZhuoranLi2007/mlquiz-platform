@@ -141,6 +141,12 @@ def test_registry_and_skill_preserve_classroom_evidence_rules(db: Session):
 
 
 def test_classroom_workflows_call_diagnosis_skill(db: Session, monkeypatch):
+    from backend.app.graphs import learning_loop
+    from backend.app.services import model_provider
+    db.add(E.User(user_id="online-1", role="student", display_name="S01"))
+    db.get(E.Student, "student-1").linked_user_id="online-1"
+    db.commit()
+    monkeypatch.setattr(model_provider, "chat_status", lambda: {"configured":False})
     calls: list[tuple[str, dict]] = []
 
     def fake_run_skill(_db, name, payload, **_context):
@@ -160,11 +166,12 @@ def test_classroom_workflows_call_diagnosis_skill(db: Session, monkeypatch):
                 "uncertainties": [], "next_actions": [], "extra": {}}
 
     monkeypatch.setattr(classroom_workflow, "run_skill", fake_run_skill)
+    monkeypatch.setattr(learning_loop, "run_skill", fake_run_skill)
 
     teacher = classroom_workflow.run_teacher_intervention(
         db, actor_user_id="teacher", student_id="student-1",
         assessment_version_id="version-fixed")
-    assert teacher["status"] == "succeeded"
+    assert teacher["status"] == "partial"  # diagnosis works, but this fixture has no reliable new bank questions.
     assert [name for name, _payload in calls] == [
         "diagnose_classroom", "recommend_resources"]
     assert calls[0][1]["scope_type"] == "student_attempt"

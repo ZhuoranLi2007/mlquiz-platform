@@ -61,6 +61,18 @@ class InterventionIn(BaseModel):
     count: int = Field(default=cfg.TARGETED_RETEST_DEFAULT_QUESTION_COUNT, ge=1, le=5)
     date_from: str = Field(default="", max_length=10)
     date_to: str = Field(default="", max_length=10)
+    kp_ids: list[str] = Field(default_factory=list, max_length=2)
+    practice: bool = False
+    prefer_bank: bool = False
+    retry_generation: bool = False
+
+
+class SelfRetestIn(BaseModel):
+    attempt_id: str = Field(default='', max_length=64)
+    kp_ids: list[str] = Field(default_factory=list, max_length=2)
+    practice: bool = False
+    prefer_bank: bool = False
+    retry_generation: bool = False
 
 
 class ApproveCandidateIn(BaseModel):
@@ -322,7 +334,7 @@ def teacher_intervention(
             scope_type=body.scope_type,
             attempt_id=body.attempt_id,
             date_from=body.date_from, date_to=body.date_to,
-            count=body.count)
+            count=body.count, kp_ids=body.kp_ids, practice=body.practice, prefer_bank=body.prefer_bank, retry_generation=body.retry_generation)
     except (classroom_diagnosis.ClassroomDiagnosisError, ValueError) as exc:
         raise HTTPException(400, str(exc)) from exc
 
@@ -348,7 +360,57 @@ def _queue_teacher_job(db: Session, principal, kind: str, payload: dict) -> dict
 def queue_intervention(body: InterventionIn,
                        principal=Depends(auth_service.require_teacher),
                        db: Session = Depends(get_session)) -> dict:
-    return _queue_teacher_job(db, principal, "teacher_intervention", body.model_dump())
+    from backend.app.services import learning_loop
+    try:
+        return learning_loop.queue(db, principal, body.model_dump())
+    except Exception as exc:
+        db.rollback()
+        raise _http_error(exc) from exc
+
+
+@router.post('/student/retests/jobs')
+def queue_self_retest(body: SelfRetestIn, principal=Depends(auth_service.require_student),
+                      db: Session = Depends(get_session)):
+    from backend.app.services import learning_loop
+    if body.attempt_id:
+        auth_service.assert_attempt_access(db, principal, body.attempt_id)
+    try:
+        return learning_loop.queue(db, principal, body.model_dump())
+    except Exception as exc:
+        db.rollback()
+        raise _http_error(exc) from exc
+
+
+@router.get('/student/retests/options')
+def self_retest_options(principal=Depends(auth_service.require_student), db: Session=Depends(get_session)):
+    from backend.app.services.learning_resources import material_catalog
+    return {'items':[{'kp_id':kp,'name':row['name']} for kp,row in material_catalog().items()]}
+
+
+@router.get('/student/retests/state')
+def self_retest_state(attempt_id: str='', principal=Depends(auth_service.require_student), db: Session=Depends(get_session)):
+    from backend.app.services import learning_loop
+    if attempt_id:
+        auth_service.assert_attempt_access(db,principal,attempt_id)
+    history=learning_loop.history_for(db,principal.student_id,attempt_id)
+    result=learning_loop.public_summary(history)
+    jobs=db.execute(select(E.Job).where(E.Job.job_type=='learning_retest',E.Job.status.in_(['queued','running']))).scalars().all()
+    key=learning_loop._scope_key(principal.student_id,attempt_id)
+    result['active_job_id']=next((j.job_id for j in jobs if key in (j.payload or {}).get('_scope_keys',[])), '')
+    return result
+
+
+@router.get('/student/retests/jobs/{job_id}')
+def self_retest_job(job_id: str, principal=Depends(auth_service.require_student), db: Session=Depends(get_session)):
+    job=db.get(E.Job,job_id)
+    if not job or job.job_type!='learning_retest' or not any(
+            s.get('student_id')==principal.student_id for s in (job.payload or {}).get('_scopes',[])):
+        raise HTTPException(404,'任务不存在')
+    out=((job.result or {}).get('outputs') or {}).get('retest') or {}
+    own=next((r for r in out.get('items',[]) if r.get('student_id')==principal.student_id),None)
+    # Never expose another student's diagnosis, answer, prompt or job payload.
+    return {'job_id':job.job_id,'status':job.status,'stage':job.stage,
+        'result':own,'error':'任务中断，可重试或使用题库。' if job.status=='failed' else ''}
 
 
 @router.post("/teacher/paper-drafts/compose/jobs")
@@ -362,7 +424,7 @@ def queue_composition(body: PaperDraftComposeIn,
 def teacher_job(job_id: str, principal=Depends(auth_service.require_teacher),
                 db: Session = Depends(get_session)) -> dict:
     job = db.get(E.Job, job_id)
-    if not job or job.user_id != principal.user_id:
+    if not job or (job.user_id != principal.user_id and job.job_type != 'learning_retest'):
         raise HTTPException(404, "任务不存在")
     return {"job_id": job.job_id, "status": job.status, "stage": job.stage,
             "result": job.result, "error": job.error, "progress": job.progress}
@@ -505,6 +567,8 @@ def student_assignments(
     db: Session = Depends(get_session),
 ) -> dict:
     items = release_service.list_student_assignments(db, principal.student_id)
+    from backend.app.services.learning_loop import self_assignments
+    items = sorted(items + self_assignments(db, principal.student_id), key=lambda r:r.get('published_at') or '', reverse=True)
     return {"total": len(items), "items": items}
 
 
@@ -877,7 +941,7 @@ def student_feedback(
     for attempt in attempts:
         # Targeted retests are presented under their source exam instead of as
         # unrelated papers in the selector.
-        if attempt.mode == "retest":
+        if attempt.mode == "retest" and attempt.retest_of_attempt_id:
             continue
         version = (db.get(E.AssessmentVersion, attempt.assessment_version_id)
                    if attempt.assessment_version_id else None)
@@ -979,7 +1043,7 @@ def student_feedback_detail(
     auth_service.assert_attempt_access(db, principal, attempt_id)
     attempt = db.get(E.Attempt, attempt_id)
     if (attempt is None or attempt.status != "submitted"
-            or not attempt.is_effective or attempt.mode == "retest"):
+            or not attempt.is_effective or (attempt.mode == "retest" and attempt.retest_of_attempt_id)):
         raise HTTPException(404, "未找到可查看的已完成试卷")
     try:
         payload = classroom_diagnosis.student_attempt(
@@ -1009,7 +1073,7 @@ def student_feedback_detail(
     resources = [{
         **{key:row.get(key) for key in ('resource_id','kp_id','kp_ids','kp_name','location',
                                       'study_focus','success_check','suggested_minutes','platform',
-                                      'content_type','source_type','checked_date')},
+                                      'content_type','source_type','checked_date','access_status','content_readable')},
         "title": row.get("title") or "学习资源",
         "type": row.get("platform") or row.get("source_type") or "资源",
         "reason": row.get("reason") or "与本次错题相关",
@@ -1036,6 +1100,7 @@ def student_feedback_detail(
     from backend.app.services.feedback_workbench import build as feedback_workbench
     return {
         "diagnosis_workbench": feedback_workbench(payload, _student_question_view),
+        "learning_loop": payload.get('learning_loop'),
         "attempt_id": attempt.attempt_id,
         "assessment": {
             "title": (payload.get("assessment") or {}).get("title") or "课堂测验",

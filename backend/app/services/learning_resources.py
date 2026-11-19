@@ -18,6 +18,12 @@ from backend.app.services.learning_catalog import target
 
 
 @lru_cache(maxsize=1)
+def access_checks():
+    path = Path(__file__).resolve().parents[1] / 'data/resource_access.json'
+    return json.loads(path.read_text(encoding='utf-8')).get('urls', {}) if path.is_file() else {}
+
+
+@lru_cache(maxsize=1)
 def material_catalog() -> dict:
     path = Path(__file__).resolve().parents[1] / 'data/learning_materials.json'
     if not path.is_file():
@@ -95,6 +101,11 @@ def recommend(db, kp_ids, limit: int = 12) -> list[dict]:
         for row in external:
             if kp_id not in (row.kp_ids or []) or is_search_entry(row.url, row.title):
                 continue
+            checked = access_checks().get(row.url, {})
+            if checked.get('access_status') in {'blocked','missing','error'}:
+                continue
+            if '/topic/' in urlparse(row.url or '').path or '话题' in row.title:
+                continue
             if urlparse(row.url or '').scheme not in {'https','http'}:
                 continue
             if row.access_status not in {'ok',''} or row.content_type == 'topic':
@@ -103,7 +114,7 @@ def recommend(db, kp_ids, limit: int = 12) -> list[dict]:
             if row.content_status == 'title_only' and not focused:
                 continue
             # Broad course homepages are not a location for a specific weakness.
-            if not focused and any(t in row.title for t in ('合集','系列课程','课程合集','Specialization')):
+            if '?p=' not in row.url and any(t in row.title for t in ('合集','系列课程','课程合集','Specialization')):
                 continue
             suitable.append(row)
         suitable.sort(key=lambda r: (
@@ -120,7 +131,9 @@ def recommend(db, kp_ids, limit: int = 12) -> list[dict]:
                     'kp_id':kp_id,'kp_ids':[kp_id],'kp_name':name,
                     'reason':guide['action'],'study_focus':guide['action'],
                     'location':segment or row.title,'verified':True,
-                    'access_status':row.access_status,'checked_date':row.checked_date,
+                    'access_status':access_checks().get(row.url,{}).get('access_status', 'unchecked'),
+                    'checked_date':access_checks().get(row.url,{}).get('checked_date',row.checked_date),
+                    'content_readable':access_checks().get(row.url,{}).get('content_readable',False),
                     'verified_scope':row.verified_scope,'content_status':row.content_status}
             if not local and not any(r['kp_id']==kp_id for r in first):
                 first.append(card)

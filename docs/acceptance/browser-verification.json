@@ -1,0 +1,51 @@
+{
+  "layout": [
+    {
+      "route": "/teacher",
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ]
+    },
+    {
+      "route": "/teacher/questions",
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ]
+    },
+    {
+      "route": "/teacher/resources",
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ]
+    },
+    {
+      "route": "/teacher/online",
+      "viewport": [
+        1366,
+        768
+      ],
+      "document": [
+        1366,
+        768
+      ]
+    }
+  ],
+  "page_errors": [],
+  "manual_chapter_save": true,
+  "course_resource_opened": "http://127.0.0.1:8020/learn/kp.regularization.l1l2"
+}

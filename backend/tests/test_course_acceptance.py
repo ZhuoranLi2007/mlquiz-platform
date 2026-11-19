@@ -80,10 +80,11 @@ def test_three_scopes_generate_publish_answer_verify_and_update(db, monkeypatch,
     assert len(published['candidate_question_ids']) == 5
     assert result['outputs']['recommendations']['result']['recommendations']
     expected_recipients = 2 if scope == 'class_assessment' else 1
-    release = published['release']
-    assert release['recipient_count'] == expected_recipients
+    releases = [r['release'] for r in published['items']]
+    release = {'recipients':[p for r in releases for p in r['recipients']]}
+    assert len(release['recipients']) == expected_recipients
     cycles = db.execute(select(E.TargetedRetestCycle).where(
-        E.TargetedRetestCycle.release_id == release['release_id'])).scalars().all()
+        E.TargetedRetestCycle.release_id.in_([r['release_id'] for r in releases]))).scalars().all()
     assert len(cycles) == expected_recipients
     for recipient in release['recipients']:
         sid = recipient['student_id']
@@ -95,10 +96,13 @@ def test_three_scopes_generate_publish_answer_verify_and_update(db, monkeypatch,
             assert not q.get('answer_payload'), 'exam API leaked answer'
             attempt_service.save_answer(db, aid, q['question_id'], {'value': True})
         submitted = release_service.submit_assignment(db, recipient['recipient_id'], student_id=sid)
-        assert submitted['targeted_retest']['passed'] is True
+        expected_pass = sid == 'stu-1'  # stu-2 also needs kp.loss; fixture only generates kp.linear.
+        assert submitted['targeted_retest']['passed'] is expected_pass
+        if not expected_pass:
+            assert submitted['targeted_retest']['status'] == 'practice_completed'
         workflow = submitted['classroom_workflow']
         assert workflow['status'] == 'succeeded', workflow
-        assert workflow['outputs']['verification']['result']['passed'] is True
+        assert workflow['outputs']['verification']['result']['passed'] is expected_pass
         assert workflow['outputs']['retest_comparison']['comparable_knowledge_points']
         assert db.execute(select(E.Diagnosis).where(E.Diagnosis.student_id == sid)).scalars().first()
     assert all(c.retest_attempt_id for c in cycles)
@@ -167,24 +171,11 @@ def test_model_adapter_records_actual_prompt_and_redacts_secret(db, monkeypatch)
 
 
 def test_round_caps_targets_without_hiding_remaining_concepts(db, monkeypatch):
+    from backend.app.services.learning_evidence import select_targets
     targets = [f'kp.{i}' for i in range(7)]
-    generated = []
-    def skill(_db, name, payload, **kwargs):
-        if name == 'diagnose_classroom':
-            return {'status': 'succeeded', 'result': {'weak_kp_ids': targets,
-                'weak_chapter_ids': ['ch1'], 'wrong_items': [
-                    {'kp_id': kp, 'chapter_id': 'ch1'} for kp in targets]}}
-        return {'status': 'succeeded', 'result': {'recommendations': []}}
-    monkeypatch.setattr(graph, 'run_skill', skill)
-    def generate(_db, blueprint, **kwargs):
-        generated.extend(blueprint['kp_ids'])
-        return {'status': 'model_not_configured', 'result': {'candidates': []}}
-    monkeypatch.setattr(graph.workflows, 'run_generation', generate)
-    result = graph.run_teacher_intervention(db, actor_user_id='teacher_local',
-        student_id='stu-1', classroom_id='class-1', scope_type='student_history')
-    assert generated == targets[:5]
-    assert result['outputs']['retest']['target_kp_ids'] == targets[:5]
-    assert result['outputs']['retest']['remaining_kp_ids'] == targets[5:]
+    selected, remaining = select_targets(targets, [], {k:True for k in targets})
+    assert selected == targets[:2]
+    assert remaining == targets[2:]
 
 
 @pytest.mark.parametrize('content', [

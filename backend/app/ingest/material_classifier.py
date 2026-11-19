@@ -73,6 +73,8 @@ def read_text(content: bytes, ext: str, *, limit: int = 12000) -> str:
 
 # ---------------------------------------------------------------- 规则特征
 _EXAM_MARKS = [
+    (r"\b(?:midterm|final)\s+(?:exam|answers)|\bthis exam is\b", 10, "英文考试说明"),
+    (r"\(\s*[a-z]\s*\)\s*\[\s*\d+\s*\]|\b\d+\s+points?\b", 6, "英文分值与小题号"),
     (r"[一二三四五六七八九十]+\s*[、.．]\s*[^\n]{0,14}(?:选择题|名词解释|判断题|"
      r"填空题|简答题|计算题|证明题|综合题|论述题)", 6, "题型分区标题"),
     (r"(?:每\s*(?:小)?题|共\s*\d+\s*分|满分|总分)\s*\d*\s*分?", 4, "分值标记"),
@@ -142,7 +144,7 @@ def rule_scores(text: str) -> dict[str, Any]:
         out["slides"]["score"] += 4
         out["slides"]["evidence"].append(f"短行版式 {short_ratio:.0%}")
     # 没有分值/题号时，试卷分要打折扣，防止「一、选择题」出现在课件目录里误判
-    if not re.search(r"\d+\s*分|满分|分值|每题", t):
+    if not re.search(r"\d+\s*分|满分|分值|每题|\[\s*\d+\s*\]|\bpoints?\b", t):
         out["exam_paper"]["score"] = int(out["exam_paper"]["score"] * 0.55)
 
     code_s, code_why = _hits(t, _CODE_MARKS)

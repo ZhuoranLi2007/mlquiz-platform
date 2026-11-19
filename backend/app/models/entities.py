@@ -644,6 +644,12 @@ class TargetedRetestCycle(Base):
     retest_attempt_id: Mapped[str] = mapped_column(
         String(64), default="", index=True)
     workflow_run_id: Mapped[str] = mapped_column(String(64), default="")
+    initiator_user_id: Mapped[str] = mapped_column(String(64), default="", server_default="")
+    retest_kind: Mapped[str] = mapped_column(String(24), default="formal", server_default="formal")
+    rule_version: Mapped[str] = mapped_column(String(32), default="legacy", server_default="legacy")
+    evidence_manifest: Mapped[dict] = mapped_column(JSON, default=dict, server_default='{}')
+    source_counts: Mapped[dict] = mapped_column(JSON, default=dict, server_default='{}')
+    delayed_from: Mapped[dict] = mapped_column(JSON, default=dict, server_default='{}')
     round_no: Mapped[int] = mapped_column(Integer, default=1)
     status: Mapped[str] = mapped_column(
         String(32), default="published", index=True)
@@ -667,7 +673,8 @@ class TargetedRetestCycle(Base):
     __table_args__ = (
         UniqueConstraint("source_attempt_id", "student_id", "round_no",
                          name="uq_targeted_retest_source_student_round"),
-        Index("uq_retest_release_student", "release_id", "student_id", unique=True),
+        Index("uq_retest_release_student", "release_id", "student_id", unique=True,
+              sqlite_where=text("release_id <> ''")),
         Index("uq_retest_nonempty_attempt", "retest_attempt_id", unique=True,
               sqlite_where=text("retest_attempt_id <> ''")),
     )

@@ -1,0 +1,174 @@
+{
+  "method": "Browser login and answer controls; real API composition/publication; SQLite readback",
+  "students": {
+    "stu001": {
+      "attempt_id": "attempt_fe1348e54d8543a6",
+      "source_attempt_id": "attempt_fe1348e54d8543a6",
+      "recipient_id": "recipient_7bfdc4585040442a"
+    },
+    "stu002": {
+      "attempt_id": "attempt_1da4e3b4d5754de2",
+      "source_attempt_id": "attempt_1da4e3b4d5754de2",
+      "recipient_id": "recipient_f48c4933791e4823"
+    }
+  },
+  "release": {
+    "release_id": "release_65f3306b5c23436f",
+    "title": "交付验收20261119-章节诊断",
+    "instructions": "",
+    "release_type": "exam",
+    "status": "published",
+    "due_at": "",
+    "published_at": "2026-11-19T02:26:15+00:00",
+    "assessment_version_id": "av_b77f283d0cc4237eb6b99926",
+    "assessment_id": "assessment_87fc77b2bbd6a0391c8a8c4f",
+    "paper_id": "paper_5b350ad248494250",
+    "paper_title": "交付验收20261119-章节诊断",
+    "item_count": 4,
+    "estimated_minutes": 6,
+    "recipient_count": 2,
+    "submitted_count": 0,
+    "pending_count": 2,
+    "expired_count": 0,
+    "recipients": [
+      {
+        "recipient_id": "recipient_7bfdc4585040442a",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "student_code": "STU001",
+        "linked_account": "stu001",
+        "linked_display_name": "STU001",
+        "online_receivable": true,
+        "status": "opened",
+        "attempt_id": "attempt_fe1348e54d8543a6",
+        "score": null,
+        "max_score": null,
+        "grading_status": "unknown",
+        "submitted_at": ""
+      },
+      {
+        "recipient_id": "recipient_f48c4933791e4823",
+        "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+        "student_code": "STU002",
+        "linked_account": "stu002",
+        "linked_display_name": "STU002",
+        "online_receivable": true,
+        "status": "assigned",
+        "attempt_id": null,
+        "score": null,
+        "max_score": null,
+        "grading_status": "not_started",
+        "submitted_at": ""
+      }
+    ],
+    "source_diagnosis_id": "",
+    "source_attempt_id": "",
+    "workflow_run_id": "",
+    "targeted_retest": null
+  },
+  "retest_job": {
+    "job_id": "job_573fd31e7df346ea",
+    "status": "queued",
+    "reused": false
+  },
+  "retest_job_result": {
+    "job_id": "job_573fd31e7df346ea",
+    "status": "succeeded",
+    "stage": "succeeded",
+    "result": {
+      "status": "published",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "cycle_id": "retestcycle_217f711c16574a0c",
+      "round": 1,
+      "source_attempt_id": "attempt_fe1348e54d8543a6",
+      "attempt_id": "attempt_fd2c632d136c40cc",
+      "release": null,
+      "candidate_question_ids": [
+        "aiq_d3115e2330f44d9b",
+        "acceptance_noanswer_20261116",
+        "aiq_003a8ba5fbbb4937",
+        "aiq_1930c82113ed40a2",
+        "aiq_22d4b78d47c24b3b"
+      ],
+      "source_counts": {
+        "ai_generated": 0,
+        "bank_selected": 1,
+        "original_reused": 4
+      },
+      "question_source": "bank_selected",
+      "retest_kind": "practice",
+      "target_kp_ids": [
+        "kp.eval.bias_var"
+      ],
+      "remaining_kp_ids": [],
+      "rejected_candidates": []
+    },
+    "error": ""
+  },
+  "retest_attempt_id": "attempt_fd2c632d136c40cc",
+  "second_release": {
+    "release_id": "release_c422e702ed9e4f01",
+    "title": "交付验收20261119-英文资料入库测验",
+    "instructions": "",
+    "release_type": "exam",
+    "status": "published",
+    "due_at": "",
+    "published_at": "2026-11-19T02:33:37+00:00",
+    "assessment_version_id": "av_faa98c94daa6752adc483e72",
+    "assessment_id": "assessment_6732b9cfe99300692ae6c95b",
+    "paper_id": "paper_d5f9018b2d234526",
+    "paper_title": "交付验收20261119-英文资料入库测验",
+    "item_count": 5,
+    "estimated_minutes": 26,
+    "recipient_count": 1,
+    "submitted_count": 0,
+    "pending_count": 1,
+    "expired_count": 0,
+    "recipients": [
+      {
+        "recipient_id": "recipient_bcf81fdeb34d4c61",
+        "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+        "student_code": "STU001",
+        "linked_account": "stu001",
+        "linked_display_name": "STU001",
+        "online_receivable": true,
+        "status": "opened",
+        "attempt_id": "attempt_19de8c85e41f4967",
+        "score": null,
+        "max_score": null,
+        "grading_status": "unknown",
+        "submitted_at": ""
+      }
+    ],
+    "source_diagnosis_id": "",
+    "source_attempt_id": "",
+    "workflow_run_id": "",
+    "targeted_retest": null
+  },
+  "second_attempt_id": "attempt_19de8c85e41f4967",
+  "persisted_attempts": [
+    {
+      "attempt_id": "attempt_19de8c85e41f4967",
+      "status": "submitted",
+      "score": 50.0,
+      "max_score": 50.0
+    },
+    {
+      "attempt_id": "attempt_1da4e3b4d5754de2",
+      "status": "submitted",
+      "score": 75.0,
+      "max_score": 100.0
+    },
+    {
+      "attempt_id": "attempt_fd2c632d136c40cc",
+      "status": "submitted",
+      "score": 10.0,
+      "max_score": 10.0
+    },
+    {
+      "attempt_id": "attempt_fe1348e54d8543a6",
+      "status": "submitted",
+      "score": 75.0,
+      "max_score": 100.0
+    }
+  ]
+}

@@ -1,0 +1,1603 @@
+{
+  "backup": "data\\final-acceptance\\db\\mlquiz.sqlite3.20261119T021824Z.bak",
+  "before": {
+    "questions": {
+      "total": 852,
+      "missing": 556
+    },
+    "paper_items": {
+      "total": 509,
+      "missing": 365
+    },
+    "answer_scores": {
+      "total": 773,
+      "missing": 773
+    }
+  },
+  "after": {
+    "questions": {
+      "total": 852,
+      "missing": 75
+    },
+    "paper_items": {
+      "total": 509,
+      "missing": 59
+    },
+    "answer_scores": {
+      "total": 773,
+      "missing": 180
+    }
+  },
+  "unresolved": [
+    {
+      "table": "questions",
+      "id": "seed_note_001",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "seed_note_002",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "seed_note_003",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "seed_note_004",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "seed_exam_2019_三_1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "nq_74b3f7a5817142aa",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_b9f5ab340a144275",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_246d0469314c4718",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_d71bc50e331a4204",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_06292da95917495a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_457223872c594b04",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_68e78fd76e0c4923",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_139e780a4bfc4e13",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_4134d44ccfc34958",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_73b74f060f5044d8",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_ca6820f113704c39",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_5fac4637e97847a7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_2002ea8b54ce4af4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_03ac82ecd3b64b0b",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_13999b2c7b6d4b98",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_688d80d6fb534704",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_e66e884aeb61409f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_e9a21f57f1394f1b",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_4cedddc35c704d54",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_81bee8c02639413a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_398675e3522f453f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_40e4fab6a34840b1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_cdad29b6a580485d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_052c930ce9cd44c0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_b7a03feacef149e6",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_6bb6c66b36b245bb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_51cdb6ab0b3841f7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_443cbfc23a914d08",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_ebc79bb099174acb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_1f15b6c67e8a4905",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_20cd3bbae61a4ea7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_028a7d9424894a82",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_3451fa26171a401a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_3db3a150a1f746d5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_d9f6534b289e4b92",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_9ba1a1f8db4b4e8a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_c672f178ae1e4cd9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_6f873dd36f604432",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_a7982f2e36a748a5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_9e69387ea1544d08",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_aa080c92e8a642a5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_db3139e247284ab3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_0cb6216b2b074f4d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_0486ed06d2de411a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_13eebe4ef2074913",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_2d6fc42685094d7c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_a2e08696dcfa4304",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_f8aac301626c4f6b",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_ac2dd81c7b85498a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_bd3c4b03c12f4d0a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_bfe5e181146e4648",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_e5a11672c8884cd2",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "qrow_fed613d5049f4c23",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "aiq_f85e76c90a8c4e8a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_503a626a7b00e33b91e00ef9de5833788d64648c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_e753f7cc61c50fbc66ff75cdde5692bd6cb16d0d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_4f970a16eed4b920d1c4eece2fb5d544af4b362c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_027732cc78ad89daae9de7a7d081ba17364bc095",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_aac8f9a0346fd09e282fde6ad25992ec43bef9a9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_7aaf27c73e7d93fc07a875ef216dc9c02f18c56c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_a47e2b69bb75884e47681ff21d0853b1b6721ae0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_69c839ffdca60e31eafa18f2e261ee32cebdaa59",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_1ce67d049419aa0442b873d8e420b2c5b8964f7f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_23fc411d5071a7b4adff5ff28868047e49174728",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_0c2851559c0b701c8f9c83fac8dc01688e43c91c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_d5bf0f212e4ab4f32df50e44806ea6ab47bfda7d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_880ac9a3b294d0a9ea6bb0b64d98f5c8cd322ee0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_967d0a06f99e8ad0ef06fbc2039901dba1797f57",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_8a8e7660960abcb6073f9429599479cf4b4121ff",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "questions",
+      "id": "cqrow_74a87725b262c07ea284954d654d43fa06c83287",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "pi_8d237b47683b4392",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "pi_2c0f9b626fd440b6",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "pi_fc4b3d8182a94308",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "pi_054a196a471c4cbb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_9919ad80f1054c0a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_23826b4c27c54d13",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_8da80eeaa64d4f0a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_aac379e9646a4d5f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_f8884328d6144bd0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_f046bd1d0d5f4c10",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_d8d98907aa4c4380",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_ec8cbc4ac70d4474",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_04a12c43377e4d27",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_7dc06e768ef642b7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_3a46df6e6f8e4964",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_45d617bcb46246e6",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_2626222337084042",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_af3c5f25e4fb48c1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_4f8f9a66f6f24b21",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_741fd12ff9eb47c0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_35947677197044f5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_8e0588be7ac04154",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_1983482255d34e6e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_7091b97eae8b4528",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_ae08148c8d164a74",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_73d697e237a74d38",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_982f5cf31f5342d1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_12fac261c8ab4155",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_6aecf37feded405e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_ca1cca2c7c00431a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_163cda363b604b52",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_c12df8349e154795",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_46aa1fbe5ae64be4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_a9af6a0fbe5846ec",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_b115a9e3e5ee412e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_e6dd3af374cc44e1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_7385baef88644290",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_1cf64cacccb843e6",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_b44e3c3867344856",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_94071117c60a434f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_469f6982827b4a6d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_9c6a43fbb93745c4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_63c55c7762a0115c6999d4eaeb837840ed162af9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_3e1cfd521784c30dca0b47e629df2714140f912c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_d0c7192946ab7c69b5db82a328fd572037aef8e4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_f75e86e6bac65910224695b394911b1cfc7566a7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_ca6291a134f08442100584ab5511fc278ed3116f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_a776808731401b02307007a32981d0d3795410cf",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_8fcf95b2c64d9f6dbe21bcf5fe1f815e681b6369",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_8d039e0621317509eb3d3ee73f8bf79e996e0dda",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_ad7dd33c4f97521d3fb47d8a1989b54f5b2e65a6",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_6e737db5e96c48fbb5a2bf4c1433db354d96bbf1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_68b6ffa35a33bd9387a04895b54b51be161d7d43",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_2b61a17b3bd2e90d6cd795c314a232a13c1ee4ee",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_c1074e2e5f63ea03d6bde23ed6e6542ad24e3cb1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_14f6a0b67b571f20d369887915f103c584552961",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_227683d2c6269d1b0e7f5b8b0eaad2d1308fd380",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "cpitem_f8a3ef3c2a3fc4cfbc886c6fcb7535dfaa2c9103",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "paper_items",
+      "id": "item_62e129ae68ae4c90",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_fcdcd7d425fa71e2de61257fb014cd1a7a72a303",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_2de0da48f98ce896f72504779dcf9d317061fda9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3e5dfb3a123f9adc08c3cbfb3f429ca3759977b1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3eebf8ee0e414a30da4a0a67e1b45499ce9e6542",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_817f023d3ae27abe42e952934009428de18403c1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_6afc31dbfb25f13fa14a3c2ab61421f86f509395",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c03d95ae3b59be8902ae8595ada3b46ef4f8ec61",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c1ce87a0e1e5c8f54415115097f4e02e9dbb4c87",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_2342e1bb47616a4274c6bfeced7886057f8ff85f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_6c5b95c6734aec32a96cda72ea54abe0963944ba",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_a37dcbbf32a51eb1f1063a03cf805ab19718235b",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_794039e0f00cd578a7a575c7ad2995927ef70586",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_b9dfbd0c9fef449a7279e26e6552f8daf7c82d84",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_7ed237acbd07f8245fe4ae71fdbbab8adfc4983f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_328b99198df54c363d99509c18d1e195a3c03712",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_efb9b4253d4b0efb9ddd65a5b6a86b517df077c1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_2a166f85ae25c35f46892d55d95015783b8382ad",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_75d57daba21651483a2249b3f0bfc8d9eb51719c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_645f0a0c61474642f71c2488b579961637e57992",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4083ee7ccbb92d6ad141b1435ef1ee4f4e94a28c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1fef1a850a13d33acec98e314fec79d5107410da",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8190d485e9a04654d2535eed51866495c95e16c4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_7adc6274c29b139c225b52e2cb99674e96c4646d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_862b7933b692a5b2f2399cb2cddce3294b1cd94b",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d6f2a015f476bc464d8938e78c675b030149c0f5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_bc416f65c9f8516985119ec5047461adbd3bf84f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d26c654d9266cb09c13754e2487a2147f5083c5c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4a1bd3fb6c6e575876234ab1df62848cd59e1b18",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_e6df42dbd168356d9a1bbcbf364f70148da89f2d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_ad754a461511c5e6c441c80314f8d2ba1af063b2",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c92496a960672af5efbed02cd7a88c48ffd7c526",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8930274aa7ed51eb714f6857d91478b44b862ba9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3cac8da1761aadc8bfcb5ea5b2c2a4da23315f0e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_11973877e4b1d5fe6eb9c63eb07581259b91f52a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1e571ed6281551da6792a078b620138670258e12",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_7ba4a43b0093ef446ca24e1264b6ee4b2c424782",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_6ab8d4d059194d152ea0e7044980d8653ce5cbb9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_cf450eee7c54e5e81553d2385351b4142d8f534f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_ca756d41d5da9460ddf37ecb0ece4d12ee9fa139",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8f4d3c689bd8f1f2ddd70a7ade125242e3030581",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4c8436394a5adff0305493df5ea614f22a8e4cd4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3933d74ace4df16db164f2b4dac72d8e7acc91dc",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d54b40e9ca712058d624c70afa7710fa3bcdd6cb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_a741e953c02da4efa8b8544bc5d697ed3130772d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8a9c24079e992f8d14c59ad896543c3999799930",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8ecbd8754e0a00265126f6c246ac55eaaaa6d176",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8ed84f7a65635997ad200c40d468428789744509",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3c25e5b881dd4fe56cf85243571e638edb5a179a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_0e09ae8278483aa119fd08039573d3d0f6d1e2ea",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_28646dab5b7f91206a4b5e625b2c2058445150e5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_2288f73c7efd8afad51166ef27748a44d5d0758e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_23d9e04e185bc4cc7ab68369e1397fd7d74921fb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_ea5c5fe6f01865cbe7bf325d30e682ae9065dc37",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3a923f2985e425b4c621be766cc638df3b2df464",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8ca8e226aaf00d610de785cf57f7c2803c3259be",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5ec0f083425ec6e7b6500db87429540cef4f1659",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4322f93d3c18eb6122900c0860452ad50f4198c1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_ae10f7fdec14428680b6b9f13c32d10ac3f7de27",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_eeda46a82c9e43f08e7df476c42e218861cb5326",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d7b87404ba9e2daef2c8d99274f7b2b91ac45fd0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c17d47f91410d0ed38ae7d452c784e0f8358f3ad",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_9e90ba7086ec0d8abe4993b1228d8e10c26d7b35",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_34a0966157f6aaaa53b74b542db2a3b7bbae45a0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_26e1ec020a084187fa21004a3250c750327f4c7d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_f71fd8738ae1d435d40695034447de1e9b1da16c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_45dce41cee3ccc5eb2b59d9ab97d8c5c00850fa3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_bd1cb9e61ff2909a6ce9eacdf004cdad62b5edd9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5a52e3d04429ab6e153fc3e3390cd13c31569a42",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_63fd0bfa2160d869f080b577eac6d65cef8fe188",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_19d6157bfb2554a026cfa965d9c7504ad9a3040c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_df6dacc3a376ff2e2981fdb3b2927fe6822a2ed3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1581ea6da314a32ad34f28ae7e13d1bcfb659f1c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_a87e2c2d765ae1c1c546adaf1bf0c8b398c34a90",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_880afbeeff3149926f6e459c721949940a87bbf9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_e11dd1edc8d2b4848ea61e45758c62802e454020",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d3bfe57288fc50d0f6445287d75c212b5a057e85",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_0d502a79476da2c1224a43961698f84057c44bc7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_27a23b16b6c2b6189f6014f354cbe16762a699e9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_9823fc55d5f676e1cb4831675befc5cb9b5c0028",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_deb0339c43dba55530044ddab186cd0441d587c7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_9c7083a17848e37c0ad20f71f0d0278637782a6e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4e1851e5026c55f921f73d02dde54eacf12ec8e0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5794af6e3eb4f0f92e849802abe1840f049eb6bd",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_e05d6f018e448c1bb44e771acf3d744da8e29f9d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_63ba1ee5cba3a7c1a667f7a12733764c7daf9ac1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_e825195b6ddc11affe8e1a5a69d8f6755aedeb2f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1dcde0c66521fe071ebdb3d85661867b8f38c940",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_7a9229159cd74daa26188883380609dbbdda1f0e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8b2114fef797f2a1708a52f8170929579387db9f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_be92bb9a5eb1b3ccaee50854fb2ada04a0b50570",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3b21ec3f389e7466118e6d655d47524547458b55",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_0ed97312b01969c7551bf06fcb175461a2a1e461",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_ea32f3275780d0a447adb2fd8bb556bc3591c57e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_0793ca269b7a59a9d622da458c4c1e245db9cf9a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1dbd0bab364fe4580e0b9d0b06288a94613bda2e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_7ae1335d149cac1d5db5424607f3c96149ff13c8",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_91ce2b272b3b3fe7ffb349afa0eb29942b231542",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_63c84a9588e0130997cca342f1a29bba09c1b0e1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_65946dfae923ce311495f15c7312f93950ee6459",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_001019f28a2330bd036b50ba39b7f5b47a7fa9fb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_765faba701cb326b443b0fe5c40a2690e675835a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_b52bacefce12da6cc4456dcd8775d7ce7aa1aa0f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_107623a6caecce1159362912c7291bcb0e013aeb",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_00d3a1b5f528349953e4d6f0d29a4f9f12a06ebd",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_e9f99a88c377dda0fd280b0c8826b8c73216d471",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_38e83d1a5f5cd5ea206ed3143cfb2d6b26b88277",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_fa06349cffe139abd241e8205c755186212c5303",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_610b293e2a23c23584ed098800c785246440e9be",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_59ca9f010cf76f8cdaffa591043bd7e43c8d1806",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_68e9086541fe69b2e88b47c2af238222553375d1",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_75895bd80f71e863394b883934e5a0bd09cd43fc",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5ad31e3f188c4f37862ad1240432ed5a5ce4f46c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8d2496930cad4ebe2b6a125fe182b8f62da89331",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5cdc7618e33487bc63865eed3d3103bef7e854cf",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_143b1cede0717205887d61b9518646f5b47fe737",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_f6a72cb7c9d490a6ce82d33d55f2d20c082ab534",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_023df34c55dfc36ca0cf659b5c7c6eb9200e8bde",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_179ad7e4a635e37f08c853abf84c53267f707d0e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3397df43585e7348e8185a34ad5a9a8fbc6e8404",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c24b28b06a31450321d0c850ea5d38e9be997c1e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_e87c77d27678ffd1f25d97a7c032e14e54ea37fc",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d33c1367b3652173ac3d40c0369fd69bd38f5252",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_04b81a769b59456da409ac26f54ca2b3d3639bb3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_23bc8e78d76b81226e630c9a40d3c844171913ab",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_ddec8be3c7ecc5e5b37c3155277e91b764101421",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d9c79b6b3dac5b1ec92a2dcfecffa84492162cc7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_b9c8d689646b8930bd9f1e551dee407dddbaf6f3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3e876983c5efb41bedfaa4e97a001147de7c0faf",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_a77c1118e21f27926fb560bf5cb96f32ded52f3a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_a37e07b272f03452bb5881a310d51111b45c479f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_9f2790321a68791a020bc59393e5aed60c8884be",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_a39359b93de6dfe18d95067cf0426623c4ad8aa8",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_0f1a44401501cf2e4e87fea60e1658b132d28330",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3bae075440ef5b8f9d0f012d48c7062466d55b38",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_2c72118c6b6cd8108373115bddf6e3a995f06a1e",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_85ea6e2d370ad1a623907a9e358b3c67df1616a2",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1b136dda152208957ac000cb015cb30189ec2c7f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_062314c0ee518609e20a1681d878dcc71b04f13f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8edb9d4c9da8742e0d3aa6f3b050878a1c3636aa",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_b09b77692287ecbc8707d889aeb205f16abcdec5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4df5250a2df796ce5a5c3b0a329c8598eee2e3a6",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_303699f3aaa7fc371aace848e76c0ea53f0cae77",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_50827493b3d0f139313618e84826bdfd29b13173",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_56ecfe53911080d1b5ba937e4b63c1439afe9b5f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_2e082828a3be3034b42e22e62eb900947acdb491",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_889f7c71e229645d46aac16759cfa33b22757b2a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_368060005f6c719b43ee8551835ae66faf2b1ad3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5b56bdd4abb12eddce399a40a64b5664622bbe1c",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_3501195fd979edce242240d42b10d304de9c1a7d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_02c37361c8a295966d8389fe10e29f072a9f2f05",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4b116c5139ec0c7af4373d3886a8188d245210ea",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_edbdb0d3da793714b70ee5b89bea19122448d5b5",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_34264e7ccad4ba2bd0a12d3a014aef2d8ca60bec",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_36562bd6703adf9cd711d7e8a7fa7f29b4c2ba8f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_eeada1af0bae1748a9c6ea42dafa624e45d15ccd",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_49aadb107476e4977329157efb3e5be1661d8493",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_6b7db70eddaa9458cc5f8a71f20015dab37bc315",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4b057db84ddf3bef57d9d34166d88cb4e3214107",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_b61e76241c8db5f7708544b568b0f9e13df8a516",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_8ea2c1b45a43346a552a92d82620cae9bda5238a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_bb20774348bc38ce3d193872e490ae4779b6e027",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4d7c66be2568e6da7bb4b569a5b7ac86c6d8dc48",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_0f5a978c7b4bbe0652c6de5c15572c959a0498db",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_9378c09be098b63c59eeb87e5c772bf9ec7f5740",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c2b9ddd3c8a6311dd73ab8b5a6e960cfd1a3f344",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d3ab64e3861af1f908208506db6ce7f7ce467538",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_bce0bc72af7226d3a58a2900a6abdf5226c551e7",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_655736a07c226e6033082cd5b6f1c10e0e5a6009",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_793947a0bf4aad8ddf1aa429a09c5ba973f59efe",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_c17b5da4e89b555265154259ac2493ec5304ea77",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_7fc5af2df72179d21cff3af1bec98a9f92941a6f",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_4c6777626105c0898dcfd6bf6745156e4b6f4cf3",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1b3af0efad5926616f8834d5c0bea14afe4eb841",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_1fdab82da542cb7e64baff3c5e69fe400dccb242",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_fd903493f524cc3334dd19122d04740468f0c3a4",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5481944bf6795aec6594c92b494df27a89aea94d",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_d307e008199a79418832ca86af9b9832068362c0",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "cscore_5dda8c425d15f7a689c997f3ed480f1b9f1a88b9",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "score_f310aff377dc4b12",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    },
+    {
+      "table": "answer_scores",
+      "id": "score_0bd7a200f3534f9a",
+      "basis": "需人工核对：主题不明确或涉及多个章节"
+    }
+  ]
+}

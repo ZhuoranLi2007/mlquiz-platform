@@ -15,3 +15,9 @@
 `mlquiz-workbench-reviewed.sqlite3.gz` 含843条题目版本、135份答卷（含1份未提交布局检查草稿）、761条作答、763条评分、7个复测周期、188条skill运行和116条真实提示词。登录会话为0、密码哈希为空。
 
 使用 `backend/scripts/restore_acceptance.py --snapshot workbench-review --output data/workbench-view` 恢复新目录，再设置MLQ_DATA_DIR并bootstrap。完整步骤及双学生数据标识见 `docs/WORKBENCH_ACCEPTANCE.md`。原始demo和此前验收快照均保留。
+
+## 学习闭环 v3 快照（2026-11-18）
+
+`mlquiz-learning-loop-reviewed.sqlite3.gz` 保存本次双学生真实验收，含学生自主复测、题库备用、4/5 与 5/5 通过、第三轮待完成任务。登录会话与密码哈希已清空，完整性检查通过。
+
+通过 `backend/scripts/restore_acceptance.py --snapshot learning-loop-review --output data/loop-review` 恢复到新目录；按 `docs/LEARNING_LOOP_V3_ACCEPTANCE.md` 设置数据目录并启动。原始成绩与此前快照保留。

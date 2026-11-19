@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import re
 from backend.app.services.learning_catalog import target
+from backend.app.services import learning_evidence
 
 _METRICS = {
     'precision': ('查准率（精确率）', r'查准率|精确率|\bprecision\b',
@@ -111,6 +112,12 @@ def build(payload, question_view):
             for key, name in concept_tags(item, kp):
                 group = groups.setdefault(key, {'id': key, 'kp_id': kp, 'name': name, 'items': []})
                 group['items'].append(item)
+    for cycle in payload.get('retest_history') or []:
+        for item in cycle.get('items') or []:
+            kp = learning_evidence.primary_kp(item)
+            if kp:
+                for key, name in concept_tags(item, kp):
+                    groups.setdefault(key, {'id':key,'kp_id':kp,'name':name,'items':[]})
     analysis = payload.get('ai_analysis') or {}
     hypotheses = analysis.get('concept_hypotheses') or []
     plans = analysis.get('learning_plan') or []
@@ -160,12 +167,12 @@ def build(payload, question_view):
                               if group['kp_id'] in (r.get('kp_ids') or [r.get('kp_id')])]
         group['retests'] = _retests(group, payload.get('retest_history') or [], question_view)
         group['retest_state'] = group['retests'][-1]['label'] if group['retests'] else '本卷此概念尚未复测'
-        latest = group['retests'][-1] if group['retests'] else {}
-        group['needs_review'] = bool(stats['wrong_count'])
-        if latest.get('state') == 'correct_this_round':
-            group['needs_review'] = False
-        elif latest.get('wrong_count'):
-            group['needs_review'] = True
+        scoped_history = [{**row, 'items':[i for i in row.get('items') or []
+            if learning_evidence.primary_kp(i)==group['kp_id'] and _matches(i, group)]}
+            for row in payload.get('retest_history') or []]
+        decision = learning_evidence.summarize(scoped_history, {group['kp_id']:bool(stats['wrong_count'])})
+        group['learning_result'] = next(r for r in decision if r['kp_id']==group['kp_id'])
+        group['needs_review'] = group['learning_result']['needs_review']
         concepts.append(group)
     concepts.sort(key=lambda c: (not c['needs_review'], -c['statistics']['wrong_count'],
                                 -(c['statistics']['error_rate'] or 0), c['name']))

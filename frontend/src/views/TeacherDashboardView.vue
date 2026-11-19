@@ -251,7 +251,7 @@ onMounted(load)
           <span>试卷标题</span><span>接收对象</span><span>提交进度</span><span>发布时间</span><span>操作</span>
         </div>
         <article v-for="release in visibleReleases" :key="release.release_id" class="release-row">
-          <div class="release-title"><b>{{ release.title }}</b><small>{{ release.paper_title }}</small></div>
+          <div class="release-title"><b>{{ release.title }}</b><small v-if="release.paper_title !== release.title">{{ release.paper_title }}</small></div>
           <span class="release-audience">{{ recipientSummary(release) }}</span>
           <div class="release-progress">
             <el-progress :percentage="release.recipient_count

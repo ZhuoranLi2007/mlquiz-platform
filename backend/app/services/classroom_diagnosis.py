@@ -1634,6 +1634,8 @@ def student_attempt(
                 "ready": True, "recommended": False,
                 "reason": "最新一轮已达标，默认无需继续复测；教师仍可主动安排巩固测验。",
             })
+    from backend.app.services import learning_loop
+    learning_loop.attach_single(db, payload)
     return payload
 
 
@@ -2247,6 +2249,8 @@ def student_history(
         ],
     }
     payload["ai_analysis"] = _v2_fallback("student_history", payload)
+    from backend.app.services import learning_loop
+    learning_loop.attach_scope(db, payload, student_id=student_id, classroom_id=classroom_id, source_ids=[r['attempt_id'] for r in attempt_summaries])
     return payload
 
 
@@ -2899,6 +2903,8 @@ def class_assessment(
     payload["resources"] = _resources(db, weak_kp_ids or [
         row["kp_id"] for row in common_weak])
     payload["ai_analysis"] = _v2_fallback("class_assessment", payload)
+    from backend.app.services import learning_loop
+    learning_loop.attach_scope(db, payload, classroom_id=classroom_id, assessment_version_id=assessment_version_id)
     return payload
 
 

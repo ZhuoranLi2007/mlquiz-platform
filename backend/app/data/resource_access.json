@@ -1,0 +1,119 @@
+{
+  "note": "HTTP reachability is distinct from browser content readability.",
+  "urls": {
+    "https://blog.csdn.net/choose_c/article/details/99073561": {
+      "checked_date": "2026-11-18T13:54:52+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://blog.csdn.net/choose_c/article/details/99073561"
+    },
+    "https://scikit-learn.org/stable/modules/cross_validation.html": {
+      "checked_date": "2026-11-18T13:54:52+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://scikit-learn.org/stable/modules/cross_validation.html"
+    },
+    "https://scikit-learn.org/stable/modules/decomposition.html#pca": {
+      "checked_date": "2026-11-18T13:54:52+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://scikit-learn.org/stable/modules/decomposition.html#pca"
+    },
+    "https://scikit-learn.org/stable/modules/lda_qda.html": {
+      "checked_date": "2026-11-18T13:54:52+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://scikit-learn.org/stable/modules/lda_qda.html"
+    },
+    "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression": {
+      "checked_date": "2026-11-18T13:54:52+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression"
+    },
+    "https://scikit-learn.org/stable/modules/model_evaluation.html": {
+      "checked_date": "2026-11-18T13:54:52+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://scikit-learn.org/stable/modules/model_evaluation.html"
+    },
+    "https://scikit-learn.org/stable/modules/svm.html": {
+      "checked_date": "2026-11-18T13:54:53+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://scikit-learn.org/stable/modules/svm.html"
+    },
+    "https://www.bilibili.com/read/cv21693998": {
+      "checked_date": "2026-11-18T13:54:54+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/opus/760148472168972296"
+    },
+    "https://www.bilibili.com/read/cv2505362/": {
+      "checked_date": "2026-11-18T13:54:55+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/read/cv2505362/"
+    },
+    "https://www.bilibili.com/video/BV154411Q7mG": {
+      "checked_date": "2026-11-18T13:54:55+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/video/BV154411Q7mG/"
+    },
+    "https://www.bilibili.com/video/BV1Bt411j7KH": {
+      "checked_date": "2026-11-18T13:54:55+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/video/BV1Bt411j7KH/"
+    },
+    "https://www.bilibili.com/video/BV1H5411e73F/": {
+      "checked_date": "2026-11-18T13:54:56+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/video/BV1H5411e73F/"
+    },
+    "https://www.bilibili.com/video/BV1Mh411e7VU?p=9": {
+      "checked_date": "2026-11-18T13:54:56+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/video/BV1Mh411e7VU/?p=9"
+    },
+    "https://www.bilibili.com/video/BV1R64y187yt/": {
+      "checked_date": "2026-11-18T13:54:57+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/video/BV1R64y187yt/"
+    },
+    "https://www.bilibili.com/video/BV1T84y167U9/": {
+      "checked_date": "2026-11-18T13:54:58+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "reachable",
+      "final_url": "https://www.bilibili.com/video/BV1T84y167U9/"
+    },
+    "https://www.douyin.com/video/7676487498093614235": {
+      "checked_date": "2026-11-18T13:54:58+00:00",
+      "content_readable": false,
+      "http_status": 200,
+      "access_status": "blocked",
+      "final_url": "https://www.douyin.com/video/7676487498093614235",
+      "browser_checked_at": "2026-11-18",
+      "browser_note": "浏览器显示登录遮挡层，未登录无法核验正文；默认以课程原页替代。"
+    }
+  }
+}

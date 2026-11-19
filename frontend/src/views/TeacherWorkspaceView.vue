@@ -23,6 +23,21 @@ const drafts = ref<any[]>(initialCache?.drafts || [])
 const selectedIds = ref<string[]>([])
 const detail = ref<Question | null>(null)
 const detailOpen = ref(false)
+const mappedChapter = ref('')
+const savingChapter = ref(false)
+watch(detail, value => { mappedChapter.value=value?.chapter_id || '' })
+async function saveChapter() {
+  if (!detail.value || !mappedChapter.value) return
+  savingChapter.value=true
+  try {
+    await api.post(`/admin/questions/${detail.value.question_id}/revise`, {patch:{chapter_id:mappedChapter.value}})
+    ElMessage.success('章节已保存，新组卷使用更新后的版本')
+    detailOpen.value=false
+    await load()
+  } catch(error) { ElMessage.error(friendlyError(error,'章节保存失败')) }
+  finally { savingChapter.value=false }
+}
+
 const draftsOpen = ref(false)
 const composeOpen = ref(false)
 const composing = ref(false)
@@ -481,7 +496,7 @@ onBeforeUnmount(() => {
       <b>题库加载失败</b><p>{{ loadError }}</p><el-button type="primary" plain @click="load">重新加载</el-button>
     </section>
     <template v-else-if="visibleQuestions.length">
-    <MasonryGrid :items="visibleQuestions" :gap="14" :max-columns="3"
+    <MasonryGrid :items="visibleQuestions" :gap="14" :max-columns="2"
       :two-column-below="1040" :single-column-below="660" item-key="question_id"
       class="question-masonry">
       <template #default="{ item: question }">
@@ -539,7 +554,7 @@ onBeforeUnmount(() => {
         <div v-if="detail.options?.length" class="detail-options">
           <div v-for="(option, index) in detail.options" :key="index"><b>{{ optionKey(option, index) }}</b><MathText :text="optionText(option)" /></div>
         </div>
-        <div class="answer-box"><b>标准答案</b><p>{{ answerText(detail) }}</p><b>解析</b><div><MathText :text="detail.explanation || '暂无解析'" /></div><b>评分规则</b><p>{{ rubricText(detail) }}</p></div>
+        <div class="workbench-toolbar"><el-select v-model="mappedChapter" aria-label="调整章节" placeholder="选择章节"><el-option v-for="chapter in metadata.chapters" :key="chapter.chapter_id" :label="chapter.value" :value="chapter.chapter_id" :disabled="!chapter.chapter_id" /></el-select><el-button :loading="savingChapter" :disabled="!mappedChapter" @click="saveChapter">保存章节</el-button></div><div class="answer-box"><b>标准答案</b><p>{{ answerText(detail) }}</p><b>解析</b><div><MathText :text="detail.explanation || '暂无解析'" /></div><b>评分规则</b><p>{{ rubricText(detail) }}</p></div>
         <p v-if="duplicateLabel(detail)" class="duplicate-note">{{ duplicateLabel(detail) }}，相似度 {{ Math.round((detail.duplicate.similarity || 0) * 100) }}%。组卷时系统会避免同题族重复进入。</p>
       </div>
       <template #footer><el-button @click="detailOpen = false">关闭</el-button><el-button v-if="detail?.usable_for_quiz" type="primary" @click="toggle(detail!); detailOpen=false">{{ selectedIds.includes(detail?.question_id) ? '移出组卷' : '加入组卷' }}</el-button></template>

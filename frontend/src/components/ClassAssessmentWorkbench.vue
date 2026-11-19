@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ResponsivePaneTabs from "./ResponsivePaneTabs.vue"
+import TeacherRetestControl from "./TeacherRetestControl.vue"
 import WorkbenchPage from "./WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -19,6 +21,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ retest: [] }>()
 const router = useRouter()
+const mobilePane = ref('primary')
 const distributionHost = ref<HTMLElement | null>(null)
 const accuracyHost = ref<HTMLElement | null>(null)
 let distributionChart: echarts.ECharts | null = null
@@ -98,6 +101,7 @@ function resourceType(resource: any) {
   return resource?.platform || '学习资料'
 }
 function locateQuestion(row: any) {
+  mobilePane.value='primary'
   const position = (row?.question_positions || [])[0]
   if (position !== undefined) document.getElementById(`class-question-${position}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
@@ -150,7 +154,8 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
 </script>
 
 <template>
-  <WorkbenchPage :scroll="false" class="class-workbench">
+  <WorkbenchPage :scroll="false" class="class-workbench" :class="{'mobile-secondary':mobilePane==='secondary'}">
+    <template #navigation><ResponsivePaneTabs v-model="mobilePane" primary="班级错题" secondary="分析与资料" /></template>
     <template #header>
     <section class="class-overview">
       <div class="class-metrics">
@@ -163,8 +168,8 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
     </section>
 
     </template>
-    <section class="class-body">
-      <main class="errors-column">
+    <section class="class-body mobile-pane-layout">
+      <main class="errors-column mobile-primary-panel">
       <div class="class-charts">
         <article class="chart-card"><header><b>成绩分布</b><span>{{ numberText(overview.max_score) }} 分 · {{ overview.question_count || 0 }} 题</span></header><div ref="distributionHost" class="chart"></div></article>
         <article class="chart-card"><header><b>各题正确率</b><span>低于 60% 重点标记</span></header><div ref="accuracyHost" class="chart"></div></article>
@@ -187,17 +192,18 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeCharts); dist
         <div v-else class="empty-card"><b>当前试卷暂无高频错题</b><span>全部答对或暂无已评分作答。</span></div>
       </main>
 
-      <aside class="ai-column">
+      <aside class="ai-column mobile-secondary-panel">
         <section class="ai-panel">
           <header><div><h2>班级学情分析</h2></div></header>
           <DiagnosisAnalysisContent :analysis="analysis" scope="class_assessment" locatable @locate="locateQuestion" />
           <p v-if="aiFailure" class="ai-failure">{{ aiFailure }}</p>
           <section class="side-section"><h3><el-icon><Collection /></el-icon>推荐学习资源</h3><LearningResourceList :resources="resources" /></section>
 
-          <section class="retest-section"><h3>班级复测</h3><p>依据班级薄弱知识点，由 AI 生成新题，独立验答通过后发布。</p><p v-if="!plan.ready">{{ plan.reason }}</p><div v-if="generatedCount" class="workflow-note">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布。</div><div v-if="publishedRetest" class="published-note">班级复测已发布。</div><el-button type="primary" class="retest-button" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布班级复测</el-button></section>
+
         </section>
       </aside>
     </section>
+    <template #footer><TeacherRetestControl :result="result" :running="runningAi" @retest="emit('retest')" @open-attempt="id=>router.push(`/exam/${id}`)" /></template>
   </WorkbenchPage>
 </template>
 

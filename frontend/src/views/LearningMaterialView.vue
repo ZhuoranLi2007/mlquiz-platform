@@ -39,7 +39,7 @@ onMounted(async () => {
         <p v-else>原页图暂不可用，以下保留已提取文字。</p>
         <details><summary>查看可检索文字（公式以原页为准）</summary><pre>{{ page.excerpt }}</pre></details>
       </article>
-      <footer>完成后回到原诊断页面，对照错题解释判断依据，再进行教师发布的复测。</footer>
+      <footer>完成后回到原诊断页面，对照错题解释判断依据，随时发起下一轮复测。</footer>
     </template>
   </WorkbenchPage>
 </template>

@@ -53,6 +53,12 @@ def _ensure_columns() -> None:
     from sqlalchemy import text
     wanted = [
         ("targeted_retest_cycles", "untested_kp_ids", "JSON DEFAULT '[]'"),
+        ("targeted_retest_cycles", "initiator_user_id", "VARCHAR(64) DEFAULT ''"),
+        ("targeted_retest_cycles", "retest_kind", "VARCHAR(24) DEFAULT 'formal'"),
+        ("targeted_retest_cycles", "rule_version", "VARCHAR(32) DEFAULT 'legacy'"),
+        ("targeted_retest_cycles", "evidence_manifest", "JSON DEFAULT '{}'"),
+        ("targeted_retest_cycles", "source_counts", "JSON DEFAULT '{}'"),
+        ("targeted_retest_cycles", "delayed_from", "JSON DEFAULT '{}'"),
         ("users", "role", "VARCHAR(24) DEFAULT 'student'"),
         ("users", "password_hash", "TEXT DEFAULT ''"),
         ("users", "active", "BOOLEAN DEFAULT 1"),
@@ -204,8 +210,11 @@ def _ensure_columns() -> None:
             if cycle_indexes.get(name):
                 conn.execute(text(f"DROP INDEX {name}"))
                 conn.execute(text(f"CREATE INDEX {name} ON targeted_retest_cycles ({column})"))
+        existing_sql = conn.execute(text("SELECT sql FROM sqlite_master WHERE name='uq_retest_release_student'")).scalar() or ""
+        if existing_sql and "WHERE" not in existing_sql.upper():
+            conn.execute(text("DROP INDEX uq_retest_release_student"))
         conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_retest_release_student "
-                          "ON targeted_retest_cycles (release_id, student_id)"))
+                          "ON targeted_retest_cycles (release_id, student_id) WHERE release_id <> ''"))
         conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_retest_nonempty_attempt "
                           "ON targeted_retest_cycles (retest_attempt_id) WHERE retest_attempt_id <> ''"))
 
@@ -251,3 +260,9 @@ def _backup_existing_schema() -> None:
             if target.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
                 raise RuntimeError("Database backup integrity check failed; migration aborted")
         temporary.replace(backup)
+
+
+@event.listens_for(SessionLocal, "before_flush")
+def _fill_new_chapters(session, context, instances):
+    from backend.app.services.chapter_mapping import fill_new_records
+    fill_new_records(session)

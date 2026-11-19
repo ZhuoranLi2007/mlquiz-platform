@@ -1,0 +1,41 @@
+{
+  "upload_id": "upl_4b0e729794e24217",
+  "reused": false,
+  "deduped": false,
+  "job_id": "job_a26e8251cdaa4996",
+  "status": "queued",
+  "filename": "acceptance-english-midterm.pdf",
+  "resolved_type": "slides",
+  "material_type_label": "课程课件",
+  "detect_reason": "内容规则：内容特征：数学公式×6、页脚页码×33、短行版式 77%（置信度 0.83）",
+  "auto_generate": true,
+  "import_run": {
+    "run_id": "imp_a7a48b05805849df",
+    "job_id": "job_db41ea663d0046b1",
+    "status": "queued",
+    "reused": false
+  },
+  "note": "原卷已保存，已进入后台处理；本次按你的选择同时生成 AI 答案解析",
+  "material_types": [
+    {
+      "value": "exam_paper",
+      "label": "考试试卷"
+    },
+    {
+      "value": "slides",
+      "label": "课程课件"
+    },
+    {
+      "value": "notes",
+      "label": "学习笔记"
+    },
+    {
+      "value": "code",
+      "label": "实验代码"
+    },
+    {
+      "value": "other",
+      "label": "其他"
+    }
+  ]
+}

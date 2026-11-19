@@ -13,7 +13,7 @@ from backend.app.services.score_policy import admissible_score
 
 
 ACTIVE_STATUSES = {"published", "opened", "scoring_pending"}
-FINAL_STATUSES = {"passed", "not_passed"}
+FINAL_STATUSES = {"passed", "not_passed", "practice_completed", "baseline_completed"}
 
 
 def _cycles(db: Session, source_attempt_id: str, student_id: str) -> list[E.TargetedRetestCycle]:
@@ -98,7 +98,12 @@ def refresh_cycle(db: Session, cycle: E.TargetedRetestCycle, *, commit: bool = F
         cycle.retest_attempt_id = recipient.attempt_id
     attempt = db.get(E.Attempt, cycle.retest_attempt_id) if cycle.retest_attempt_id else None
     if not attempt or attempt.status != "submitted":
-        cycle.status = "opened" if recipient and recipient.status == "opened" else "published"
+        release = db.get(E.AssessmentRelease, cycle.release_id) if cycle.release_id else None
+        from backend.app.services.release_service import _is_expired
+        cycle.status = ('cancelled' if cycle.release_id and (not release or release.status != 'published'
+                         or _is_expired(release.due_at)) else
+                        'opened' if (attempt and attempt.status == 'in_progress') or
+                        (recipient and recipient.status == 'opened') else 'published')
         cycle.updated_at = E.utcnow()
         if commit:
             db.commit()
@@ -134,6 +139,16 @@ def refresh_cycle(db: Session, cycle: E.TargetedRetestCycle, *, commit: bool = F
     cycle.correct_count = correct_count
     cycle.accuracy = round(accuracy, 6)
     cycle.status = "passed" if accuracy >= cycle.threshold else "not_passed"
+    if cycle.rule_version != 'legacy':
+        answers = attempt_service._saved_answers(db, attempt.attempt_id)
+        independent = all((answers.get(item.question_id) is not None and
+            answers[item.question_id].is_independent_evidence and
+            not answers[item.question_id].hints_used and not answers[item.question_id].solution_viewed
+            and not answers[item.question_id].seen_before) for item in items)
+        if cycle.retest_kind == 'baseline':
+            cycle.status = 'baseline_completed'
+        elif cycle.retest_kind == 'practice' or not independent or cycle.question_count != 5:
+            cycle.status = 'practice_completed'
     cycle.completed_at = cycle.completed_at or E.utcnow()
     covered = {str(item.snapshot.get("main_kp_id") or scores[item.item_id].kp_id or "")
                for item in items}
@@ -185,6 +200,9 @@ def _question_items(db: Session, cycle: E.TargetedRetestCycle) -> list[dict[str,
             **question,
             "position": question.get("position") or position,
             "response": answer.get("response"),
+            "independent_evidence": bool(answer and answer.get('independent_evidence')
+                and not answer.get('hints_used') and not answer.get('solution_viewed')
+                and not answer.get('seen_before')),
             "correct": score.get("correct"),
             "awarded_score": score.get("awarded_score"),
             "max_score": score.get("max_score"),
@@ -210,8 +228,16 @@ def cycle_detail(db: Session, cycle: E.TargetedRetestCycle, *, include_items: bo
     refresh_cycle(db, cycle, commit=False)
     release = db.get(E.AssessmentRelease, cycle.release_id) if cycle.release_id else None
     items = _question_items(db, cycle) if include_items else []
+    attempt = db.get(E.Attempt, cycle.retest_attempt_id) if cycle.retest_attempt_id else None
     return {
         "cycle_id": cycle.cycle_id,
+        "initiator_user_id": cycle.initiator_user_id,
+        "retest_kind": cycle.retest_kind,
+        "rule_version": cycle.rule_version,
+        "evidence_manifest": cycle.evidence_manifest or {},
+        "source_counts": cycle.source_counts or {},
+        "delayed_from": cycle.delayed_from or {},
+        "started_at": attempt.started_at if attempt else '',
         "round": cycle.round_no,
         "status": cycle.status,
         "passed": cycle.status == "passed",
@@ -291,6 +317,9 @@ def enrich_analysis(analysis: dict, history: list[dict]) -> dict:
         )
         result["next_step"] = ("仍有未验证或答错的知识点，请继续复习并安排后续复测。"
                                if remaining else "本轮目标已达标，后续可安排间隔复测验证稳定性。")
+    elif latest["status"] in {"practice_completed", "baseline_completed"}:
+        summary = '练习完成，当前证据不升级为知识点达标。' if latest['status'] == 'practice_completed' else '基线自测完成，可继续用新题验证。'
+        result['next_step'] = '可继续发起新题复测。'
     elif latest["status"] == "not_passed":
         pct = round(float(latest.get("accuracy") or 0) * 100)
         wrong_positions = [str(item.get("position")) for item in latest.get("wrong_items") or []

@@ -153,7 +153,7 @@ test('学生学习反馈以错题和复测闭环为核心且不展示技术文�
   const shared = readFileSync(new URL('../src/components/DiagnosisAnalysisContent.vue', import.meta.url), 'utf8')
   const router = readFileSync(new URL('../src/router/index.ts', import.meta.url), 'utf8')
   assert.match(router, /student\/feedback[\s\S]*StudentFeedbackView\.vue/)
-  for (const label of ['选择试卷', '本次成绩', '错题数量', '薄弱知识点', '学情诊断', '错题详情', '对应课程资料', '本知识点专项复测']) {
+  for (const label of ['选择试卷', '本次成绩', '错题数量', '薄弱知识点', '学情诊断', '错题详情', '对应课程资料', 'StudentRetestControl']) {
     assert.match(source, new RegExp(label))
   }
   assert.match(source, /<AttemptEvidenceTable/)

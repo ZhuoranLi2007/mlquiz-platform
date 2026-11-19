@@ -10,7 +10,7 @@ function percent(value: unknown) {
   return value === null || value === undefined ? '—' : `${Math.round(Number(value) * 100)}%`
 }
 function statusText(row: any) {
-  if (row.status === 'passed') return '本轮已达标'
+  if (row.status === 'passed') return '本轮通过'
   if (row.status === 'not_passed') return '本轮未达标'
   if (row.status === 'scoring_pending') return '评分未完成'
   if (row.status === 'opened') return '学生作答中'

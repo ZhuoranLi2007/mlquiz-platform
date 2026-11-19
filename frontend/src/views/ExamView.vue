@@ -357,7 +357,7 @@ async function load(showSpinner = true) {
         && (assignedStudentMode || result.mode === 'retest') && !targetedRetest.value) {
       const tasks: any = await api.get('/student/assignments')
       targetedRetest.value = (tasks.items || []).find(
-        (item: any) => item.recipient_id === recipientId || item.attempt_id === attemptId)?.targeted_retest || targetedRetest.value
+        (item: any) => (recipientId && item.recipient_id === recipientId) || item.attempt_id === attemptId)?.targeted_retest || targetedRetest.value
     }
     const nextResponses: Record<string, Record<string, unknown>> = {}
     const nextMeta: Record<string, { hints_used: number; solution_viewed: boolean }> = {}
@@ -566,9 +566,9 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
     <template v-if="!submitted" #header>
     <header class="exam-toolbar">
       <div class="exam-title">
-          <button class="back-button" aria-label="返回" @click="router.push(assignedStudentMode ? '/student' : '/teacher/questions')">←</button>
+          <button class="back-button" aria-label="返回" @click="router.push(auth.principal.value?.role === 'student' ? '/student' : '/teacher/questions')">←</button>
         <div>
-          <p class="eyebrow">{{ isQuiz ? '模拟测验' : '学习练习' }}</p>
+          <p class="eyebrow">{{ isRetest ? '专项复测' : isQuiz ? '模拟测验' : '学习练习' }}</p>
           <h1>{{ submitted ? '答卷结果' : '专注答题' }}</h1>
         </div>
       </div>
@@ -599,9 +599,9 @@ function scoreOf(item: any) { return state.value?.scores_by_item?.[item?.item_id
         <p v-if="state?.ungraded_item_count && state?.scored_item_count">已记录 {{ state.scored_item_count }} / {{ questions.length }} 题的逐题成绩。</p>
         <p v-if="scorePercent !== null">{{ scorePercent }}% · {{ wrongCount }} 道错题</p>
         <div v-if="isRetest && targetedRetest" :class="['retest-verdict', targetedRetest.status]">
-          <b v-if="targetedRetest.status === 'passed'">本轮复测已达标，正确率{{ Math.round(Number(targetedRetest.accuracy) * 100) }}%。</b>
+          <b v-if="targetedRetest.status === 'passed'">本轮复测通过，正确率{{ Math.round(Number(targetedRetest.accuracy) * 100) }}%。</b>
           <b v-else-if="targetedRetest.status === 'not_passed'">本轮复测未达标，正确率{{ Math.round(Number(targetedRetest.accuracy) * 100) }}%，建议继续练习。</b>
-          <b v-else>本轮仍有题目未完成可靠评分，暂不能判断是否达标。</b>
+          <b v-else-if="targetedRetest.status === 'practice_completed'">练习完成，证据不足时不升级为知识点达标。</b><b v-else-if="targetedRetest.status === 'baseline_completed'">基线自测完成，可以继续复测。</b><b v-else>本轮仍有题目未完成可靠评分，暂不能判断是否达标。</b>
         </div>
       </div>
       <div class="result-next">

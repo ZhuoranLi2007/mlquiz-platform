@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
-const props = withDefaults(defineProps<{ resources?: any[]; compact?: boolean }>(), { compact: false })
+const props = withDefaults(defineProps<{ resources?: any[]; compact?: boolean }>(), { compact: true })
 const expanded = ref(false)
 const all = computed(() => recommendedResourceLinks(props.resources || [], [], 100))
-const visibleLimit = computed(() => props.compact ? 2 : 6)
-const rows = computed(() => expanded.value ? all.value : all.value.slice(0, visibleLimit.value))
+const visibleLimit = computed(() => 2)
+const rows = computed(() => [all.value.find(r=>r.source_type==='local'),all.value.find(r=>r.source_type!=='local')].filter(Boolean).length === 2
+  ? [all.value.find(r=>r.source_type==='local'),all.value.find(r=>r.source_type!=='local')] : all.value.slice(0,2))
 function type(row:any) {
   if (row.source_type === 'local') return '课程原页 · 可离线阅读'
   return ({ bilibili:'B站', douyin:'抖音', csdn:'CSDN文章' } as Record<string,string>)[row.platform] || row.platform || row.type || '学习资料'
@@ -34,7 +35,10 @@ function type(row:any) {
       <strong class="open-resource">{{ row.source_type === 'local' ? '打开课程精读 →' : '打开对应内容 →' }}</strong>
     </a>
     </template>
-    <button v-if="all.length > visibleLimit" type="button" @click="expanded=!expanded">{{ expanded ? '收起更多资料' : `查看其他 ${all.length - visibleLimit} 项资料` }}</button>
+    <button v-if="all.length > visibleLimit" type="button" @click="expanded=true">查看全部 {{ all.length }} 项资料</button>
+    <el-drawer v-model="expanded" title="对应学习资料" size="min(540px, 96vw)">
+      <a v-for="row in all" :key="row.url" :href="row.url" target="_blank" rel="noopener noreferrer" class="diagnosis-resource-link"><b>{{ row.title }}</b><span>{{ row.location }}</span><small>{{ row.study_focus || row.reason }}</small><small v-if="row.checked_date">访问检查 {{ row.checked_date }} · {{ row.content_readable ? '已核对页面内容' : row.source_type==='local' ? '课程原页' : '外部平台可能需要登录' }}</small><strong>打开资料 ↗</strong></a>
+    </el-drawer>
   </div>
   <p v-else class="no-target-resource">完成有效评分并确定复习知识点后，会在这里提供对应资料。</p>
 </template>

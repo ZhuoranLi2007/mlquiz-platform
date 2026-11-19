@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TeacherRetestControl from "../components/TeacherRetestControl.vue"
 import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -31,6 +32,9 @@ const loading = ref(false)
 const selectionLoading = ref(false)
 const runningAi = ref(false)
 const intervention = ref<any>(null)
+const topicPicker = ref(false)
+const baselineTopics = ref<string[]>([])
+const topicOptions = ref<any[]>([])
 const contextLoading = ref(false)
 const historyRangeMode = ref<'all' | 'date' | 'paper'>('all')
 const historyDates = ref<[string, string] | null>(null)
@@ -378,8 +382,11 @@ async function analyze() {
 
 async function runIntervention() {
   if (runningAi.value) return
-  if (!['student_attempt', 'student_history', 'class_assessment'].includes(scope.value)
-    || !result.value?.retest_plan?.ready) return
+  if (!['student_attempt', 'student_history', 'class_assessment'].includes(scope.value)) return
+  if (scope.value !== 'class_assessment' && !studentId.value) { ElMessage.info('请先选择学生'); return }
+  if (!result.value && !baselineTopics.value.length) {
+    const topics:any = await api.get('/knowledge-points'); topicOptions.value=topics.items;topicPicker.value=true;return
+  }
   runningAi.value = true
   const request = selectionRequest
   try {
@@ -389,7 +396,8 @@ async function runIntervention() {
       classroom_id: scope.value === 'student_attempt' ? '' : classroomId.value,
       scope_type: scope.value,
       attempt_id: result.value?.attempt_id || result.value?.retest_plan?.anchor_attempt_id || '',
-      count: result.value.retest_plan.item_count || 5,
+      count: 5, kp_ids:baselineTopics.value,
+      retry_generation:true,
       date_from: scope.value === 'student_history' ? historyParams.value.date_from : '',
       date_to: scope.value === 'student_history' ? historyParams.value.date_to : '',
     })
@@ -398,7 +406,7 @@ async function runIntervention() {
       return
     }
     intervention.value = value
-    result.value = value?.outputs?.diagnosis?.result || result.value
+    if (scope.value === 'student_attempt') result.value = value?.outputs?.diagnosis?.result || result.value
     diagnosisReady.value = true
     const diagnosisId = value?.outputs?.diagnosis?.extra?.diagnosis_id
     if (diagnosisId) {
@@ -409,11 +417,13 @@ async function runIntervention() {
       }
     }
     if (value?.outputs?.retest?.status === 'published') {
-      ElMessage.success('复测题已通过自动校验并发布给学生')
+      ElMessage.success(value.outputs.retest.reused ? '已有复测任务，可继续完成' : '复测任务已准备好')
       if (value.outputs.retest.remaining_kp_ids?.length) {
         ElMessage.info(`本轮先覆盖 ${value.outputs.retest.target_kp_ids.length} 个薄弱点，其余 ${value.outputs.retest.remaining_kp_ids.length} 个仍保留在诊断中`)
       }
       if (scope.value === 'student_attempt') await loadStudentSelection()
+      else if (scope.value === 'student_history') await loadHistorySelection()
+      else await loadClassAssessmentSelection()
     } else {
       ElMessage.warning(
         value?.errors?.join('；') ||
@@ -530,6 +540,8 @@ onMounted(loadContext)
     <div v-else-if="scope === 'class_assessment'" class="empty-selection">
       当前试卷暂无班级作答。
     </div>
+    <template v-if="!result" #footer><TeacherRetestControl :result="{}" :running="runningAi" @retest="runIntervention" /></template>
+    <el-dialog v-model="topicPicker" title="安排基线自测" width="min(480px,94vw)"><p>没有有效答卷时，选择 1–2 个知识点建立基线。</p><el-select v-model="baselineTopics" multiple :multiple-limit="2" filterable style="width:100%" aria-label="基线知识点"><el-option v-for="row in topicOptions" :key="row.kp_id" :label="row.name" :value="row.kp_id" /></el-select><template #footer><el-button :disabled="!baselineTopics.length" type="primary" @click="topicPicker=false;runIntervention()">安排自测</el-button></template></el-dialog>
   </WorkbenchPage>
 </template>
 
@@ -537,4 +549,5 @@ onMounted(loadContext)
 
 <style scoped>
 .analysis-page.workbench-page{display:flex;gap:12px}.diagnosis-controls{position:static;margin:0}.scope-tabs,.filters-panel{margin:0}.filters-panel{padding:12px}
+@media(max-width:850px){.diagnosis-controls{gap:8px}.filters-panel{display:flex;flex-wrap:wrap;gap:8px;padding:8px}.filter-item,.paper-filter,.history-range-filter,.history-value-filter{width:auto;flex:1 1 160px}.run-button{width:auto;flex:0 0 auto}}
 </style>

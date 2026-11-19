@@ -54,10 +54,9 @@ def test_retest_updates_current_priority_without_rewriting_original_answers():
              'items': [item(10, correct=True), item(11, 'kp.eval.bias_var', False)]}
     value = result([item(1), item(2, 'kp.eval.bias_var', True)], [cycle])
     assert value['statistics']['wrong_count'] == 1
-    assert value['weak_concept_count'] == 1 and value['current_weak_concept_count'] == 1
-    assert value['concepts'][0]['kp_id'] == 'kp.eval.bias_var'
-    assert value['concepts'][0]['needs_review'] is True
-    assert value['concepts'][1]['needs_review'] is False
+    assert value['weak_concept_count'] == 1 and value['current_weak_concept_count'] == 2
+    assert all(c['needs_review'] for c in value['concepts'])  # one legacy correct answer is insufficient
+    assert value['concepts'][0]['learning_result']['state'] == 'needs_review'
 
 
 def test_metric_refinement_does_not_count_distractor_as_coverage():
@@ -66,7 +65,8 @@ def test_metric_refinement_does_not_count_distractor_as_coverage():
     cycle = {'round': 1, 'submitted_at': 'today', 'kp_ids': ['kp.eval.cv'],
              'items': [item(2, 'kp.eval.cv', True, stem='召回率的定义是什么？')]}
     concepts = result([base], [cycle])['concepts']
-    assert len(concepts) == 1 and concepts[0]['id'] == 'kp.eval.cv:precision'
+    assert len(concepts) == 2 and concepts[0]['id'] == 'kp.eval.cv:precision'
+    assert concepts[1]['learning_result']['state'] == 'insufficient'
     assert concepts[0]['retests'][0]['state'] == 'not_covered'
     assert 'TP + FP' in concepts[0]['corrections'][0]['text']
 

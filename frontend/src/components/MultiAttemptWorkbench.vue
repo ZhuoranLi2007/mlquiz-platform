@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ResponsivePaneTabs from "./ResponsivePaneTabs.vue"
+import TeacherRetestControl from "./TeacherRetestControl.vue"
 import WorkbenchPage from "./WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -28,16 +30,19 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ retest: []; openAttempt: [assessmentVersionId: string] }>()
 const router = useRouter()
+const mobilePane = ref('primary')
 const chartHost = ref<HTMLElement | null>(null)
 let chart: echarts.ECharts | null = null
 let chartResizeObserver: ResizeObserver | null = null
 const activeTab = ref<'overview' | 'wrong' | 'records'>('overview')
+watch(activeTab, () => { mobilePane.value='primary' })
 const viewMode = ref<'all' | 'paper' | 'chapter'>('all')
 const selectedPaper = ref('')
 const selectedAttemptId = ref('')
 const selectedChapter = ref('')
 const repeatedOnly = ref(false)
-const showAllWrong = ref(false)
+const wrongPage = ref(1)
+const recordPage = ref(1)
 const showAllChapters = ref(false)
 const selectedWrong = ref<any | null>(null)
 const recordType = ref<HistoryRecordType>('all')
@@ -68,6 +73,8 @@ const resources = computed(() => recommendedResourceLinks(workflowResources.valu
 const publishedRetest = computed(() => props.intervention?.outputs?.retest?.status === 'published')
 const generatedCount = computed(() => props.intervention?.outputs?.generation?.result?.candidates?.length || 0)
 const filteredAttempts = computed<any[]>(() => filterHistoryAttempts<any>(attempts.value, recordType.value, recordStatus.value))
+const visibleAttempts = computed(() => filteredAttempts.value.slice((recordPage.value-1)*5, recordPage.value*5))
+watch(filteredAttempts, () => { recordPage.value=1 })
 const ratedAttempts = computed(() => attempts.value.filter((row: any) => validScoreRate(row.score_rate) !== null).length)
 const partiallyGradedAttempts = computed(() => attempts.value.filter((row: any) => historyScoringStatus(row) === 'partial').length)
 
@@ -90,8 +97,8 @@ const filteredWrongItems = computed(() => allWrongItems.value.filter((item: any)
   }
   return true
 }))
-const visibleWrongItems = computed(() => showAllWrong.value ? filteredWrongItems.value : filteredWrongItems.value.slice(0, 5))
-const remainingWrongCount = computed(() => Math.max(0, filteredWrongItems.value.length - 5))
+const visibleWrongItems = computed(() => filteredWrongItems.value.slice((wrongPage.value-1)*5, wrongPage.value*5))
+watch(filteredWrongItems, () => { wrongPage.value=1 })
 const filteredWrongEvents = computed(() => filteredWrongItems.value.reduce((sum: number, item: any) => sum + displayErrorCount(item), 0))
 
 const TYPE_LABELS: Record<string, string> = {
@@ -210,6 +217,7 @@ function openRecordedAttempt(row: any) {
   else emit('openAttempt', row.assessment_version_id)
 }
 async function locateConcept(row: any) {
+  mobilePane.value='primary'
   const name = row?.name || row?.concept
   const item = allWrongItems.value.find((entry: any) =>
     (row?.kp_id && entry?.knowledge_point?.kp_id === row.kp_id)
@@ -222,7 +230,8 @@ async function locateConcept(row: any) {
   selectedChapter.value = ''
   selectedPaper.value = ''
   if (!item) return
-  if (allWrongItems.value.indexOf(item) >= 5) showAllWrong.value = true
+  await nextTick()
+  wrongPage.value = Math.floor(filteredWrongItems.value.indexOf(item)/5)+1
   await nextTick()
   document.getElementById(itemDomId(item))?.scrollIntoView({ block: 'center' })
   openWrong(item)
@@ -233,13 +242,13 @@ async function showWrongForAttempt(row: any) {
   selectedPaper.value = row.assessment_version_id || ''
   selectedAttemptId.value = row.attempt_id || ''
   repeatedOnly.value = false
-  showAllWrong.value = false
+  wrongPage.value = 1
   await nextTick()
   document.querySelector('.wrong-workspace')?.scrollIntoView({ block: 'start' })
 }
 
 watch(() => props.result, () => {
-  showAllWrong.value = false
+  wrongPage.value = 1
   showAllChapters.value = false
   selectedWrong.value = null
   viewMode.value = 'all'
@@ -318,13 +327,14 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
 </script>
 
 <template>
-  <WorkbenchPage :scroll="false" class="history-workbench">
+  <WorkbenchPage :scroll="false" class="history-workbench" :class="{'mobile-secondary':mobilePane==='secondary'}">
+    <template #navigation><ResponsivePaneTabs v-model="mobilePane" primary="诊断与记录" secondary="资料与筛选" /></template>
     <template #header>
     <HistorySummaryTabs :stats="stats" :active-tab="activeTab" @update:active-tab="activeTab = $event" />
 
     </template>
-    <div v-if="activeTab === 'overview'" class="history-content-grid">
-      <div class="history-primary">
+    <div v-if="activeTab === 'overview'" class="history-content-grid mobile-pane-layout">
+      <div class="history-primary mobile-primary-panel">
         <section class="history-surface overview-conclusion">
           <h2>综合结论</h2>
           <p>{{ overviewSummary }}</p>
@@ -364,15 +374,15 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
         </section>
       </div>
 
-      <aside class="history-side history-surface">
+      <aside class="history-side history-surface mobile-secondary-panel">
         <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 2)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看相关错题 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
         <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div><LearningResourceList :resources="resources" /></section>
-        <section class="side-retest"><h2>针对性复测</h2><p>依据当前薄弱知识点，由 AI 生成新题，独立验答通过后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="generatedCount" class="workflow-state">已生成 {{ generatedCount }} 道候选题，自动筛选并核验后发布</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+
       </aside>
     </div>
 
-    <div v-else-if="activeTab === 'wrong'" class="history-content-grid wrong-workspace">
-      <div class="history-primary">
+    <div v-else-if="activeTab === 'wrong'" class="history-content-grid wrong-workspace mobile-pane-layout">
+      <div class="history-primary mobile-primary-panel">
         <section class="history-surface wrong-surface">
           <header class="wrong-heading"><div><h2>错题清单</h2><p>共 {{ filteredWrongItems.length }} 道不同错题 · {{ filteredWrongEvents }} 次错误作答</p></div><div class="wrong-filters"><el-select v-model="selectedChapter" clearable placeholder="全部章节" aria-label="按章节筛选"><el-option v-for="row in chapterOptions" :key="row.value" :label="row.label" :value="row.value" /></el-select><el-checkbox v-model="repeatedOnly">仅看重复错误</el-checkbox></div></header>
           <div class="wrong-view-tabs"><button type="button" :class="{ active: viewMode === 'all' }" :aria-pressed="viewMode === 'all'" @click="setView('all')">全部错题</button><button type="button" :class="{ active: viewMode === 'paper' }" :aria-pressed="viewMode === 'paper'" @click="setView('paper')">按试卷查看</button><button type="button" :class="{ active: viewMode === 'chapter' }" :aria-pressed="viewMode === 'chapter'" @click="setView('chapter')">按章节统计</button><el-select v-if="viewMode === 'paper'" v-model="selectedPaper" placeholder="选择试卷" @change="selectedAttemptId = ''"><el-option v-for="row in paperOptions" :key="row.value" :label="row.label" :value="row.value" /></el-select></div>
@@ -382,28 +392,29 @@ onBeforeUnmount(() => { window.removeEventListener('resize', resizeChart); chart
             <article v-for="item in visibleWrongItems" :id="itemDomId(item)" :key="item.repeat_group_key" class="wrong-row"><div><b>{{ wrongItemTitle(item) }}</b><small>{{ item.chapter?.title || '未映射章节' }} · {{ TYPE_LABELS[item.question_type] || item.question_type }} · {{ wrongSources(item) }}</small></div><strong :class="{ repeated: displayErrorCount(item) > 1 }">{{ displayErrorCount(item) }} 次</strong><button type="button" @click="openWrong(item)">查看题目与解析</button></article>
             <div v-if="!visibleWrongItems.length" class="history-empty"><el-icon><WarningFilled /></el-icon><span>当前筛选下没有错题。可调整试卷、章节或重复错误条件。</span></div>
           </div>
-          <button v-if="remainingWrongCount" type="button" class="text-action more-wrong" @click="showAllWrong = !showAllWrong">{{ showAllWrong ? '收起其他错题' : `查看全部 ${filteredWrongItems.length} 道错题` }}</button>
+          <el-pagination v-if="filteredWrongItems.length>5" v-model:current-page="wrongPage" :page-size="5" :total="filteredWrongItems.length" layout="prev, pager, next" />
           <details v-if="result.ungraded_items?.length" class="ungraded-list"><summary>另有 {{ result.ungraded_items.length }} 题次待评分</summary><p v-for="(item, index) in result.ungraded_items" :key="`${item.attempt_id}-${item.paper_item_id}-${index}`">{{ friendlyQuizCode(item.quiz_code) || item.assessment_title }} · 第 {{ item.position }} 题</p></details>
         </section>
       </div>
-      <aside class="history-side history-surface">
+      <aside class="history-side history-surface mobile-secondary-panel">
         <section><h2>本次关注</h2><div v-if="priorityConcepts.length" class="side-priorities"><button v-for="row in priorityConcepts.slice(0, 3)" :key="row.kp_id || row.name" type="button" @click="locateConcept(row)"><b>{{ row.name || row.concept }}</b><small>相关题目答错 {{ conceptWrongCount(row) }} 次</small><span>查看作答依据 ›</span></button></div><p v-else class="history-empty-inline">暂无明确的重点错题。</p></section>
         <section><div class="side-heading"><h2>推荐学习资源</h2><button type="button" class="text-action" @click="router.push('/teacher/resources')">查看相关资料</button></div></section>
-        <section class="side-retest"><h2>针对性复测</h2><p>依据当前薄弱知识点，由 AI 生成新题，独立验答通过后发布。</p><strong v-if="plan.ready">{{ plan.item_count }} 题</strong><p>{{ plan.ready ? `${planChapterSummary}。通过自动校验后立即发布。` : (plan.reason || '当前没有适合生成复测的错题。') }}</p><p v-if="publishedRetest" class="workflow-state">复测已发布</p><el-button type="primary" :icon="Position" :loading="runningAi" :disabled="!plan.ready" @click="emit('retest')">生成并发布复测</el-button></section>
+
       </aside>
     </div>
 
-    <div v-else class="history-content-grid records-workspace">
-      <div class="history-primary">
+    <div v-else class="history-content-grid records-workspace mobile-pane-layout">
+      <div class="history-primary mobile-primary-panel">
         <section class="history-surface score-chart-surface"><div class="surface-heading"><h2>历次成绩</h2><div class="chart-legend" aria-label="考试类型图例"><span><i class="dot-quiz"></i>课堂小测</span><span><i class="dot-exam"></i>在线考试</span><span><i class="dot-retest"></i>针对性复测</span></div></div><div v-if="attempts.length" ref="chartHost" class="history-score-chart"></div><p v-else class="history-empty-inline">当前范围没有考试记录。</p><p class="chart-note">仅展示可计算得分率的记录；不同试卷难度、题型和范围可能不同，折线不能单独证明进步或退步。</p></section>
-        <section class="history-surface records-table-surface"><div class="surface-heading"><h2>考试记录</h2><span>显示 {{ filteredAttempts.length }} / {{ attempts.length }} 次</span></div><div class="records-table"><div class="records-head"><span>考试名称</span><span>类型</span><span>得分率</span><span>状态</span><span>操作</span></div><article v-for="row in filteredAttempts" :key="row.attempt_id" class="record-row"><div><b>第 {{ row.exam_order }} 次 · {{ row.title }}</b><small>{{ dateText(row.exam_time) }} · {{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</small></div><span class="record-type" :class="historyRecordType(row)">{{ recordTypeLabel(row) }}</span><strong>{{ scoreRateLabel(row.score_rate) }}</strong><span class="record-status" :class="historyScoringStatus(row)">{{ recordStatusLabel(row) }}</span><div class="record-actions"><button type="button" @click="openRecordedAttempt(row)">查看试卷</button><button type="button" @click="showWrongForAttempt(row)">看错题</button></div></article><p v-if="!filteredAttempts.length" class="history-empty">当前筛选下没有考试记录。</p></div></section>
+        <section class="history-surface records-table-surface"><div class="surface-heading"><h2>考试记录</h2><span>显示 {{ filteredAttempts.length }} / {{ attempts.length }} 次</span></div><div class="records-table"><div class="records-head"><span>考试名称</span><span>类型</span><span>得分率</span><span>状态</span><span>操作</span></div><article v-for="row in visibleAttempts" :key="row.attempt_id" class="record-row"><div><b>第 {{ row.exam_order }} 次 · {{ row.title }}</b><small>{{ dateText(row.exam_time) }} · {{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</small></div><span class="record-type" :class="historyRecordType(row)">{{ recordTypeLabel(row) }}</span><strong>{{ scoreRateLabel(row.score_rate) }}</strong><span class="record-status" :class="historyScoringStatus(row)">{{ recordStatusLabel(row) }}</span><div class="record-actions"><button type="button" @click="openRecordedAttempt(row)">查看试卷</button><button type="button" @click="showWrongForAttempt(row)">看错题</button></div></article><p v-if="!filteredAttempts.length" class="history-empty">当前筛选下没有考试记录。</p></div><el-pagination v-if="filteredAttempts.length>5" v-model:current-page="recordPage" :page-size="5" :total="filteredAttempts.length" layout="prev, pager, next" /></section>
       </div>
-      <aside class="history-side history-surface record-side"><section><h2>记录摘要</h2><div class="record-facts"><p><span>考试次数</span><b>{{ attempts.length }} 次</b></p><p><span>平均得分率</span><b>{{ scoreRateLabel(stats.average_score_rate) }}</b></p><p><span>可计算得分率</span><b>{{ ratedAttempts }} 次</b></p><p><span>部分评分</span><b>{{ partiallyGradedAttempts }} 次</b></p><p><span>待评分题次</span><b>{{ stats.ungraded_item_events ?? 0 }} 题次</b></p></div></section><section><h2>查看方式</h2><label class="record-filter"><span>考试类型</span><el-select v-model="recordType" aria-label="按考试类型筛选"><el-option label="全部类型" value="all" /><el-option label="课堂小测" value="quiz" /><el-option label="在线考试" value="exam" /><el-option label="针对性复测" value="retest" /></el-select></label><label class="record-filter"><span>评分状态</span><el-select v-model="recordStatus" aria-label="按评分状态筛选"><el-option label="全部状态" value="all" /><el-option label="已评分" value="graded" /><el-option label="部分评分" value="partial" /><el-option label="待评分" value="ungraded" /></el-select></label></section><section class="record-navigation"><h2>与诊断联动</h2><button type="button" @click="activeTab = 'wrong'">查看错题清单 ›</button><button type="button" @click="activeTab = 'overview'">返回诊断概览 ›</button></section></aside>
+      <aside class="history-side history-surface record-side mobile-secondary-panel"><section><h2>记录摘要</h2><div class="record-facts"><p><span>考试次数</span><b>{{ attempts.length }} 次</b></p><p><span>平均得分率</span><b>{{ scoreRateLabel(stats.average_score_rate) }}</b></p><p><span>可计算得分率</span><b>{{ ratedAttempts }} 次</b></p><p><span>部分评分</span><b>{{ partiallyGradedAttempts }} 次</b></p><p><span>待评分题次</span><b>{{ stats.ungraded_item_events ?? 0 }} 题次</b></p></div></section><section><h2>查看方式</h2><label class="record-filter"><span>考试类型</span><el-select v-model="recordType" aria-label="按考试类型筛选"><el-option label="全部类型" value="all" /><el-option label="课堂小测" value="quiz" /><el-option label="在线考试" value="exam" /><el-option label="针对性复测" value="retest" /></el-select></label><label class="record-filter"><span>评分状态</span><el-select v-model="recordStatus" aria-label="按评分状态筛选"><el-option label="全部状态" value="all" /><el-option label="已评分" value="graded" /><el-option label="部分评分" value="partial" /><el-option label="待评分" value="ungraded" /></el-select></label></section><section class="record-navigation"><h2>与诊断联动</h2><button type="button" @click="activeTab = 'wrong'">查看错题清单 ›</button><button type="button" @click="activeTab = 'overview'">返回诊断概览 ›</button></section></aside>
     </div>
 
     <el-dialog :model-value="Boolean(selectedWrong)" :title="selectedWrong ? `第 ${selectedWrong.position} 题 · ${wrongItemTitle(selectedWrong)}` : '错题详情'" width="min(960px, 94vw)" append-to-body class="history-question-dialog" @close="selectedWrong = null">
       <div v-if="selectedWrong" class="question-detail"><p class="question-origin">{{ wrongSources(selectedWrong) }} · {{ selectedWrong.chapter?.title || '未映射章节' }} · {{ TYPE_LABELS[selectedWrong.question_type] || selectedWrong.question_type }} · 当前筛选 {{ displayErrorCount(selectedWrong) }} 次出错</p><div class="question-stem"><SourceQuestionContent :question="selectedWrong" /></div><div v-if="optionsFor(selectedWrong).length" class="question-options"><div v-for="option in optionsFor(selectedWrong)" :key="option.key" class="question-option" :class="optionClass(selectedWrong, option.key)"><b>{{ option.key }}</b><MathText :text="option.text || option.value || ''" /><span v-if="correctOption(selectedWrong, option.key)">正确答案</span><span v-if="selected(selectedWrong, option.key) && !correctOption(selectedWrong, option.key)">学生选择</span></div></div><div class="question-answers"><div><small>学生作答</small><MathText :text="answerText(selectedWrong.response)" /></div><div><small>正确答案</small><MathText :text="answerText(correctPayload(selectedWrong))" /></div></div><p class="question-score">本题得分 {{ numberText(selectedWrong.awarded_score) }}/{{ numberText(selectedWrong.max_score) }} · 所属知识点 {{ selectedWrong.knowledge_point?.name || '未映射' }}</p><section class="question-explanation"><h3>参考解析</h3><MathText :text="selectedWrong.answer_reference?.explanation || '该题暂未提供独立解析。'" /></section><details v-if="selectedWrong.occurrences?.length" class="question-history"><summary>历史作答记录（{{ selectedWrong.occurrences.length }} 次）</summary><article v-for="(row, index) in selectedWrong.occurrences" :key="`${row.attempt_id}-${index}`"><div><b>{{ friendlyQuizCode(row.quiz_code) || row.assessment_title }} · 第 {{ row.position }} 题</b><small>{{ dateText(row.exam_time) }}</small></div><span>作答：{{ answerText(row.response) }}</span><strong>{{ numberText(row.awarded_score) }}/{{ numberText(row.max_score) }} 分</strong></article></details></div>
     </el-dialog>
+    <template #footer><TeacherRetestControl :result="result" :running="runningAi" @retest="emit('retest')" @open-attempt="id=>router.push(`/exam/${id}`)" /></template>
   </WorkbenchPage>
 </template>
 

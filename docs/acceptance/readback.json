@@ -1,0 +1,148 @@
+{
+  "attempts": [
+    {
+      "user": "stu001",
+      "attempt_id": "attempt_fe1348e54d8543a6",
+      "db_score": 75.0,
+      "api_score": {
+        "nominal_max_score": 100.0,
+        "ungraded_item_count": 0,
+        "ungraded_max_score": 0.0,
+        "grading_status": "graded",
+        "scored_items": 4,
+        "correct_items": 3,
+        "wrong_items": 1,
+        "partial_items": 0,
+        "awarded_score": 75.0,
+        "max_score": 100.0,
+        "score_rate": 0.75
+      },
+      "all_items_mapped": true
+    },
+    {
+      "user": "stu002",
+      "attempt_id": "attempt_1da4e3b4d5754de2",
+      "db_score": 75.0,
+      "api_score": {
+        "nominal_max_score": 100.0,
+        "ungraded_item_count": 0,
+        "ungraded_max_score": 0.0,
+        "grading_status": "graded",
+        "scored_items": 4,
+        "correct_items": 3,
+        "wrong_items": 1,
+        "partial_items": 0,
+        "awarded_score": 75.0,
+        "max_score": 100.0,
+        "score_rate": 0.75
+      },
+      "all_items_mapped": true
+    }
+  ],
+  "teacher_scopes": {
+    "student-attempt": {
+      "consistent": true,
+      "round_result": {
+        "cycle_id": "retestcycle_217f711c16574a0c",
+        "round": 1,
+        "status": "practice_completed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_fd2c632d136c40cc",
+        "accuracy": 1.0,
+        "correct_count": 5,
+        "question_count": 5,
+        "completed_at": "2026-11-19T02:34:47+00:00",
+        "published_at": "2026-11-19T02:28:53+00:00",
+        "source_counts": {
+          "ai_generated": 0,
+          "bank_selected": 1,
+          "original_reused": 4
+        },
+        "retest_kind": "practice"
+      }
+    },
+    "student-history": {
+      "consistent": true,
+      "round_result": {
+        "cycle_id": "retestcycle_217f711c16574a0c",
+        "round": 1,
+        "status": "practice_completed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_fd2c632d136c40cc",
+        "accuracy": 1.0,
+        "correct_count": 5,
+        "question_count": 5,
+        "completed_at": "2026-11-19T02:34:47+00:00",
+        "published_at": "2026-11-19T02:28:53+00:00",
+        "source_counts": {
+          "ai_generated": 0,
+          "bank_selected": 1,
+          "original_reused": 4
+        },
+        "retest_kind": "practice"
+      }
+    },
+    "class-assessment": {
+      "consistent": true,
+      "round_result": {
+        "cycle_id": "retestcycle_217f711c16574a0c",
+        "round": 1,
+        "status": "practice_completed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_fd2c632d136c40cc",
+        "accuracy": 1.0,
+        "correct_count": 5,
+        "question_count": 5,
+        "completed_at": "2026-11-19T02:34:47+00:00",
+        "published_at": "2026-11-19T02:28:53+00:00",
+        "source_counts": {
+          "ai_generated": 0,
+          "bank_selected": 1,
+          "original_reused": 4
+        },
+        "retest_kind": "practice"
+      }
+    }
+  },
+  "database_integrity": "ok",
+  "retest_attempt_id": {
+    "attempt_id": "attempt_fd2c632d136c40cc",
+    "status": "submitted",
+    "score": 10.0,
+    "max_score": 10.0
+  },
+  "second_attempt_id": {
+    "attempt_id": "attempt_19de8c85e41f4967",
+    "status": "submitted",
+    "score": 50.0,
+    "max_score": 50.0
+  },
+  "isolation_status": 403,
+  "import": {
+    "run_id": "imp_a7a48b05805849df",
+    "language": "en",
+    "status": "partial",
+    "error": "",
+    "result": {
+      "zh_pdf": "data/final-acceptance/import/zh/imp_a7a48b05805849df.pdf",
+      "zh_pdf_pages": 4,
+      "zh_thumbnail": "data/final-acceptance/import/thumbs/imp_a7a48b05805849df.png",
+      "language": "en",
+      "questions": 8,
+      "publishable": 2,
+      "pending_review": 6,
+      "in_scope": 2,
+      "extension": 6,
+      "unconfirmed": 0,
+      "answer_source": 8,
+      "answer_ai": 0,
+      "zh_questions": 8,
+      "zh_pages_translated": 4,
+      "ocr_pages": [],
+      "formula_fixed": 1,
+      "gate_failed": [],
+      "failed_pages_translate": ""
+    }
+  },
+  "chapter_audit_rows": 1410
+}
