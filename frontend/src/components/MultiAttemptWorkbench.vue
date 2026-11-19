@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { readableAnswerContent } from '../utils/presentation'
 import ResponsivePaneTabs from "./ResponsivePaneTabs.vue"
 import TeacherRetestControl from "./TeacherRetestControl.vue"
 import WorkbenchPage from "./WorkbenchPage.vue"
@@ -126,14 +127,10 @@ function answerValue(value: any): any {
   }
   return value
 }
-function answerText(input: any): string {
-  const value = answerValue(input)
-  if (value === null || value === undefined || value === '') return '未作答'
-  if (typeof value === 'boolean') return value ? '正确' : '错误'
-  if (typeof value === 'string' || typeof value === 'number') return String(value)
-  if (Array.isArray(value)) return value.map((entry: any) => answerText(entry)).join('；')
-  return Object.entries(value).map(([key, entry]) => `${key}：${answerText(entry)}`).join('；')
+function answerText(input: unknown): string {
+  return readableAnswerContent(input, '未作答')
 }
+
 function answerKeys(input: any): string[] {
   const value = answerValue(input)
   return (Array.isArray(value) ? value : [value]).map((entry: any) =>

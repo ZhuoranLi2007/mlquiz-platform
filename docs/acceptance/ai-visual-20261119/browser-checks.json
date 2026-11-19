@@ -1,0 +1,68 @@
+{
+  "initial": {
+    "empty": 1,
+    "generate_enabled": true
+  },
+  "candidates": {
+    "count": 3,
+    "header": "3 道候选 · 已入库 3 道\n刷新进度",
+    "statuses": [
+      "已入库",
+      "已入库",
+      "已入库"
+    ]
+  },
+  "another": {
+    "selected": "第 2 题\n已入库\n在平方损失回归中，固定同一环境输入 \n𝑥\nx。同一学习方法在4种等概率训练集上训练，所得模型对该输入的温度预测依次为 \n20\n,\n22\n,\n24\n,\n26\n20,22,24,26 ",
+    "detail": "在平方损失回归中，固定同一环境输入 \n𝑥\nx。同一学习方法在4种等概率训练集上训练，所得模型对该输入的温度预测依次为 \n20\n,\n22\n,\n24\n,\n26\n20,22,24,26 ℃。真实回归函数值 \n𝑓\n(\n𝑥\n)\n=\n25\nf(x)=25 ℃，不可约噪声方"
+  },
+  "layout": {
+    "viewport": [
+      1366,
+      768
+    ],
+    "document": [
+      1366,
+      768
+    ],
+    "dialog": {
+      "x": 83,
+      "y": 16,
+      "width": 1200,
+      "height": 718.546875,
+      "right": 1283,
+      "bottom": 734.546875
+    },
+    "settings": {
+      "x": 99,
+      "y": 85,
+      "width": 254,
+      "height": 566.546875,
+      "right": 353,
+      "bottom": 651.546875
+    },
+    "list": {
+      "x": 373,
+      "y": 137,
+      "width": 206,
+      "height": 483.359375,
+      "right": 579,
+      "bottom": 620.359375
+    },
+    "detail": {
+      "x": 593,
+      "y": 137,
+      "width": 674,
+      "height": 483.359375,
+      "right": 1267,
+      "bottom": 620.359375
+    },
+    "detailScrollable": true,
+    "detailScrollHeight": 539,
+    "detailClientHeight": 481,
+    "font": "\"Noto Sans SC\", \"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+    "stemSize": "16px",
+    "stemColor": "rgb(31, 41, 55)",
+    "bodyColor": "rgb(51, 65, 85)"
+  }
+}

@@ -4,6 +4,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../api/client'
+import { questionAnswerText } from '../utils/presentation'
 import MathText from '../components/MathText.vue'
 import { friendlyError, questionTypeLabel } from '../utils/presentation'
 
@@ -56,16 +57,7 @@ const replacementCandidates = computed(() => {
 function stemOf(item: any) { return item?.stem_zh || item?.stem || '（题干缺失）' }
 function optionKey(option: any, index: number) { return option?.key || option?.label || String.fromCharCode(65 + index) }
 function optionText(option: any) { return option?.text || option?.content || option?.text_zh || '（选项正文缺失）' }
-function answerText(item: any) {
-  const answer = item?.answer_payload || {}
-  const type = item?.question_type_effective || item?.question_type
-  if (type === 'single_choice') return answer.key ? `选项 ${answer.key}` : '未提供可用答案'
-  if (type === 'multi_choice') return Array.isArray(answer.keys) ? `选项 ${answer.keys.join('、')}` : '未提供可用答案'
-  if (type === 'true_false') return typeof answer.value === 'boolean' ? (answer.value ? '正确' : '错误') : '未提供可用答案'
-  if (answer.numeric !== undefined || answer.value !== undefined) return String(answer.numeric ?? answer.value)
-  if (Array.isArray(answer.values)) return answer.values.join('；')
-  return answer.text || answer.reference || '未提供可用答案'
-}
+const answerText = questionAnswerText
 
 async function load() {
   loading.value = true
@@ -217,7 +209,7 @@ onMounted(load)
           <div class="item-meta"><span>{{ questionTypeLabel(item.question_type_effective || item.question_type) }}</span><span>{{ kpMap.get(item.main_kp_id) || '知识点未标注' }}</span></div>
           <div class="item-stem"><MathText :text="stemOf(item)" /></div>
           <div v-if="item.options?.length" class="options"><div v-for="(option, optionIndex) in item.options" :key="optionIndex"><b>{{ optionKey(option, optionIndex) }}</b><MathText :text="optionText(option)" /></div></div>
-          <details><summary>查看标准答案与解析</summary><div class="solution"><b>标准答案：{{ answerText(item) }}</b><MathText :text="item.explanation || '暂无解析'" /></div></details>
+          <details><summary>查看参考答案与解析</summary><div class="solution"><div><b>参考答案：</b><MathText :text="answerText(item)" /></div><MathText :text="item.explanation || '暂无解析'" /></div></details>
         </div>
         <aside>
           <label>分值<el-input-number v-model="item.score" :disabled="!editable" :min="0.5" :max="1000" :step="0.5" /></label>

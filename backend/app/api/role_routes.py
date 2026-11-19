@@ -458,6 +458,21 @@ def generate_teacher_questions(
     }, user_id=principal.user_id)
 
 
+@router.post("/teacher/ai-questions/jobs")
+def queue_teacher_questions(
+    body: GenerateQuestionsIn,
+    principal: auth_service.Principal = Depends(auth_service.require_teacher),
+    db: Session = Depends(get_session),
+) -> dict:
+    """Expose the existing generation worker with the teacher's identity."""
+    return _queue_teacher_job(db, principal, "generate_questions", {"blueprint": {
+        "kp_ids": body.kp_ids, "count": body.count,
+        "question_types": body.question_types or ["single_choice", "true_false"],
+        "mode": "teacher_question_bank",
+        "instruction": body.instruction or "为机器学习课程生成可诊断的新题；提供答案、解析和真实资料引用。",
+    }})
+
+
 @router.post("/teacher/ai-candidates/{question_id}/approve")
 def approve_ai_candidate(
     question_id: str, body: ApproveCandidateIn,

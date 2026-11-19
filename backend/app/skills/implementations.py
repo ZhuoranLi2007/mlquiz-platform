@@ -701,6 +701,25 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
     for i, v in enumerate(deduped[:count]):
         c = v["candidate"]
         qid = E.new_id("aiq")
+        # Preserve the generated teaching explanation separately from the
+        # verification note. The note is not an explanation of the answer.
+        explanation = c.get("explanation")
+        refs = []
+        for chunk_id in c.get("source_chunk_ids", []):
+            chunk = db.get(E.Chunk, chunk_id)
+            ref = {"chunk_id": chunk_id}
+            if chunk:
+                ref.update(document_id=chunk.document_id, title=chunk.title,
+                           unit_refs=chunk.unit_refs, source_refs=chunk.source_refs)
+                for source_ref in chunk.source_refs or []:
+                    if isinstance(source_ref, dict):
+                        for key in ("rel_path", "page"):
+                            if source_ref.get(key):
+                                ref[key] = source_ref[key]
+                if not ref.get("page"):
+                    ref["page"] = next((r.get("page") for r in chunk.unit_refs or []
+                                        if isinstance(r, dict) and r.get("page")), None)
+            refs.append(ref)
         row = E.Question(
             row_id=qid, question_id=qid, question_version=1, origin="ai",
             question_type=c["question_type"], stem=c["stem"],
@@ -708,12 +727,13 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
             main_kp_id=c.get("kp_id", ""),
             cognitive_level=c.get("cognitive_level", "理解"),
             difficulty=c.get("difficulty", "中等"),
-            source_refs=[{"chunk_id": r} for r in c.get("source_chunk_ids", [])],
+            source_refs=refs,
             question_family_id=E.new_id("fam"), review_status="pending",
             answer_status="candidate", answer_origin="ai_candidate",
             active=False,  # 审核通过后才发布
             answer_payload=c["answer_payload"],
-            explanation=v["verification_note"],
+            explanation=explanation.strip() if isinstance(explanation, str) and explanation.strip() else v["verification_note"],
+            rubric=c.get("rubric") if isinstance(c.get("rubric"), dict) else {},
             scope_class=c.get("scope_class") or "unconfirmed",
             notes=json.dumps({"generation": {
                 "source": "ai_generated", "call_id": out.get("call_id", ""),
@@ -722,6 +742,7 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
                 "target_kp_ids": kp_ids,
                 "source_question_id": (bp.get("source_question") or {}).get("question_id", ""),
                 "scope_basis": c.get("scope_basis", ""),
+                "verification_note": v["verification_note"],
             }, "status": "候选题，须通过独立验答才能用于复测"}, ensure_ascii=False),
             created_by="skill:generate_questions",
         )

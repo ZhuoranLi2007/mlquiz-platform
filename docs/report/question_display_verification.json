@@ -1,0 +1,45 @@
+{
+  "viewport": [
+    1366,
+    768
+  ],
+  "page_errors": [],
+  "checks": {
+    "reference_answer_visible": true,
+    "reference_formula_rendered": true,
+    "point_field_and_score_visible": true,
+    "refresh_ok": true,
+    "paper_preview_ok": true,
+    "unfinished_exam_reference_hidden": true,
+    "student_score_feedback_ok": true,
+    "historical_scores_unchanged": true
+  },
+  "backend_changed": false,
+  "question_ids": [
+    "seed_exam_2019_一_3",
+    "upq_6428a417b9_s1_q3",
+    "slq_62cc358de7_p12_3"
+  ],
+  "frontend_unit_tests": {
+    "passed": 45,
+    "failed": 0
+  },
+  "typecheck": "passed",
+  "production_build": "passed",
+  "report": {
+    "pages": 58,
+    "changed_pages": [
+      35,
+      36
+    ],
+    "toc_entries": 56,
+    "toc_page_mismatches": []
+  },
+  "remaining_content_review": "偏差—方差内容已在展示库规范化修订；原始验收数据保留",
+  "content_review_followup": {
+    "status": "resolved_in_display_database",
+    "record": "visible_content_revision.json",
+    "verification": "visible_content_verification.json"
+  },
+  "record_scope": "前一轮字段显示修复记录；报告统计为当时58页，最新报告与内容修订见followup"
+}

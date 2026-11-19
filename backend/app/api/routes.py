@@ -1318,7 +1318,7 @@ CONTENT_LABELS = {"title_only": "仅核验标题", "intro_checked": "已核验�
 @router.get("/resources/{resource_id}/cover")
 def resource_cover(resource_id: str):
     """资源封面：只按资源 ID 提供，文件名不外露；没有就 404 让前端降级。"""
-    path = cfg.PROJECT_ROOT / "data" / "assets" / "covers" / f"{resource_id}.jpg"
+    path = cfg.ASSET_DIR / "covers" / f"{resource_id}.jpg"
     if not path.exists():
         raise HTTPException(404, "该资源没有本地封面")
     return FileResponse(str(path), media_type="image/jpeg",

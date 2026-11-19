@@ -1,0 +1,194 @@
+{
+  "viewport": [
+    1366,
+    768
+  ],
+  "page_errors": [],
+  "checks": {
+    "latest_versions_and_content": true,
+    "bias_answer_explanation_and_formula": true,
+    "l2_options_and_no_answer_images": true,
+    "unpublished_preview_ok": true,
+    "refresh_persistence": true,
+    "unfinished_exam_no_reference": true,
+    "old_score_feedback_ok": true,
+    "existing_history_unchanged": true,
+    "adjacent_question_content_preserved": true,
+    "corrected_question_student_payload_safe": true,
+    "teacher_student_boolean_labels_single_line": true
+  },
+  "revised_questions": [
+    {
+      "id": "slq_62cc358de7_p12_3",
+      "version": 2,
+      "chapter": "ch06",
+      "kp": "kp.eval.bias_var"
+    },
+    {
+      "id": "slq_62cc358de7_p12_4",
+      "version": 2,
+      "chapter": "ch06",
+      "kp": "kp.eval.bias_var"
+    },
+    {
+      "id": "seed_note_pending_010",
+      "version": 2,
+      "chapter": "ch02",
+      "kp": "kp.regularization.l1l2"
+    },
+    {
+      "id": "seed_note_pending_023",
+      "version": 2,
+      "chapter": "ch02",
+      "kp": "kp.regularization.l1l2"
+    }
+  ],
+  "preview_paper_id": "paper_1826da3d96104278",
+  "frontend_tests_passed": 45,
+  "typecheck": "passed",
+  "production_build": "passed",
+  "new_model_calls": 0,
+  "new_exam_releases": 0,
+  "revised_student_dto_readonly": [
+    {
+      "question_id": "slq_62cc358de7_p12_3",
+      "answer_fields_hidden": true,
+      "four_options_complete": true,
+      "body_images": 0
+    },
+    {
+      "question_id": "slq_62cc358de7_p12_4",
+      "answer_fields_hidden": true,
+      "four_options_complete": true,
+      "body_images": 0
+    },
+    {
+      "question_id": "seed_note_pending_010",
+      "answer_fields_hidden": true,
+      "four_options_complete": true,
+      "body_images": 0
+    },
+    {
+      "question_id": "seed_note_pending_023",
+      "answer_fields_hidden": true,
+      "four_options_complete": true,
+      "body_images": 0
+    }
+  ],
+  "boolean_layout_browser": [
+    {
+      "role": "T19",
+      "labels": [
+        {
+          "text": "正确",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "错误",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "正确",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "错误",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "正确",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "错误",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "正确",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        },
+        {
+          "text": "错误",
+          "height": 22.390625,
+          "lineHeight": 22.4
+        }
+      ],
+      "page_errors": []
+    },
+    {
+      "role": "S19",
+      "labels": [
+        {
+          "text": "正确",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "错误",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "正确",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "错误",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "正确",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "错误",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "正确",
+          "height": 23.25,
+          "lineHeight": 23.25
+        },
+        {
+          "text": "错误",
+          "height": 23.25,
+          "lineHeight": 23.25
+        }
+      ],
+      "page_errors": []
+    }
+  ],
+  "report": {
+    "pages": 59,
+    "screenshots": 42,
+    "toc_entries": 56,
+    "page_mismatches": [],
+    "verification": "../submission/report_verification.json"
+  },
+  "screenshots_refreshed": [
+    "T07",
+    "T08",
+    "T08b",
+    "T10",
+    "T12",
+    "T19",
+    "T20",
+    "T20b",
+    "T22",
+    "T23",
+    "T24",
+    "S18",
+    "S19"
+  ]
+}

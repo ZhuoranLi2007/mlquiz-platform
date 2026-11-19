@@ -1,0 +1,41 @@
+{
+  "source_attempt_id": "attempt_1da4e3b4d5754de2",
+  "job_id": "job_3b6baeedd6884aa6",
+  "job": {
+    "job_id": "job_3b6baeedd6884aa6",
+    "status": "succeeded",
+    "stage": "succeeded",
+    "result": {
+      "status": "published",
+      "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+      "cycle_id": "retestcycle_34fb0754a49f47d6",
+      "round": 1,
+      "source_attempt_id": "attempt_1da4e3b4d5754de2",
+      "attempt_id": "attempt_393a14e38d6e42e9",
+      "release": null,
+      "candidate_question_ids": [
+        "aiq_a9498cbee8704fe5",
+        "aiq_d7c9fce2b78747f5",
+        "aiq_d42b627b4acc49f2",
+        "aiq_eff6788ecdfa4a51",
+        "aiq_f2205800d9974672"
+      ],
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "question_source": "mixed",
+      "retest_kind": "formal",
+      "target_kp_ids": [
+        "kp.regularization.l1l2"
+      ],
+      "remaining_kp_ids": [],
+      "rejected_candidates": []
+    },
+    "error": ""
+  },
+  "page_errors": [],
+  "attempt_id": "attempt_393a14e38d6e42e9",
+  "student_exam_text": "←\n\n专项复测\n\n专注答题\n0/5 已作答\n00:01\n作答中\n题目\n1 / 5\n1\n2\n3\n4\n5\n交卷\n（5 题未答）\n第 1 题\n判断题\n2 分\n自动保存\nLASSO 使用 L2 正则化，因此它通常不会让参数严格等于 0。\n正确\n错误\n立即保存\n上一题\n下一题\n\n复测已准备好"
+}

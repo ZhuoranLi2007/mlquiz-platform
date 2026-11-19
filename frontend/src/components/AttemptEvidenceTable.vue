@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { readableAnswerContent, rubricRows as displayRubricRows } from '../utils/presentation'
 import { computed, ref } from 'vue'
 import { ArrowDown, CircleCheck } from '@element-plus/icons-vue'
 import MathText from './MathText.vue'
@@ -32,20 +33,10 @@ function answerValue(value: any): any {
   }
   return value
 }
-function answerText(input: any): string {
-  const value = answerValue(input)
-  if (value === null || value === undefined || value === '') return '未作答'
-  if (typeof value === 'boolean') return value ? '正确' : '错误'
-  if (typeof value === 'string' || typeof value === 'number') return String(value)
-  if (Array.isArray(value)) return value.map((entry, index) => {
-    if (entry && typeof entry === 'object') {
-      const label = entry.label || entry.name || entry.key || `第 ${index + 1} 项`
-      return `${label}：${answerText(entry.value ?? entry.answer ?? entry.accepted ?? entry)}`
-    }
-    return answerText(entry)
-  }).join('；')
-  return Object.entries(value).map(([key, entry]) => `${key}：${answerText(entry)}`).join('；')
+function answerText(input: unknown): string {
+  return readableAnswerContent(input, '未作答')
 }
+
 function answerKeys(input: any): string[] {
   const value = answerValue(input)
   const rows = Array.isArray(value) ? value : [value]
@@ -91,12 +82,7 @@ function scoreText(item: any) {
   if (!(Number(item.max_score) > 0)) return item.correct ? '已判对 · 历史分值缺失' : '已判错 · 历史分值缺失'
   return `${numberText(item.awarded_score)}/${numberText(item.max_score)} 分`
 }
-function rubricRows(item: any): any[] {
-  const rubric = item?.answer_reference?.rubric
-  if (!rubric) return []
-  if (Array.isArray(rubric)) return rubric
-  return rubric.points || rubric.key_points || rubric.criteria || []
-}
+function rubricRows(item: any) { return displayRubricRows(item?.answer_reference?.rubric) }
 function explanationText(item: any): string {
   return String(item?.answer_reference?.explanation || '').trim()
 }
@@ -132,7 +118,7 @@ function toleranceText(item: any) {
           </div>
           <details v-if="rubricRows(item).length" class="learning-detail">
             <summary><span>评分要点</span><el-icon><ArrowDown /></el-icon></summary>
-            <div class="detail-content rubric-content"><ul><li v-for="(point, index) in rubricRows(item)" :key="index">{{ point.description || point.text || point.criterion || answerText(point) }}<em v-if="point.score ?? point.weight">{{ point.score ?? point.weight }} 分</em></li></ul></div>
+            <div class="detail-content rubric-content"><ul><li v-for="(point, index) in rubricRows(item)" :key="index"><MathText :text="point.text" /><em v-if="point.score !== undefined">{{ point.score }} 分</em></li></ul></div>
           </details>
           <details v-if="explanationText(item)" class="learning-detail">
             <summary><span>参考解析</span><el-icon><ArrowDown /></el-icon></summary>

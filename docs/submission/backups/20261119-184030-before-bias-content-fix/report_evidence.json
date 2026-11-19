@@ -1,0 +1,684 @@
+{
+  "date": "2026-11-19",
+  "method": "sqlite URI mode=ro; selected non-secret fields; no model calls or data mutations",
+  "source_db": "data\\final-acceptance\\db\\mlquiz.sqlite3",
+  "db_sha256": "29e04ae21567f37a8dba18bc26bb0f06eaffcb23cf4f10a2e1ba7ac7d87de0b9",
+  "db_unchanged": true,
+  "attempts": [
+    {
+      "attempt_id": "attempt_fe1348e54d8543a6",
+      "paper_id": "paper_5b350ad248494250",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "assessment_version_id": "av_b77f283d0cc4237eb6b99926",
+      "status": "submitted",
+      "grading_status": "graded",
+      "score": 75.0,
+      "max_score": 100.0,
+      "submitted_at": "2026-11-19T02:27:32+00:00",
+      "retest_of_attempt_id": "",
+      "items": [
+        {
+          "question_id": "seed_exam_2019_二_5",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 0,
+          "awarded_score": 0.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "seed_human_tf_lasso_l2",
+          "chapter_id": "ch02",
+          "kp_id": "kp.regularization.l1l2",
+          "correct": 1,
+          "awarded_score": 25.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "question_id": "seed_human_tf_overfit",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 25.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "question_id": "upq_6428a417b9_s2_q5",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 25.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        }
+      ]
+    },
+    {
+      "attempt_id": "attempt_1da4e3b4d5754de2",
+      "paper_id": "paper_5b350ad248494250",
+      "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+      "assessment_version_id": "av_b77f283d0cc4237eb6b99926",
+      "status": "submitted",
+      "grading_status": "graded",
+      "score": 75.0,
+      "max_score": 100.0,
+      "submitted_at": "2026-11-19T02:27:37+00:00",
+      "retest_of_attempt_id": "",
+      "items": [
+        {
+          "question_id": "seed_exam_2019_二_5",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 25.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "seed_human_tf_lasso_l2",
+          "chapter_id": "ch02",
+          "kp_id": "kp.regularization.l1l2",
+          "correct": 0,
+          "awarded_score": 0.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "question_id": "seed_human_tf_overfit",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 25.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "question_id": "upq_6428a417b9_s2_q5",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 25.0,
+          "max_score": 25.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        }
+      ]
+    },
+    {
+      "attempt_id": "attempt_fd2c632d136c40cc",
+      "paper_id": "paper_b40041e229084b98",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "assessment_version_id": "av_323c9c8a4e90e9691b4c69dd",
+      "status": "submitted",
+      "grading_status": "graded",
+      "score": 10.0,
+      "max_score": 10.0,
+      "submitted_at": "2026-11-19T02:34:47+00:00",
+      "retest_of_attempt_id": "attempt_fe1348e54d8543a6",
+      "items": [
+        {
+          "question_id": "acceptance_noanswer_20261116",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "aiq_003a8ba5fbbb4937",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "aiq_1930c82113ed40a2",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "aiq_22d4b78d47c24b3b",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "aiq_d3115e2330f44d9b",
+          "chapter_id": "ch06",
+          "kp_id": "kp.eval.bias_var",
+          "correct": 1,
+          "awarded_score": 2.0,
+          "max_score": 2.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        }
+      ]
+    },
+    {
+      "attempt_id": "attempt_19de8c85e41f4967",
+      "paper_id": "paper_d5f9018b2d234526",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "assessment_version_id": "av_faa98c94daa6752adc483e72",
+      "status": "submitted",
+      "grading_status": "graded",
+      "score": 50.0,
+      "max_score": 50.0,
+      "submitted_at": "2026-11-19T02:34:49+00:00",
+      "retest_of_attempt_id": "",
+      "items": [
+        {
+          "question_id": "extq_utexas_mt2_q4a",
+          "chapter_id": "ch03",
+          "kp_id": "kp.intro.hypothesis",
+          "correct": 1,
+          "awarded_score": 10.0,
+          "max_score": 10.0,
+          "scoring_status": "auto",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "question_id": "extq_utexas_mt2_q4b",
+          "chapter_id": "ch05",
+          "kp_id": "kp.svm.margin",
+          "correct": 1,
+          "awarded_score": 10.0,
+          "max_score": 10.0,
+          "scoring_status": "auto",
+          "authority_status": "paper_snapshot"
+        },
+        {
+          "question_id": "slq_56e61e7442_p1_1",
+          "chapter_id": "ch12",
+          "kp_id": "kp.theory.pac",
+          "correct": 1,
+          "awarded_score": 10.0,
+          "max_score": 10.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "slq_56e61e7442_p2_2",
+          "chapter_id": "ch12",
+          "kp_id": "kp.theory.pac",
+          "correct": 1,
+          "awarded_score": 10.0,
+          "max_score": 10.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        },
+        {
+          "question_id": "slq_56e61e7442_p3_3",
+          "chapter_id": "ch12",
+          "kp_id": "kp.theory.pac",
+          "correct": 1,
+          "awarded_score": 10.0,
+          "max_score": 10.0,
+          "scoring_status": "auto",
+          "authority_status": "ai_auto_checked"
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "job_id": "job_9d172ff8feaa457c",
+      "job_type": "diagnosis",
+      "status": "succeeded",
+      "stage": "succeeded",
+      "result_keys": [
+        "thread_id",
+        "job_id",
+        "user_id",
+        "graph",
+        "status",
+        "stages",
+        "outputs",
+        "errors",
+        "checkpoint_available"
+      ],
+      "stages": [
+        {
+          "node": "score_check",
+          "detail": {
+            "attempt_id": "attempt_fe1348e54d8543a6",
+            "status": "submitted",
+            "score_already_saved": 75.0,
+            "max_score": 100.0,
+            "note": "客观成绩在交卷时已确定性保存；模型失败不会丢失答卷"
+          }
+        },
+        {
+          "node": "question_diagnoses",
+          "detail": {
+            "count": 4
+          }
+        },
+        {
+          "node": "paper_diagnosis",
+          "detail": {
+            "status": "succeeded",
+            "kp_count": 2
+          }
+        },
+        {
+          "node": "history_diagnosis",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "recommend",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "update_plan",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "finalize",
+          "detail": {
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "job_id": "job_573fd31e7df346ea",
+      "job_type": "learning_retest",
+      "status": "succeeded",
+      "stage": "succeeded",
+      "result_keys": [
+        "thread_id",
+        "graph",
+        "status",
+        "stages",
+        "outputs",
+        "errors",
+        "checkpoint_available"
+      ],
+      "stages": [
+        {
+          "node": "diagnose",
+          "detail": {
+            "scope_count": 1
+          }
+        },
+        {
+          "node": "recommend_resources"
+        },
+        {
+          "node": "generate_retest_candidates",
+          "detail": {
+            "count": 0
+          }
+        },
+        {
+          "node": "validate_and_publish_retest",
+          "detail": {
+            "published": 1
+          }
+        }
+      ]
+    },
+    {
+      "job_id": "job_269b87ec73164cc1",
+      "job_type": "diagnosis",
+      "status": "succeeded",
+      "stage": "succeeded",
+      "result_keys": [
+        "thread_id",
+        "job_id",
+        "user_id",
+        "graph",
+        "status",
+        "stages",
+        "outputs",
+        "errors",
+        "checkpoint_available"
+      ],
+      "stages": [
+        {
+          "node": "score_check",
+          "detail": {
+            "attempt_id": "attempt_fd2c632d136c40cc",
+            "status": "submitted",
+            "score_already_saved": 10.0,
+            "max_score": 10.0,
+            "note": "客观成绩在交卷时已确定性保存；模型失败不会丢失答卷"
+          }
+        },
+        {
+          "node": "question_diagnoses",
+          "detail": {
+            "count": 5
+          }
+        },
+        {
+          "node": "paper_diagnosis",
+          "detail": {
+            "status": "succeeded",
+            "kp_count": 1
+          }
+        },
+        {
+          "node": "history_diagnosis",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "recommend",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "update_plan",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "finalize",
+          "detail": {
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "job_id": "job_544a2d568f5f4c67",
+      "job_type": "diagnosis",
+      "status": "succeeded",
+      "stage": "succeeded",
+      "result_keys": [
+        "thread_id",
+        "job_id",
+        "user_id",
+        "graph",
+        "status",
+        "stages",
+        "outputs",
+        "errors",
+        "checkpoint_available"
+      ],
+      "stages": [
+        {
+          "node": "score_check",
+          "detail": {
+            "attempt_id": "attempt_19de8c85e41f4967",
+            "status": "submitted",
+            "score_already_saved": 50.0,
+            "max_score": 50.0,
+            "note": "客观成绩在交卷时已确定性保存；模型失败不会丢失答卷"
+          }
+        },
+        {
+          "node": "question_diagnoses",
+          "detail": {
+            "count": 5
+          }
+        },
+        {
+          "node": "paper_diagnosis",
+          "detail": {
+            "status": "succeeded",
+            "kp_count": 3
+          }
+        },
+        {
+          "node": "history_diagnosis",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "recommend",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "update_plan",
+          "detail": {
+            "status": "succeeded"
+          }
+        },
+        {
+          "node": "finalize",
+          "detail": {
+            "errors": 0
+          }
+        }
+      ]
+    }
+  ],
+  "generation_run": {
+    "run_id": "run_737643d9fe5143e7",
+    "skill_name": "generate_questions",
+    "thread_id": "gen:17509e2bf5",
+    "status": "no_valid_candidates",
+    "engine": "model+deterministic_validation",
+    "model": "deepseek-chat",
+    "started_at": "2026-11-19T02:28:49+00:00",
+    "pipeline": [
+      {
+        "stage": "blueprint",
+        "status": "done",
+        "detail": {
+          "count": 5,
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ],
+          "question_types": [
+            "single_choice",
+            "multi_choice",
+            "true_false"
+          ]
+        }
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "done",
+        "detail": {
+          "chunks": 4,
+          "mode": "keyword",
+          "chunk_ids": [
+            "doc_6428a417b9bb36_u0001",
+            "doc_314b0bf1ff3468_q0007",
+            "doc_314b0bf1ff3468_q0008",
+            "doc_9b657c5718aca8_q0007"
+          ]
+        }
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "done",
+        "detail": {
+          "raw_count": 5,
+          "usage": {
+            "prompt_tokens": 1088,
+            "completion_tokens": 793,
+            "total_tokens": 1881
+          },
+          "usage_missing": false,
+          "model": "deepseek-flash",
+          "duration_ms": 3452
+        }
+      },
+      {
+        "stage": "structure_check",
+        "status": "done",
+        "detail": {
+          "valid": 5,
+          "rejected": [
+            {
+              "stem": "在偏差—方差理论中，若一个模型在训练集和测试集上的误差都很大，最可能反映该模型具有：",
+              "reason": "与题库重复 (相似度 1.00)"
+            },
+            {
+              "stem": "某模型在训练集上误差很小，但在测试集上误差明显增大，从偏差—方差理论看，这主要说明：",
+              "reason": "与题库重复 (相似度 0.87)"
+            },
+            {
+              "stem": "关于偏差—方差理论，下列说法正确的有：",
+              "reason": "与题库重复 (相似度 1.00)"
+            },
+            {
+              "stem": "在偏差—方差理论中，欠拟合对应高偏差。",
+              "reason": "与题库重复 (相似度 0.87)"
+            },
+            {
+              "stem": "在偏差—方差理论中，过拟合对应低方差。",
+              "reason": "与题库重复 (相似度 0.79)"
+            }
+          ]
+        }
+      },
+      {
+        "stage": "scope_check",
+        "status": "done",
+        "detail": {
+          "kept": 5,
+          "unconfirmed": 0,
+          "rejected": [],
+          "note": "按老师 PPT 范围表复判；判不清的进待确认，不发布"
+        }
+      },
+      {
+        "stage": "answer_verification",
+        "status": "done",
+        "detail": {
+          "checked": 5,
+          "numeric_items": 0
+        }
+      },
+      {
+        "stage": "dedupe",
+        "status": "done",
+        "detail": {
+          "kept": 0,
+          "total_rejected": 5
+        }
+      },
+      {
+        "stage": "review_or_publish",
+        "status": "queued",
+        "detail": {
+          "created_candidates": 0,
+          "published": 0,
+          "note": "候选写入题库但 active=False，需审核后发布"
+        }
+      }
+    ],
+    "rejected": [
+      {
+        "stem": "在偏差—方差理论中，若一个模型在训练集和测试集上的误差都很大，最可能反映该模型具有：",
+        "reason": "与题库重复 (相似度 1.00)"
+      },
+      {
+        "stem": "某模型在训练集上误差很小，但在测试集上误差明显增大，从偏差—方差理论看，这主要说明：",
+        "reason": "与题库重复 (相似度 0.87)"
+      },
+      {
+        "stem": "关于偏差—方差理论，下列说法正确的有：",
+        "reason": "与题库重复 (相似度 1.00)"
+      },
+      {
+        "stem": "在偏差—方差理论中，欠拟合对应高偏差。",
+        "reason": "与题库重复 (相似度 0.87)"
+      },
+      {
+        "stem": "在偏差—方差理论中，过拟合对应低方差。",
+        "reason": "与题库重复 (相似度 0.79)"
+      }
+    ]
+  },
+  "daily_skill_runs": [
+    {
+      "skill_name": "build_study_plan",
+      "status": "succeeded",
+      "engine": "deterministic",
+      "count": 4
+    },
+    {
+      "skill_name": "diagnose_classroom",
+      "status": "succeeded",
+      "engine": "deterministic",
+      "count": 7
+    },
+    {
+      "skill_name": "diagnose_history",
+      "status": "succeeded",
+      "engine": "deterministic",
+      "count": 4
+    },
+    {
+      "skill_name": "diagnose_paper",
+      "status": "succeeded",
+      "engine": "deterministic+model",
+      "count": 4
+    },
+    {
+      "skill_name": "diagnose_question",
+      "status": "succeeded",
+      "engine": "deterministic+model",
+      "count": 18
+    },
+    {
+      "skill_name": "generate_questions",
+      "status": "no_valid_candidates",
+      "engine": "model+deterministic_validation",
+      "count": 1
+    },
+    {
+      "skill_name": "recommend_resources",
+      "status": "succeeded",
+      "engine": "deterministic+curated_retrieval",
+      "count": 8
+    },
+    {
+      "skill_name": "verify_learning",
+      "status": "succeeded",
+      "engine": "deterministic",
+      "count": 1
+    }
+  ],
+  "cycle": {
+    "cycle_id": "retestcycle_217f711c16574a0c",
+    "source_attempt_id": "attempt_fe1348e54d8543a6",
+    "retest_attempt_id": "attempt_fd2c632d136c40cc",
+    "workflow_run_id": "teacher-job:job_573fd31e7df346ea",
+    "kp_ids": "[\"kp.eval.bias_var\"]",
+    "retest_kind": "practice",
+    "rule_version": "learning-loop-v3",
+    "source_counts": "{\"ai_generated\": 0, \"bank_selected\": 1, \"original_reused\": 4}"
+  }
+}

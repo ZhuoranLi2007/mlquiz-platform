@@ -1,0 +1,191 @@
+{
+  "job_id": "job_d0fc4d78486548da",
+  "status": "succeeded",
+  "stage": "succeeded",
+  "result": {
+    "thread_id": "gen:9e0ab2d850",
+    "job_id": "job_d0fc4d78486548da",
+    "graph": "generation_graph",
+    "status": "succeeded",
+    "stages": [
+      {
+        "node": "blueprint_check",
+        "detail": {
+          "count": 3,
+          "kp_ids": [
+            "kp.eval.bias_var"
+          ]
+        }
+      },
+      {
+        "node": "retrieve",
+        "detail": {
+          "hits": 12,
+          "mode": "keyword",
+          "chunk_ids": [
+            "doc_17d35390e5b478_u0017",
+            "doc_314b0bf1ff3468_u0081",
+            "doc_d3ea9d865a587e_u0066",
+            "doc_d3ea9d865a587e_u0079",
+            "doc_17d35390e5b478_u0016"
+          ]
+        }
+      },
+      {
+        "node": "generate",
+        "detail": {
+          "status": "succeeded",
+          "engine": "model+deterministic_validation"
+        }
+      },
+      {
+        "node": "finalize",
+        "detail": {
+          "candidates": 3
+        }
+      }
+    ],
+    "result": {
+      "candidates": [
+        {
+          "question_id": "aiq_e3596c3939074035",
+          "stem": "某农业试验站用同一模型对同一块试验田的产量进行多次独立预测，得到预测值（单位：kg）：$100, 102, 98, 104, 96$。该田块的真实产量为 $10",
+          "question_type": "single_choice",
+          "answer_payload": {
+            "key": "A"
+          },
+          "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+          "scope_class": "in_scope",
+          "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+          "review_status": "pending",
+          "active": false
+        },
+        {
+          "question_id": "aiq_f64f6d22d61d4b60",
+          "stem": "某温度传感器在相同环境条件下被同一校准模型重复预测 $4$ 次，预测温度（单位：℃）为 $20, 22, 24, 26$。环境真实温度为 $25$ ℃，传感器读",
+          "question_type": "single_choice",
+          "answer_payload": {
+            "key": "A"
+          },
+          "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+          "scope_class": "in_scope",
+          "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+          "review_status": "pending",
+          "active": false
+        },
+        {
+          "question_id": "aiq_7f802d7c07044a72",
+          "stem": "某房价预测模型对同一套住房重复给出 $3$ 次预测（单位：万元）：$200, 210, 220$。该住房真实成交价为 $215$ 万元，市场交易本身含不可约噪声",
+          "question_type": "single_choice",
+          "answer_payload": {
+            "key": "A"
+          },
+          "verification_note": "结构检查通过；答案仍为 AI 候选，需人工/独立计算核验",
+          "scope_class": "in_scope",
+          "scope_basis": "课件支持深度=计算，变式题干体现的层级=识记（覆盖=covered）",
+          "review_status": "pending",
+          "active": false
+        }
+      ],
+      "pipeline": [
+        {
+          "stage": "blueprint",
+          "status": "done",
+          "detail": {
+            "count": 3,
+            "kp_ids": [
+              "kp.eval.bias_var"
+            ],
+            "question_types": [
+              "single_choice"
+            ]
+          }
+        },
+        {
+          "stage": "retrieve_evidence",
+          "status": "done",
+          "detail": {
+            "chunks": 4,
+            "mode": "keyword",
+            "chunk_ids": [
+              "doc_6428a417b9bb36_u0001",
+              "doc_314b0bf1ff3468_q0007",
+              "doc_314b0bf1ff3468_q0008",
+              "doc_9b657c5718aca8_q0007"
+            ]
+          }
+        },
+        {
+          "stage": "generate_candidates",
+          "status": "done",
+          "detail": {
+            "raw_count": 3,
+            "usage": {
+              "prompt_tokens": 1139,
+              "completion_tokens": 1662,
+              "total_tokens": 2801
+            },
+            "usage_missing": false,
+            "model": "deepseek-flash",
+            "duration_ms": 7862
+          }
+        },
+        {
+          "stage": "structure_check",
+          "status": "done",
+          "detail": {
+            "valid": 3,
+            "rejected": []
+          }
+        },
+        {
+          "stage": "scope_check",
+          "status": "done",
+          "detail": {
+            "kept": 3,
+            "unconfirmed": 0,
+            "rejected": [],
+            "note": "按老师 PPT 范围表复判；判不清的进待确认，不发布"
+          }
+        },
+        {
+          "stage": "answer_verification",
+          "status": "done",
+          "detail": {
+            "checked": 3,
+            "numeric_items": 0
+          }
+        },
+        {
+          "stage": "dedupe",
+          "status": "done",
+          "detail": {
+            "kept": 3,
+            "total_rejected": 0
+          }
+        },
+        {
+          "stage": "review_or_publish",
+          "status": "queued",
+          "detail": {
+            "created_candidates": 3,
+            "published": 0,
+            "note": "候选写入题库但 active=False，需审核后发布"
+          }
+        }
+      ],
+      "rejected": [],
+      "message": "已生成候选并完成结构/答案/去重检查；未自动发布，未标为已核验。"
+    },
+    "engine": "model+deterministic_validation",
+    "run_id": "run_c3fa24f08bc44725",
+    "errors": [],
+    "checkpoint_available": true
+  },
+  "error": "",
+  "progress": {
+    "stage": "run_generation_graph",
+    "updated_at": "2026-11-19T12:13:46+00:00",
+    "detail": {}
+  }
+}

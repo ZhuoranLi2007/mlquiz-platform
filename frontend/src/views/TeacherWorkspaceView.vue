@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import AiQuestionWorkbench from "../components/AiQuestionWorkbench.vue"
 import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { api, runTeacherJob } from '../api/client'
+import { questionAnswerText, questionRubricText } from '../utils/presentation'
 import MathText from '../components/MathText.vue'
 import MasonryGrid from '../components/MasonryGrid.vue'
 import { friendlyError, questionTypeLabel } from '../utils/presentation'
@@ -23,6 +25,7 @@ const drafts = ref<any[]>(initialCache?.drafts || [])
 const selectedIds = ref<string[]>([])
 const detail = ref<Question | null>(null)
 const detailOpen = ref(false)
+const aiOpen = ref(false)
 const mappedChapter = ref('')
 const savingChapter = ref(false)
 watch(detail, value => { mappedChapter.value=value?.chapter_id || '' })
@@ -274,23 +277,8 @@ function toggle(question: Question) {
     : [...selectedIds.value, question.question_id]
 }
 function showDetail(question: Question) { detail.value = question; detailOpen.value = true }
-function answerText(question: Question | null) {
-  const answer = question?.answer_payload || {}
-  const type = effectiveType(question || {})
-  if (type === 'single_choice') return answer.key ? `选项 ${answer.key}` : '未提供可用答案'
-  if (type === 'multi_choice') return Array.isArray(answer.keys) ? `选项 ${answer.keys.join('、')}` : '未提供可用答案'
-  if (type === 'true_false') return typeof answer.value === 'boolean' ? (answer.value ? '正确' : '错误') : '未提供可用答案'
-  if (answer.numeric !== undefined || answer.value !== undefined) return String(answer.numeric ?? answer.value)
-  if (Array.isArray(answer.values)) return answer.values.join('；')
-  return answer.text || answer.reference || '未提供可用答案'
-}
-function rubricText(question: Question | null) {
-  const rubric = question?.rubric || {}
-  if (typeof rubric === 'string') return rubric
-  const points = rubric.points || rubric.items || rubric.criteria
-  if (Array.isArray(points)) return points.map((item: any) => item.text || item.description || item).join('；')
-  return rubric.note || rubric.description || '按固定答案自动评分'
-}
+const answerText = questionAnswerText
+const rubricText = questionRubricText
 function duplicateLabel(question: Question) {
   const kind = question.duplicate?.kind
   return kind === 'exact' ? '发现重复题' : kind === 'family' ? '同题族近似题'
@@ -447,7 +435,7 @@ onBeforeUnmount(() => {
         <el-input v-model="filters.keyword" clearable class="keyword-search" placeholder="搜索题干、知识点或章节">
           <template #prefix>⌕</template>
         </el-input>
-        <el-button class="compose-button" type="primary" @click="openCompose('ai')">开始组卷</el-button>
+        <el-button plain @click="aiOpen=true">AI出新题</el-button><el-button class="compose-button" type="primary" @click="openCompose('ai')">开始组卷</el-button>
       </div>
       <div class="filter-secondary">
         <el-button link class="advanced-trigger" @click="advancedOpen = !advancedOpen">
@@ -543,7 +531,8 @@ onBeforeUnmount(() => {
     </template>
     <el-empty v-else :description="hasActiveFilters ? '没有符合当前组合条件的题目，请清空部分筛选条件' : '题库中暂时没有题目'" />
 
-    <el-dialog v-model="detailOpen" title="完整题目" width="min(820px, 94vw)" top="5vh">
+    <AiQuestionWorkbench v-model="aiOpen" :metadata="metadata" @changed="load" />
+    <el-dialog v-model="detailOpen" title="题目详情" width="min(860px, 94vw)" top="4vh">
       <div v-if="detail" class="detail-view">
         <div class="tag-row"><span>{{ questionTypeLabel(effectiveType(detail)) }}</span><span>{{ kpName(detail.main_kp_id) }}</span><span>{{ detail.source_category_label }}</span></div>
         <div class="detail-stem"><MathText :text="stemOf(detail)" /></div>
@@ -554,7 +543,7 @@ onBeforeUnmount(() => {
         <div v-if="detail.options?.length" class="detail-options">
           <div v-for="(option, index) in detail.options" :key="index"><b>{{ optionKey(option, index) }}</b><MathText :text="optionText(option)" /></div>
         </div>
-        <div class="workbench-toolbar"><el-select v-model="mappedChapter" aria-label="调整章节" placeholder="选择章节"><el-option v-for="chapter in metadata.chapters" :key="chapter.chapter_id" :label="chapter.value" :value="chapter.chapter_id" :disabled="!chapter.chapter_id" /></el-select><el-button :loading="savingChapter" :disabled="!mappedChapter" @click="saveChapter">保存章节</el-button></div><div class="answer-box"><b>标准答案</b><p>{{ answerText(detail) }}</p><b>解析</b><div><MathText :text="detail.explanation || '暂无解析'" /></div><b>评分规则</b><p>{{ rubricText(detail) }}</p></div>
+        <div class="workbench-toolbar"><el-select v-model="mappedChapter" aria-label="调整章节" placeholder="选择章节"><el-option v-for="chapter in metadata.chapters" :key="chapter.chapter_id" :label="chapter.value" :value="chapter.chapter_id" :disabled="!chapter.chapter_id" /></el-select><el-button :loading="savingChapter" :disabled="!mappedChapter" @click="saveChapter">保存章节</el-button></div><div class="answer-box"><b>参考答案</b><div><MathText :text="answerText(detail)" /></div><details open><summary>解析</summary><MathText :text="detail.explanation || '解析待补充'" /></details><details><summary>评分要点</summary><MathText :text="rubricText(detail)" /></details><details><summary>来源</summary><p>{{ sourceText(detail) }}</p></details></div>
         <p v-if="duplicateLabel(detail)" class="duplicate-note">{{ duplicateLabel(detail) }}，相似度 {{ Math.round((detail.duplicate.similarity || 0) * 100) }}%。组卷时系统会避免同题族重复进入。</p>
       </div>
       <template #footer><el-button @click="detailOpen = false">关闭</el-button><el-button v-if="detail?.usable_for_quiz" type="primary" @click="toggle(detail!); detailOpen=false">{{ selectedIds.includes(detail?.question_id) ? '移出组卷' : '加入组卷' }}</el-button></template>
@@ -1392,4 +1381,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .workspace-page.workbench-page{display:flex;gap:12px}.page-head,.filter-panel,.bank-summary,.selection-bar{margin-top:0;margin-bottom:0}.filter-panel{padding:12px 16px}.page-head h1,.page-head h2{font-size:26px}
+</style>
+
+<style scoped>
+.detail-view{max-height:calc(88dvh - 140px);overflow:auto;padding-right:8px;display:grid;gap:14px;font-family:"Noto Sans SC","Microsoft YaHei UI","Microsoft YaHei",sans-serif;color:#334155;font-size:14px;line-height:1.7}.detail-view .detail-stem{font-size:16px;line-height:1.7;font-weight:600;margin:0;color:#1f2937}.detail-view .detail-options{background:#fff;border:0;border-radius:0;padding:0;gap:10px;color:#334155}.detail-view .detail-options b{color:#334155}.detail-view .answer-box{display:grid;gap:10px;border-left:0;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;background:#fff;padding:14px 0;color:#334155}.detail-view .answer-box b{color:#1f2937}.detail-view .answer-box details{border-top:1px solid #e2e8f0;padding-top:10px;line-height:1.75;font-size:14px;color:#334155}.detail-view .answer-box summary{cursor:pointer;font-weight:600;color:#1f2937}.detail-view .answer-box details[open] summary{margin-bottom:8px}.detail-view .workbench-toolbar{padding-top:4px}.detail-view .duplicate-note{font-size:13px;margin:0;padding:8px 10px;color:#64748b}
 </style>

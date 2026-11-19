@@ -39,7 +39,8 @@ QUESTION_GEN_SYSTEM = """你是机器学习课程出题助手。只依据【课�
    {"question_type":"single_choice|multi_choice|true_false|numeric|short_answer",
     "stem":"...", "options":[{"key":"A","text":"..."}],
     "answer_payload":{...}, "kp_id":"...", "cognitive_level":"...",
-    "difficulty":"...", "source_chunk_ids":[...], "calculation":"数值题写独立计算式"}
+    "difficulty":"...", "source_chunk_ids":[...], "calculation":"数值题写独立计算式",
+    "explanation":"说明正确答案及干扰项依据", "rubric":{"points":[{"point":"评分要点","score":2}]}}
 2. 题干/选项不得包含答案或解析；公式用 LaTeX $...$ 或 $$...$$。
 3. 单选答案用 {"key":"B"}；多选 {"keys":["A","C"],"partial_rule":"proportional_no_wrong"}；
    判断 {"value":true}；数值 {"value":1.25,"tol":0.01,"unit":"","rounding":2}。

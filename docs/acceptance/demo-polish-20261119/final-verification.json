@@ -1,0 +1,15 @@
+{
+  "source_database_sha256": true,
+  "original_acceptance_database_sha256": true,
+  "all_38_screenshots_cataloged": true,
+  "resource_preview_and_external_content": true,
+  "three_ai_candidates_approved": true,
+  "stu001_real_retest": true,
+  "stu002_real_retest": true,
+  "ai_paper_draft_exists": true,
+  "teacher_three_scopes": true,
+  "frontend_45_passed": true,
+  "backend_218_passed": true,
+  "typecheck_passed": true,
+  "frontend_build_passed": true
+}

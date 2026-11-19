@@ -1,0 +1,63 @@
+[
+  {
+    "scope": "student_attempt",
+    "student": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+    "retest_mentions": [
+      "历次复测",
+      "本轮复测通过",
+      "知识点达标 1/2",
+      "再次安排复测"
+    ],
+    "geometry": {
+      "width": 1366,
+      "height": 768,
+      "documentWidth": 1366,
+      "documentHeight": 768
+    }
+  },
+  {
+    "scope": "student_attempt",
+    "student": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+    "retest_mentions": [
+      "历次复测",
+      "本轮复测通过",
+      "知识点达标 0/2",
+      "再次安排复测"
+    ],
+    "geometry": {
+      "width": 1366,
+      "height": 768,
+      "documentWidth": 1366,
+      "documentHeight": 768
+    }
+  },
+  {
+    "scope": "student_history",
+    "student": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+    "retest_mentions": [
+      "生成并发布复测",
+      "复测进度",
+      "安排复测"
+    ],
+    "geometry": {
+      "width": 1366,
+      "height": 768,
+      "documentWidth": 1366,
+      "documentHeight": 768
+    }
+  },
+  {
+    "scope": "class_assessment",
+    "student": "",
+    "retest_mentions": [
+      "复测进度",
+      "安排复测"
+    ],
+    "geometry": {
+      "width": 1366,
+      "height": 768,
+      "documentWidth": 1366,
+      "documentHeight": 768
+    }
+  }
+]

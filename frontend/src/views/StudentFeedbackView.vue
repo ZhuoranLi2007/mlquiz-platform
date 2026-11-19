@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import RetestRoundList from '../components/RetestRoundList.vue'
 import ResponsivePaneTabs from "../components/ResponsivePaneTabs.vue"
 import { loopTime } from '../utils/learningLoop'
 import { computed, nextTick, onMounted, ref } from 'vue'
@@ -229,20 +230,8 @@ onMounted(load)
         </div>
       </section>
     </template>
-    <el-drawer v-model="showRetests" title="当前原卷的复测记录" size="min(920px, 96vw)">
-      <template v-if="detail">
-        <p>{{ detail.assessment.title }} · 原卷答对比例 {{ percent(stats.accuracy) }}</p>
-        <p class="scope-note">整轮通过线 {{ percent(detail.retest_threshold) }}；知识点是否仍有错题，请查看知识点详情。未覆盖和待评分不算通过。</p>
-        <el-empty v-if="!retests.length" description="当前原卷尚未安排复测，可自主开始" />
-        <details v-for="(round,index) in retests" :key="round.round" :open="index===retests.length-1" class="history-round">
-          <summary>第 {{ round.round }} 轮 · {{ round.submitted_at ? (round.result_determinable ? `${round.correct_count}/${round.question_count} · ${percent(round.accuracy)}` : '等待评分') : '等待作答' }}</summary>
-          <p>{{ round.status==='passed' ? '本轮达到发布时设定的通过线。' : round.status==='not_passed' ? '本轮未达到设定的通过线。' : '完成作答并取得有效评分后更新结果。' }}</p>
-          <p v-if="round.untested_kp_ids?.length">本轮仍有未覆盖知识点，不能据此判断已掌握。</p>
-          <AttemptEvidenceTable v-if="round.wrong_items?.length" :result="{items: round.wrong_items}" :id-prefix="`round-${round.round}`" heading="本轮错题" />
-          <el-button v-if="round.release_id || round.attempt_id || round.retest_attempt_id" :loading="opening===round.release_id" @click="openRetest(round)">{{ round.submitted_at ? '查看本轮答卷' : '打开本轮复测' }}</el-button>
-        </details>
-      </template>
-      <template #footer><el-button @click="showRetests=false">关闭记录</el-button></template>
+    <el-drawer v-model="showRetests" title="复测记录" size="min(520px, 96vw)">
+      <template v-if="detail"><p class="history-assessment">{{ detail.assessment.title }}</p><RetestRoundList :rounds="retests" @open="openRetest" /></template>
     </el-drawer>
     <template #footer><StudentRetestControl :key="selectedAttemptId" :attempt-id="selectedAttemptId" :summary="detail?.learning_loop" @updated="load" /></template>
   </WorkbenchPage>
@@ -261,3 +250,5 @@ button:focus-visible,summary:focus-visible{outline:2px solid #315fc0;outline-off
 @media(max-width:650px){.diagnosis-layout{grid-template-columns:1fr;grid-template-rows:100px minmax(0,1fr);gap:8px}.overview,.concept-detail{padding:12px}.workbench-metric{height:auto;min-height:84px}.feedback-heading h1{font-size:24px}.retest-action{flex-wrap:wrap}}
 .detail-tabs{display:flex;gap:5px;padding-top:8px;flex-wrap:wrap;flex:none}.detail-tabs button{border:0;border-radius:6px;background:#f0f4fa;color:#4a6382;padding:6px 10px;cursor:pointer}.detail-tabs button[aria-pressed=true]{background:#e0ebff;color:#245db4}.evidence-pass{color:#148457!important}
 </style>
+
+<style scoped>.history-assessment{margin:0 0 18px;color:#6d839f;line-height:1.6;font-size:15px}.student-feedback-page :deep(.resource-notes){display:none}</style>

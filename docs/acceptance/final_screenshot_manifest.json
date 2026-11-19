@@ -1,0 +1,530 @@
+[
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A01_ai_configuration.png",
+    "title": "知识点、题型、数量及出题要求",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "报告正文",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "ce7248aaa64bbda52c94aa616efe5107e745cf186b359c33fefba7c4f041b954"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A02_ai_running.png",
+    "title": "后台生成中",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "ed148ee3f0dfe1f700983d1172bb06b526a1b6ac2f90c6d2ad120f5e5bc9fe6a"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A03_ai_candidates.png",
+    "title": "原始候选与解析，供展示审核必要性",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "报告正文、答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "b813d375f8f323abc69626925ef60913ee4cd044a95b625c98c581460610ff2e"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A04_candidate_revision.png",
+    "title": "教师修订错误答案",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "9e487572f44115b978e482294177168e65bb65d00da1094ed05a011b3ea7c6a9"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A05_candidate_review_sources.png",
+    "title": "审核时查看评分要点和来源",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "f1797f8ff5d9f034e7d626312108f347eb9dc4f3d2c7189d377aa77b782f75ba"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A06_ai_reviewed_results.png",
+    "title": "3 道题审核入库",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "03aa865922cad0504ba543b628691a6efef31d67e5337ac61516543a3a2edaad"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A07_ai_paper_preview.png",
+    "title": "已审核题进入组卷草稿",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "报告正文",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "1784823ea4e747ec5e21ebb55d7bc74a8bf8120e9aa5b2e9ab5df829a1908cec"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/A08_approved_question_detail.png",
+    "title": "修订后完整题干、答案和解析",
+    "role": "教师",
+    "group": "AI出题",
+    "use": "报告正文",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "3b3983d032f40952ed2dc5bf50a42e81052440a229049d696a95a68ed18e0233"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/R01_teacher_online.png",
+    "title": "教师在线资源列表；封面恢复后重拍",
+    "role": "教师",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "adf2d33782b4fe882a22cc8ac1481bc326925d9a70aaf09623a0173485214b48"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/R02_teacher_resource_preview.png",
+    "title": "教师预览真实 L1/L2 课件页",
+    "role": "教师",
+    "group": "资源预览",
+    "use": "报告正文、答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "d0b9bd48ea392eb301f31f9cdcdb3b15fd9929a01d9a5f0c9eee2a1f44f42e84"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/R03_student_online.png",
+    "title": "学生在线资源列表；封面恢复后重拍",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "2340cb7fd6da97079814ee2fd56fe2ed9bf1373531228e97d2a2da818c027953"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/R04_recommended_resource_preview.png",
+    "title": "从薄弱点推荐打开站内预览",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "报告正文",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "13f236b4bb0eae1a370012cd0cdd6da766be03fe1c673bcbe8785d30c79b85ef"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/R05_course_page_reader.png",
+    "title": "点击课程原页后的阅读器",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "5d8a4732a81a4b7eaeccd2e7f85b7cca918b14c2e2e745d0093e2724daf64d5d"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/R06_external_resource_open.png",
+    "title": "scikit-learn 原站正文真实打开",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "fcb03a05d22dc2095f3f1171ca30a5c21cc06ae897f83124a0eb71961fc7d0b7"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_01_before.png",
+    "title": "A 的原卷弱点与旧“练习完成”",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "8ab36d0a7a42facc03846b4c461a6090fe00ce516a2c38b6dd1bf225e8a3be4f"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_02_preparing.png",
+    "title": "A 的新题准备中",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "52a53baa8371e4084902a20fecbe9e5f6fbed09f37488e2c06ba325430be975b"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_03_new_questions.png",
+    "title": "A 的复测题已出现",
+    "role": "学生",
+    "group": "复测",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "c6ecb38484d3d6a565003e103c1057dee02b7c8ff28272ad72e27e863acdd0f9"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_04_answered.png",
+    "title": "A 作答 5/5",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "42c414be12b3c52f40938eb1c517fc135f747bcffe9e228cfddfc2fc9209704b"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_05_submit_confirmation.png",
+    "title": "A 交卷确认",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "3810cc2bd701c36efc60d68c8600ac4e42975054809e8c0c09487fb2a9d2e6cf"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_06_score.png",
+    "title": "A 10/10 与本轮通过",
+    "role": "学生",
+    "group": "复测",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "533fc7e179ef63b09e1652be092fcce526a5d0f1fb7cc3756a900561e7ea9b46"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_07_feedback_updated.png",
+    "title": "A 知识点达标、薄弱点归零、仍可再次复测",
+    "role": "学生",
+    "group": "复测",
+    "use": "报告正文",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "19a775027c1175465a8859be0c83cfb7630f0a524f3f933a6a40d4bfe26f2f38"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_08_retest_history.png",
+    "title": "旧练习与新正式轮次并列",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "b74f1426b0938e609619b067826f3477eb7daac6d46d5aab43703690fdc76457"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_01_before.png",
+    "title": "B 的复测前反馈",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "b5642bb7a536bd7f654f4661f76229d1b7a640b6b32155a374f21da241ebe06d"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_02_preparing.png",
+    "title": "B 的新题准备中",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "a414bc4c003ed160d7486ba98bbcb1e94b66955a646b5172a633b2a98e5956c8"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_03_new_questions.png",
+    "title": "B 的复测题",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "2bed01715419e71bdec1b8b716ae2877004a4454e470055633b493df10948d7f"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_04_answered.png",
+    "title": "B 作答 5/5",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "b55b20bd0695bd4667ce1c587ba196ba2baabdf4463f7db4c21ed0dd69b26c15"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_05_submit_confirmation.png",
+    "title": "B 交卷确认",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "3f943eef5880862996c5a0cb654f9e33afed7411a4c335b5fb628b92082d441b"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_06_score.png",
+    "title": "B 8/10 与整轮通过",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "5da84886545823a90d6692bab689d321c3308f06e3f1c24ee559351f81ca8f2f"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_07_feedback_updated.png",
+    "title": "B 的知识点仍需加强、资料与入口仍在",
+    "role": "学生",
+    "group": "复测",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "a4913d1700833dc2b41f7ca3d40ebffb10ba7f255c8d5c09d450235e05e67ddf"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/B_stu002_08_retest_history.png",
+    "title": "B 的轮次记录",
+    "role": "学生",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "f47183a492d6bb1af861caa9e7fb39c25e1163df4c90024d76081c3a9f55eab5"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T21_student_a_retest.png",
+    "title": "A 单人单卷诊断",
+    "role": "教师",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "e4b6cfb15d884be9a2b69d6e7f9ad54fded73564a4ed64000382fcf331efed60"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T21_student_a_retest_progress.png",
+    "title": "A 的复测证据卡",
+    "role": "教师",
+    "group": "复测",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "94518efb6d2cb32867b6dc1490fa9498927156fd29f57ea611979a19047a6fad"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T22_student_b_retest.png",
+    "title": "B 单人单卷诊断",
+    "role": "教师",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "c3fecc9200c6208a188e571f24c340b2ce4144724d31166eceb231788e19a4f1"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T22_student_b_retest_progress.png",
+    "title": "B 的复测证据卡",
+    "role": "教师",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "3d52f6dae075a231c1eb4fdd6f44d6876d192c4a5e0842d48f1d11a14dff157f"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T23_student_history_retest.png",
+    "title": "单人多卷诊断",
+    "role": "教师",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "88dbe0046c4b7b58f01b507fa7d4370181066fee1c21d3c62c897a23da4e5371"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T23_student_history_retest_progress.png",
+    "title": "多卷复测按原卷分列",
+    "role": "教师",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "427fa9fb8b1b3429980777a41e375633d32c6f990edd80ba9a3a1e22f98bbc02"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T24_class_retest.png",
+    "title": "多人单卷诊断",
+    "role": "教师",
+    "group": "复测",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "1d5db551966b2fd900bd0ee307f2cc727daa97fb0327db65d5fee7a784a5e79a"
+  },
+  {
+    "file": "docs/acceptance/demo-polish-20261119/screenshots/T24_class_retest_progress.png",
+    "title": "同卷双学生的不同知识点结论",
+    "role": "教师",
+    "group": "复测",
+    "use": "报告正文、答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "4182469ff91f2a5266490b483d6956779b828bcf08ba44e782cd0d14db95dc15"
+  },
+  {
+    "file": "docs/acceptance/cover-restore-20261119/R01_teacher_online.png",
+    "title": "教师在线资源列表：真实视频封面",
+    "role": "教师",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "adf2d33782b4fe882a22cc8ac1481bc326925d9a70aaf09623a0173485214b48"
+  },
+  {
+    "file": "docs/acceptance/cover-restore-20261119/R01_teacher_online_video_preview.png",
+    "title": "教师在线视频封面和课程原页预览",
+    "role": "教师",
+    "group": "资源预览",
+    "use": "报告正文",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "365fa60c1ca057ee184c18996911e54c86f4021e317b1bf61d935bd0d558954a"
+  },
+  {
+    "file": "docs/acceptance/cover-restore-20261119/R01_teacher_online_blue_fallback.png",
+    "title": "教师端无封面资源的蓝色占位",
+    "role": "教师",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "e743fdb7a16e720e90f2729f4a9eb9bc95769e769e1f73fce84eaebd702e91d6"
+  },
+  {
+    "file": "docs/acceptance/cover-restore-20261119/R03_student_online.png",
+    "title": "学生在线资源列表：真实视频封面",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "2340cb7fd6da97079814ee2fd56fe2ed9bf1373531228e97d2a2da818c027953"
+  },
+  {
+    "file": "docs/acceptance/cover-restore-20261119/R03_student_online_video_preview.png",
+    "title": "学生在线视频封面和课程原页预览",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "答辩PPT",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "8e2f990cf7d75c38dda42071a68bcba8954f552926f1bf464f9c15bd20135fc5"
+  },
+  {
+    "file": "docs/acceptance/cover-restore-20261119/R03_student_online_blue_fallback.png",
+    "title": "学生端无封面资源的蓝色占位",
+    "role": "学生",
+    "group": "资源预览",
+    "use": "备用",
+    "size": [
+      1366,
+      768
+    ],
+    "sha256": "d5eb80d2e5855abdd078c30f45ed0f9eea5997c660607bbf2c57d0bc4118d0f8"
+  }
+]

@@ -1,0 +1,409 @@
+{
+  "account": "stu001",
+  "source_attempt_id": "attempt_fe1348e54d8543a6",
+  "attempt_id": "attempt_bb7f13bb13cd4ece",
+  "answers": [
+    {
+      "question_id": "aiq_1d467c73eb514327",
+      "selected": "B",
+      "reference": "B"
+    },
+    {
+      "question_id": "aiq_7f802d7c07044a72",
+      "selected": "A",
+      "reference": "A"
+    },
+    {
+      "question_id": "slq_62cc358de7_p12_4",
+      "selected": "B",
+      "reference": "B"
+    },
+    {
+      "question_id": "aiq_24e7ba252064405e",
+      "selected": "B",
+      "reference": "B"
+    },
+    {
+      "question_id": "aiq_e3596c3939074035",
+      "selected": "A",
+      "reference": "A"
+    }
+  ],
+  "attempt_database": {
+    "attempt_id": "attempt_bb7f13bb13cd4ece",
+    "mode": "retest",
+    "status": "submitted",
+    "score": 10.0,
+    "max_score": 10.0,
+    "grading_status": "graded",
+    "manual_pending_count": 0,
+    "retest_of_attempt_id": "attempt_fe1348e54d8543a6"
+  },
+  "state": {
+    "rule_version": "learning-loop-v3",
+    "task_state": "ready",
+    "round_result": {
+      "cycle_id": "retestcycle_806c76c81e87410e",
+      "round": 2,
+      "status": "passed",
+      "release_id": "",
+      "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+      "accuracy": 1.0,
+      "correct_count": 5,
+      "question_count": 5,
+      "completed_at": "2026-11-19T13:39:35+00:00",
+      "published_at": "2026-11-19T13:38:40+00:00",
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "retest_kind": "formal"
+    },
+    "last_passed": {
+      "cycle_id": "retestcycle_806c76c81e87410e",
+      "round": 2,
+      "status": "passed",
+      "release_id": "",
+      "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+      "accuracy": 1.0,
+      "correct_count": 5,
+      "question_count": 5,
+      "completed_at": "2026-11-19T13:39:35+00:00",
+      "published_at": "2026-11-19T13:38:40+00:00",
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "retest_kind": "formal"
+    },
+    "latest_task": {
+      "cycle_id": "retestcycle_806c76c81e87410e",
+      "round": 2,
+      "status": "passed",
+      "release_id": "",
+      "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+      "accuracy": 1.0,
+      "correct_count": 5,
+      "question_count": 5,
+      "completed_at": "2026-11-19T13:39:35+00:00",
+      "published_at": "2026-11-19T13:38:40+00:00",
+      "source_counts": {
+        "ai_generated": 2,
+        "bank_selected": 3,
+        "original_reused": 0
+      },
+      "retest_kind": "formal"
+    },
+    "concept_results": [
+      {
+        "kp_id": "kp.eval.bias_var",
+        "state": "achieved",
+        "achieved_at": "2026-11-19T13:39:35+00:00",
+        "confirmed_at": "",
+        "due_at": "2026-11-20T13:39:35+00:00",
+        "history": [
+          {
+            "kp_id": "kp.eval.bias_var",
+            "cycle_id": "retestcycle_217f711c16574a0c",
+            "round": 1,
+            "state": "insufficient",
+            "correct_count": 5,
+            "question_count": 5,
+            "scored_count": 5,
+            "independent": false,
+            "distinct_families": 5,
+            "distinct_angles": 4,
+            "evidence_question_ids": [
+              "aiq_d3115e2330f44d9b",
+              "acceptance_noanswer_20261116",
+              "aiq_003a8ba5fbbb4937",
+              "aiq_1930c82113ed40a2",
+              "aiq_22d4b78d47c24b3b"
+            ],
+            "submitted_at": "2026-11-19T02:34:47+00:00",
+            "started_at": "2026-11-19T02:28:53+00:00",
+            "completed_at": "2026-11-19T02:34:47+00:00",
+            "kind": "practice"
+          },
+          {
+            "kp_id": "kp.eval.bias_var",
+            "cycle_id": "retestcycle_806c76c81e87410e",
+            "round": 2,
+            "state": "achieved",
+            "correct_count": 5,
+            "question_count": 5,
+            "scored_count": 5,
+            "independent": true,
+            "distinct_families": 5,
+            "distinct_angles": 3,
+            "evidence_question_ids": [
+              "aiq_1d467c73eb514327",
+              "aiq_7f802d7c07044a72",
+              "slq_62cc358de7_p12_4",
+              "aiq_24e7ba252064405e",
+              "aiq_e3596c3939074035"
+            ],
+            "submitted_at": "2026-11-19T13:39:35+00:00",
+            "started_at": "2026-11-19T13:38:40+00:00",
+            "completed_at": "2026-11-19T13:39:35+00:00",
+            "kind": "formal"
+          }
+        ],
+        "task_state": "achieved",
+        "evidence": {
+          "kp_id": "kp.eval.bias_var",
+          "cycle_id": "retestcycle_806c76c81e87410e",
+          "round": 2,
+          "state": "achieved",
+          "correct_count": 5,
+          "question_count": 5,
+          "scored_count": 5,
+          "independent": true,
+          "distinct_families": 5,
+          "distinct_angles": 3,
+          "evidence_question_ids": [
+            "aiq_1d467c73eb514327",
+            "aiq_7f802d7c07044a72",
+            "slq_62cc358de7_p12_4",
+            "aiq_24e7ba252064405e",
+            "aiq_e3596c3939074035"
+          ],
+          "submitted_at": "2026-11-19T13:39:35+00:00",
+          "started_at": "2026-11-19T13:38:40+00:00",
+          "completed_at": "2026-11-19T13:39:35+00:00",
+          "kind": "formal"
+        },
+        "label": "知识点达标",
+        "needs_review": false
+      }
+    ],
+    "available_actions": [
+      "start"
+    ],
+    "remaining_kp_ids": [],
+    "active_job_id": ""
+  },
+  "feedback": {
+    "score_summary": {
+      "nominal_max_score": 100.0,
+      "ungraded_item_count": 0,
+      "ungraded_max_score": 0.0,
+      "grading_status": "graded",
+      "scored_items": 4,
+      "correct_items": 3,
+      "wrong_items": 1,
+      "partial_items": 0,
+      "awarded_score": 75.0,
+      "max_score": 100.0,
+      "score_rate": 0.75
+    },
+    "retest_history": [
+      {
+        "cycle_id": "retestcycle_217f711c16574a0c",
+        "kp_ids": [
+          "kp.eval.bias_var"
+        ],
+        "remaining_kp_ids": [],
+        "untested_kp_ids": [],
+        "release_id": "",
+        "release_title": "针对性复测",
+        "retest_attempt_id": "attempt_fd2c632d136c40cc",
+        "result_determinable": true,
+        "round": 1,
+        "status": "practice_completed",
+        "threshold": 0.8,
+        "question_count": 5,
+        "correct_count": 5,
+        "accuracy": 1.0,
+        "published_at": "2026-11-19T02:28:53+00:00",
+        "submitted_at": "2026-11-19T02:34:47+00:00",
+        "wrong_items": []
+      },
+      {
+        "cycle_id": "retestcycle_806c76c81e87410e",
+        "kp_ids": [
+          "kp.eval.bias_var"
+        ],
+        "remaining_kp_ids": [],
+        "untested_kp_ids": [],
+        "release_id": "",
+        "release_title": "针对性复测",
+        "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+        "result_determinable": true,
+        "round": 2,
+        "status": "passed",
+        "threshold": 0.8,
+        "question_count": 5,
+        "correct_count": 5,
+        "accuracy": 1.0,
+        "published_at": "2026-11-19T13:38:40+00:00",
+        "submitted_at": "2026-11-19T13:39:35+00:00",
+        "wrong_items": []
+      }
+    ],
+    "learning_loop": {
+      "rule_version": "learning-loop-v3",
+      "task_state": "ready",
+      "round_result": {
+        "cycle_id": "retestcycle_806c76c81e87410e",
+        "round": 2,
+        "status": "passed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+        "accuracy": 1.0,
+        "correct_count": 5,
+        "question_count": 5,
+        "completed_at": "2026-11-19T13:39:35+00:00",
+        "published_at": "2026-11-19T13:38:40+00:00",
+        "source_counts": {
+          "ai_generated": 2,
+          "bank_selected": 3,
+          "original_reused": 0
+        },
+        "retest_kind": "formal"
+      },
+      "last_passed": {
+        "cycle_id": "retestcycle_806c76c81e87410e",
+        "round": 2,
+        "status": "passed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+        "accuracy": 1.0,
+        "correct_count": 5,
+        "question_count": 5,
+        "completed_at": "2026-11-19T13:39:35+00:00",
+        "published_at": "2026-11-19T13:38:40+00:00",
+        "source_counts": {
+          "ai_generated": 2,
+          "bank_selected": 3,
+          "original_reused": 0
+        },
+        "retest_kind": "formal"
+      },
+      "latest_task": {
+        "cycle_id": "retestcycle_806c76c81e87410e",
+        "round": 2,
+        "status": "passed",
+        "release_id": "",
+        "retest_attempt_id": "attempt_bb7f13bb13cd4ece",
+        "accuracy": 1.0,
+        "correct_count": 5,
+        "question_count": 5,
+        "completed_at": "2026-11-19T13:39:35+00:00",
+        "published_at": "2026-11-19T13:38:40+00:00",
+        "source_counts": {
+          "ai_generated": 2,
+          "bank_selected": 3,
+          "original_reused": 0
+        },
+        "retest_kind": "formal"
+      },
+      "concept_results": [
+        {
+          "kp_id": "kp.eval.bias_var",
+          "state": "achieved",
+          "achieved_at": "2026-11-19T13:39:35+00:00",
+          "confirmed_at": "",
+          "due_at": "2026-11-20T13:39:35+00:00",
+          "history": [
+            {
+              "kp_id": "kp.eval.bias_var",
+              "cycle_id": "retestcycle_217f711c16574a0c",
+              "round": 1,
+              "state": "insufficient",
+              "correct_count": 5,
+              "question_count": 5,
+              "scored_count": 5,
+              "independent": false,
+              "distinct_families": 5,
+              "distinct_angles": 4,
+              "evidence_question_ids": [
+                "aiq_d3115e2330f44d9b",
+                "acceptance_noanswer_20261116",
+                "aiq_003a8ba5fbbb4937",
+                "aiq_1930c82113ed40a2",
+                "aiq_22d4b78d47c24b3b"
+              ],
+              "submitted_at": "2026-11-19T02:34:47+00:00",
+              "started_at": "2026-11-19T02:28:53+00:00",
+              "completed_at": "2026-11-19T02:34:47+00:00",
+              "kind": "practice"
+            },
+            {
+              "kp_id": "kp.eval.bias_var",
+              "cycle_id": "retestcycle_806c76c81e87410e",
+              "round": 2,
+              "state": "achieved",
+              "correct_count": 5,
+              "question_count": 5,
+              "scored_count": 5,
+              "independent": true,
+              "distinct_families": 5,
+              "distinct_angles": 3,
+              "evidence_question_ids": [
+                "aiq_1d467c73eb514327",
+                "aiq_7f802d7c07044a72",
+                "slq_62cc358de7_p12_4",
+                "aiq_24e7ba252064405e",
+                "aiq_e3596c3939074035"
+              ],
+              "submitted_at": "2026-11-19T13:39:35+00:00",
+              "started_at": "2026-11-19T13:38:40+00:00",
+              "completed_at": "2026-11-19T13:39:35+00:00",
+              "kind": "formal"
+            }
+          ],
+          "task_state": "achieved",
+          "evidence": {
+            "kp_id": "kp.eval.bias_var",
+            "cycle_id": "retestcycle_806c76c81e87410e",
+            "round": 2,
+            "state": "achieved",
+            "correct_count": 5,
+            "question_count": 5,
+            "scored_count": 5,
+            "independent": true,
+            "distinct_families": 5,
+            "distinct_angles": 3,
+            "evidence_question_ids": [
+              "aiq_1d467c73eb514327",
+              "aiq_7f802d7c07044a72",
+              "slq_62cc358de7_p12_4",
+              "aiq_24e7ba252064405e",
+              "aiq_e3596c3939074035"
+            ],
+            "submitted_at": "2026-11-19T13:39:35+00:00",
+            "started_at": "2026-11-19T13:38:40+00:00",
+            "completed_at": "2026-11-19T13:39:35+00:00",
+            "kind": "formal"
+          },
+          "label": "知识点达标",
+          "needs_review": false,
+          "name": "偏差-方差均衡"
+        },
+        {
+          "kp_id": "kp.regularization.l1l2",
+          "state": "insufficient",
+          "achieved_at": "",
+          "confirmed_at": "",
+          "due_at": "",
+          "history": [],
+          "label": "证据不足",
+          "needs_review": false,
+          "name": "L1/L2 正则化"
+        }
+      ],
+      "available_actions": [
+        "start"
+      ],
+      "remaining_kp_ids": [
+        "kp.regularization.l1l2"
+      ]
+    },
+    "current_weak_concept_count": 0
+  },
+  "visible_control": "本轮复测通过\n第 2 轮 · 100% · 11/19 21:39\n第 2 轮题源：AI 新题 2 · 题库 3\n查看结果\n再次复测",
+  "page_errors": []
+}

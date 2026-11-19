@@ -1,0 +1,252 @@
+[
+  {
+    "figure": "4-1",
+    "path": "docs/acceptance/screenshots/13_imported_exam.png",
+    "caption": "英文资料处理后的题目支持中文与原文切换"
+  },
+  {
+    "figure": "4-2",
+    "path": "docs/acceptance/screenshots/02_question_bank.png",
+    "caption": "教师按章节 题型 来源筛选正式题库"
+  },
+  {
+    "figure": "4-3",
+    "path": "docs/acceptance/screenshots/04_student_exam.png",
+    "caption": "学生A进入共同考试并开始作答"
+  },
+  {
+    "figure": "4-4",
+    "path": "docs/acceptance/screenshots/05_exam_result.png",
+    "caption": "学生B提交后的成绩与错题反馈"
+  },
+  {
+    "figure": "4-5",
+    "path": "docs/acceptance/screenshots/06_single_diagnosis.png",
+    "caption": "教师查看A的单卷错题 章节与复测结果"
+  },
+  {
+    "figure": "4-6",
+    "path": "docs/acceptance/screenshots/07_history_diagnosis.png",
+    "caption": "A的多卷诊断与既有历史中的薄弱知识点"
+  },
+  {
+    "figure": "4-7",
+    "path": "docs/acceptance/screenshots/08_group_diagnosis.png",
+    "caption": "同卷班级分析显示题目正确率与共性问题"
+  },
+  {
+    "figure": "4-8",
+    "path": "docs/acceptance/screenshots/09_resource_recommendation.png",
+    "caption": "L1与L2薄弱点对应课程原页和相关外链"
+  },
+  {
+    "figure": "4-9",
+    "path": "docs/acceptance/screenshots/10_retest.png",
+    "caption": "针对偏差与方差目标创建的复测作答任务"
+  },
+  {
+    "figure": "6-1",
+    "path": "docs/report/screenshots_full/teacher/T01_teacher_home.png",
+    "caption": "教师教学总览"
+  },
+  {
+    "figure": "6-2",
+    "path": "docs/report/screenshots_full/teacher/T02_materials.png",
+    "caption": "课程资料管理"
+  },
+  {
+    "figure": "6-3",
+    "path": "docs/report/screenshots_full/teacher/T03_import_dialog.png",
+    "caption": "资料导入设置"
+  },
+  {
+    "figure": "6-4",
+    "path": "docs/report/screenshots_full/teacher/T04_english_import.png",
+    "caption": "英文试卷资料检索"
+  },
+  {
+    "figure": "6-5",
+    "path": "docs/report/screenshots_full/teacher/T05_online_resources.png",
+    "caption": "教师在线资源列表与视频封面"
+  },
+  {
+    "figure": "6-6",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/R02_teacher_resource_preview.png",
+    "caption": "教师打开资源预览并阅读配套课程原页"
+  },
+  {
+    "figure": "6-7",
+    "path": "docs/report/screenshots_full/teacher/T07_question_bank.png",
+    "caption": "正式题库与筛选"
+  },
+  {
+    "figure": "6-8",
+    "path": "docs/report/screenshots_full/teacher/T08_question_detail.png",
+    "caption": "题目详情与章节调整"
+  },
+  {
+    "figure": "6-9",
+    "path": "docs/report/screenshots_full/teacher/T10_ai_bank_results.png",
+    "caption": "已有AI题筛选结果"
+  },
+  {
+    "figure": "6-10",
+    "path": "docs/report/screenshots_full/teacher/T20_ai_question_review.png",
+    "caption": "偏差—方差规范定义题修订结果"
+  },
+  {
+    "figure": "6-11",
+    "path": "docs/report/screenshots_full/teacher/T23_l2_formula_options.png",
+    "caption": "L2正则化公式选项修复结果"
+  },
+  {
+    "figure": "6-12",
+    "path": "docs/report/screenshots_full/teacher/T11_ai_paper_config.png",
+    "caption": "AI自动组卷条件设置"
+  },
+  {
+    "figure": "6-13",
+    "path": "docs/report/screenshots_full/teacher/T12_ai_paper_preview.png",
+    "caption": "自动组卷结果与预览"
+  },
+  {
+    "figure": "6-14",
+    "path": "docs/report/screenshots_full/teacher/T13_publish_students.png",
+    "caption": "选择学生并发布考试"
+  },
+  {
+    "figure": "6-15",
+    "path": "docs/report/screenshots_full/teacher/T14_published.png",
+    "caption": "发布后的考试记录"
+  },
+  {
+    "figure": "6-16",
+    "path": "docs/report/screenshots_full/student/S02_my_tasks.png",
+    "caption": "学生我的任务接收考试"
+  },
+  {
+    "figure": "6-17",
+    "path": "docs/report/screenshots_full/student/S03_task_submitted.png",
+    "caption": "交卷后任务状态更新"
+  },
+  {
+    "figure": "6-18",
+    "path": "docs/report/screenshots_full/student/S15_history_records.png",
+    "caption": "学生考试历史记录"
+  },
+  {
+    "figure": "6-19",
+    "path": "docs/report/screenshots_full/student/S06_submit_confirmation.png",
+    "caption": "交卷前确认窗口"
+  },
+  {
+    "figure": "6-20",
+    "path": "docs/report/screenshots_full/student/S07_exam_score.png",
+    "caption": "新增考试成绩与错题"
+  },
+  {
+    "figure": "6-21",
+    "path": "docs/report/screenshots_full/student/S08_wrong_answers.png",
+    "caption": "学生错题分析"
+  },
+  {
+    "figure": "6-22",
+    "path": "docs/report/screenshots_full/teacher/T16_student_history.png",
+    "caption": "教师单人多卷诊断"
+  },
+  {
+    "figure": "6-23",
+    "path": "docs/report/screenshots_full/teacher/T19_attempt_review.png",
+    "caption": "教师查看学生答卷"
+  },
+  {
+    "figure": "6-24",
+    "path": "docs/report/screenshots_full/student/S11_course_reading.png",
+    "caption": "课程原页定位阅读"
+  },
+  {
+    "figure": "6-25",
+    "path": "docs/report/screenshots_full/student/S16_student_online.png",
+    "caption": "学生在线资源列表与视频封面"
+  },
+  {
+    "figure": "6-26",
+    "path": "docs/report/screenshots_full/student/S17_retest_answering.png",
+    "caption": "专项复测实际答题"
+  },
+  {
+    "figure": "6-27",
+    "path": "docs/report/screenshots_full/student/S12_retest_history.png",
+    "caption": "学生复测记录抽屉"
+  },
+  {
+    "figure": "6-28",
+    "path": "docs/report/screenshots_full/student/S13_retest_answer_review.png",
+    "caption": "已提交复测评分结果"
+  },
+  {
+    "figure": "6-29",
+    "path": "docs/report/screenshots_full/student/S14_retest_feedback.png",
+    "caption": "知识点复测反馈"
+  },
+  {
+    "figure": "6-30",
+    "path": "docs/report/screenshots_full/teacher/T18_retest_management.png",
+    "caption": "教师复测进度与结果"
+  },
+  {
+    "figure": "6-31",
+    "path": "docs/acceptance/cover-restore-20261119/R01_teacher_online_video_preview.png",
+    "caption": "教师在线视频封面与配套课程原页预览"
+  },
+  {
+    "figure": "6-32",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/R04_recommended_resource_preview.png",
+    "caption": "学生从薄弱点推荐进入资源预览"
+  },
+  {
+    "figure": "6-33",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/A01_ai_configuration.png",
+    "caption": "AI出新题的知识点、题型与题量配置"
+  },
+  {
+    "figure": "6-34",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/A03_ai_candidates.png",
+    "caption": "真实生成的三道候选题"
+  },
+  {
+    "figure": "6-35",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/A08_approved_question_detail.png",
+    "caption": "修订后审核入库的题目详情"
+  },
+  {
+    "figure": "6-36",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/A07_ai_paper_preview.png",
+    "caption": "已审核AI题进入组卷草稿"
+  },
+  {
+    "figure": "6-37",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/B_stu001_07_feedback_updated.png",
+    "caption": "A完成新题复测后知识点达标"
+  },
+  {
+    "figure": "6-38",
+    "path": "docs/acceptance/demo-polish-20261119/screenshots/T24_class_retest_progress.png",
+    "caption": "教师查看同卷两名学生的不同复测结论"
+  },
+  {
+    "figure": "7-1",
+    "path": "docs/acceptance/screenshots/11_progress_comparison.png",
+    "caption": "A复测全对后的练习完成与学习状态"
+  },
+  {
+    "figure": "7-2",
+    "path": "docs/evidence/learning-loop-v3/student1-passed-1366.jpg",
+    "caption": "此前专项中A正式复测通过并保留达标记录"
+  },
+  {
+    "figure": "7-3",
+    "path": "docs/evidence/learning-loop-v3/student2-four-of-five.jpg",
+    "caption": "此前专项中B整轮通过但正则化仍需加强"
+  }
+]

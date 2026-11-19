@@ -1,0 +1,179 @@
+{
+  "target": "data\\report-ui-20261119",
+  "reference": "https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html",
+  "revisions": [
+    {
+      "question_id": "slq_62cc358de7_p12_3",
+      "from": 1,
+      "to": 2,
+      "patch": {
+        "stem": "在平方损失回归的偏差—方差分解中，下列对偏差和方差的理解正确的是？",
+        "options": [
+          {
+            "key": "A",
+            "text": "偏差描述更换训练集后的预测波动；方差描述平均预测的系统偏离。"
+          },
+          {
+            "key": "B",
+            "text": "偏差描述平均预测相对真实回归函数的系统偏离；方差描述更换训练集后预测结果的波动。"
+          },
+          {
+            "key": "C",
+            "text": "偏差就是训练错误率；方差就是验证错误率减去训练错误率。"
+          },
+          {
+            "key": "D",
+            "text": "只要训练错误率为0，偏差和方差就都为0。"
+          }
+        ],
+        "question_type": "single_choice",
+        "score": 2.0,
+        "answer_payload": {
+          "key": "B"
+        },
+        "explanation": "固定输入 $x$，使用同一学习方法，从同一分布反复抽取训练集 $D$。偏差是平均预测相对真实回归函数的系统偏离：$\\mathrm{Bias}(x)=\\mathbb{E}_D[\\hat f_D(x)]-f(x)$；方差是更换训练集后预测结果的波动：$\\mathrm{Var}(x)=\\mathbb{E}_D[(\\hat f_D(x)-\\mathbb{E}_D[\\hat f_D(x)])^2]$。在通常的平方损失回归设定下，预期误差由偏差平方、方差和不可约噪声组成。训练误差及训练／验证差距只能作为诊断线索，不能直接当作二者的严格定义。故选B。",
+        "rubric": {
+          "points": [
+            {
+              "point": "选B：偏差对应平均预测的系统偏离，方差对应更换训练集后的预测波动。",
+              "score": 2.0
+            }
+          ]
+        },
+        "main_kp_id": "kp.eval.bias_var",
+        "chapter_id": "ch06",
+        "notes": "2026-11-19 展示内容核对修订；原课件第12页作为主题来源，定义按scikit-learn官方回归偏差—方差说明规范化；https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html",
+        "answer_status": "verified",
+        "review_status": "verified",
+        "answer_origin": "curated_correction",
+        "source_refs": [
+          {
+            "document_id": "doc_62cc358de7c7fc",
+            "document_version_id": "ver_62cc358de7c7fc_parse-10",
+            "rel_path": "data/uploads/62cc358de7c7fc/12.机器学习的相关理论.pdf",
+            "page": 12,
+            "unit_label": "page",
+            "upload_id": "upl_59579adc7b97495b",
+            "note": "主题来源第12页；定义已按规范说明修订，并非原文逐字引用。"
+          }
+        ]
+      }
+    },
+    {
+      "question_id": "slq_62cc358de7_p12_4",
+      "from": 1,
+      "to": 2,
+      "patch": {
+        "main_kp_id": "kp.eval.bias_var",
+        "chapter_id": "ch06"
+      }
+    },
+    {
+      "question_id": "seed_note_pending_010",
+      "from": 1,
+      "to": 2,
+      "patch": {
+        "question_type": "single_choice",
+        "options": [
+          {
+            "key": "A",
+            "text": "$\\sum_j |w_j|$"
+          },
+          {
+            "key": "B",
+            "text": "$\\sum_j w_j^2$"
+          },
+          {
+            "key": "C",
+            "text": "$\\max(0,1-yf(x))$"
+          },
+          {
+            "key": "D",
+            "text": "$-\\log p(y\\mid x)$"
+          }
+        ],
+        "answer_payload": {
+          "key": "B"
+        },
+        "explanation": "L2正则化使用参数向量的平方范数 $\\|w\\|_2^2=\\sum_j w_j^2$，通常乘以正的正则化系数加入损失函数，故选B。A是L1形式，C是Hinge损失，D是负对数概率形式。",
+        "rubric": {
+          "points": [
+            {
+              "point": "选B：L2正则化项对应参数的平方和。",
+              "score": 2.0
+            }
+          ]
+        },
+        "stem_images": [],
+        "main_kp_id": "kp.regularization.l1l2",
+        "chapter_id": "ch02",
+        "answer_status": "verified",
+        "review_status": "verified",
+        "answer_origin": "curated_correction",
+        "notes": "2026-11-19 展示内容核对修订；公式选项与原页第203页逐项核对；整页配图含答案，已从题目正文移除，原页引用保留。"
+      }
+    },
+    {
+      "question_id": "seed_note_pending_023",
+      "from": 1,
+      "to": 2,
+      "patch": {
+        "question_type": "single_choice",
+        "options": [
+          {
+            "key": "A",
+            "text": "$\\sum_j |w_j|$"
+          },
+          {
+            "key": "B",
+            "text": "$\\sum_j w_j^2$"
+          },
+          {
+            "key": "C",
+            "text": "$\\max(0,1-yf(x))$"
+          },
+          {
+            "key": "D",
+            "text": "$-\\log p(y\\mid x)$"
+          }
+        ],
+        "answer_payload": {
+          "key": "B"
+        },
+        "explanation": "L2正则化使用参数向量的平方范数 $\\|w\\|_2^2=\\sum_j w_j^2$，通常乘以正的正则化系数加入损失函数，故选B。A是L1形式，C是Hinge损失，D是负对数概率形式。",
+        "rubric": {
+          "points": [
+            {
+              "point": "选B：L2正则化项对应参数的平方和。",
+              "score": 2.0
+            }
+          ]
+        },
+        "stem_images": [],
+        "main_kp_id": "kp.regularization.l1l2",
+        "chapter_id": "ch02",
+        "answer_status": "verified",
+        "review_status": "verified",
+        "answer_origin": "curated_correction",
+        "notes": "2026-11-19 展示内容核对修订；公式选项与原页第37页逐项核对；整页配图含答案，已从题目正文移除，原页引用保留。"
+      }
+    }
+  ],
+  "backup": {
+    "path": "data\\report-ui-20261119\\db\\mlquiz.before-visible-content-20261119-184146.sqlite3.bak",
+    "sha256": "dc68c12fbbdb4ee2d555b73dd0ac06b2241a37eeeded3d44516160b640c950e0"
+  },
+  "historical_before": {
+    "paper_items": "f9adde9d0dfc7442e10e58e2b6c1b71b2d4c4a99cf5863a89c890250c9d89604",
+    "attempts": "76a1fbf48eae9e36cf2c106c43d4474d8e7c1776af13842d4344eed6d74c0812",
+    "answer_scores": "dbfab618db6e49d7b13f55f12fca2b80ace462752e951a57fff44a54821f2f07"
+  },
+  "historical_after": {
+    "paper_items": "f9adde9d0dfc7442e10e58e2b6c1b71b2d4c4a99cf5863a89c890250c9d89604",
+    "attempts": "76a1fbf48eae9e36cf2c106c43d4474d8e7c1776af13842d4344eed6d74c0812",
+    "answer_scores": "dbfab618db6e49d7b13f55f12fca2b80ace462752e951a57fff44a54821f2f07"
+  },
+  "historical_unchanged": true,
+  "original_acceptance_db_unchanged": true,
+  "original_acceptance_db_sha256": "29e04ae21567f37a8dba18bc26bb0f06eaffcb23cf4f10a2e1ba7ac7d87de0b9"
+}
