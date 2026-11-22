@@ -5,8 +5,8 @@ import { api } from '../api/client'
 import { auth } from '../auth'
 import { ElMessage } from 'element-plus'
 import { resourceHref } from '../utils/resourceLinks'
-const props=defineProps<{modelValue:boolean;resource:any}>()
-const emit=defineEmits<{ 'update:modelValue':[boolean] }>()
+const props=defineProps<{modelValue:boolean;resource:any;attemptId?:string;kpId?:string;completedResourceIds?:string[]}>()
+const emit=defineEmits<{ 'update:modelValue':[boolean]; activity:[] }>()
 const shown=computed({get:()=>props.modelValue,set:v=>emit('update:modelValue',v)})
 const material=ref<any>(null),loading=ref(false),pageIndex=ref(0),topic=ref(''),coverBroken=ref(false)
 let sequence=0
@@ -19,6 +19,35 @@ const bookmarkUrl = computed(() => props.modelValue && auth.isStudent.value && p
   ? '/student/resource-bookmarks/' + encodeURIComponent(props.resource.resource_id) : '')
 const bookmarked = ref<boolean | null>(null)
 const saving = ref(false)
+const activityBusy = ref(false)
+const activityError = ref('')
+const readingCompleted = ref(false)
+let activityRequest = 0
+const activityEnabled = computed(() => auth.isStudent.value && props.attemptId && props.kpId && props.resource?.resource_id)
+async function recordActivity(action: 'resource_opened' | 'resource_completed') {
+  if (!activityEnabled.value || (activityBusy.value && action === 'resource_completed')) return
+  const request = ++activityRequest
+  const resourceId = props.resource.resource_id
+  const attemptId = props.attemptId
+  activityBusy.value = true
+  activityError.value = ''
+  try {
+    await api.post('/student/learning-activity', {
+      attempt_id: attemptId, kp_id: props.kpId, resource_id: resourceId, action,
+    })
+    if (props.resource?.resource_id === resourceId && props.attemptId === attemptId) {
+      if (action === 'resource_completed') readingCompleted.value = true
+      emit('activity')
+    }
+  } catch {
+    if (request === activityRequest) activityError.value = '学习记录保存失败，请重试'
+  } finally { if (request === activityRequest) activityBusy.value = false }
+}
+watch(() => [props.modelValue, props.resource?.resource_id], () => {
+  activityError.value = ''
+  readingCompleted.value = props.completedResourceIds?.includes(props.resource?.resource_id) || false
+  if (props.modelValue) void recordActivity('resource_opened')
+})
 watch(bookmarkUrl, async (url, _, onCleanup) => {
   let current = true
   onCleanup(() => { current = false })
@@ -63,12 +92,15 @@ watch(()=>[props.modelValue,props.resource],()=>{coverBroken.value=false;if(prop
    </section>
   </div>
   <template #footer>
+    <span v-if="activityError" role="alert" class="activity-error">{{ activityError }}</span>
+    <el-button v-if="activityEnabled" :loading="activityBusy" :disabled="readingCompleted" @click="recordActivity('resource_completed')">{{ readingCompleted ? '已标记阅读完成' : '标记阅读完成' }}</el-button>
     <el-button v-if="bookmarkUrl" :aria-pressed="bookmarked === true" :loading="saving" :disabled="bookmarked === null" @click="toggleBookmark">{{ bookmarked ? '已收藏 · 取消' : '收藏资料' }}</el-button>
     <el-button @click="shown=false">完成预览</el-button>
   </template>
  </el-dialog>
 </template>
 <style scoped>
+.activity-error{display:inline-block;color:#b45309;font-size:13px;margin-right:10px}
 .resource-preview-layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:22px;height:min(565px,calc(92dvh - 142px));min-height:280px}.resource-info{display:flex;flex-direction:column;gap:14px;min-width:0;overflow:auto;padding-right:4px}.source-label{font-size:14px;color:#466c9c}.resource-info h2{font-size:21px;line-height:1.5;margin:0;color:#203a5a}.author{margin:0;color:#6a7c90;font-size:14px}.topic-list{display:flex;gap:6px;flex-wrap:wrap}.topic-list span{padding:4px 8px;border-radius:5px;background:#edf4fd;color:#3f679c;font-size:14px}.resource-info section{border-top:1px solid #e4ecf6;padding-top:14px}.resource-info h3{margin:0 0 8px;font-size:15px;color:#304c70}.resource-info p{font-size:15px;line-height:1.7;margin:0}.resource-info section p,.access-details{color:#5d7087}.access-details{font-size:14px;line-height:1.6}.access-details summary{cursor:pointer}.original-link{display:block;text-align:center;border:1px solid #bfd2ef;border-radius:8px;padding:9px;color:#285ec0;text-decoration:none;margin-top:auto;font-size:15px}.resource-preview-content{display:flex;flex-direction:column;min-width:0;min-height:0;background:#f5f8fd;border:1px solid #dfe8f4;border-radius:12px;overflow:hidden}.resource-preview-content>header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:#edf4fd;color:#304c70;flex:none}.resource-preview-content .el-select{width:210px}.page-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;font-size:14px;flex:none}.page-toolbar>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.page-toolbar nav{display:flex;align-items:center;gap:8px;flex:none}.page-toolbar .el-button{padding:7px 10px;margin:0}.page-image{display:flex;align-items:center;justify-content:center;flex:1;min-height:0;padding:12px;background:#fff}.page-image img{max-width:100%;max-height:100%;object-fit:contain}.resource-summary{padding:30px;overflow:auto;line-height:1.7}.resource-summary img{max-width:100%;max-height:240px;object-fit:contain}.resource-summary h3{font-size:20px;color:#294766}.original-note{color:#738298;font-size:14px}@media(max-width:760px){.resource-preview-layout{grid-template-columns:1fr;grid-template-rows:150px minmax(240px,1fr);height:68vh}.resource-info{gap:8px}.resource-info h2{font-size:18px}.resource-info section,.access-details{display:none}.original-link{margin:0;padding:6px}.resource-preview-content .el-select{width:140px}.page-toolbar>span{max-width:40%}}
 .video-cover{display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:16/9;max-height:164px;flex:none;border:1px solid #dbe8f8;border-radius:8px;background:#eef5ff;color:#547fb5;overflow:hidden}.video-cover img{width:100%;height:100%;max-height:none;object-fit:cover}.video-cover span{display:grid;justify-items:center;gap:6px;font-size:14px}.video-cover .el-icon{font-size:28px}.resource-summary .video-cover.large{width:min(100%,480px);max-height:270px;margin:0 auto 20px}.resource-summary .video-cover.large img{max-height:none}
 </style>

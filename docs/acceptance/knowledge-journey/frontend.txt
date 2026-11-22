@@ -1,0 +1,59 @@
+
+> ml-quiz-frontend@0.1.0 test:unit
+> node --test tests/*.test.ts
+
+✔ quality fallback is not described as an unavailable AI service (0.8405ms)
+✔ configuration and connection failures have distinct notices (0.1572ms)
+✔ 原卷全对不自动等于知识点达标，展示使用后端证据判定 (1.0199ms)
+✔ 新轮待作答不覆盖已有达标结果，可靠错答能够重新显示需加强 (0.3951ms)
+✔ 原卷答对不能掩盖复测待评分、未覆盖或待作答 (0.2857ms)
+✔ 无评分、部分评分和仍需加强的知识点不进入已掌握分组 (0.2464ms)
+✔ 真实零分与未评分保持不同状态 (1.1628ms)
+✔ 考试类型和评分状态筛选互不覆盖 (0.9605ms)
+✔ 知识点分布使用真实错题按章节聚合 (0.3513ms)
+✔ 地图只采用后端掌握结论，满分与未知状态均不自动升级 (1.0179ms)
+✔ 章节筛选保留独立概念ID并支持中文搜索和空结果 (2.3964ms)
+✔ 每种复测状态都有下一步，练习不伪装成通过 (0.9758ms)
+✔ 已核对的题干与 LDA 解析公式转换为 KaTeX 可渲染表达式 (14.8422ms)
+✔ 已有公式和普通文字保持原样 (0.2513ms)
+✔ 题干内直接展示原图且学生页面不展示技术详情 (1.4675ms)
+✔ 下一步行动遵循继续答卷、到期复测、计划、薄弱点的固定优先级 (3.942ms)
+✔ 英文状态统一显示为中文 (0.2561ms)
+✔ 诊断选择器隐藏内部试卷编号，保留课堂小测顺序 (0.4985ms)
+✔ 答案格式化忽略提示和查看解析元数据 (0.53ms)
+✔ 诊断摘要提取中文知识点名称和建议 (1.21ms)
+✔ 兼容路由保留原查询参数并强制目标标签 (0.2904ms)
+✔ 学生身份明确区分正式班和旧测试账号 (0.2787ms)
+✔ 教师诊断页只保留三种业务模式并加载当前版本结果 (1.1356ms)
+✔ 三种诊断的分析栏不再用运行后占位文案代替结论 (1.5134ms)
+✔ 教师首页保持四项统计并把发布表单收进快捷弹窗 (1.2055ms)
+✔ 登录页选择身份即登录并保留手动登录降级 (0.9703ms)
+✔ 学生学习反馈以错题和复测闭环为核心且不展示技术文案 (1.0161ms)
+✔ 学生端侧边栏复用教师在线资源页且保持角色路由隔离 (0.7292ms)
+✔ 资源页面复用共享标题并从筛选工具栏直接开始 (1.2727ms)
+✔ 完整错题卡支持历史原题选项并用选项键展示多选答案 (0.4842ms)
+✔ 题库真实主观题使用reference_answer，支持旧rubric答案 (1.343ms)
+✔ 真实AI题points.point与不同评分要点格式均保留正文和分值 (0.437ms)
+✔ 选择、判断错误和数值0均是有效答案 (0.3243ms)
+✔ 多空答案、候选答案和公式按内容展示 (0.2581ms)
+✔ 未知嵌套对象不泄露元数据，空字段继续查找真实答案 (0.3686ms)
+✔ 缺失主观题规则不声称自动评分，空答案保留真实提示 (0.2699ms)
+✔ 考试反馈共用安全格式化，不输出未知字段或对象 (1.1961ms)
+✔ recommendation links preserve all knowledge-point resources and remove duplicate or unsafe URLs (1.4836ms)
+✔ saved current-version narrative survives reload when evidence is unchanged (0.9816ms)
+✔ same-count regrading, new attempts, other students and retest updates invalidate old interpretation (0.2187ms)
+✔ class question-answer distribution changes invalidate saved narrative at unchanged average (0.2402ms)
+✔ 多选题明确区分选对、漏选、错选，映射不可靠时不猜漏选 (1.3182ms)
+✔ 判断题标记和未评分结果保持独立 (0.1655ms)
+✔ 全错、部分得分与完全未评分分别归入正确的区域 (0.161ms)
+✔ 历史结构化作答仅显示答案内容，不暴露内部字段 (0.3659ms)
+✔ 无分隔符的历史 LaTeX 答案交给现有 KaTeX 渲染 (0.2942ms)
+✔ average uses each complete scored attempt once and excludes missing or partial scores (1.2298ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 47
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 391.0551

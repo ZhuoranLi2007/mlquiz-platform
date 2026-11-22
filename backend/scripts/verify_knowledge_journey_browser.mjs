@@ -1,0 +1,55 @@
+// Requires Playwright and the isolated learning-loop-review dataset. Records explicit demo reading actions.
+import { createRequire } from 'node:module';
+import fs from 'node:fs/promises';
+const require=createRequire(process.env.RUNTIME_NODE_MODULES ? process.env.RUNTIME_NODE_MODULES + '/_journey.cjs' : import.meta.url);
+const {chromium}=require('playwright');const {expect}=require('playwright/test');
+await fs.mkdir('docs/acceptance/knowledge-journey', {recursive:true});
+const browser=await chromium.launch({channel:'msedge',headless:true});
+const page=await browser.newPage({viewport:{width:1366,height:900}});const base=process.env.MLQ_ACCEPTANCE_URL || 'http://127.0.0.1:8022';const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(base+'/login');await page.getByRole('combobox').click();await page.getByRole('option').filter({hasText:'STU001（stu001）'}).click();await page.waitForURL('**/student');
+const source='attempt_d660ce810c684cfd';await page.goto(base+'/student/feedback?attempt='+source);
+await expect(page.locator('.knowledge-node')).toHaveCount(2);
+await page.locator('.knowledge-node').first().focus(); await page.keyboard.press('Enter'); await expect(page.locator('.knowledge-node').first()).toHaveAttribute('aria-pressed','true');
+const before=await page.evaluate(async id=>(await fetch('/api/student/feedback/'+id,{headers:{Authorization:'Bearer '+sessionStorage.getItem('mlq_tab_session')}})).json(),source);
+const states=data=>data.diagnosis_workbench.concepts.map(c=>({id:c.id,state:c.learning_result.state}));
+const initial=states(before);
+await page.getByRole('button',{name:'需加强',exact:true}).click();await expect(page.getByText('没有符合筛选条件的知识点',{exact:true})).toBeVisible();
+await page.getByRole('button',{name:'全部',exact:true}).click();await page.getByRole('button',{name:'放大地图节点'}).click();await expect(page.getByRole('button',{name:'重置地图节点大小'})).toContainText('110%');
+const name=await page.locator('.knowledge-node b').first().innerText();await page.getByRole('textbox',{name:'搜索知识点或章节'}).fill(name);await expect(page.locator('.knowledge-node')).toHaveCount(1);
+await page.getByRole('textbox',{name:'搜索知识点或章节'}).fill('');await page.locator('.knowledge-node').first().click();
+await page.getByRole('button',{name:'证据时间线',exact:true}).click();await expect(page.locator('.learning-timeline')).toContainText('原卷作答');
+await page.screenshot({path:'docs/acceptance/knowledge-journey/map-timeline.png',animations:'disabled'});
+await page.getByRole('button',{name:'学习建议',exact:true}).click();await page.locator('.compact .diagnosis-resource-link').first().click();
+const preview=page.getByRole('dialog',{name:'资源预览'});if(await preview.getByRole('button',{name:'标记阅读完成',exact:true}).count()) {
+await preview.getByRole('button',{name:'标记阅读完成',exact:true}).click();} await expect(preview.getByRole('button',{name:'已标记阅读完成',exact:true})).toBeVisible();
+await preview.getByRole('button',{name:'完成预览',exact:true}).click();await page.getByRole('button',{name:'证据时间线',exact:true}).click();await expect(page.locator('.learning-timeline')).toContainText('标记阅读完成');
+await page.reload();await expect(page.locator('.knowledge-node')).toHaveCount(2);await page.getByRole('button',{name:'证据时间线',exact:true}).click();await expect(page.locator('.learning-timeline')).toContainText('标记阅读完成');
+const after=await page.evaluate(async id=>(await fetch('/api/student/feedback/'+id,{headers:{Authorization:'Bearer '+sessionStorage.getItem('mlq_tab_session')}})).json(),source);
+if(JSON.stringify(initial)!==JSON.stringify(states(after)))throw Error('reading changed mastery');
+await page.waitForLoadState('networkidle');await page.screenshot({path:'docs/acceptance/knowledge-journey/recorded-timeline.png',animations:'disabled'});
+await page.setViewportSize({width:390,height:844});await page.getByRole('button',{name:'知识点概览',exact:true}).click();await expect(page.locator('.knowledge-node').first()).toBeVisible();await page.locator('.knowledge-node').first().click();await expect(page.locator('.learning-timeline')).toBeVisible();
+if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2))throw Error('mobile overflow');
+await page.locator('.concept-content').evaluate(el=>el.scrollTop=el.scrollHeight);
+await expect(page.locator('.learning-timeline li').last()).toBeInViewport();
+await page.screenshot({path:'docs/acceptance/knowledge-journey/mobile.png',animations:'disabled'});
+await page.setViewportSize({width:1366,height:900});
+await page.getByRole('button',{name:'学习建议',exact:true}).click();
+await page.route('**/api/student/learning-activity', route => route.abort());
+await page.locator('.compact .diagnosis-resource-link').nth(1).click();
+const failed=page.getByRole('dialog',{name:'资源预览'});
+await expect(failed.getByRole('alert')).toContainText('学习记录保存失败');
+await page.unroute('**/api/student/learning-activity');
+if(await failed.getByRole('button',{name:'标记阅读完成',exact:true}).count()) {
+ await failed.getByRole('button',{name:'标记阅读完成',exact:true}).click();
+ await expect(failed.getByRole('button',{name:'已标记阅读完成',exact:true})).toBeVisible();
+}
+await failed.getByRole('button',{name:'完成预览',exact:true}).click();
+const second=await browser.newPage({viewport:{width:1366,height:768}});
+second.on('pageerror',e=>errors.push(e.message));
+await second.goto(base+'/login');await second.getByRole('combobox').click();await second.getByRole('option').filter({hasText:'STU002（stu002）'}).click();await second.waitForURL('**/student');
+await second.goto(base+'/student/feedback?attempt=attempt_7bc74a1a495e4925');await expect(second.locator('.knowledge-node.needs_review')).toHaveCount(1);
+await second.getByRole('button',{name:'需加强',exact:true}).click();await expect(second.locator('.knowledge-node')).toHaveCount(1);
+await second.locator('.knowledge-node').click();await second.getByRole('button',{name:'证据时间线',exact:true}).click();
+await second.waitForLoadState('networkidle');await second.screenshot({path:'docs/acceptance/knowledge-journey/needs-review.png',animations:'disabled'});
+await fs.writeFile('docs/acceptance/knowledge-journey/browser.json',JSON.stringify({checks:['chapter_map','state_filter_empty','search','zoom','timeline_evidence','explicit_reading_record','reload_persistence','reading_does_not_change_mastery','mobile_navigation','keyboard_selection','mobile_timeline_scroll','activity_failure_and_retry','second_student_weakness'],states:initial,errors},null,2));
+if(errors.length)throw Error(errors.join('\n'));await browser.close();console.log('Map and timeline browser checks passed');

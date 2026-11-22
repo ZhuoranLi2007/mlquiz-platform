@@ -2,7 +2,8 @@
 import { computed, ref } from 'vue'
 import ResourcePreview from './ResourcePreview.vue'
 import { recommendedResourceLinks } from '../utils/resourceLinks'
-const props = withDefaults(defineProps<{ resources?: any[]; compact?: boolean }>(), { compact: true })
+const props = withDefaults(defineProps<{ resources?: any[]; compact?: boolean; attemptId?: string; kpId?: string; completedResourceIds?: string[] }>(), { compact: true })
+const emit = defineEmits<{ activity: [] }>()
 const expanded = ref(false)
 const previewOpen=ref(false), preview=ref<any>(null)
 function showPreview(row:any){preview.value=row;previewOpen.value=true}
@@ -43,7 +44,7 @@ function type(row:any) {
       <a v-for="row in all" :key="row.url" :href="row.url" @click.prevent="showPreview(row)" target="_blank" rel="noopener noreferrer" class="diagnosis-resource-link"><b>{{ row.title }}</b><span>{{ row.location }}</span><small>{{ row.study_focus || row.reason }}</small><small v-if="row.checked_date">访问检查 {{ row.checked_date }} · {{ row.content_readable ? '已核对页面内容' : row.source_type==='local' ? '课程原页' : '外部平台可能需要登录' }}</small><strong>打开资料 ↗</strong></a>
     </el-drawer>
   </div>
-  <ResourcePreview v-model="previewOpen" :resource="preview" />
+  <ResourcePreview v-model="previewOpen" :resource="preview" :attempt-id="attemptId" :kp-id="kpId" :completed-resource-ids="completedResourceIds" @activity="emit('activity')"/>
   <p v-if="!rows.length" class="no-target-resource">完成有效评分并确定复习知识点后，会在这里提供对应资料。</p>
 </template>
 <style scoped>

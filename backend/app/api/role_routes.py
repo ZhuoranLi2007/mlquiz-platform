@@ -191,6 +191,40 @@ class ResourceBookmarkIn(BaseModel):
     saved: bool
 
 
+class LearningActivityIn(BaseModel):
+    attempt_id: str = Field(min_length=1, max_length=64)
+    kp_id: str = Field(min_length=1, max_length=64)
+    resource_id: str = Field(min_length=1, max_length=128)
+    action: Literal["resource_opened", "resource_completed"]
+
+
+@router.post("/student/learning-activity")
+def record_learning_activity(
+    body: LearningActivityIn,
+    principal: auth_service.Principal = Depends(auth_service.require_student),
+    db: Session = Depends(get_session),
+) -> dict:
+    from backend.app.services import learning_journey
+    from backend.app.services.feedback_workbench import build
+    attempt = auth_service.assert_attempt_access(db, principal, body.attempt_id)
+    if attempt.status != "submitted" or not attempt.is_effective:
+        raise HTTPException(409, "交卷后才可记录复习活动")
+    if not attempt.assessment_version_id or (attempt.mode == "retest" and attempt.retest_of_attempt_id):
+        raise HTTPException(404, "未找到可记录复习活动的原卷")
+    try:
+        payload = classroom_diagnosis.student_attempt(
+            db, principal.student_id, attempt.assessment_version_id, attempt_id=attempt.attempt_id)
+    except classroom_diagnosis.ClassroomDiagnosisError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    workbench = build(payload, _student_question_view)
+    if not any(row["kp_id"] == body.kp_id for row in workbench["concepts"]):
+        raise HTTPException(422, "知识点不属于当前答卷")
+    try:
+        return learning_journey.record_activity(db, user_id=principal.user_id, **body.model_dump())
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
 @router.get("/student/resource-bookmarks/{resource_id}")
 def resource_bookmark(resource_id: str,
                       principal: auth_service.Principal = Depends(auth_service.require_student),
@@ -1217,8 +1251,10 @@ def student_feedback_detail(
                             for row in round_row.get("wrong_items") or []],
         })
     from backend.app.services.feedback_workbench import build as feedback_workbench
+    from backend.app.services.learning_journey import attach
     return {
-        "diagnosis_workbench": feedback_workbench(payload, _student_question_view),
+        "diagnosis_workbench": attach(db, feedback_workbench(payload, _student_question_view),
+            user_id=principal.user_id, attempt_id=attempt.attempt_id, submitted_at=attempt.submitted_at),
         "learning_loop": payload.get('learning_loop'),
         "attempt_id": attempt.attempt_id,
         "assessment": {

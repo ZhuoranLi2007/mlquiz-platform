@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "chapter_map",
+    "state_filter_empty",
+    "search",
+    "zoom",
+    "timeline_evidence",
+    "explicit_reading_record",
+    "reload_persistence",
+    "reading_does_not_change_mastery",
+    "mobile_navigation",
+    "keyboard_selection",
+    "mobile_timeline_scroll",
+    "activity_failure_and_retry",
+    "second_student_weakness"
+  ],
+  "states": [
+    {
+      "id": "kp.regularization.l1l2",
+      "state": "achieved"
+    },
+    {
+      "id": "kp.eval.bias_var",
+      "state": "achieved"
+    }
+  ],
+  "errors": []
+}
