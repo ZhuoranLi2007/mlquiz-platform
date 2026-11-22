@@ -582,7 +582,7 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
     parsed = model_provider.parse_json_content(out["content"])
     raw = parsed if isinstance(parsed, list) else (
         parsed.get("questions", []) if isinstance(parsed, dict) else [])
-    if not isinstance(raw, list):
+    if not isinstance(raw, list) or parsed is None or (isinstance(parsed, dict) and "questions" not in parsed):
         return {"result": {"candidates": [], "pipeline": pipeline},
                 "status": "invalid_output", "engine": "model_failed",
                 "uncertainties": ["模型 questions 字段不是数组，未写入题库"]}
@@ -623,6 +623,12 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
             problems.append("题干过短")
         if qt in ("single_choice", "multi_choice") and len(opts) < 2:
             problems.append("选项不足")
+        if qt in ("single_choice", "multi_choice"):
+            labels = [o.get("key") for o in opts]
+            if (not all(isinstance(key, str) and key.strip() for key in labels)
+                    or len({str(key).strip().upper() for key in labels}) != len(labels)
+                    or not all(isinstance(o.get("text"), str) and o["text"].strip() for o in opts)):
+                problems.append("选项编号重复或选项内容缺失")
         if not ans:
             problems.append("缺少答案")
         if not refs or not all(r in {x["chunk_id"] for x in context} for r in refs):
@@ -637,6 +643,13 @@ def generate_questions(db: Session, payload: dict, *, run_id: str,
                 problems.append("多选答案缺失或含无效选项")
         if qt == "true_false" and not isinstance(ans.get("value"), bool):
             problems.append("判断题答案必须是布尔值")
+        if qt == "numeric":
+            try:
+                value, tolerance = float(ans["value"]), float(ans.get("tol", 0.01))
+                if not math.isfinite(value) or not math.isfinite(tolerance) or tolerance < 0:
+                    raise ValueError
+            except (KeyError, ValueError, TypeError, OverflowError):
+                problems.append("数值答案或容差无效")
         if problems:
             rejected.append({"i": i, "reason": "；".join(problems)})
         else:

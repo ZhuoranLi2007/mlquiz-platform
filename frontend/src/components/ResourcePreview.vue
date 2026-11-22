@@ -2,6 +2,8 @@
 import { computed, ref, watch } from 'vue'
 import { VideoPlay } from '@element-plus/icons-vue'
 import { api } from '../api/client'
+import { auth } from '../auth'
+import { ElMessage } from 'element-plus'
 import { resourceHref } from '../utils/resourceLinks'
 const props=defineProps<{modelValue:boolean;resource:any}>()
 const emit=defineEmits<{ 'update:modelValue':[boolean] }>()
@@ -13,6 +15,30 @@ const isVideo=computed(()=>['bilibili','douyin'].includes(props.resource?.platfo
 const topics=computed(()=>props.resource?.kp_ids?.length?props.resource.kp_ids:props.resource?.kp_id?[props.resource.kp_id]:String(props.resource?.url||'').startsWith('/learn/')?[decodeURIComponent(props.resource.url.split('/learn/')[1].split('?')[0])]:[])
 const page=computed(()=>material.value?.pages?.[pageIndex.value])
 const href=computed(()=>resourceHref(props.resource?.url))
+const bookmarkUrl = computed(() => props.modelValue && auth.isStudent.value && props.resource?.resource_id
+  ? '/student/resource-bookmarks/' + encodeURIComponent(props.resource.resource_id) : '')
+const bookmarked = ref<boolean | null>(null)
+const saving = ref(false)
+watch(bookmarkUrl, async (url, _, onCleanup) => {
+  let current = true
+  onCleanup(() => { current = false })
+  bookmarked.value = null
+  if (!url) return
+  try {
+    const result = await api.get(url)
+    if (current) bookmarked.value = result.saved
+  } catch { if (current) ElMessage.warning('未能读取收藏状态，请重新打开预览') }
+}, { immediate: true })
+async function toggleBookmark() {
+  const url = bookmarkUrl.value
+  if (!url || saving.value || bookmarked.value === null) return
+  saving.value = true
+  try {
+    const result = await api.put(url, { saved: !bookmarked.value })
+    if (url === bookmarkUrl.value) bookmarked.value = result.saved
+  } catch { ElMessage.error('收藏更新失败，请重试') }
+  finally { saving.value = false }
+}
 async function loadTopic(){const id=++sequence;material.value=null;pageIndex.value=0;if(!topic.value)return;loading.value=true;try{const r=await api.get('/learning-materials/'+encodeURIComponent(topic.value));if(id===sequence)material.value=r}catch{/* The original link remains available when course pages are absent. */}finally{if(id===sequence)loading.value=false}}
 watch(()=>[props.modelValue,props.resource],()=>{coverBroken.value=false;if(props.modelValue){topic.value=topics.value[0]||'';void loadTopic()}else{sequence++;loading.value=false}},{immediate:true})
 </script>
@@ -36,7 +62,10 @@ watch(()=>[props.modelValue,props.resource],()=>{coverBroken.value=false;if(prop
     <div v-else-if="!loading" class="resource-summary"><div v-if="isVideo" class="video-cover large" aria-label="视频封面预览"><img v-if="resource?.thumbnail&&!coverBroken" :src="resource.thumbnail" :alt="`${title} 视频封面`" @error="coverBroken=true" /><span v-else><el-icon><VideoPlay /></el-icon>{{ resource?.platform_label || '视频' }}</span></div><img v-else-if="resource?.thumbnail" :src="resource.thumbnail" :alt="title" @error="($event.target as HTMLImageElement).hidden=true" /><h3>{{ title }}</h3><p>{{ resource?.intro || resource?.study_focus || '本站登记该资源的标题、知识点与原始链接。' }}</p><p class="original-note">完整内容请在原站阅读</p></div>
    </section>
   </div>
-  <template #footer><el-button @click="shown=false">完成预览</el-button></template>
+  <template #footer>
+    <el-button v-if="bookmarkUrl" :aria-pressed="bookmarked === true" :loading="saving" :disabled="bookmarked === null" @click="toggleBookmark">{{ bookmarked ? '已收藏 · 取消' : '收藏资料' }}</el-button>
+    <el-button @click="shown=false">完成预览</el-button>
+  </template>
  </el-dialog>
 </template>
 <style scoped>

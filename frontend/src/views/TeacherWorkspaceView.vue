@@ -2,7 +2,8 @@
 import AiQuestionWorkbench from "../components/AiQuestionWorkbench.vue"
 import WorkbenchPage from "../components/WorkbenchPage.vue"
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import TeacherQuestionEditor from '../components/TeacherQuestionEditor.vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { api, runTeacherJob } from '../api/client'
 import { questionAnswerText, questionRubricText } from '../utils/presentation'
@@ -42,6 +43,34 @@ async function saveChapter() {
 }
 
 const draftsOpen = ref(false)
+const editor = ref<InstanceType<typeof TeacherQuestionEditor>>()
+const updating = ref(false)
+const refreshing = ref(false)
+async function finishEdit() {
+  refreshing.value = true
+  detailOpen.value = false
+  try {
+    await load()
+    selectedIds.value = selectedIds.value.filter(id => questions.value.some(q => q.question_id === id && q.usable_for_quiz))
+  } finally { refreshing.value = false }
+}
+
+async function archiveQuestion(question: Question) {
+  if (updating.value) return
+  try {
+    await ElMessageBox.confirm('停用后不能加入新试卷，历史答卷将保留原题。', '停用题目', {
+      confirmButtonText: '确认停用', cancelButtonText: '取消', type: 'warning',
+    })
+  } catch { return }
+  updating.value = true
+  try {
+    await api.del('/teacher/question-bank/' + question.question_id + '?question_version=' + question.question_version)
+    await finishEdit()
+    ElMessage.success('题目已停用')
+  } catch (error) { ElMessage.error(friendlyError(error, '停用失败，请刷新后重试')) }
+  finally { updating.value = false }
+}
+
 const composeOpen = ref(false)
 const composing = ref(false)
 const advancedOpen = ref(false)
@@ -276,7 +305,11 @@ function toggle(question: Question) {
     ? selectedIds.value.filter((id) => id !== question.question_id)
     : [...selectedIds.value, question.question_id]
 }
-function showDetail(question: Question) { detail.value = question; detailOpen.value = true }
+function showDetail(question: Question) {
+  if (refreshing.value) return
+  detail.value = question
+  detailOpen.value = true
+}
 const answerText = questionAnswerText
 const rubricText = questionRubricText
 function duplicateLabel(question: Question) {
@@ -438,6 +471,7 @@ onBeforeUnmount(() => {
         <el-button plain @click="aiOpen=true">AI出新题</el-button><el-button class="compose-button" type="primary" @click="openCompose('ai')">开始组卷</el-button>
       </div>
       <div class="filter-secondary">
+        <el-button link @click="editor?.show()">新增题目</el-button>
         <el-button link class="advanced-trigger" @click="advancedOpen = !advancedOpen">
           {{ advancedOpen ? '收起高级筛选' : '更多筛选' }}{{ filters.kpId || filters.availability !== 'all' || filters.scope !== 'all' ? '（已应用）' : '' }}
         </el-button>
@@ -531,6 +565,7 @@ onBeforeUnmount(() => {
     </template>
     <el-empty v-else :description="hasActiveFilters ? '没有符合当前组合条件的题目，请清空部分筛选条件' : '题库中暂时没有题目'" />
 
+    <TeacherQuestionEditor ref="editor" :points="metadata.knowledge_points || []" @saved="finishEdit"/>
     <AiQuestionWorkbench v-model="aiOpen" :metadata="metadata" @changed="load" />
     <el-dialog v-model="detailOpen" title="题目详情" width="min(860px, 94vw)" top="4vh">
       <div v-if="detail" class="detail-view">
@@ -546,7 +581,10 @@ onBeforeUnmount(() => {
         <div class="workbench-toolbar"><el-select v-model="mappedChapter" aria-label="调整章节" placeholder="选择章节"><el-option v-for="chapter in metadata.chapters" :key="chapter.chapter_id" :label="chapter.value" :value="chapter.chapter_id" :disabled="!chapter.chapter_id" /></el-select><el-button :loading="savingChapter" :disabled="!mappedChapter" @click="saveChapter">保存章节</el-button></div><div class="answer-box"><b>参考答案</b><div><MathText :text="answerText(detail)" /></div><details open><summary>解析</summary><MathText :text="detail.explanation || '解析待补充'" /></details><details><summary>评分要点</summary><MathText :text="rubricText(detail)" /></details><details><summary>来源</summary><p>{{ sourceText(detail) }}</p></details></div>
         <p v-if="duplicateLabel(detail)" class="duplicate-note">{{ duplicateLabel(detail) }}，相似度 {{ Math.round((detail.duplicate.similarity || 0) * 100) }}%。组卷时系统会避免同题族重复进入。</p>
       </div>
-      <template #footer><el-button @click="detailOpen = false">关闭</el-button><el-button v-if="detail?.usable_for_quiz" type="primary" @click="toggle(detail!); detailOpen=false">{{ selectedIds.includes(detail?.question_id) ? '移出组卷' : '加入组卷' }}</el-button></template>
+      <template #footer>
+        <el-button v-if="detail && ['single_choice','multi_choice','true_false'].includes(detail.question_type)" @click="detailOpen=false; editor?.show(detail)">编辑题目</el-button>
+        <el-button v-if="detail?.active" :loading="updating" @click="archiveQuestion(detail!)">停用题目</el-button>
+        <el-button @click="detailOpen = false">关闭</el-button><el-button v-if="detail?.usable_for_quiz" type="primary" @click="toggle(detail!); detailOpen=false">{{ selectedIds.includes(detail?.question_id) ? '移出组卷' : '加入组卷' }}</el-button></template>
     </el-dialog>
 
     <el-dialog v-model="composeOpen" title="开始组卷" width="min(800px, 94vw)" top="8vh"

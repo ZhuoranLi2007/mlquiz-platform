@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "teacher_create_edit_archive",
+    "student_bookmark_survives_reload",
+    "/teacher",
+    "/teacher/analysis",
+    "/teacher/resources",
+    "/teacher/online"
+  ],
+  "errors": [],
+  "modelCallsTriggered": false
+}

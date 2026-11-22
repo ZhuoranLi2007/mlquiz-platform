@@ -1,0 +1,23 @@
+{
+  "remote": "https://github.com/ZhuoranLi2007/mlquiz-platform.git",
+  "pre_sync_head": "ca689b658253be89c91c5b260990a85fd3af2ce4",
+  "remote_base": "c8e973c211f6c3a83156cebb3f35d40b664fc86f",
+  "branch": "course/acceptance-polish",
+  "preexisting_local_change": "deleted .env.example",
+  "draft_preserved_in_stash": true,
+  "pushed": false,
+  "deliverables": {
+    "docs\\submission\\course_demo_reviewed_1122.pptx": {
+      "size": 922385,
+      "sha256": "fb100e8c5af569801ee3ee94a22c02940f02b38d166f8f9f14c5f533d639bd3d"
+    },
+    "docs\\submission\\course_report_reviewed_1122.docx": {
+      "size": 5464531,
+      "sha256": "0a809151e13af53bad40c7cfb0b9427614d94401e27d0033075fbc6832f1284c"
+    },
+    "docs\\submission\\course_report_reviewed_1122.pdf": {
+      "size": 5086382,
+      "sha256": "9f7e9baf3f5b3d6d4d64ba7e40eacbb93ad6f0e83609add24a5447e361a86ee9"
+    }
+  }
+}

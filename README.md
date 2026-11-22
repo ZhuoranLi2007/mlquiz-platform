@@ -99,7 +99,7 @@ cd mlquiz-platform
 
 ### 🤖 需要真实 AI 时
 
-题库、考试、评分和已有诊断无需模型密钥。要运行新的 AI 分析或出题任务，请将 `.env.example` 复制为 `.env`，填写自己的模型配置；已有 `.env` 时直接编辑即可。
+题库、考试、评分和已有诊断无需模型密钥。要运行新的 AI 分析或出题任务，请在项目根目录的 `.env` 中填写以下配置；已有文件时编辑相应字段。
 
 ```dotenv
 MLQ_MODEL_PROVIDER=deepseek
@@ -107,6 +107,8 @@ MLQ_MODEL_BASE_URL=https://api.deepseek.com
 MLQ_MODEL_CHAT_MODEL=deepseek-chat
 MLQ_MODEL_API_KEY=你的密钥
 ```
+
+2026年11月22日的增量验收、最终交付文件和课堂演示路径见 [本轮验收索引](docs/ACCEPTANCE_20261122.md)。教师题库支持新增、版本化编辑和停用，学生可在资源预览中保存收藏。
 
 `.env` 已被 Git 忽略。平台会明确区分模型配置、任务运行和生成结果，不把未配置的模型当作成功生成。
 

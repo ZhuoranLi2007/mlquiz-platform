@@ -81,7 +81,9 @@ if DIST.exists():
         if full_path.startswith("api/"):
             return JSONResponse({"detail": "Not Found",
                                  "path": "/" + full_path}, status_code=404)
-        target = DIST / full_path
+        target = (DIST / full_path).resolve()
+        if not target.is_relative_to(DIST.resolve()):
+            return JSONResponse({"detail": "Not Found"}, status_code=404)
         if full_path and target.is_file():
             return FileResponse(str(target))
         return FileResponse(str(DIST / "index.html"))

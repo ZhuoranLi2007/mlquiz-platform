@@ -1,0 +1,4 @@
+{
+  "static_path_traversal": "blocked",
+  "new_text_artifacts_secret_scan": "passed"
+}

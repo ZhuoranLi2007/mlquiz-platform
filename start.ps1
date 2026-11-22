@@ -29,7 +29,8 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Py = Join-Path $Root '.venv\Scripts\python.exe'
-$DataDb = Join-Path $Root 'data\db'
+$DataRoot = if ($env:MLQ_DATA_DIR) { $env:MLQ_DATA_DIR } else { Join-Path $Root 'data' }
+$DataDb = Join-Path $DataRoot 'db'
 $BackendOut = Join-Path $DataDb 'uvicorn.log'
 $BackendErr = Join-Path $DataDb 'uvicorn.err.log'
 $WorkerOut = Join-Path $DataDb 'worker.log'
@@ -162,7 +163,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Demo data bootstrap failed' }
 
 # ------------------------------------------------------------------ 3. 前端构建
 $node = Get-Command node -ErrorAction SilentlyContinue
-$npm = Get-Command npm -ErrorAction SilentlyContinue
+$npm = Get-Command npm.cmd -ErrorAction SilentlyContinue
 $npmCli = ''
 if (-not $npm) {
     $bundledNode = Join-Path $env:USERPROFILE '.workbuddy\binaries\node\versions'
@@ -172,7 +173,8 @@ if (-not $npm) {
     }
 }
 function Invoke-ProjectNpm {
-    if ($npm) { & $npm.Source @args } else { & $node.Source $npmCli @args }
+    param([Parameter(ValueFromRemainingArguments=$true)][string[]]$NpmArguments)
+    if ($npm) { & $npm.Source @NpmArguments } else { & $node.Source $npmCli @NpmArguments }
     if ($LASTEXITCODE -ne 0) { throw 'npm command failed' }
 }
 if (-not $node -or (-not $npm -and -not $npmCli)) {

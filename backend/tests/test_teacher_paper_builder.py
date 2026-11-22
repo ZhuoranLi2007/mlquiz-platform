@@ -108,6 +108,52 @@ def test_teacher_bank_filters_and_exposes_answers_only_to_teacher(builder):
     assert body["items"][0]["usable_for_quiz"] is True
 
 
+def test_teacher_question_lifecycle_preserves_versions_and_rejects_stale_writes(builder):
+    client, local = builder
+    bank = "/api/teacher/question-bank"
+    body = {"stem": "在固定可分数据上，硬间隔分类器寻找最大间隔。",
+            "main_kp_id": "kp-svm", "aux_kp_ids": ["kp-svm"], "question_type": "true_false",
+            "answer_payload": {"value": True}, "explanation": "约束满足时最大化几何间隔。"}
+    assert client.post(bank, json=body).status_code == 401
+    _login(client)
+    assert client.post(bank, json={**body, "main_kp_id": "missing"}).status_code == 409
+    assert client.post(bank, json={**body, "answer_payload": {"value": "false"}}).status_code == 422
+    response = client.post(bank, json=body)
+    assert response.status_code == 201, response.text
+    qid = response.json()["question_id"]
+    assert client.post(bank, json=body).status_code == 409
+    updated = {**body, "stem": "只改变测试集会直接改变已训练好的分类边界。", "question_version": 1,
+               "answer_payload": {"value": False}, "explanation": "预测阶段不会重估模型参数。"}
+    assert client.put(f"{bank}/{qid}", json=updated).status_code == 200
+    assert client.put(f"{bank}/{qid}", json=updated).status_code == 409
+    assert client.delete(f"{bank}/{qid}?question_version=1").status_code == 409
+    assert client.delete(f"{bank}/{qid}?question_version=2").status_code == 200
+    assert not client.get(bank, params={"include_inactive": False, "keyword": updated["stem"]}).json()["items"]
+    with local() as session:
+        versions = session.query(E.Question).filter_by(question_id=qid).order_by(E.Question.question_version).all()
+        assert [v.stem for v in versions] == [body["stem"], updated["stem"]]
+        assert all(not v.active for v in versions)
+        assert versions[1].aux_kp_ids == []
+
+
+def test_student_bookmark_is_idempotent_and_separate_from_teacher(builder):
+    client, local = builder
+    with local() as session:
+        session.add(E.Resource(resource_id="resource-test", title="课程资料", url="https://example.org"))
+        session.commit()
+    path = "/api/student/resource-bookmarks/resource-test"
+    _login(client)
+    assert client.put(path, json={"saved": True}).status_code == 403
+    client.post("/api/auth/login", json={"user_id": "student", "password": "Student!2026"})
+    assert client.get(path).json() == {"saved": False}
+    for _ in range(2):
+        assert client.put(path, json={"saved": True}).json() == {"saved": True}
+    with local() as session:
+        assert session.query(E.Favorite).filter_by(kind="resource").count() == 1
+    assert client.put(path, json={"saved": False}).json() == {"saved": False}
+    assert client.put("/api/student/resource-bookmarks/missing", json={"saved": True}).status_code == 404
+
+
 def test_teacher_bank_uses_independent_chapter_without_fake_kp(builder):
     client, local = builder
     with local() as db:

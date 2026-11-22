@@ -1,0 +1,37 @@
+{
+  "mode": "isolated_demo_api_no_live_model",
+  "checks": [
+    "production_frontend_served",
+    "snapshot_restored_and_accounts_generated",
+    "question-analysis",
+    "student-attempt",
+    "student-history",
+    "class-assessment",
+    "queued_composition",
+    "teacher_publication",
+    "student_answer_save",
+    "grading_persisted_10_of_10",
+    "post_submit_review",
+    "role_access_control",
+    "prompt_export"
+  ],
+  "snapshot_counts": {
+    "students": 16,
+    "assessments": 26,
+    "attempts": 122,
+    "questions": 782,
+    "resources": 37,
+    "chunks": 4612
+  },
+  "resource_platforms": {
+    "bilibili": 17,
+    "csdn": 3,
+    "docs": 7,
+    "douyin": 4,
+    "internal": 4,
+    "zhihu": 2
+  },
+  "status": "passed",
+  "live_model_verified": false,
+  "browser_clicks_verified": false
+}

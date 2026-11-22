@@ -1,0 +1,491 @@
+{
+  "kind": "runtime_model_prompt_history",
+  "exported_at": "2026-11-22T09:34:01+00:00",
+  "note": "仅包含本功能启用后的真实模型调用；开发工具中的对话历史需另行导出。图片仅留摘要，密钥已脱敏。",
+  "count": 23,
+  "items": [
+    {
+      "call_id": "call_059c2e9e49874442",
+      "run_id": "run_3e3e950068674d3f",
+      "skill": "generate_questions",
+      "model": "deepseek-flash",
+      "prompt_version": "question-gen-1.1",
+      "created_at": "2026-11-18T13:54:24+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是机器学习课程出题助手。只依据【课程资料片段】生成候选题。\n规则：\n1. 只输出 JSON 数组，每个元素字段：\n   {\"question_type\":\"single_choice|multi_choice|true_false|numeric|short_answer\",\n    \"stem\":\"...\", \"options\":[{\"key\":\"A\",\"text\":\"...\"}],\n    \"answer_payload\":{...}, \"kp_id\":\"...\", \"cognitive_level\":\"...\",\n    \"difficulty\":\"...\", \"source_chunk_ids\":[...], \"calculation\":\"数值题写独立计算式\"}\n2. 题干/选项不得包含答案或解析；公式用 LaTeX $...$ 或 $$...$$。\n3. 单选答案用 {\"key\":\"B\"}；多选 {\"keys\":[\"A\",\"C\"],\"partial_rule\":\"proportional_no_wrong\"}；\n   判断 {\"value\":true}；数值 {\"value\":1.25,\"tol\":0.01,\"unit\":\"\",\"rounding\":2}。\n4. 每个题必须引用至少一个真实 chunk_id；无依据时不要出题。\n5. 候选答案只是候选，不得声称已核验；不要标注为教师标准答案。\n6. 当蓝图 mode=similar_to_wrong 时：必须围绕 source_question 的同一知识点和同一题型改写，\n   可改数值、条件与应用场景，但不得照抄原题干、不得换成无关知识点；难度与原题相近或略高；\n   仍然必须引用真实的 chunk_id。\n7. kp_id 必须从蓝图 kp_ids 中选择，题型必须符合 question_types；不得用其他知识点凑数。\n"
+        },
+        {
+          "role": "user",
+          "content": "【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n\n[doc_9b657c5718aca8_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n【出题蓝图】{\"count\": 5, \"kp_ids\": [\"kp.eval.bias_var\"], \"question_types\": [\"single_choice\", \"multi_choice\", \"true_false\"], \"mode\": \"teacher_retest_candidate\", \"instruction\": \"复测新题：覆盖至少两种题型，结合概念辨析与情境应用。每题给出可核验答案、解析、课程引用。改变考查情境或推理方式，不得只换数字或措辞。\"}\n请输出 JSON 数组，不要输出其它文字。"
+        }
+      ],
+      "response": "[\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"在偏差—方差理论中，若一个模型在训练集和测试集上的误差都很大，最可能反映该模型具有：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"高偏差\"},\n      {\"key\": \"B\", \"text\": \"高方差\"},\n      {\"key\": \"C\", \"text\": \"低偏差\"},\n      {\"key\": \"D\", \"text\": \"低方差\"}\n    ],\n    \"answer_payload\": {\"key\": \"A\"},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0008\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"某模型在训练集上误差很小，但在测试集上误差明显增大，按照偏差—方差理论，这主要说明模型：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"偏差较高\"},\n      {\"key\": \"B\", \"text\": \"方差较高\"},\n      {\"key\": \"C\", \"text\": \"偏差和方差都较低\"},\n      {\"key\": \"D\", \"text\": \"不存在噪声\"}\n    ],\n    \"answer_payload\": {\"key\": \"B\"},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"应用\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0007\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"multi_choice\",\n    \"stem\": \"关于偏差—方差理论，下列说法正确的有：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"过拟合通常与高方差相联系\"},\n      {\"key\": \"B\", \"text\": \"欠拟合通常与高偏差相联系\"},\n      {\"key\": \"C\", \"text\": \"增加模型复杂度一定会同时降低偏差和方差\"},\n      {\"key\": \"D\", \"text\": \"偏差—方差分解可用于分析模型的泛化误差\"}\n    ],\n    \"answer_payload\": {\"keys\": [\"A\", \"B\", \"D\"], \"partial_rule\": \"proportional_no_wrong\"},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"分析\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0007\", \"doc_314b0bf1ff3468_q0008\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"在偏差—方差理论中，欠拟合对应高偏差。\",\n    \"options\": [],\n    \"answer_payload\": {\"value\": true},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"记忆\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0008\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"在偏差—方差理论中，过拟合对应低方差。\",\n    \"options\": [],\n    \"answer_payload\": {\"value\": false},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0007\"],\n    \"calculation\": \"\"\n  }\n]",
+      "request_sha256": "b1eaa18107b7bec7c1b2a116a5e2489329010e0fb97d6c9bd9b69b7b080a23b6"
+    },
+    {
+      "call_id": "call_99f2395938f5445b",
+      "run_id": "run_189e185b0ba24556",
+      "skill": "generate_questions",
+      "model": "deepseek-flash",
+      "prompt_version": "question-gen-1.1",
+      "created_at": "2026-11-18T13:54:29+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是机器学习课程出题助手。只依据【课程资料片段】生成候选题。\n规则：\n1. 只输出 JSON 数组，每个元素字段：\n   {\"question_type\":\"single_choice|multi_choice|true_false|numeric|short_answer\",\n    \"stem\":\"...\", \"options\":[{\"key\":\"A\",\"text\":\"...\"}],\n    \"answer_payload\":{...}, \"kp_id\":\"...\", \"cognitive_level\":\"...\",\n    \"difficulty\":\"...\", \"source_chunk_ids\":[...], \"calculation\":\"数值题写独立计算式\"}\n2. 题干/选项不得包含答案或解析；公式用 LaTeX $...$ 或 $$...$$。\n3. 单选答案用 {\"key\":\"B\"}；多选 {\"keys\":[\"A\",\"C\"],\"partial_rule\":\"proportional_no_wrong\"}；\n   判断 {\"value\":true}；数值 {\"value\":1.25,\"tol\":0.01,\"unit\":\"\",\"rounding\":2}。\n4. 每个题必须引用至少一个真实 chunk_id；无依据时不要出题。\n5. 候选答案只是候选，不得声称已核验；不要标注为教师标准答案。\n6. 当蓝图 mode=similar_to_wrong 时：必须围绕 source_question 的同一知识点和同一题型改写，\n   可改数值、条件与应用场景，但不得照抄原题干、不得换成无关知识点；难度与原题相近或略高；\n   仍然必须引用真实的 chunk_id。\n7. kp_id 必须从蓝图 kp_ids 中选择，题型必须符合 question_types；不得用其他知识点凑数。\n"
+        },
+        {
+          "role": "user",
+          "content": "【课程资料片段】\n[doc_314b0bf1ff3468_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_9b657c5718aca8_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_04d94304c8879d_u0045] line_block 45\n正则化（L1/L2）的作用是 压低模型复杂度、减小方差 ，代价是 引入偏差 。如果模型本来是 欠拟合 （高偏差），再加正则只会更差；就算正合适，λ 调大了也会欠拟合。所以是\" 可能 提升\"，不是\"一定\"。另外正则是在 训练 目标里加的，它对训练集性能的影响方向恰恰相反（见 D）。\n\n[doc_314b0bf1ff3468_u0183] page 183\n常数形式可能不同，本质⼀致。 5.1.2 Ridge 的特点 1. 使⽤ L2 正则项。 2. 惩罚参数平⽅。 3. 使参数变⼩。 4. 通常不会让参数严格等于 0。 5. 能缓解过拟合。 6. 更强调平滑性。 5.2 LASSO 5.2.1 定义 LASSO 使⽤ L1 正则化。 代价函数： LASSO 全称： 5.2.2 LASSO 的特点 1. 使⽤ L1 正则项。 2. 惩罚参数绝对值。 3. 可以使部分参数变为 0。 4. 具有特征选择能⼒。 5. 体现稀疏性偏好。 5.3 Ridge 与 LASSO 对⽐\n\n【出题蓝图】{\"count\": 5, \"kp_ids\": [\"kp.regularization.l1l2\"], \"question_types\": [\"single_choice\", \"multi_choice\", \"true_false\"], \"mode\": \"teacher_retest_candidate\", \"instruction\": \"复测新题：覆盖至少两种题型，结合概念辨析与情境应用。每题给出可核验答案、解析、课程引用。改变考查情境或推理方式，不得只换数字或措辞。\"}\n请输出 JSON 数组，不要输出其它文字。"
+        }
+      ],
+      "response": "[\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"在回归任务中，若希望模型在拟合数据的同时自动将部分特征的权重压缩为 0，从而获得稀疏解，应优先选用下列哪种正则化方式？\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"L1 正则化\"},\n      {\"key\": \"B\", \"text\": \"L2 正则化\"},\n      {\"key\": \"C\", \"text\": \"不使用任何正则化\"},\n      {\"key\": \"D\", \"text\": \"仅增大训练轮数\"}\n    ],\n    \"answer_payload\": {\"key\": \"A\"},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_u0183\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"关于 Ridge 回归的特点，下列说法正确的是：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"使用 L2 正则项，通常不会让参数严格等于 0\"},\n      {\"key\": \"B\", \"text\": \"使用 L1 正则项，具有特征选择能力\"},\n      {\"key\": \"C\", \"text\": \"使用 L2 正则项，一定能使所有参数变为 0\"},\n      {\"key\": \"D\", \"text\": \"不使用正则项，只强调平滑性\"}\n    ],\n    \"answer_payload\": {\"key\": \"A\"},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_u0183\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"multi_choice\",\n    \"stem\": \"下列关于 LASSO 与 Ridge 的对比，正确的有：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"LASSO 使用 L1 正则项，惩罚参数的绝对值\"},\n      {\"key\": \"B\", \"text\": \"Ridge 使用 L2 正则项，惩罚参数的平方\"},\n      {\"key\": \"C\", \"text\": \"LASSO 可以使部分参数变为 0，具有特征选择能力\"},\n      {\"key\": \"D\", \"text\": \"Ridge 通常会让大量参数严格等于 0\"}\n    ],\n    \"answer_payload\": {\"keys\": [\"A\", \"B\", \"C\"], \"partial_rule\": \"proportional_no_wrong\"},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"分析\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_u0183\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"若模型本身处于欠拟合（高偏差）状态，此时增大正则化强度通常能改善其泛化性能。\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"正确\"},\n      {\"key\": \"B\", \"text\": \"错误\"}\n    ],\n    \"answer_payload\": {\"value\": false},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"分析\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_04d94304c8879d_u0045\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"正则化（L1/L2）通过在训练目标中加入惩罚项来压低模型复杂度、减小方差，其代价是引入偏差。\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"正确\"},\n      {\"key\": \"B\", \"text\": \"错误\"}\n    ],\n    \"answer_payload\": {\"value\": true},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_04d94304c8879d_u0045\"],\n    \"calculation\": \"\"\n  }\n]",
+      "request_sha256": "d18827333c4b57196e53742f64c65fa87bd12493819d9f5149a588ac5201ab66"
+    },
+    {
+      "call_id": "call_2d0f7df2b0ec4a1c",
+      "run_id": "teacher-job:job_910f481e50a54d8c",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T13:54:32+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"某模型在训练集上误差很小，但在测试集上误差明显增大，按照偏差—方差理论，这主要说明模型：\", \"options\": [{\"key\": \"A\", \"text\": \"偏差较高\"}, {\"key\": \"B\", \"text\": \"方差较高\"}, {\"key\": \"C\", \"text\": \"偏差和方差都较低\"}, {\"key\": \"D\", \"text\": \"不存在噪声\"}], \"question_type\": \"single_choice\", \"knowledge_point\": \"偏差-方差均衡\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\":{\"key\":\"B\"},\"explanation\":\"训练误差很小说明模型对训练数据拟合得很好，偏差较低；测试误差明显增大说明模型对训练集过度敏感、泛化能力差，即方差较高。这属于过拟合的典型表现。\",\"unambiguous\":true,\"kp_matches\":true,\"assessment_angle\":\"情境诊断\"}",
+      "request_sha256": "be95690ebf5c0a228243af49483bd81bc05db33bcaf23b027b3f48cada6670ca"
+    },
+    {
+      "call_id": "call_2368f8855bc94e1a",
+      "run_id": "teacher-job:job_910f481e50a54d8c",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T13:54:35+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"下列关于 LASSO 与 Ridge 的对比，正确的有：\", \"options\": [{\"key\": \"A\", \"text\": \"LASSO 使用 L1 正则项，惩罚参数的绝对值\"}, {\"key\": \"B\", \"text\": \"Ridge 使用 L2 正则项，惩罚参数的平方\"}, {\"key\": \"C\", \"text\": \"LASSO 可以使部分参数变为 0，具有特征选择能力\"}, {\"key\": \"D\", \"text\": \"Ridge 通常会让大量参数严格等于 0\"}], \"question_type\": \"multi_choice\", \"knowledge_point\": \"L1/L2 正则化\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\": {\"keys\": [\"A\", \"B\", \"C\"]}, \"explanation\": \"A 正确：LASSO 的惩罚项是参数绝对值之和（L1 正则）。B 正确：Ridge 的惩罚项是参数平方和（L2 正则）。C 正确：L1 正则的几何性质使解在坐标轴上具有稀疏性，部分系数可被压为 0，从而具备特征选择能力。D 错误：Ridge 通常只会把参数收缩到接近 0 但不严格为 0，不会产生大量严格为 0 的参数。\", \"unambiguous\": true, \"kp_matches\": true, \"assessment_angle\": \"定义辨析\"}",
+      "request_sha256": "7407003dd0ef1af8868cf31dbb1d8c5ce53fcf76190ffd899285c95288d1e724"
+    },
+    {
+      "call_id": "call_7b658f571c9b4ed8",
+      "run_id": "teacher-job:job_910f481e50a54d8c",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T13:54:38+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"若模型本身处于欠拟合（高偏差）状态，此时增大正则化强度通常能改善其泛化性能。\", \"options\": [{\"key\": \"A\", \"text\": \"正确\"}, {\"key\": \"B\", \"text\": \"错误\"}], \"question_type\": \"true_false\", \"knowledge_point\": \"L1/L2 正则化\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\": false, \"explanation\": \"欠拟合（高偏差）说明模型对训练数据的拟合能力不足；增大正则化强度会进一步限制模型复杂度、增强先验约束，通常使偏差更大、训练误差和泛化性能更差。因此该说法错误。\", \"unambiguous\": true, \"kp_matches\": true, \"assessment_angle\": \"情境诊断\"}",
+      "request_sha256": "fc96f0fae4f985bd9b5b3bf15cc8e8528fcb7826836c5c7b5a9d722b632c12a9"
+    },
+    {
+      "call_id": "call_219bca1037614efa",
+      "run_id": "teacher-job:job_910f481e50a54d8c",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T13:54:40+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"正则化（L1/L2）通过在训练目标中加入惩罚项来压低模型复杂度、减小方差，其代价是引入偏差。\", \"options\": [{\"key\": \"A\", \"text\": \"正确\"}, {\"key\": \"B\", \"text\": \"错误\"}], \"question_type\": \"true_false\", \"knowledge_point\": \"L1/L2 正则化\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\": true, \"explanation\": \"L1/L2 正则化在损失函数中加入参数惩罚项，限制模型参数大小，从而降低模型复杂度与方差，但会使估计产生偏差，这是偏差-方差权衡的体现。\", \"unambiguous\": true, \"kp_matches\": true, \"assessment_angle\": \"概念理解\"}",
+      "request_sha256": "c3fdfe89e7a38e8f5c4af80d8e64226550e0ed53ee36ce983972832212a7a746"
+    },
+    {
+      "call_id": "call_06565a36324f40dc",
+      "run_id": "run_64f2f0cab6c94c6a",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T13:56:08+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"single_choice\", \"kp_id\": \"kp.eval.bias_var\", \"family_id\": \"fam_72127e0828a3440a\", \"response\": {\"key\": \"B\"}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n请输出 JSON。"
+        }
+      ],
+      "response": "{\n  \"observed\": [\n    \"题目类型为单选题，知识点为 kp.eval.bias_var（偏差-方差理论）。\",\n    \"学生作答选项为 B，判定为正确，得分 2.0/2.0。\",\n    \"本题未使用提示（hints_used=0），未查看解答（solution_viewed=false），此前未见过该题（seen_before=false），属于独立作答证据。\"\n  ],\n  \"candidate_causes\": [\n    \"可能已掌握‘过拟合对应高方差’这一具体对应关系（仅凭单题正确只能作为候选解释）。\",\n    \"也可能通过排除法或对选项语义的常识判断选对，未必完整理解偏差-方差权衡。\"\n  ],\n  \"evidence\": [\n    \"作答事实：response.key=B，correct=true，awarded_score=2.0，independent_evidence=true。\",\n    \"课程资料题7题干为‘过拟合对应偏差—方差理论中的：’，选项B为‘高方差’，与本题正确选项一致。\",\n    \"课程资料题8为‘欠拟合对应偏差—方差理论中的：’，可作为同题族对照，但学生未作答该题，不能作为掌握证据。\"\n  ],\n  \"next_verification\": [\n    \"提供欠拟合对应高偏差的同类题（如题8），检验是否能区分过拟合与欠拟合的偏差/方差归属。\",\n    \"提供需要解释偏差-方差权衡或泛化误差分解的变式题，检验是否理解概念而非仅记住对应关系。\",\n    \"若后续同题族重复作答或使用提示，应标注该次不是独立证据。\"\n  ],\n  \"insufficient\": false\n}",
+      "request_sha256": "369ed46f6f80e5490ab8f0f667f83392b171f108e40adff186130ee11ce844a8"
+    },
+    {
+      "call_id": "call_017428bb9b3c4e63",
+      "run_id": "run_c4551c34b8a14bc1",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T13:56:12+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"true_false\", \"kp_id\": \"kp.eval.bias_var\", \"family_id\": \"fam_2ad1e95204ea4c8b\", \"response\": {\"value\": true}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"题目类型为判断题，学生作答 value=true，判定为正确，得分 2.0/2.0\",\"该次作答 hints_used=0、solution_viewed=false、seen_before=false，independent_evidence=true，属于独立作答证据\",\"题目知识点为 kp.eval.bias_var（偏差—方差理论），课程资料片段中出现过拟合对应高方差、欠拟合对应高偏差的相关题目\"],\"candidate_causes\":[\"可能已掌握偏差—方差理论中该判断所涉及的基本对应关系（如过拟合/欠拟合与偏差、方差的对应）\",\"也可能仅凭常识或猜测答对，尚未证明对偏差—方差权衡有系统理解\"],\"evidence\":[\"单题判断正确且为独立作答，可作为该知识点局部掌握的正向证据\",\"课程资料片段仅展示过拟合/欠拟合与偏差、方差对应关系的题干，未提供该判断题原题与解析，无法确认所考具体表述\"],\"next_verification\":[\"提供同知识点 fam_2ad1e95204ea4c8b 的变式题（如更换过拟合/欠拟合、偏差/方差表述方向）检验是否稳定\",\"增加需要解释偏差—方差权衡或计算期望泛化误差的题目，区分记忆性作答与理解性作答\",\"确认该判断题原题表述与课程资料片段的对应关系，避免用不同题目推断同一结论\"],\"insufficient\":true}",
+      "request_sha256": "bd4c239e4504ca96dea634f3cf0f662aaed7897557f8512277738fc107f5c0fe"
+    },
+    {
+      "call_id": "call_436a6bb4771442ae",
+      "run_id": "run_64b4ed0397d84d7b",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T13:56:16+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"single_choice\", \"kp_id\": \"kp.eval.bias_var\", \"family_id\": \"fam_fdae3dddc6e046e4\", \"response\": {\"key\": \"B\"}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"题目类型为单选题，kp_id 为 kp.eval.bias_var，family_id 为 fam_fdae3dddc6e046e4。\",\"作答选择 B，判定为正确，得分 2.0/2.0，评分状态为 auto。\",\"hints_used=0，solution_viewed=false，seen_before=false，independent_evidence=true，因此本次作答可作为独立证据。\"],\"candidate_causes\":[\"可能已掌握“过拟合对应高方差”这一偏差—方差理论对应关系（仅凭单题正确，不能断言整体掌握）。\",\"也可能通过选项排除或猜测得到正确答案，需进一步验证。\"],\"evidence\":[\"课程资料题7题干为“过拟合对应偏差—方差理论中的：”，选项 B 为“高方差”，与本次作答 key=B 且判定正确一致。\",\"课程资料题8题干为“欠拟合对应偏差—方差理论中的：”，可作为同题族对照，用于检验是否真正区分过拟合与欠拟合的偏差—方差对应关系。\",\"本次无提示、未看答案、未见过原题，属于独立作答证据。\"],\"next_verification\":[\"补充同题族题8（欠拟合对应高偏差）进行对照作答，检验是否能区分过拟合与欠拟合的偏差—方差对应关系。\",\"提供一道需要解释“高方差/高偏差”含义或结合模型复杂度判断的变式题，验证是否理解而非仅记住选项。\",\"若后续出现同题族重复作答或使用提示，应标注该次不作为独立证据。\"],\"insufficient\":false}",
+      "request_sha256": "cfbecd64c2972ae5fbbc3c1de84c51dccb9b1341540c880c90f3676f4563d2ea"
+    },
+    {
+      "call_id": "call_8e0c17508b5040d6",
+      "run_id": "run_61cab6a800044920",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T13:56:21+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"multi_choice\", \"kp_id\": \"kp.regularization.l1l2\", \"family_id\": \"fam_035edeb5e9514314\", \"response\": {\"keys\": [\"A\", \"B\", \"C\"]}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_314b0bf1ff3468_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_9b657c5718aca8_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_04d94304c8879d_u0045] line_block 45\n正则化（L1/L2）的作用是 压低模型复杂度、减小方差 ，代价是 引入偏差 。如果模型本来是 欠拟合 （高偏差），再加正则只会更差；就算正合适，λ 调大了也会欠拟合。所以是\" 可能 提升\"，不是\"一定\"。另外正则是在 训练 目标里加的，它对训练集性能的影响方向恰恰相反（见 D）。\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"题目类型为多选题，kp_id 为 kp.regularization.l1l2，family_id 为 fam_035edeb5e9514314。\",\"学生作答 keys 为 [\\\"A\\\",\\\"B\\\",\\\"C\\\"]，系统判定 correct=true，得分 2.0/2.0，scoring_status=auto。\",\"hints_used=0，solution_viewed=false，seen_before=false，independent_evidence=true。\"],\"candidate_causes\":[\"该次作答为独立证据，可支持学生在该题所考查的 L1/L2 正则化相关知识点上表现正确。\",\"但单题正确只能说明本题表现，不能据此断言学生已稳定掌握 kp.regularization.l1l2 的全部内容。\"],\"evidence\":[\"作答记录显示未使用提示、未查看解答、此前未见过该题，且 independent_evidence=true，因此该次正确可作为独立作答证据。\",\"课程资料片段中题11 的题干为“LASSO 使用：”，选项包含 A“L1 正则化”、B“L2 正则化”、C“Hinge loss”、D“Softmax”；学生选择 A、B、C，与系统判定正确一致。\",\"课程资料片段说明正则化（L1/L2）的作用是压低模型复杂度、减小方差，代价是引入偏差；该片段用于解释正则化作用，不直接等同于该多选题的完整答案依据。\"],\"next_verification\":[\"补充同知识点 kp.regularization.l1l2 下不同题族的独立题目，验证学生能否区分 L1 与 L2 正则化的定义、作用与适用场景。\",\"安排不使用提示、不查看解答的新题，检查学生在 LASSO 与 L1 正则化对应关系上的稳定性。\",\"若后续出现错误，再结合具体错选项判断是概念混淆还是审题问题；当前证据不足以定位误区。\"],\"insufficient\":false}",
+      "request_sha256": "fe63fd874a7d7055356e791552bbba5615763a9b5b5920d640813c3e3891e4e1"
+    },
+    {
+      "call_id": "call_7668c874e5d4440d",
+      "run_id": "run_85ec44f05fe94587",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T13:56:26+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"true_false\", \"kp_id\": \"kp.regularization.l1l2\", \"family_id\": \"fam_bfab6a7bc96d4478\", \"response\": {\"value\": false}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_314b0bf1ff3468_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_9b657c5718aca8_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_04d94304c8879d_u0045] line_block 45\n正则化（L1/L2）的作用是 压低模型复杂度、减小方差 ，代价是 引入偏差 。如果模型本来是 欠拟合 （高偏差），再加正则只会更差；就算正合适，λ 调大了也会欠拟合。所以是\" 可能 提升\"，不是\"一定\"。另外正则是在 训练 目标里加的，它对训练集性能的影响方向恰恰相反（见 D）。\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"题型为判断题，学生作答 value=false，判定为正确，得 2.0/2.0 分\",\"该次作答 hints_used=0、solution_viewed=false、seen_before=false、independent_evidence=true，属于独立作答证据\",\"kp_id 为 kp.regularization.l1l2，涉及 L1/L2 正则化知识点\"],\"candidate_causes\":[\"可能已能正确区分 L1/L2 正则化的相关命题（如 LASSO 与 L1 的对应关系），但单题正确不足以确认完整掌握\",\"也可能基于常识或猜测答对，本次仅一题、无过程信息，无法排除\"],\"evidence\":[\"作答记录：correct=true，awarded_score=2.0，max_score=2.0，scoring_status=auto\",\"independent_evidence=true，hints_used=0，solution_viewed=false，seen_before=false，说明该次不是提示或看答案后的非独立证据\",\"课程资料片段显示 LASSO 对应 L1 正则化（题11 选项 A），与本知识点同族\"],\"next_verification\":[\"补充同题族（fam_bfab6a7bc96d4478）中不同表述的判断题或选择题，检验是否能稳定区分 L1 与 L2 正则化的作用与代价\",\"增加需要解释“正则化压低模型复杂度、减小方差、引入偏差”的变式题，观察是否理解其机制而非仅记忆对应关系\",\"若后续出现错误，再结合错题定位具体误区；当前不据此推断心理原因\"],\"insufficient\":true}",
+      "request_sha256": "5304bce45fc4f1ace987731bf348eea0e0d0e99a4f12c478c57ca3b322c996eb"
+    },
+    {
+      "call_id": "call_56a1d88aed6748b7",
+      "run_id": "run_83dba90bacd94905",
+      "skill": "diagnose_paper",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T13:56:28+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情报告助手。只依据【统计事实】写简短总结，不新增事实、不推断能力变化。\n输出 JSON：{\"summary\":\"...\", \"cautions\":[...]}\n"
+        },
+        {
+          "role": "user",
+          "content": "【统计事实】\n{\"attempt_id\": \"attempt_c0da6e6920724ab6\", \"paper_id\": \"paper_ac0e1bbcb6b34c6c\", \"score\": 10.0, \"max_score\": 10.0, \"manual_pending_count\": 0, \"covered_knowledge_points\": [{\"kp_id\": \"kp.eval.bias_var\", \"kp_name\": \"偏差-方差均衡\", \"items\": 3, \"auto_scored_items\": 3, \"correct_items\": 3, \"manual_pending\": 0, \"lost_points\": 0.0, \"independent_families\": 3, \"evidence_ids\": [\"score_c021b25b56b34ffa\", \"score_cb3480fadde64374\", \"score_e7a269e927a448fa\"], \"accuracy_if_scored\": 1.0}, {\"kp_id\": \"kp.regularization.l1l2\", \"kp_name\": \"L1/L2 正则化\", \"items\": 2, \"auto_scored_items\": 2, \"correct_items\": 2, \"manual_pending\": 0, \"lost_points\": 0.0, \"independent_families\": 2, \"evidence_ids\": [\"score_dd8a326be8074b04\", \"score_8d6a4ea5111f45a0\"], \"accuracy_if_scored\": 1.0}], \"weak_points\": [], \"review_priority\": []}\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"summary\":\"本次作答得分10.0/10.0，覆盖偏差-方差均衡、L1/L2 正则化两个知识点，共5题全部自动评分且正确，无待人工评分项，无失分。\",\"cautions\":[]}",
+      "request_sha256": "95e5053f32bb8490bd5277f76e71cdb92391f34455500acffdf8e9eea2893a5a"
+    },
+    {
+      "call_id": "call_1a2d5ed292fa456c",
+      "run_id": "run_f2a33ae20c7c488f",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T14:05:11+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"multi_choice\", \"kp_id\": \"kp.eval.bias_var\", \"family_id\": \"fam_0b2f8e2d11e34c25\", \"response\": {\"keys\": [\"A\", \"B\"]}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"kp.eval.bias_var 多选题作答为 A、B，判定正确，得分 2.0/2.0\",\"hints_used=0，solution_viewed=false，seen_before=false，independent_evidence=true\",\"该题族 fam_0b2f8e2d11e34c25 仅见本次作答记录\"],\"candidate_causes\":[\"可能已能区分过拟合与欠拟合在偏差—方差理论中的对应关系（过拟合→高方差，欠拟合→高偏差）\",\"可能仅凭选项字面或排除法作答，未真正建立偏差—方差概念结构\"],\"evidence\":[\"作答正确且为独立证据（无提示、未看答案、此前未见过）\",\"课程资料题7、题8分别考查过拟合/欠拟合与偏差—方差的对应，与本次 kp 同族，但资料中选项文本存在缺失，无法据此核对具体选项内容\"],\"next_verification\":[\"补充同 kp 的变式题（如给出学习曲线或训练/验证误差模式，判断高偏差或高方差）以验证迁移\",\"要求口头或书面解释过拟合与高方差、欠拟合与高偏差的因果联系\",\"检查是否存在同题族重复作答记录，若重复则不计为新的独立证据\"],\"insufficient\":false}",
+      "request_sha256": "622cb790b39dfebbfebc6248d35df1af0a2e29b94b32b083fb4d565b35437ed6"
+    },
+    {
+      "call_id": "call_38f387d166df4fce",
+      "run_id": "run_b846d4a0361d4995",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T14:05:16+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"single_choice\", \"kp_id\": \"kp.eval.bias_var\", \"family_id\": \"fam_6a52c02aecb14d9d\", \"response\": {\"key\": \"B\"}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"单题单选作答，kp_id=kp.eval.bias_var，选择B且判定正确，得分2/2\",\"hints_used=0，solution_viewed=false，seen_before=false，independent_evidence=true，本次为独立作答证据\",\"课程资料片段显示题7考查“过拟合对应偏差—方差理论中的”，选项B为“高方差”；题8考查“欠拟合对应偏差—方差理论中的”，选项A为“高偏差”\"],\"candidate_causes\":[\"可能已能正确将过拟合与高方差对应（候选掌握点，非断言）\",\"可能通过排除法或对偏差—方差概念的一般印象作答，未必能区分欠拟合/过拟合的完整对应关系\",\"可能仅记住“过拟合—高方差”这一单点配对，尚未验证对偏差、方差、泛化误差关系的整体理解\"],\"evidence\":[\"作答事实：本题正确且为独立证据（无提示、未看答案、未见过）\",\"课程资料题7与本题考点一致，选项B“高方差”为过拟合对应项，与作答一致\",\"课程资料题8提供对照考点（欠拟合—高偏差），但本次未测\"],\"next_verification\":[\"用同题族变式题（如欠拟合对应哪一项、偏差—方差与泛化误差分解）进行独立复测\",\"要求口头或书面解释过拟合与高方差、欠拟合与高偏差的因果联系\",\"检查是否存在选项位置记忆或排除法作答的痕迹\"],\"insufficient\":true}",
+      "request_sha256": "a55a786f8f89aa08de732d03f79e259bc74544cddabc6b6d68870b3adf8ccc35"
+    },
+    {
+      "call_id": "call_1f65c59b70ad4842",
+      "run_id": "run_21b4c51d190644d5",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T14:05:20+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"single_choice\", \"kp_id\": \"kp.eval.bias_var\", \"family_id\": \"fam_202b337177ce4b90\", \"response\": {\"key\": \"B\"}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n请输出 JSON。"
+        }
+      ],
+      "response": "{\n  \"observed\": [\n    \"题目类型为单选题，知识点为 kp.eval.bias_var，作答选择 B，判定为正确，得分 2/2。\",\n    \"该次作答 hints_used=0、solution_viewed=false、seen_before=false、independent_evidence=true，属于独立作答证据。\"\n  ],\n  \"candidate_causes\": [\n    \"可能已能正确区分过拟合与偏差—方差理论中“高方差”的对应关系。\",\n    \"也可能仅凭选项表面匹配或排除法答对，尚未证明对偏差—方差概念体系有完整理解。\"\n  ],\n  \"evidence\": [\n    \"作答事实显示本题正确且为独立证据，支持该单题上的表现正确。\",\n    \"课程资料片段中题7题干为“过拟合对应偏差—方差理论中的”，选项包含“高方差”，与本次作答知识点一致。\",\n    \"课程资料片段中题8为“欠拟合对应偏差—方差理论中的”，说明该知识点还涉及欠拟合与高偏差的对应关系，但本次未测。\"\n  ],\n  \"next_verification\": [\n    \"用同题族但不同题面的题目验证，例如“欠拟合对应偏差—方差理论中的什么”，检查是否能区分高偏差与高方差。\",\n    \"给出具体模型现象（如训练误差低、验证误差高）让学生判断偏差/方差状态，验证是否真正理解而非选项记忆。\",\n    \"若后续作答使用提示或查看答案，应标记该次不是独立证据。\"\n  ],\n  \"insufficient\": false\n}",
+      "request_sha256": "dbd1385ff989c18c13d52e9557d689ac9988f05df5d6d58b7c48c77e4ae6bda2"
+    },
+    {
+      "call_id": "call_9054941b9c424f7a",
+      "run_id": "run_9bed7f4706094821",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T14:05:25+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"true_false\", \"kp_id\": \"kp.regularization.l1l2\", \"family_id\": \"fam_bd149af732d44f54\", \"response\": {\"value\": true}, \"correct\": true, \"awarded_score\": 2.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_314b0bf1ff3468_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_9b657c5718aca8_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_04d94304c8879d_u0045] line_block 45\n正则化（L1/L2）的作用是 压低模型复杂度、减小方差 ，代价是 引入偏差 。如果模型本来是 欠拟合 （高偏差），再加正则只会更差；就算正合适，λ 调大了也会欠拟合。所以是\" 可能 提升\"，不是\"一定\"。另外正则是在 训练 目标里加的，它对训练集性能的影响方向恰恰相反（见 D）。\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"observed\":[\"题目类型为判断题，学生作答 value=true，判定正确，得分 2/2\",\"该次作答 hints_used=0、solution_viewed=false、seen_before=false，independent_evidence=true，属于独立作答证据\",\"题目知识点为 kp.regularization.l1l2（L1/L2 正则化）\",\"课程资料片段显示相关题目为“LASSO 使用：”，正确选项为 L1 正则化；另有一段资料说明正则化（L1/L2）的作用是压低模型复杂度、减小方差，代价是引入偏差\"],\"candidate_causes\":[\"可能已掌握 LASSO 与 L1 正则化的对应关系（候选解释，单题正确不足以断言）\",\"可能通过排除法或常识判断作答正确，而非完整理解 L1/L2 差异（候选解释）\",\"可能对 L1/L2 的机制（稀疏性、权重收缩）理解不完整，仅记住结论（候选解释）\"],\"evidence\":[\"独立作答且正确：hints_used=0、solution_viewed=false、seen_before=false、independent_evidence=true\",\"课程资料中 LASSO 对应 L1 正则化，与本题知识点 kp.regularization.l1l2 一致\",\"课程资料片段指出正则化会压低模型复杂度、减小方差但引入偏差，说明该知识点存在可进一步考查的理解维度\"],\"next_verification\":[\"提供同题族（fam_bd149af732d44f54）的新判断题或选择题，考查 L2 正则化对应关系及 L1/L2 差异\",\"要求解释 LASSO 为什么产生稀疏解，验证是否理解 L1 的机制而非仅记住结论\",\"考查正则化对训练集/测试集性能影响方向，验证是否掌握资料片段中“可能提升而非一定”的表述\",\"若后续使用提示或重复作答，需标注该次不作为独立证据\"],\"insufficient\":true}",
+      "request_sha256": "b72a388d739979649b930a87936c6084ebf533613bc168ba252a0a6e8c27ff05"
+    },
+    {
+      "call_id": "call_6b3ae88ba3be4019",
+      "run_id": "run_6a9ba19f70a64019",
+      "skill": "diagnose_question",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T14:05:30+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情诊断助手。只依据【作答事实】与【课程资料片段】给出候选解释。\n规则：\n1. 单题错误只能支持「候选误区」，不能断言学生的心理原因。\n2. 区分观察事实、可能原因、支持证据、下一步验证。\n3. 若使用提示/看过答案/同题族重复作答，必须说明该次不是独立证据。\n4. 未测不等于不会；证据不足时不给精确掌握概率。\n5. 输出 JSON：{\"observed\":[...],\"candidate_causes\":[...],\"evidence\":[...],\"next_verification\":[...],\"insufficient\":true/false}\n"
+        },
+        {
+          "role": "user",
+          "content": "【作答事实】\n{\"question_type\": \"true_false\", \"kp_id\": \"kp.regularization.l1l2\", \"family_id\": \"fam_bfab6a7bc96d4478\", \"response\": {\"value\": true}, \"correct\": false, \"awarded_score\": 0.0, \"max_score\": 2.0, \"scoring_status\": \"auto\", \"hints_used\": 0, \"solution_viewed\": false, \"seen_before\": false, \"independent_evidence\": true, \"answer_status\": \"ai_auto_checked\"}\n\n【课程资料片段】\n[doc_314b0bf1ff3468_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_9b657c5718aca8_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_04d94304c8879d_u0045] line_block 45\n正则化（L1/L2）的作用是 压低模型复杂度、减小方差 ，代价是 引入偏差 。如果模型本来是 欠拟合 （高偏差），再加正则只会更差；就算正合适，λ 调大了也会欠拟合。所以是\" 可能 提升\"，不是\"一定\"。另外正则是在 训练 目标里加的，它对训练集性能的影响方向恰恰相反（见 D）。\n请输出 JSON。"
+        }
+      ],
+      "response": "{\n  \"observed\": [\n    \"题目类型为判断题，学生作答为 true，正确答案为 false，得分为 0/2。\",\n    \"该题知识点为 kp.regularization.l1l2，题族为 fam_bfab6a7bc96d4478。\",\n    \"本次作答未使用提示（hints_used=0），未查看答案（solution_viewed=false），此前未见过该题（seen_before=false），属于独立作答证据。\",\n    \"课程资料片段显示：LASSO 使用 L1 正则化；正则化（L1/L2）的作用是压低模型复杂度、减小方差，代价是引入偏差；若模型原本欠拟合，再加正则只会更差；正则化对训练集性能的影响方向与泛化性能相反。\"\n  ],\n  \"candidate_causes\": [\n    \"候选误区：可能将 LASSO 与 L2 正则化（Ridge）混淆，误认为 LASSO 使用 L2 正则化。\",\n    \"候选误区：可能对 L1/L2 正则化的作用方向理解有误，例如认为正则化一定能提升模型性能，或混淆正则化对训练集与测试集性能的影响。\",\n    \"候选误区：可能对判断题的陈述方向判断失误，例如将“可能提升”误判为“一定提升”，或对正则化与偏差/方差的关系理解不准确。\"\n  ],\n  \"evidence\": [\n    \"作答事实：判断题选择 true 但正确答案为 false，说明学生对该陈述的真伪判断与标准答案相反。\",\n    \"课程资料片段明确指出 LASSO 使用 L1 正则化，且正则化是“可能提升”而非“一定提升”，并说明正则化对训练集性能的影响方向与泛化性能相反。\",\n    \"本次作答为独立证据（未使用提示、未查看答案、此前未见过该题），可作为该题族下的单题错误证据。\"\n  ],\n  \"next_verification\": [\n    \"提供同题族中关于 LASSO 与 L1/L2 正则化对应关系的变式题（如选择题或填空题），验证学生是否能正确区分 LASSO 使用 L1 正则化。\",\n    \"提供关于正则化作用方向的判断题或简答题（如“正则化一定能提升模型性能”“正则化对训练集性能的影响方向”），验证学生是否理解正则化可能提升泛化性能但会引入偏差、且对训练集性能影响方向相反。\",\n    \"询问学生选择 true 的理由（如口头解释或书面说明），以区分是概念混淆还是判断题陈述方向误读。\"\n  ],\n  \"insufficient\": false\n}",
+      "request_sha256": "6aad657b37099b590bc791ac896b5e75d106c1f7597efbbe6ae79ae07bc2d87a"
+    },
+    {
+      "call_id": "call_a01e021bf3f94ce3",
+      "run_id": "run_88e7262ebfd44ce0",
+      "skill": "diagnose_paper",
+      "model": "deepseek-flash",
+      "prompt_version": "prompt-1.0",
+      "created_at": "2026-11-18T14:05:33+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是学情报告助手。只依据【统计事实】写简短总结，不新增事实、不推断能力变化。\n输出 JSON：{\"summary\":\"...\", \"cautions\":[...]}\n"
+        },
+        {
+          "role": "user",
+          "content": "【统计事实】\n{\"attempt_id\": \"attempt_9d9d618e544d43aa\", \"paper_id\": \"paper_0b728f675c814338\", \"score\": 8.0, \"max_score\": 10.0, \"manual_pending_count\": 0, \"covered_knowledge_points\": [{\"kp_id\": \"kp.regularization.l1l2\", \"kp_name\": \"L1/L2 正则化\", \"items\": 2, \"auto_scored_items\": 2, \"correct_items\": 1, \"manual_pending\": 0, \"lost_points\": 2.0, \"independent_families\": 2, \"evidence_ids\": [\"score_746dee2582434a4b\", \"score_f14900e9c11644d4\"], \"accuracy_if_scored\": 0.5}, {\"kp_id\": \"kp.eval.bias_var\", \"kp_name\": \"偏差-方差均衡\", \"items\": 3, \"auto_scored_items\": 3, \"correct_items\": 3, \"manual_pending\": 0, \"lost_points\": 0.0, \"independent_families\": 3, \"evidence_ids\": [\"score_a0dd7642abcc44e9\", \"score_10c383378ee24e54\", \"score_3ad3b771d73f45c8\"], \"accuracy_if_scored\": 1.0}], \"weak_points\": [\"kp.regularization.l1l2\"], \"review_priority\": [{\"kp_id\": \"kp.regularization.l1l2\", \"reason\": \"失分 2.0 分，覆盖 2 题，独立题族 2 个\"}]}\n请输出 JSON。"
+        }
+      ],
+      "response": "{\"summary\":\"本次得分 8.0/10.0，无待人工评分项。L1/L2 正则化覆盖 2 题，答对 1 题，失 2.0 分；偏差-方差均衡覆盖 3 题，全部答对，失 0.0 分。\",\"cautions\":[\"L1/L2 正则化为薄弱点，失分 2.0 分，覆盖 2 题、2 个独立题族，建议优先复习。\"]}",
+      "request_sha256": "ebf78452d3d681207930469b9e77736c7c1c6f745c2af1b6afd9cc2366d3e1e3"
+    },
+    {
+      "call_id": "call_6f848785ec91459c",
+      "run_id": "run_4f7b29db552044a3",
+      "skill": "generate_questions",
+      "model": "deepseek-flash",
+      "prompt_version": "question-gen-1.1",
+      "created_at": "2026-11-18T14:07:00+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是机器学习课程出题助手。只依据【课程资料片段】生成候选题。\n规则：\n1. 只输出 JSON 数组，每个元素字段：\n   {\"question_type\":\"single_choice|multi_choice|true_false|numeric|short_answer\",\n    \"stem\":\"...\", \"options\":[{\"key\":\"A\",\"text\":\"...\"}],\n    \"answer_payload\":{...}, \"kp_id\":\"...\", \"cognitive_level\":\"...\",\n    \"difficulty\":\"...\", \"source_chunk_ids\":[...], \"calculation\":\"数值题写独立计算式\"}\n2. 题干/选项不得包含答案或解析；公式用 LaTeX $...$ 或 $$...$$。\n3. 单选答案用 {\"key\":\"B\"}；多选 {\"keys\":[\"A\",\"C\"],\"partial_rule\":\"proportional_no_wrong\"}；\n   判断 {\"value\":true}；数值 {\"value\":1.25,\"tol\":0.01,\"unit\":\"\",\"rounding\":2}。\n4. 每个题必须引用至少一个真实 chunk_id；无依据时不要出题。\n5. 候选答案只是候选，不得声称已核验；不要标注为教师标准答案。\n6. 当蓝图 mode=similar_to_wrong 时：必须围绕 source_question 的同一知识点和同一题型改写，\n   可改数值、条件与应用场景，但不得照抄原题干、不得换成无关知识点；难度与原题相近或略高；\n   仍然必须引用真实的 chunk_id。\n7. kp_id 必须从蓝图 kp_ids 中选择，题型必须符合 question_types；不得用其他知识点凑数。\n"
+        },
+        {
+          "role": "user",
+          "content": "【课程资料片段】\n[doc_314b0bf1ff3468_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_9b657c5718aca8_q0011] 题11\n{\"kind\": \"question\", \"no\": \"题11\", \"stem\": \"LASSO 使⽤：\", \"options\": [{\"key\": \"A\", \"text\": \"L1 正则化\", \"missing_formula\": false}, {\"key\": \"B\", \"text\": \"L2 正则化\", \"missing_formula\": false}, {\"key\": \"C\", \"text\": \"Hinge loss\", \"missing_formula\": false}, {\"key\": \"D\", \"text\": \"Softmax\", \"mi\n\n[doc_04d94304c8879d_u0045] line_block 45\n正则化（L1/L2）的作用是 压低模型复杂度、减小方差 ，代价是 引入偏差 。如果模型本来是 欠拟合 （高偏差），再加正则只会更差；就算正合适，λ 调大了也会欠拟合。所以是\" 可能 提升\"，不是\"一定\"。另外正则是在 训练 目标里加的，它对训练集性能的影响方向恰恰相反（见 D）。\n\n[doc_314b0bf1ff3468_u0183] page 183\n常数形式可能不同，本质⼀致。 5.1.2 Ridge 的特点 1. 使⽤ L2 正则项。 2. 惩罚参数平⽅。 3. 使参数变⼩。 4. 通常不会让参数严格等于 0。 5. 能缓解过拟合。 6. 更强调平滑性。 5.2 LASSO 5.2.1 定义 LASSO 使⽤ L1 正则化。 代价函数： LASSO 全称： 5.2.2 LASSO 的特点 1. 使⽤ L1 正则项。 2. 惩罚参数绝对值。 3. 可以使部分参数变为 0。 4. 具有特征选择能⼒。 5. 体现稀疏性偏好。 5.3 Ridge 与 LASSO 对⽐\n\n【出题蓝图】{\"count\": 5, \"kp_ids\": [\"kp.regularization.l1l2\"], \"question_types\": [\"single_choice\", \"multi_choice\", \"true_false\"], \"mode\": \"teacher_retest_candidate\", \"instruction\": \"复测新题：覆盖至少两种题型，结合概念辨析与情境应用。每题给出可核验答案、解析、课程引用。改变考查情境或推理方式，不得只换数字或措辞。\"}\n请输出 JSON 数组，不要输出其它文字。"
+        }
+      ],
+      "response": "[\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"某线性回归模型在训练集上表现很好，但在测试集上误差较大。若希望模型参数中有一部分严格等于 0，从而起到特征选择的作用，应优先选用下列哪种正则化方式？\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"L2 正则化（Ridge）\"},\n      {\"key\": \"B\", \"text\": \"L1 正则化（LASSO）\"},\n      {\"key\": \"C\", \"text\": \"不使用任何正则化\"},\n      {\"key\": \"D\", \"text\": \"增大特征数量\"}\n    ],\n    \"answer_payload\": {\"key\": \"B\"},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"应用\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_u0183\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"multi_choice\",\n    \"stem\": \"关于 Ridge 与 LASSO 的特点，下列说法正确的有：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"Ridge 使用 L2 正则项，通常不会让参数严格等于 0\"},\n      {\"key\": \"B\", \"text\": \"LASSO 使用 L1 正则项，可以使部分参数变为 0\"},\n      {\"key\": \"C\", \"text\": \"LASSO 具有特征选择能力，体现稀疏性偏好\"},\n      {\"key\": \"D\", \"text\": \"Ridge 使用 L1 正则项，LASSO 使用 L2 正则项\"}\n    ],\n    \"answer_payload\": {\"keys\": [\"A\", \"B\", \"C\"], \"partial_rule\": \"proportional_no_wrong\"},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_u0183\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"在训练目标中加入正则化项，其作用是压低模型复杂度、减小方差，但代价是引入偏差；因此对原本已经欠拟合（高偏差）的模型再加正则化，只会使情况更差。\",\n    \"options\": [],\n    \"answer_payload\": {\"value\": true},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_04d94304c8879d_u0045\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"某同学在训练集上加入正则化项后，发现训练集上的性能反而变差。结合正则化的作用机制，下列解释最合理的是：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"正则化项是在训练目标中加入的，它压低模型复杂度，因此对训练集性能的影响方向与对泛化性能的影响方向相反\"},\n      {\"key\": \"B\", \"text\": \"正则化项只在测试阶段起作用，因此训练集性能必然下降\"},\n      {\"key\": \"C\", \"text\": \"正则化项等价于增加特征数量，导致训练集性能下降\"},\n      {\"key\": \"D\", \"text\": \"正则化项会消除偏差，因此训练集性能下降\"}\n    ],\n    \"answer_payload\": {\"key\": \"A\"},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"分析\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_04d94304c8879d_u0045\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"Ridge 回归使用 L2 正则项，其惩罚项为参数的平方和，通常会使参数变小但不会让参数严格等于 0，因而更强调平滑性。\",\n    \"options\": [],\n    \"answer_payload\": {\"value\": true},\n    \"kp_id\": \"kp.regularization.l1l2\",\n    \"cognitive_level\": \"记忆\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_u0183\"],\n    \"calculation\": \"\"\n  }\n]",
+      "request_sha256": "d18827333c4b57196e53742f64c65fa87bd12493819d9f5149a588ac5201ab66"
+    },
+    {
+      "call_id": "call_df8f4f1d276a4c3e",
+      "run_id": "run_d51468e7665948a2",
+      "skill": "generate_questions",
+      "model": "deepseek-flash",
+      "prompt_version": "question-gen-1.1",
+      "created_at": "2026-11-18T14:07:06+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "你是机器学习课程出题助手。只依据【课程资料片段】生成候选题。\n规则：\n1. 只输出 JSON 数组，每个元素字段：\n   {\"question_type\":\"single_choice|multi_choice|true_false|numeric|short_answer\",\n    \"stem\":\"...\", \"options\":[{\"key\":\"A\",\"text\":\"...\"}],\n    \"answer_payload\":{...}, \"kp_id\":\"...\", \"cognitive_level\":\"...\",\n    \"difficulty\":\"...\", \"source_chunk_ids\":[...], \"calculation\":\"数值题写独立计算式\"}\n2. 题干/选项不得包含答案或解析；公式用 LaTeX $...$ 或 $$...$$。\n3. 单选答案用 {\"key\":\"B\"}；多选 {\"keys\":[\"A\",\"C\"],\"partial_rule\":\"proportional_no_wrong\"}；\n   判断 {\"value\":true}；数值 {\"value\":1.25,\"tol\":0.01,\"unit\":\"\",\"rounding\":2}。\n4. 每个题必须引用至少一个真实 chunk_id；无依据时不要出题。\n5. 候选答案只是候选，不得声称已核验；不要标注为教师标准答案。\n6. 当蓝图 mode=similar_to_wrong 时：必须围绕 source_question 的同一知识点和同一题型改写，\n   可改数值、条件与应用场景，但不得照抄原题干、不得换成无关知识点；难度与原题相近或略高；\n   仍然必须引用真实的 chunk_id。\n7. kp_id 必须从蓝图 kp_ids 中选择，题型必须符合 question_types；不得用其他知识点凑数。\n"
+        },
+        {
+          "role": "user",
+          "content": "【课程资料片段】\n[doc_6428a417b9bb36_u0001] page 1\n第1 页 共8 页 南开大学软件学院本科生2019-2020 学年第2 学期《机器学习导论》课程期末考试试卷（A 卷） 专业： 年级： 学号： 姓名： 成绩: 草 稿 区 一 、名词解释（本题共15 分，每小题3 分） 得 分 得 分 1. SVM 2. LSTM 3. 统计学习理论 4. 聚类(Clustering)： 5. PCA 二 、是非题（本题共10 分，每小题2 分） 1. （ ）Logistic 回归即可以解决回归问题，又可以解决分类问题。 2. （ ）深度神经网络不能仅靠增加神经网络的层数实现，因不能很好地解决梯度不稳定（消失或爆炸）。 \n\n[doc_314b0bf1ff3468_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n[doc_314b0bf1ff3468_q0008] 题8\n{\"kind\": \"question\", \"no\": \"题8\", \"stem\": \"⽋拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低偏差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⾼泛化能⼒\", \"missing_formula\n\n[doc_9b657c5718aca8_q0007] 题7\n{\"kind\": \"question\", \"no\": \"题7\", \"stem\": \"过拟合对应偏差—⽅差理论中的：\", \"options\": [{\"key\": \"A\", \"text\": \"⾼偏差\", \"missing_formula\": true}, {\"key\": \"B\", \"text\": \"⾼⽅差\", \"missing_formula\": true}, {\"key\": \"C\", \"text\": \"低⽅差\", \"missing_formula\": true}, {\"key\": \"D\", \"text\": \"⽆噪声\", \"missing_formula\":\n\n【出题蓝图】{\"count\": 5, \"kp_ids\": [\"kp.eval.bias_var\"], \"question_types\": [\"single_choice\", \"multi_choice\", \"true_false\"], \"mode\": \"teacher_retest_candidate\", \"instruction\": \"复测新题：覆盖至少两种题型，结合概念辨析与情境应用。每题给出可核验答案、解析、课程引用。改变考查情境或推理方式，不得只换数字或措辞。\"}\n请输出 JSON 数组，不要输出其它文字。"
+        }
+      ],
+      "response": "[\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"在偏差—方差理论中，若一个模型在训练集和测试集上的误差都很大，最可能反映该模型具有：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"高偏差\"},\n      {\"key\": \"B\", \"text\": \"高方差\"},\n      {\"key\": \"C\", \"text\": \"低偏差\"},\n      {\"key\": \"D\", \"text\": \"低方差\"}\n    ],\n    \"answer_payload\": {\"key\": \"A\"},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0008\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"single_choice\",\n    \"stem\": \"某模型在训练集上误差很小，但在测试集上误差明显增大，从偏差—方差理论看，这主要说明：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"模型偏差过高\"},\n      {\"key\": \"B\", \"text\": \"模型方差过高\"},\n      {\"key\": \"C\", \"text\": \"模型偏差和方差都过低\"},\n      {\"key\": \"D\", \"text\": \"数据中不存在噪声\"}\n    ],\n    \"answer_payload\": {\"key\": \"B\"},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"应用\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0007\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"multi_choice\",\n    \"stem\": \"关于偏差—方差理论，下列说法正确的有：\",\n    \"options\": [\n      {\"key\": \"A\", \"text\": \"过拟合通常与高方差相联系\"},\n      {\"key\": \"B\", \"text\": \"欠拟合通常与高偏差相联系\"},\n      {\"key\": \"C\", \"text\": \"增加模型复杂度一定同时降低偏差和方差\"},\n      {\"key\": \"D\", \"text\": \"偏差—方差分解可用于分析模型的泛化误差\"}\n    ],\n    \"answer_payload\": {\"keys\": [\"A\", \"B\", \"D\"], \"partial_rule\": \"proportional_no_wrong\"},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"分析\",\n    \"difficulty\": \"medium\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0007\", \"doc_314b0bf1ff3468_q0008\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"在偏差—方差理论中，欠拟合对应高偏差。\",\n    \"options\": [],\n    \"answer_payload\": {\"value\": true},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"记忆\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0008\"],\n    \"calculation\": \"\"\n  },\n  {\n    \"question_type\": \"true_false\",\n    \"stem\": \"在偏差—方差理论中，过拟合对应低方差。\",\n    \"options\": [],\n    \"answer_payload\": {\"value\": false},\n    \"kp_id\": \"kp.eval.bias_var\",\n    \"cognitive_level\": \"理解\",\n    \"difficulty\": \"easy\",\n    \"source_chunk_ids\": [\"doc_314b0bf1ff3468_q0007\"],\n    \"calculation\": \"\"\n  }\n]",
+      "request_sha256": "b1eaa18107b7bec7c1b2a116a5e2489329010e0fb97d6c9bd9b69b7b080a23b6"
+    },
+    {
+      "call_id": "call_7c8191ece74843a8",
+      "run_id": "teacher-job:job_b1e87932427a4221",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T14:07:09+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"某线性回归模型在训练集上表现很好，但在测试集上误差较大。若希望模型参数中有一部分严格等于 0，从而起到特征选择的作用，应优先选用下列哪种正则化方式？\", \"options\": [{\"key\": \"A\", \"text\": \"L2 正则化（Ridge）\"}, {\"key\": \"B\", \"text\": \"L1 正则化（LASSO）\"}, {\"key\": \"C\", \"text\": \"不使用任何正则化\"}, {\"key\": \"D\", \"text\": \"增大特征数量\"}], \"question_type\": \"single_choice\", \"knowledge_point\": \"L1/L2 正则化\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\": \"B\", \"explanation\": \"L1 正则化（LASSO）在损失函数中加入参数绝对值之和的惩罚项，其几何性质使最优解中部分参数可被压缩为严格的 0，从而实现特征选择；L2 正则化（Ridge）通常只将参数收缩到接近 0 而不严格为 0。\", \"unambiguous\": true, \"kp_matches\": true, \"assessment_angle\": \"定义辨析\"}",
+      "request_sha256": "551a8265469f7d30b0715ac964e83ce68be0a4f24df9af427ce297e6ffe065ad"
+    },
+    {
+      "call_id": "call_061a4130e7bf4118",
+      "run_id": "teacher-job:job_b1e87932427a4221",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T14:07:12+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"某同学在训练集上加入正则化项后，发现训练集上的性能反而变差。结合正则化的作用机制，下列解释最合理的是：\", \"options\": [{\"key\": \"A\", \"text\": \"正则化项是在训练目标中加入的，它压低模型复杂度，因此对训练集性能的影响方向与对泛化性能的影响方向相反\"}, {\"key\": \"B\", \"text\": \"正则化项只在测试阶段起作用，因此训练集性能必然下降\"}, {\"key\": \"C\", \"text\": \"正则化项等价于增加特征数量，导致训练集性能下降\"}, {\"key\": \"D\", \"text\": \"正则化项会消除偏差，因此训练集性能下降\"}], \"question_type\": \"single_choice\", \"knowledge_point\": \"L1/L2 正则化\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\": {\"key\": \"A\"}, \"explanation\": \"正则化项被加入训练目标，通过惩罚模型参数来限制模型复杂度，因此通常会降低模型在训练集上的拟合程度（训练误差可能上升），其目的是改善泛化性能。A 正确指出正则化压低复杂度且对训练集性能的影响方向与对泛化性能的影响方向相反。B 错误，正则化在训练阶段起作用；C 错误，正则化不是增加特征数量；D 错误，正则化通常增大偏差而非消除偏差。\", \"unambiguous\": true, \"kp_matches\": true, \"assessment_angle\": \"机制解释\"}",
+      "request_sha256": "e65edd9cdff86a43e3ee40c8dadd48219362f168089411dbb923f0f2176c1387"
+    },
+    {
+      "call_id": "call_d9638553fee84e69",
+      "run_id": "teacher-job:job_b1e87932427a4221",
+      "skill": "automatic_retest_verification",
+      "model": "deepseek-flash",
+      "prompt_version": "",
+      "created_at": "2026-11-18T14:07:15+00:00",
+      "status": "ok",
+      "messages": [
+        {
+          "role": "system",
+          "content": "独立解答机器学习题，检查歧义与指定知识点匹配。只输出 JSON：answer_payload（单选为 key，多选为 keys 数组，判断为布尔 value）、explanation、unambiguous（布尔）、kp_matches（布尔）、assessment_angle（简短的考查方式类别，例如定义辨析、情境诊断、公式应用、反例判断；不得用题目编号或复述题干冒充类别）。不要猜测，无法唯一解答时 unambiguous=false。"
+        },
+        {
+          "role": "user",
+          "content": "{\"stem\": \"Ridge 回归使用 L2 正则项，其惩罚项为参数的平方和，通常会使参数变小但不会让参数严格等于 0，因而更强调平滑性。\", \"options\": [], \"question_type\": \"true_false\", \"knowledge_point\": \"L1/L2 正则化\", \"chapter\": \"\"}"
+        }
+      ],
+      "response": "{\"answer_payload\": true, \"explanation\": \"Ridge 回归采用 L2 正则化，惩罚项为参数平方和，其解通常将参数收缩到接近 0 但不严格为 0，因此具有平滑性而非稀疏性。\", \"unambiguous\": true, \"kp_matches\": true, \"assessment_angle\": \"定义辨析\"}",
+      "request_sha256": "c32179f1f717419cceafc54a2688e7f565ebb19a88dd44df283c19c15a57aa95"
+    }
+  ]
+}

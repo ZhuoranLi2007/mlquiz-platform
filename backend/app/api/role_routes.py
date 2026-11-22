@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import hashlib
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
-from pydantic import BaseModel, Field
-from sqlalchemy import select
+from pydantic import BaseModel, Field, StringConstraints, model_validator
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import delete, select
+from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.orm import Session
 
 from backend.app import config as cfg
@@ -23,6 +25,7 @@ from backend.app.services import (
     paper_builder_service,
     release_service,
     teacher_attempt_review,
+    teacher_question_service,
 )
 
 router = APIRouter(prefix="/api", tags=["teacher-student"])
@@ -77,6 +80,44 @@ class SelfRetestIn(BaseModel):
 
 class ApproveCandidateIn(BaseModel):
     review_note: str = Field(default="", max_length=500)
+
+
+TeacherQuestionType = Literal["single_choice", "multi_choice", "true_false"]
+NonBlankText = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+
+
+class QuestionOptionIn(BaseModel):
+    key: str = Field(pattern=r"^[A-H]$")
+    text: NonBlankText = Field(max_length=2000)
+
+
+class TeacherQuestionIn(BaseModel):
+    question_type: TeacherQuestionType
+    stem: NonBlankText = Field(max_length=12000)
+    options: list[QuestionOptionIn] = Field(default_factory=list, max_length=8)
+    answer_payload: dict
+    explanation: NonBlankText = Field(max_length=8000)
+    main_kp_id: NonBlankText = Field(max_length=64)
+    aux_kp_ids: list[str] = Field(default_factory=list, max_length=10)
+    difficulty: Literal["基础", "中等", "困难"] = "中等"
+    score: float = Field(default=2, gt=0, le=1000, allow_inf_nan=False)
+    question_version: int | None = Field(default=None, ge=1)
+
+    @model_validator(mode="after")
+    def validate_answer(self):
+        if len({option.key for option in self.options}) != len(self.options):
+            raise ValueError("选项编号重复")
+        if self.question_type == "true_false":
+            if self.options or type(self.answer_payload.get("value")) is not bool:
+                raise ValueError("判断题需提供布尔答案")
+        elif self.question_type == "single_choice":
+            if not isinstance(self.answer_payload.get("key"), str):
+                raise ValueError("单选题需填写正确选项")
+        else:
+            keys = self.answer_payload.get("keys")
+            if not isinstance(keys, list) or not all(isinstance(key, str) for key in keys):
+                raise ValueError("多选题需填写正确选项列表")
+        return self
 
 
 class TeacherPaperIn(BaseModel):
@@ -144,6 +185,69 @@ def teacher_question_bank(
         difficulty=difficulty, source=source, keyword=keyword,
         availability=availability, scope=scope,
         include_inactive=include_inactive, limit=limit)
+
+
+class ResourceBookmarkIn(BaseModel):
+    saved: bool
+
+
+@router.get("/student/resource-bookmarks/{resource_id}")
+def resource_bookmark(resource_id: str,
+                      principal: auth_service.Principal = Depends(auth_service.require_student),
+                      db: Session = Depends(get_session)):
+    entry = db.scalar(select(E.Favorite.entry_id).filter_by(
+        user_id=principal.user_id, kind="resource", target_id=resource_id))
+    return {"saved": entry is not None}
+
+
+@router.put("/student/resource-bookmarks/{resource_id}")
+def set_resource_bookmark(resource_id: str, body: ResourceBookmarkIn,
+                          principal: auth_service.Principal = Depends(auth_service.require_student),
+                          db: Session = Depends(get_session)):
+    identity = dict(user_id=principal.user_id, kind="resource", target_id=resource_id)
+    if body.saved:
+        from backend.app.services.learning_resources import material_catalog
+        resource = db.get(E.Resource, resource_id)
+        local = material_catalog().get(resource_id.removeprefix("course.")) if resource_id.startswith("course.") else None
+        if not resource and not local:
+            raise HTTPException(404, "资料已下架")
+        title = resource.title if resource else local.get("title") or resource_id
+        db.execute(insert(E.Favorite).values(entry_id=E.new_id("fav"), title=title, **identity)
+                   .on_conflict_do_nothing(index_elements=["user_id", "kind", "target_id"]))
+    else:
+        db.execute(delete(E.Favorite).filter_by(**identity))
+    db.commit()
+    return {"saved": body.saved}
+
+
+@router.post("/teacher/question-bank", status_code=201)
+@router.put("/teacher/question-bank/{question_id}")
+def save_teacher_question(
+    body: TeacherQuestionIn, question_id: str = "",
+    principal: auth_service.Principal = Depends(auth_service.require_teacher),
+    db: Session = Depends(get_session),
+) -> dict:
+    try:
+        return teacher_question_service.save(
+            db, body.model_dump(exclude={"question_version"}), principal.user_id,
+            question_id=question_id, version=body.question_version)
+    except (KeyError, ValueError) as exc:
+        raise _http_error(exc) from exc
+    except IntegrityError as exc:
+        db.rollback()
+        raise HTTPException(409, "题目已被更新，请刷新题库") from exc
+
+
+@router.delete("/teacher/question-bank/{question_id}")
+def archive_teacher_question(
+    question_id: str, question_version: int = Query(ge=1),
+    _: auth_service.Principal = Depends(auth_service.require_teacher),
+    db: Session = Depends(get_session),
+) -> dict:
+    try:
+        return teacher_question_service.archive(db, question_id, question_version)
+    except (KeyError, ValueError) as exc:
+        raise _http_error(exc) from exc
 
 
 @router.get("/teacher/paper-drafts")

@@ -603,9 +603,10 @@ def create_paper_from_questions(db: Session, questions: list[E.Question], *,
     }
 
 
-def revise_question(db: Session, question_id: str, patch: dict) -> dict:
+def revise_question(db: Session, question_id: str, patch: dict, *,
+                    actor_user_id: str = "", previous: E.Question | None = None) -> dict:
     """Create a NEW question version. Published papers keep their snapshots."""
-    old = db.execute(
+    old = previous or db.execute(
         select(E.Question).where(E.Question.question_id == question_id)
         .order_by(E.Question.question_version.desc())
     ).scalars().first()
@@ -615,6 +616,7 @@ def revise_question(db: Session, question_id: str, patch: dict) -> dict:
     new_ver = old.question_version + 1
     # Retire the superseded version so the same question_id can never be
     # selected twice for one paper. Published papers keep their own snapshot.
+    was_active = old.active
     old.active = False
     allowed = {"stem", "options", "stem_images", "score", "chapter_id",
                "question_type", "main_kp_id",
@@ -641,12 +643,28 @@ def revise_question(db: Session, question_id: str, patch: dict) -> dict:
         explanation=cur["explanation"],
         created_by="admin_revise",
     )
+    if actor_user_id:
+        # Preserve provenance and scope for the teacher workbench. Clear a
+        # translated display value only when its underlying content changes.
+        for column in E.Question.__table__.columns:
+            if column.key not in {"row_id", "question_version", "active",
+                                  "created_at", "created_by"}:
+                setattr(new, column.key, getattr(old, column.key))
+        if patch["stem"] != old.stem or patch["options"] != old.options:
+            new.stem_zh = ""
+            new.translation_status = "stale"
+        new.created_by = actor_user_id
+        if was_active:
+            new.review_status = "verified"
+            new.answer_status = "verified"
+            new.answer_origin = "teacher"
+        new.active = was_active
     for k, v in (patch or {}).items():
         if k in allowed and hasattr(new, k):
             setattr(new, k, v)
     db.add(new)
     db.add(E.LearningEvent(
-        event_id=E.new_id("evt"), user_id="local_user",
+        event_id=E.new_id("evt"), user_id=actor_user_id or "local_user",
         event_type="question_revised", target_id=question_id,
         payload={"from_version": old.question_version, "to_version": new_ver,
                  "changed_fields": sorted((patch or {}).keys())},
