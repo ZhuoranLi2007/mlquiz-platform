@@ -2,6 +2,7 @@
 import RetestRoundList from '../components/RetestRoundList.vue'
 import KnowledgeMap from '../components/KnowledgeMap.vue'
 import LearningTimeline from '../components/LearningTimeline.vue'
+import AdaptiveLearningPath from '../components/AdaptiveLearningPath.vue'
 import ResponsivePaneTabs from "../components/ResponsivePaneTabs.vue"
 import { loopTime } from '../utils/learningLoop'
 import { computed, nextTick, onMounted, ref } from 'vue'
@@ -33,6 +34,7 @@ const rememberedConcepts = new Map<string, string>()
 const showRetests = ref(false)
 const detailTab = ref('study')
 const overviewMode = ref('map')
+const retestControl = ref<InstanceType<typeof StudentRetestControl>>()
 const opening = ref('')
 const questionScroll = ref<HTMLElement>()
 const conceptScroll = ref<HTMLElement>()
@@ -211,11 +213,12 @@ onMounted(load)
         <article class="concept-detail mobile-secondary-panel" tabindex="-1" aria-label="当前知识点详细诊断">
           <template v-if="current">
             <header><h2>{{ current.name }}</h2><span :class="{ 'evidence-pass': ['achieved','delayed_confirmed'].includes(current.learning_result?.state) }">{{ current.learning_result?.label || '证据不足' }}</span></header>
-            <nav class="detail-tabs" aria-label="知识点详情"><button v-for="tab in [{key:'study',label:'学习建议'},{key:'timeline',label:'证据时间线'},{key:'errors',label:'错题依据'},{key:'concept',label:'概念自测'},{key:'history',label:'复测记录'}]" :key="tab.key" :aria-pressed="detailTab===tab.key" @click="detailTab=tab.key">{{ tab.label }}</button></nav>
+            <nav class="detail-tabs" aria-label="知识点详情"><button v-for="tab in [{key:'study',label:'学习建议'},{key:'path',label:'学习路径'},{key:'timeline',label:'证据时间线'},{key:'errors',label:'错题依据'},{key:'concept',label:'概念自测'},{key:'history',label:'复测记录'}]" :key="tab.key" :aria-pressed="detailTab===tab.key" @click="detailTab=tab.key">{{ tab.label }}</button></nav>
             <div ref="conceptScroll" class="concept-content workbench-scroll" tabindex="0" aria-label="学习建议、资源与解析">
             <section v-if="detailTab==='study'" class="next-advice"><h3>本次建议</h3><p><MathText :text="current.action" /></p><p v-if="current.learning_result?.state==='achieved'" class="scope-note">{{ loopTime(current.learning_result.due_at) }} 起可做延后确认；现在仍可继续练习。</p></section>
             <section v-if="detailTab==='study'" class="detail-section resource-section" aria-label="对应课程资料"><h3>推荐学习资源</h3><LearningResourceList :key="current.id" :resources="current.resources" :attempt-id="selectedAttemptId" :kp-id="current.kp_id" :completed-resource-ids="(current.timeline || []).filter((event: any) => event.kind === 'resource_completed').map((event: any) => event.resource_id)" compact @activity="refreshJourney"/></section>
             <LearningTimeline v-if="detailTab==='timeline'" :key="current.id" :concept="current" @answers="detailTab='errors'" @retest="openTimelineRetest"/>
+            <AdaptiveLearningPath v-if="detailTab==='path'" :path="current.learning_path" :active-task="['published','opened'].includes(detail.learning_loop?.task_state) ? detail.learning_loop.latest_task : null" @study="detailTab='study'" @evidence="detailTab='timeline'" @test="retestControl?.start(true)"/>
             <section v-if="detailTab==='errors'" class="detail-fold">
               <div v-if="current.errors.length" class="question-links"><button v-for="item in current.errors" :key="item.position" type="button" @click="locate(item.position)">定位第 {{ item.position }} 题 ↗</button></div>
               <AttemptEvidenceTable v-if="current.errors.length" :result="{items: current.errors}" :id-prefix="`concept-${current.id}`" heading="原卷作答依据" />
@@ -260,7 +263,7 @@ onMounted(load)
     <el-drawer v-model="showRetests" title="复测记录" size="min(520px, 96vw)">
       <template v-if="detail"><p class="history-assessment">{{ detail.assessment.title }}</p><RetestRoundList :rounds="retests" @open="openRetest" /></template>
     </el-drawer>
-    <template #footer><StudentRetestControl :key="selectedAttemptId" :attempt-id="selectedAttemptId" :summary="detail?.learning_loop" @updated="load" /></template>
+    <template #footer><StudentRetestControl ref="retestControl" :key="selectedAttemptId" :attempt-id="selectedAttemptId" :kp-ids="current ? [current.kp_id] : []" :summary="detail?.learning_loop" @updated="load" /></template>
   </WorkbenchPage>
 </template>
 

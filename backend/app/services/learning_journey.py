@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from backend.app.models import entities as E
 from backend.app.services.learning_evidence import instant
 from backend.app.services.learning_resources import material_catalog
+from backend.app.services.adaptive_learning import path
 
 ACTIVITIES = {"resource_opened": "首次查看学习资料", "resource_completed": "标记阅读完成"}
 
@@ -39,7 +40,8 @@ def record_activity(db: Session, *, user_id: str, attempt_id: str,
 
 
 def attach(db: Session, workbench: dict, *, user_id: str,
-           attempt_id: str, submitted_at: str) -> dict:
+           attempt_id: str, submitted_at: str, learning_summary: dict | None = None) -> dict:
+    decisions = {row["kp_id"]: row for row in (learning_summary or {}).get("concept_results", [])}
     activities = list(db.scalars(select(E.LearningEvent).where(
         E.LearningEvent.user_id == user_id,
         E.LearningEvent.target_id == attempt_id,
@@ -85,4 +87,5 @@ def attach(db: Session, workbench: dict, *, user_id: str,
         events.sort(key=lambda event: (instant(event["at"]).timestamp()
                     if instant(event["at"]) else float("inf"), event["id"]))
         concept["timeline"] = events
+        concept["learning_path"] = path(concept, decisions.get(concept["kp_id"]))
     return workbench

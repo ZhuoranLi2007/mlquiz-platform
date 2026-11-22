@@ -14,6 +14,7 @@ from sqlalchemy import select, text
 
 from backend.app.models import entities as E
 from backend.app.services import (answer_pipeline, attempt_service, bank_service,
+    adaptive_learning, paper_builder_service,
     learning_evidence as evidence, learning_resources, model_provider,
     release_service, targeted_retest)
 
@@ -223,6 +224,8 @@ def plan_scope(db, scope, requested=None, practice=False, retry_generation=False
     baseline = _baseline(payload.get('items') or [])
     available = list(dict.fromkeys([*(payload.get('weak_kp_ids') or []), *(k for k,v in baseline.items() if v),
                                   *(kp for row in history for kp in row.get('kp_ids', []))]))
+    if requested:
+        available = list(dict.fromkeys([*available, *(kp for kp in requested if kp in baseline)]))
     if not available:
         available = list(baseline)
     if not available:
@@ -234,10 +237,20 @@ def plan_scope(db, scope, requested=None, practice=False, retry_generation=False
                 available = list(dict.fromkeys(evidence.primary_kp(i.snapshot or {}) for i in db.execute(
                     select(E.PaperItem).where(E.PaperItem.paper_id == version.paper_id)).scalars()))
     targets, remaining = evidence.select_targets(available, history, baseline, requested)
+    if source and requested and any(kp not in available for kp in requested):
+        raise ValueError('所选知识点缺少当前原卷或关联复测证据')
+    if requested:
+        targets = list(dict.fromkeys(kp for kp in requested if kp in available))[:2]
+        states = {row['kp_id']: row for row in evidence.summarize(history, baseline)}
+        remaining = [kp for kp in available if kp not in targets
+                     and states.get(kp, {}).get('state') not in {'achieved', 'delayed_confirmed'}]
+    decisions = {row["kp_id"]: row for row in evidence.summarize(history, baseline)}
+    profiles = {kp: adaptive_learning.profile(decisions.get(kp, {})) for kp in targets}
     chapters = {i.get('chapter_id') or (i.get('chapter') or {}).get('chapter_id') for i in payload.get('items', [])
                 if evidence.primary_kp(i) in targets}
     return {**scope, 'payload': payload, 'history': history, 'existing': existing, 'retry_generation':retry_generation,
-            'targets': targets, 'remaining': remaining, 'chapters': [c for c in chapters if c],
+            'targets': targets, 'remaining': remaining, 'adaptive_profiles': profiles,
+            'chapters': [c for c in chapters if c],
             'kind': 'practice' if practice or any(r['status']=='scoring_pending' for r in history) else
                     'formal' if source else 'baseline',
             'round': max((r['round'] for r in history), default=0)+1}
@@ -289,7 +302,7 @@ def prepare_questions(db, plan, candidate_ids, thread_id):
         if q.question_id in seen or (plan['chapters'] and q.chapter_id not in plan['chapters']):
             continue
         seen.add(q.question_id)
-        if not answer_pipeline.answer_structurally_valid(q)[0]:
+        if not paper_builder_service.quiz_gate(q)[0]:
             continue
         if attempt_service.snapshot_score_authority({'origin':q.origin,'answer_origin':q.answer_origin,
                 'answer_status':q.answer_status}) not in {'paper_snapshot','teacher_key','ai_auto_checked'}:
@@ -308,7 +321,14 @@ def prepare_questions(db, plan, candidate_ids, thread_id):
                 and not any(SequenceMatcher(None,_fingerprint(r[0].stem),s).ratio()>=.78 for s in selected_stems)]
             if not suitable:
                 break
-            row = min(suitable, key=lambda r:(angle(r) in angles, r[1] != 'ai_generated'))
+            preference = plan.get('adaptive_profiles', {}).get(kp, {})
+            bands = {'easy': 0, 'medium': 1, 'hard': 2}
+            target_band = bands.get(paper_builder_service.difficulty_band(preference.get('difficulty', '中等')), 1)
+            row = min(suitable, key=lambda r: (
+                angle(r) in angles,
+                abs(bands.get(paper_builder_service.difficulty_band(r[0].difficulty), 1) - target_band),
+                r[0].cognitive_level != preference.get('cognitive_level', '应用'),
+                r[1] != 'ai_generated'))
             selected.append(row); selected_families.add(family(row[0])); angles.add(angle(row))
             selected_stems.append(_fingerprint(row[0].stem))
     formal = len(selected)==5 and all(sum(r[0].main_kp_id==k for r in selected)==n for k,n in quotas.items())
@@ -324,7 +344,10 @@ def prepare_questions(db, plan, candidate_ids, thread_id):
     for q, source, new, check, call_id in selected:
         counts[source if new else 'original_reused']+=1
         manifest[q.question_id]={'kp_id':q.main_kp_id,'new_to_student':new,
-            'family_key':family(q), 'assessment_angle':angle((q,source,new,check,call_id)), 'source':source}
+            'family_key':family(q), 'assessment_angle':angle((q,source,new,check,call_id)), 'source':source,
+            'adaptive_stage': plan.get('adaptive_profiles', {}).get(q.main_kp_id, {}).get('stage'),
+            'actual_difficulty': q.difficulty,
+            'target_difficulty': plan.get('adaptive_profiles', {}).get(q.main_kp_id, {}).get('difficulty')}
         if source=='ai_generated':
             q.answer_status='ai_auto_checked';q.review_status='auto_checked';q.answer_origin='deepseek_generated'
             q.explanation=check['explanation'];q.active=True
@@ -355,7 +378,8 @@ def publish(db, plan, questions, manifest, counts, *, actor_user_id, thread_id):
     title=f'第{number}轮 · '+('巩固练习' if plan['kind']=='practice' else '基线自测' if plan['kind']=='baseline' else '专项复测')
     paper=bank_service.create_paper_from_questions(db,questions,title=title,mode='retest',
         source='learning_loop',user_id=actor_user_id,scores=[2.0]*len(questions),
-        blueprint={'source':evidence.RULE_VERSION,'source_counts':counts,'kp_ids':plan['targets']},commit=False)
+        blueprint={'source':evidence.RULE_VERSION,'source_counts':counts,'kp_ids':plan['targets'],
+                   'adaptive_profiles': plan.get('adaptive_profiles', {})},commit=False)
     actor=db.get(E.User,actor_user_id)
     release=None;attempt_id=''
     if actor and actor.role=='teacher' and plan['source_id']:

@@ -1,0 +1,29 @@
+{
+  "students": [
+    {
+      "student": "stu001",
+      "stage": "application",
+      "target_difficulty": "中等",
+      "actual_difficulties": [
+        ""
+      ],
+      "kind": "practice",
+      "question_count": 2,
+      "cycle_count": 1
+    },
+    {
+      "student": "stu002",
+      "stage": "foundation",
+      "target_difficulty": "基础",
+      "actual_difficulties": [
+        ""
+      ],
+      "kind": "practice",
+      "question_count": 2,
+      "cycle_count": 1
+    }
+  ],
+  "new_model_calls": 0,
+  "duplicate_cycles": false,
+  "selection_metadata_persisted": true
+}

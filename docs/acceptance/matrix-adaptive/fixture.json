@@ -1,0 +1,17 @@
+{
+  "classroom_id": "class_783dbb1fb6d9cc66e4221a0744c6753a90b4fb78",
+  "assessment_version_id": "av_3a7628a91be18bc9e3bc79c9",
+  "kp_id": "kp.logistic.boundary",
+  "students": [
+    {
+      "uid": "stu001",
+      "student_id": "student_5a8c57d381a25cb3b0d46e568b4c327c3b6c4b95",
+      "attempt_id": "attempt_d4f74d571a534601"
+    },
+    {
+      "uid": "stu002",
+      "student_id": "student_5fca5cbf9f5898f3ba6e26825834854661581ee3",
+      "attempt_id": "attempt_dfcbd7a177cb469e"
+    }
+  ]
+}

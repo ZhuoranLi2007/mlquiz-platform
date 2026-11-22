@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "16_student_fixed_version_matrix",
+    "search",
+    "attention_filter",
+    "reliable_wrong_answer_drawer",
+    "two_student_group_publication",
+    "duplicate_publication_resume",
+    "different_learning_stages",
+    "path_opens_real_training",
+    "mobile_matrix_scroll",
+    "mobile_publish_button_reachable"
+  ],
+  "errors": [],
+  "mode": "verified_bank_group_training"
+}

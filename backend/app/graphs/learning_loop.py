@@ -51,17 +51,23 @@ def build(db, checkpointer):
         for plan in s['plans']:
             if plan['existing'] or plan['kind']=='practice':continue
             for index,kp in enumerate(plan['targets']):
-                if kp in pool:continue
-                pool[kp]=[]
+                profile = plan.get('adaptive_profiles', {}).get(kp, {})
+                pool_key = kp + ':' + profile.get('stage', 'application')
+                if pool_key in pool:continue
+                pool[pool_key]=[]
                 if not enabled:continue
                 try:
                     out=workflows.run_generation(db,{'count':5,'kp_ids':[kp],
                         'question_types':['single_choice','multi_choice','true_false'],
                         'mode':'teacher_retest_candidate',
-                        'instruction': '复测新题：覆盖至少两种题型，结合概念辨析与情境应用。每题给出可核验答案、解析、课程引用。改变考查情境或推理方式，不得只换数字或措辞。'},user_id=s['actor_user_id'])
+                        'difficulty': profile.get('difficulty', '中等'),
+                        'cognitive_level': profile.get('cognitive_level', '应用'),
+                        'instruction': f"当前学习阶段为{profile.get('label', '应用验证')}，优先生成{profile.get('difficulty', '中等')}难度、{profile.get('cognitive_level', '应用')}层次新题。" +
+                          '覆盖至少两种题型与考查角度，每题给出可核验答案、解析、课程引用。改变情境或推理方式，不得只换数字或措辞。'},user_id=s['actor_user_id'])
                     rows=(out.get('result') or {}).get('candidates') or []
-                    pool[kp]=[r['question_id'] for r in rows if r.get('question_id')]
-                    attempts.append({'kp_id':kp,'status':out.get('status'),'count':len(pool[kp])})
+                    pool[pool_key]=[r['question_id'] for r in rows if r.get('question_id')]
+                    attempts.append({'kp_id':kp,'adaptive_stage':profile.get('stage'),
+                                     'status':out.get('status'),'count':len(pool[pool_key])})
                 except Exception as exc:
                     db.rollback();attempts.append({'kp_id':kp,'status':'unavailable','error_type':type(exc).__name__})
         candidates=[{'question_id':q} for rows in pool.values() for q in rows]
@@ -78,7 +84,8 @@ def build(db, checkpointer):
                     'reason':'请选择课程知识点后开始自测。','available_actions':['select_topics']});continue
             try:
                 qs,manifest,counts,rejected=loop.prepare_questions(db,plan,
-                    [qid for kp in plan['targets'] for qid in s['candidates'].get(kp,[])],s['thread_id'])
+                    [qid for kp in plan['targets'] for qid in s['candidates'].get(
+                        kp + ':' + plan.get('adaptive_profiles', {}).get(kp, {}).get('stage', 'application'), [])],s['thread_id'])
                 result=loop.publish(db,plan,qs,manifest,counts,actor_user_id=s['actor_user_id'],thread_id=s['thread_id'])
                 result['rejected_candidates']=rejected
                 results.append(result)

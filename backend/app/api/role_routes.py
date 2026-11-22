@@ -191,6 +191,67 @@ class ResourceBookmarkIn(BaseModel):
     saved: bool
 
 
+class MatrixPracticeIn(BaseModel):
+    classroom_id: str = Field(min_length=1, max_length=64)
+    assessment_version_id: str = Field(min_length=1, max_length=64)
+    student_ids: list[str] = Field(min_length=1, max_length=60)
+    kp_id: str = Field(min_length=1, max_length=64)
+
+
+@router.get("/teacher/class-matrix")
+def teacher_class_matrix(classroom_id: str, assessment_version_id: str,
+                         _: auth_service.Principal = Depends(auth_service.require_teacher),
+                         db: Session = Depends(get_session)):
+    from backend.app.services.class_matrix import build
+    try:
+        return build(db, classroom_id, assessment_version_id)
+    except classroom_diagnosis.ClassroomDiagnosisError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
+@router.post("/teacher/class-matrix/practice")
+def teacher_matrix_practice(
+    body: MatrixPracticeIn, principal=Depends(auth_service.require_teacher),
+    db: Session = Depends(get_session),
+):
+    from backend.app.services import class_matrix, learning_loop
+    try:
+        matrix = class_matrix.build(db, body.classroom_id, body.assessment_version_id)
+    except classroom_diagnosis.ClassroomDiagnosisError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    selected = list(dict.fromkeys(body.student_ids))
+    rows = {row["student_id"]: row for row in matrix["rows"]}
+    if any(sid not in rows or not rows[sid]["eligible"] or
+           not rows[sid]["cells"].get(body.kp_id, {}).get("scored_count") for sid in selected):
+        raise HTTPException(422, "请选择当前班级中该知识点已有有效评分且已绑定账号的学生")
+    results = []
+    for sid in selected:
+        try:
+            job = learning_loop.queue(db, principal, {
+                "scope_type": "student_attempt", "student_id": sid,
+                "attempt_id": rows[sid]["attempt_id"], "kp_ids": [body.kp_id],
+                "prefer_bank": True,
+            })
+            results.append({"student_id": sid, **job})
+        except Exception:
+            db.rollback()
+            results.append({"student_id": sid, "status": "error",
+                            "error": "该学生任务暂未入队，可重新发布以恢复"})
+    return {"items": results, "question_source": "verified_bank"}
+
+
+@router.get("/teacher/class-matrix/jobs/{job_id}")
+def teacher_matrix_job(job_id: str, _=Depends(auth_service.require_teacher),
+                       db: Session = Depends(get_session)):
+    job = db.get(E.Job, job_id)
+    if not job or job.job_type != "learning_retest":
+        raise HTTPException(404, "任务不存在")
+    output = ((job.result or {}).get("outputs") or {}).get("retest") or {}
+    return {"job_id": job_id, "status": job.status,
+            "items": [{key: row.get(key) for key in ("student_id", "status", "reused", "round",
+                      "retest_kind", "target_kp_ids", "reason")} for row in output.get("items", [])]}
+
+
 class LearningActivityIn(BaseModel):
     attempt_id: str = Field(min_length=1, max_length=64)
     kp_id: str = Field(min_length=1, max_length=64)
@@ -1254,7 +1315,8 @@ def student_feedback_detail(
     from backend.app.services.learning_journey import attach
     return {
         "diagnosis_workbench": attach(db, feedback_workbench(payload, _student_question_view),
-            user_id=principal.user_id, attempt_id=attempt.attempt_id, submitted_at=attempt.submitted_at),
+            user_id=principal.user_id, attempt_id=attempt.attempt_id, submitted_at=attempt.submitted_at,
+            learning_summary=payload.get("learning_loop")),
         "learning_loop": payload.get('learning_loop'),
         "attempt_id": attempt.attempt_id,
         "assessment": {

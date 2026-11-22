@@ -80,6 +80,7 @@ async function start(preferBank=false, retryGeneration=false) {
     void poll(jobId.value,sequence)
   } catch(e) {busy.value=false;error.value=friendlyError(e,'复测发起失败，可以重试。')}
 }
+defineExpose({ start })
 watch(() => props.attemptId,refresh,{immediate:true})
 onBeforeUnmount(() => {sequence++;clearTimeout(timer)})
 </script>
