@@ -49,7 +49,3 @@ for(const route of ['/teacher','/teacher/analysis','/teacher/resources','/teache
 if(errors.length)throw Error(errors.join('\n'));
 await fs.writeFile('docs/acceptance/review1122/browser.json',JSON.stringify({checks,errors,modelCallsTriggered:false},null,2));
 console.log(checks);await browser.close();
-
-
-
-
